@@ -51,10 +51,10 @@
 
     <!-- Header -->
     <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             <!-- Brand Logo from logo11.png -->
-            <div class="flex items-center gap-2">
-                <img src="logo11.png" width="100" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
+            <div class="flex items-center gap-2 shrink-0">
+                <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
                 <!-- Fallback text logo if image is not loaded -->
                 <div id="logo-fallback" class="hidden items-center gap-2">
                     <span class="text-xl font-black text-brand-dark">1Approval <span class="text-brand-yellow text-xs font-bold">for kintone</span></span>
@@ -62,7 +62,7 @@
             </div>
             
             <!-- Navigation Desktop -->
-            <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
+            <nav class="hidden xl:flex items-center gap-6 text-sm font-semibold text-slate-600 shrink-0">
                 <a href="#problem" class="hover:text-brand-yellow transition-colors">解決する課題</a>
                 <a href="#features" class="hover:text-brand-yellow transition-colors">機能・ステップ</a>
                 <a href="#simulator" class="hover:text-brand-yellow transition-colors">削減シミュレーター</a>
@@ -71,7 +71,7 @@
                 <a href="#roadmap" class="hover:text-brand-yellow transition-colors">今後の展開</a>
             </nav>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 shrink-0">
                 <a href="#contact" class="hidden sm:inline-flex items-center justify-center border border-slate-300 text-slate-700 hover:border-brand-yellow hover:text-brand-yellow transition-all duration-300 font-bold px-4 py-2 rounded-full text-xs">
                     資料・デモ請求
                 </a>
@@ -89,9 +89,9 @@
         <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
                 <!-- Hero Left text -->
-                <div class="lg:col-span-7 space-y-6 text-left">
+                <div class="md:col-span-7 space-y-6 text-left">
                     <div class="inline-flex items-center gap-2 bg-brand-yellow/10 border border-brand-yellow/30 rounded-full py-1.5 px-4 text-xs font-bold text-slate-700">
                         <span class="flex h-2 w-2 rounded-full bg-brand-yellow"></span>
                         国内初！出張・購買業務をkintone承認から一気通貫DX
@@ -132,9 +132,15 @@
                         </a>
                     </div>
 
+                    <!-- Joint Partnership Logos -->
+                    <div class="pt-6 border-t border-slate-100 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-500 font-medium">
+                        <span>【提供】</span>
+                        <span class="font-bold text-slate-700">株式会社エイチ (Eichiii)</span>
+                    </div>
+                </div>
 
                 <!-- Hero Right Content: Visual interactive preview -->
-                <div class="lg:col-span-5 relative mt-6 lg:mt-0">
+                <div class="md:col-span-5 relative mt-6 md:mt-0">
                     <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-yellow to-brand-primary rounded-3xl blur opacity-15"></div>
                     <div class="bg-white border border-slate-200/80 p-6 sm:p-8 rounded-3xl shadow-xl relative space-y-6">
                         
