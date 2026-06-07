@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1approval Event for Salesforce | 製薬企業向け講演会・医師招請DXシステム</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            sfblue: '#0176D3',       /* Salesforce/Veeva親和性の高いオフィシャルブルー */
+                            sfbg: '#EEF4FF',         /* ソフトなブルー背景 */
+                            medicalteal: '#0D9488',  /* 信頼感と医療・製薬を象徴するティールグリーン */
+                            teallight: '#F0FDFA',    /* ティールの柔らかな背景 */
+                            navy: '#0F172A',         /* アクセントダーク */
+                            success: '#10B981',      /* 適合・承認グリーン */
+                            warning: '#F59E0B',      /* 警告・規程外注意イエロー */
+                            slatebg: '#F8FAFC',      /* 薄いグレー背景 */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .card-shadow {
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.06);
+        }
+        .hero-shadow {
+            box-shadow: 0 20px 40px -15px rgba(1, 118, 211, 0.12);
+        }
+        .tab-active {
+            border-bottom: 2px solid #0176D3;
+            color: #0176D3;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 shrink-0">
+                <img src="logo11.png" alt="1Approval" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
+                <div id="logo-fallback" class="hidden items-center gap-2">
+                    <span class="text-lg font-black text-brand-navy">1approval <span class="text-brand-sfblue text-xs font-bold">Event</span></span>
+                </div>
+                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+                <span class="text-[10px] bg-brand-sfbg text-brand-sfblue font-bold px-2 py-1 rounded hidden sm:inline-block">for Salesforce & Veeva</span>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="hidden xl:flex items-center gap-6 text-sm font-semibold text-slate-600 shrink-0">
+                <a href="#problem" class="hover:text-brand-sfblue transition-colors">製薬業界の課題</a>
+                <a href="#workflow" class="hover:text-brand-sfblue transition-colors">手配ワークフロー</a>
+                <a href="#compliance" class="hover:text-brand-sfblue transition-colors">透明性仕訳連携</a>
+                <a href="#policy" class="hover:text-brand-sfblue transition-colors">HCPポリシー制限</a>
+                <a href="#pricing" class="hover:text-brand-sfblue transition-colors">料金体系</a>
+            </nav>
+
+            <div class="flex items-center gap-3 shrink-0">
+                <a href="#contact" class="hidden sm:inline-flex items-center justify-center border border-slate-300 text-slate-700 hover:border-brand-sfblue hover:text-brand-sfblue transition-all duration-300 font-bold px-4 py-2 rounded-full text-xs">
+                    製品資料請求
+                </a>
+                <a href="#contact" class="inline-flex items-center justify-center bg-brand-sfblue text-white hover:bg-brand-navy transition-all duration-300 font-extrabold px-5 py-2.5 rounded-full text-xs shadow-md">
+                    デモ環境・POC相談
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-brand-sfbg/40 via-white to-white">
+        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-sfbg/30 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-teallight/40 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Hero Left text -->
+                <div class="lg:col-span-7 space-y-6 text-left">
+                    <div class="inline-flex items-center gap-2 bg-brand-sfbg border border-brand-sfblue/30 rounded-full py-1.5 px-4 text-xs font-bold text-brand-sfblue">
+                        <span class="flex h-2 w-2 rounded-full bg-brand-sfblue animate-pulse"></span>
+                        製薬業界特化型ソリューション
+                    </div>
+                    
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.25] text-slate-900 tracking-tight">
+                        Salesforce / Veeva から起案、<br class="hidden sm:block">
+                        会場手配から<span class="text-brand-sfblue">自動仕訳連携</span>まで。
+                    </h1>
+                    
+                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+                        イベント企画（講演会）の起案情報と連動し、全国38,000箇所の最適な会場・医師（HCP）の宿泊交通を半自動手配。透明性ガイドラインに即した勘定科目と内訳（EOSS/EBOSSコード）を自動マッピングし、ConcurやSAPなどの基幹システムへシームレスに出力します。
+                    </p>
+
+                    <!-- Pharma Pillars Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex gap-3 items-center">
+                            <i class="fa-solid fa-hotel text-brand-medicalteal text-xl"></i>
+                            <div>
+                                <span class="text-[10px] text-slate-500 font-bold block">コンシェルジュ</span>
+                                <span class="text-xs font-black text-slate-800">半自動会場提案</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex gap-3 items-center">
+                            <i class="fa-solid fa-user-doctor text-brand-sfblue text-xl"></i>
+                            <div>
+                                <span class="text-[10px] text-slate-500 font-bold block">医師ランク判別</span>
+                                <span class="text-xs font-black text-slate-800">自動規程ポリシー制限</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex gap-3 items-center">
+                            <i class="fa-solid fa-shield-halved text-brand-success text-xl"></i>
+                            <div>
+                                <span class="text-[10px] text-slate-500 font-bold block">透明性ガイドライン</span>
+                                <span class="text-xs font-black text-slate-800">仕訳データ連携</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <a href="#contact" class="bg-brand-sfblue text-white font-black text-center px-8 py-4 rounded-xl text-base hover:bg-brand-navy transition-all duration-300 shadow-lg flex items-center justify-center gap-2 group">
+                            1approval Eventのデモを依頼する <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#compliance" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-center px-8 py-4 rounded-xl text-base transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-table-list text-brand-medicalteal"></i> 仕訳対応表を確認する
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Right Content: Visual interactive preview -->
+                <div class="lg:col-span-5 relative mt-6 lg:mt-0">
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-sfblue to-brand-medicalteal rounded-3xl blur opacity-15"></div>
+                    <div class="bg-white border border-slate-200/80 p-6 sm:p-8 rounded-3xl shadow-xl relative space-y-6">
+                        
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="h-3 w-3 rounded-full bg-red-400"></span>
+                                <span class="h-3 w-3 rounded-full bg-yellow-400"></span>
+                                <span class="h-3 w-3 rounded-full bg-green-400"></span>
+                            </div>
+                            <span class="text-xs font-bold text-slate-500"><i class="fa-brands fa-salesforce text-brand-sfblue mr-1"></i> Veeva Medical HCP Policy</span>
+                        </div>
+
+                        <!-- Sourcing Flow mockup -->
+                        <div class="space-y-4">
+                            <!-- SF HCP policy check card -->
+                            <div class="bg-brand-sfbg/30 p-3.5 rounded-xl border border-slate-200 text-xs space-y-2">
+                                <div class="flex justify-between items-center font-bold">
+                                    <span class="text-slate-800"><i class="fa-solid fa-user-doctor mr-1"></i> 招請医師: 山田 健一 教授</span>
+                                    <span class="bg-brand-sfblue text-white text-[10px] px-2 py-0.5 rounded">HCP Rank: A</span>
+                                </div>
+                                <div class="h-px bg-slate-200/80 my-1"></div>
+                                <div class="flex justify-between items-center text-[11px] text-slate-600">
+                                    <span>宿泊規程制限:</span>
+                                    <span class="text-brand-success font-semibold">適合（上限 15,000円以内）</span>
+                                </div>
+                                <div class="flex justify-between items-center text-[11px] text-slate-600">
+                                    <span>移動手段規程:</span>
+                                    <span class="text-brand-success font-semibold">適合（グリーン車・変更可能航空券可）</span>
+                                </div>
+                            </div>
+
+                            <!-- Portal Sync mockup -->
+                            <div class="bg-teal-50/50 p-3.5 rounded-xl border border-teal-100 text-xs space-y-2">
+                                <div class="flex justify-between items-center font-bold">
+                                    <span class="text-brand-medicalteal"><i class="fa-solid fa-building-circle-check mr-1"></i> エイチ手配 提案状況</span>
+                                    <span class="text-xs text-brand-medicalteal">仮予約済</span>
+                                </div>
+                                <div class="h-px bg-teal-100 my-1"></div>
+                                <p class="text-[11px] text-slate-600">品川グランドホテル コンファレンスルームB （40名規模）</p>
+                                <div class="flex justify-between items-center pt-1 text-[11px]">
+                                    <span class="text-slate-400">日程: 2026年7月15日</span>
+                                    <span class="font-extrabold text-slate-800">¥180,000</span>
+                                </div>
+                            </div>
+
+                            <!-- SF Sync trigger -->
+                            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-center">
+                                <p class="text-[10px] text-slate-500 mb-2">確定情報を1クリックでSalesforceに自動マッピング</p>
+                                <span class="inline-flex items-center gap-2 bg-brand-sfblue text-white font-extrabold text-xs px-5 py-2.5 rounded-lg shadow-sm">
+                                    <i class="fa-solid fa-rotate mr-1"></i> Salesforce / Veeva へ同期する
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="py-20 bg-brand-slatebg border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-sfblue bg-brand-sfbg px-3 py-1 rounded-full uppercase">PHARMA EVENT PAIN POINTS</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    講演会・医師手配の「システム分断」が、<br class="hidden sm:block">重大なコンプライアンス＆工数ロスを招いています
+                </h2>
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                    MRによる企画、手配業者への都度依頼、医師規程の個別チェック、そして透明性ガイドラインへの勘定科目手動マッピング。すべて手入力で行う体制は限界を迎えています。
+                </p>
+            </div>
+
+            <!-- Problem grid based on pharma needs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-sfblue/30 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-sfblue"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-sfbg text-brand-sfblue flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">医師規程の「目視チェック」限界</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        医師の役職や社内規定（HCO/HCPランク）に応じた「座席クラス、宿泊上限規定」のチェックをMRが手作業で確認。規程外の手配が監査段階で発覚し、二度手間やコンプラ違反の原因に。
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-sfblue/30 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-medicalteal"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-teallight text-brand-medicalteal flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-envelope-open-text"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">会場手配のスピード不足とタイムラグ</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        MRからメールや代理店経由で会場の見積もりを取得するまでに数日を浪費。医師（演者）のスケジュールが超多忙な中、確認中に他社に会場を押さえられる機会損失が多発。
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-sfblue/30 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-warning"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-orange-50 text-brand-warning flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-gears"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">透明性ガイドラインの仕訳地獄</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        講演会費、情報交換会費、一般茶菓・弁当代、医師宿泊費等、証憑を見ながら「交際費」「非交際費」の厳密な切り分け、自社EOSS/EBOSSコードを手動で入力・仕訳する月末処理が莫大な負担に。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-sfblue bg-brand-sfbg px-3 py-1 rounded-full uppercase">INTEGRATED WORKFLOW</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">手配から購買、仕訳までシームレスな一気通貫フロー</h2>
+                <p class="text-slate-500 text-sm">MRはSalesforce/Veeva上のアクションだけで、すべてのノンコア業務を自動化します。</p>
+            </div>
+
+            <!-- Steps Visualization -->
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-16 text-xs text-slate-600">
+                <!-- Step 1 -->
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 relative">
+                    <div class="text-brand-sfblue font-black text-xl mb-2">01</div>
+                    <span class="bg-brand-sfbg text-brand-sfblue text-[9px] font-bold px-2 py-0.5 rounded block w-max mb-2">Veeva / SF 起案</span>
+                    <h4 class="font-bold text-slate-900 text-sm mb-2">講演会企画の起案</h4>
+                    <p class="leading-relaxed">MRが使い慣れたVeeva Events Management等から日程、場所、人数を入力して企画を起案。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 relative">
+                    <div class="text-brand-medicalteal font-black text-xl mb-2">02</div>
+                    <span class="bg-brand-teallight text-brand-medicalteal text-[9px] font-bold px-2 py-0.5 rounded block w-max mb-2">コンシェルジュ</span>
+                    <h4 class="font-bold text-slate-900 text-sm mb-2">半自動会場提案</h4>
+                    <p class="leading-relaxed">入力された内容に基づき、専門コンシェルジュがチャットや専用ポータルで最適な仮キープ済みの会場を半自動で提案。</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 relative">
+                    <div class="text-brand-sfblue font-black text-xl mb-2">03</div>
+                    <span class="bg-brand-sfbg text-brand-sfblue text-[9px] font-bold px-2 py-0.5 rounded block w-max mb-2">1-Click 同期</span>
+                    <h4 class="font-bold text-slate-900 text-sm mb-2">仮予約情報の同期</h4>
+                    <p class="leading-relaxed">確定した仮予約会場（または事前に入力した持込会場）のスペック・料金データを1クリックでSalesforceに完全同期。</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 relative">
+                    <div class="text-brand-success font-black text-xl mb-2">04</div>
+                    <span class="bg-emerald-50 text-brand-success text-[9px] font-bold px-2 py-0.5 rounded block w-max mb-2">承認＆本予約</span>
+                    <h4 class="font-bold text-slate-900 text-sm mb-2">承認時に自動購買・発券</h4>
+                    <p class="leading-relaxed">上長承認アクションと同時に、手配システムが自動で本予約確定。医師のホテルや新幹線割引・LCC運賃まで自動発券。</p>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 relative">
+                    <div class="text-brand-navy font-black text-xl mb-2">05</div>
+                    <span class="bg-slate-200 text-slate-700 text-[9px] font-bold px-2 py-0.5 rounded block w-max mb-2">ERP 出力</span>
+                    <h4 class="font-bold text-slate-900 text-sm mb-2">透明性ガイドライン連携</h4>
+                    <p class="leading-relaxed">講演会の終了後、手配した実績データを自動で仕訳分類し、ConcurやSAPなどの主要基幹会計システムに直接出力。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compliance Section -->
+    <section id="compliance" class="py-20 bg-brand-slatebg border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-sfblue bg-brand-sfbg px-3 py-1 rounded-full uppercase">COMPLIANCE INTELLIGENCE</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    透明性ガイドライン適合の仕訳データを一瞬で
+                </h2>
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                    お弁当・お茶菓子、貸し会場、医師のホテル実費。JTB様との業務提携や製薬各社のEOSS経費管理に適合した、精緻で複雑な財務仕訳マッピング例を以下よりご体験いただけます。
+                </p>
+            </div>
+
+            <!-- Interactive Mapping visualizer -->
+            <div class="mt-16 max-w-5xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg space-y-8">
+                <div class="text-center pb-4 border-b border-slate-100">
+                    <p class="text-sm font-bold text-slate-800">
+                        <i class="fa-solid fa-tags text-brand-sfblue mr-1"></i> 【体験型デモ】手配カテゴリ選択でマッピングの適合性を自動計算
+                    </p>
+                    <p class="text-[11px] text-slate-400 mt-1">実データ：「業務提携のご提案（2026年5月12日）」内の製薬経費コード（AMGEN、EBOSS、塩野義コード等）より一部抽出</p>
+                </div>
+
+                <!-- Selector tabs -->
+                <div class="flex flex-wrap justify-center gap-2" id="mapping-tabs">
+                    <button onclick="switchTab('tab1', this)" class="tab-btn px-4 py-2 text-xs font-extrabold rounded-lg bg-brand-sfbg text-brand-sfblue border border-brand-sfblue/30 transition-colors">
+                        会場レンタル料 (ビュッフェ除く)
+                    </button>
+                    <button onclick="switchTab('tab2', this)" class="tab-btn px-4 py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">
+                        医師レセプション（飲食費）
+                    </button>
+                    <button onclick="switchTab('tab3', this)" class="tab-btn px-4 py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">
+                        医師の昼食（お弁当代）
+                    </button>
+                    <button onclick="switchTab('tab4', this)" class="tab-btn px-4 py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">
+                        一般参加者 宿泊費（サービス料込）
+                    </button>
+                </div>
+
+                <!-- Display panel -->
+                <div class="bg-brand-slatebg rounded-2xl p-6 border border-slate-200 text-xs sm:text-sm space-y-4" id="mapping-panel">
+                    <!-- Default initial display -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-3">
+                            <span class="bg-blue-100 text-brand-sfblue text-[10px] font-black px-2.5 py-1 rounded">手配項目: 会議室レンタル料（ビュッフェ会場を除く）</span>
+                            <div class="space-y-1">
+                                <p class="text-sm font-bold text-slate-800">会場レンタル費用（講演会本番、待合室等）</p>
+                                <p class="text-xs text-slate-500 leading-relaxed">ビュッフェ形式などの飲食費を伴わない、純粋な講演会やセミナーの開催に伴う会場手配の実費仕訳データ。</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="bg-brand-teallight text-brand-medicalteal text-[10px] font-bold px-2 py-0.5 rounded">非交際費</span>
+                                <span class="bg-slate-200 text-slate-700 text-[10px] font-bold px-2 py-0.5 rounded">課税 10%</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-500 font-bold">AMGENコード:</span>
+                                <span class="font-extrabold text-slate-800">Meeting Room Rental - Except Buffet Venue</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-t border-slate-100">
+                                <span class="text-slate-500 font-bold">EBOSS/MOP経費タイプ:</span>
+                                <span class="font-extrabold text-slate-800">1. 講演会 会場費 (課税10%)</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-t border-slate-100">
+                                <span class="text-slate-500 font-bold">製薬企業標準コード (EOSS):</span>
+                                <span class="font-black text-brand-sfblue">0101: 講演会/セミナー 会場費</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center text-[11px] text-slate-400 leading-relaxed">
+                    ※ 手配が実行された瞬間、該当する請求明細は上記ルールに準拠したEOSS/EBOSSコードがSalesforce標準オブジェクトに直接格納されます。<br>
+                    これにより、管理部門による複雑な仕訳確認や手入力のコスト、仕訳ミス、Concur経由の手動アップロード作業は完全に不要化。
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Policy Engine Section -->
+    <section id="policy" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="text-xs font-bold tracking-widest text-brand-sfblue bg-brand-sfbg px-3 py-1 rounded-full uppercase">HCP COMPLIANCE ENGINE</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                        HCP（医師・演者）ランクに自動適合するポリシー制限機能
+                    </h2>
+                    <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                        SalesforceやVeevaに登録されている各ドクターのランク情報（HCO/HCP）を「1approval Event」がリアルタイムに照合。役職に応じたホテル上限金額や新幹線の席種グレードを自動判定。
+                    </p>
+                    <div class="space-y-4 text-xs sm:text-sm">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-brand-success text-lg mt-0.5"></i>
+                            <div>
+                                <h4 class="font-bold text-slate-900">規程外予約の強力な水際防止</h4>
+                                <p class="text-xs text-slate-500 mt-1">「一般医師は1泊12,000円、指定の教授クラスは15,000円まで」などの手配の上限をシステムが事前に適用。規程を超える場合は、警告表示や承認者の自動アラートを行います。</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-brand-success text-lg mt-0.5"></i>
+                            <div>
+                                <h4 class="font-bold text-slate-900">グリーン車・航空クラスの制限自動適用</h4>
+                                <p class="text-xs text-slate-500 mt-1">医師のランクに応じてグリーン車チケット手配の可不可を判定。移動実費が社内上限を逸脱するのを自動で防ぎます。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 bg-brand-slatebg p-6 sm:p-8 rounded-3xl border border-slate-200">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4">
+                        <h4 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center justify-between">
+                            <span><i class="fa-solid fa-shield-halved text-brand-sfblue mr-1.5"></i> 規程ポリシー自動判別デモ</span>
+                            <span class="text-xs text-brand-sfblue font-semibold">1approval Event 搭載モジュール</span>
+                        </h4>
+
+                        <div class="space-y-4 text-xs">
+                            <div class="flex items-center justify-between bg-brand-sfbg/30 p-3 rounded-lg border border-slate-200">
+                                <div>
+                                    <span class="text-slate-500 font-bold block text-[10px]">HCP（演者役職）</span>
+                                    <span class="font-bold text-slate-800 text-sm">医療顧問 / HCP Rank A</span>
+                                </div>
+                                <span class="bg-brand-success text-white text-[10px] font-black px-2 py-1 rounded">手配制限 A 適用中</span>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                    <span class="text-slate-500">宿泊上限額（1泊あたり）:</span>
+                                    <span class="font-bold">¥15,000 <span class="text-[10px] text-slate-400">（通常時 ¥12,000）</span></span>
+                                </div>
+                                <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                    <span class="text-slate-500">交通制限（JR新幹線）:</span>
+                                    <span class="font-bold">グリーン車（適合・許容）</span>
+                                </div>
+                                <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                    <span class="text-slate-500">移動手段（フライト種別）:</span>
+                                    <span class="font-bold">変更可能運賃（JAL / ANA）適合</span>
+                                </div>
+                            </div>
+
+                            <p class="text-[10px] text-slate-400 leading-relaxed">
+                                ※MRが手配する際、システムが自動でこの上限フィルターを適用した候補のみをリストアップします。手動での確認確認がゼロ化します。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-brand-slatebg border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-sfblue bg-brand-sfbg px-3 py-1 rounded-full uppercase">PRICING</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">製薬企業向け 1approval Event 料金体系</h2>
+                <p class="text-slate-500 text-sm">
+                    導入から実利用、保守運用までをフルサポートするエンタープライズ向けのプランです。
+                </p>
+            </div>
+
+            <!-- Two-Tier Pricing Schema -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 max-w-4xl mx-auto">
+                <!-- SaaS License -->
+                <div class="bg-white rounded-3xl border border-slate-200 p-8 flex flex-col justify-between shadow-md relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-brand-sfblue text-white text-[10px] font-extrabold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
+                        Salesforce & Veeva App
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <span class="text-brand-sfblue font-bold text-xs uppercase tracking-widest block">① プラグイン・システムライセンス</span>
+                        <h3 class="text-2xl font-black text-slate-900">1approval Event</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Salesforce（Veeva）オブジェクト連携、HCPポリシー照合エンジン、Concur・SAP仕訳出力マッピングシステム。
+                        </p>
+                        
+                        <div class="pt-4 border-t border-slate-100 space-y-2.5 text-xs">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-500 font-semibold">初期導入・構築費用</span>
+                                <span class="font-extrabold text-slate-900 text-sm">¥1,000,000 <span class="text-[10px] text-slate-400">(税別/仮)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-t border-slate-100/50">
+                                <span class="text-slate-500 font-semibold">月額システム費用</span>
+                                <span class="font-black text-brand-sfblue text-xl">¥200,000 <span class="text-[10px] text-slate-400">(税別) / 月・社</span></span>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-400">※1年ごとの自動更新ライセンス契約。導入完了の初月は無償、翌月1日より課金・請求サイクルがスタートします。</p>
+                    </div>
+                </div>
+
+                <!-- Concierge / Sourcing Fee -->
+                <div class="bg-white rounded-3xl border-2 border-brand-medicalteal p-8 flex flex-col justify-between shadow-md relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-brand-medicalteal text-white text-[10px] font-extrabold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
+                        Sourcing Concierge
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <span class="text-brand-medicalteal font-bold text-xs uppercase tracking-widest block">② 会場・手配業務コンシェルジュ料金</span>
+                        <h3 class="text-2xl font-black text-slate-900">エイチ・手配代行手数料</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            プロの会場プランナーによる仮キープ・空室状況交渉、お弁当やその他ケータリング、医師（演者）の宿泊・交通手配に関する業務サポート。
+                        </p>
+                        
+                        <div class="pt-4 border-t border-slate-100 space-y-2.5 text-xs">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-500 font-semibold">コンシェルジュ基本料</span>
+                                <span class="font-extrabold text-brand-medicalteal text-sm">基本無償（手配実費にマッピング）</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-t border-slate-100/50">
+                                <span class="text-slate-500 font-semibold">手配・提案手数料率</span>
+                                <span class="font-extrabold text-slate-900 text-sm">エイチの手配等手数料に準ずる</span>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-400">※詳細な手配手数料スキーム（会場手配・宿泊等に伴う取扱手数料の基準）は、お問い合わせ後、営業担当よりご案内いたします。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-sfblue bg-brand-sfbg px-3 py-1 rounded-full uppercase">FAQ</span>
+                <p class="text-3xl font-extrabold text-slate-900">よくあるご質問</p>
+            </div>
+
+            <div class="mt-12 space-y-4 max-w-3xl mx-auto text-xs sm:text-sm">
+                <!-- Q1 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-bold flex items-center justify-between text-slate-800 hover:text-brand-sfblue transition-colors">
+                        <span>Q. Veeva Events Managementとの統合連携は可能ですか？</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300 shrink-0 ml-4 text-slate-400"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5 text-brand-muted leading-relaxed border-t border-slate-100 pt-4">
+                        A. はい。Salesforce標準オブジェクト、およびVeeva Events Management上の各オブジェクト（イベント、トピック、講演者、医師登録レコード：HCP/HCOなど）とシームレスなAPI連携を構築できます。Veevaの標準画面内に1approval Event専用のコンポーネントを埋め込んでのご提供も可能です。
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-bold flex items-center justify-between text-slate-800 hover:text-brand-sfblue transition-colors">
+                        <span>Q. すでに使用している会場代理店や、自社直接手配（持込）の仮予約会場の連携は可能ですか？</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300 shrink-0 ml-4 text-slate-400"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5 text-brand-muted leading-relaxed border-t border-slate-100 pt-4">
+                        A. はい。エイチ社のコンシェルジュによる半自動会場手配（全国38,000箇所）に加え、すでに企業側やMRが直接お好みの会場でキープ済みの仮予約情報を手入力することで、全く同様に自動仕訳・Salesforce / Concur / SAPデータ出力フローを走らせることができます。
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-bold flex items-center justify-between text-slate-800 hover:text-brand-sfblue transition-colors">
+                        <span>Q. ConcurやSAPなど各ERP・会計ソフトへの仕訳マッピングは変更できますか？</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300 shrink-0 ml-4 text-slate-400"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5 text-brand-muted leading-relaxed border-t border-slate-100 pt-4">
+                        A. はい。製薬企業ごとに固有の会計コード体系や、各社の経費定義ルール（EOSS、EBOSS、MOP経費タイプコード、AMGEN体系等）に適合するよう、初期設定の段階で専任のアカウントエンジニアが個別に最適マッピングを構築します。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Lead Form -->
+    <section id="contact" class="py-20 bg-brand-slatebg border-t border-slate-200 relative overflow-hidden">
+        <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-brand-sfbg/30 rounded-full blur-[120px] pointer-events-none"></div>
+        
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center space-y-4 mb-12">
+                <img src="logo11.png" alt="1Approval" class="h-8 mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">資料請求・デモのご依頼</h2>
+                <p class="text-slate-500 text-xs sm:text-sm">
+                    実際のVeeva/Salesforce連携画面、仕訳データ連携のデモ等についてお気軽にご相談ください。
+                </p>
+            </div>
+
+            <!-- Stylized Form -->
+            <form id="lead-form" class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 space-y-6 shadow-md">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">お名前 <span class="text-red-500">*</span></label>
+                        <input type="text" required placeholder="山田 太郎" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-sfblue transition-colors text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">貴社名 <span class="text-red-500">*</span></label>
+                        <input type="text" required placeholder="製薬会社など" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-sfblue transition-colors text-sm">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">所属部門 <span class="text-red-500">*</span></label>
+                        <input type="text" required placeholder="営業企画、コンプライアンス管理、IT推進等" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-sfblue transition-colors text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">ビジネスメールアドレス <span class="text-red-500">*</span></label>
+                        <input type="email" required placeholder="name@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-sfblue transition-colors text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">お問い合わせ目的 <span class="text-red-500">*</span></label>
+                    <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-sfblue transition-colors text-sm">
+                        <option>詳しい製品営業資料・EBOSS等マッピング仕様書が欲しい</option>
+                        <option>実際のSalesforce/Veeva上での動作デモ動画を依頼したい</option>
+                        <option>検証POC（概念実証テスト導入）を検討・相談したい</option>
+                        <option>見積もりの依頼</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">メッセージ・事前質問 (任意)</label>
+                    <textarea rows="3" placeholder="お使いのCRM環境（例：Veeva、Salesforce標準環境）や基幹会計システム等の状況をご自由にご記入ください。" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-sfblue transition-colors text-sm"></textarea>
+                </div>
+
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" required id="privacy" class="mt-1 accent-brand-sfblue">
+                    <label for="privacy" class="text-[11px] text-slate-500 leading-relaxed">
+                        個人情報の取り扱い方針（プライバシーポリシー）に同意の上、送信します。
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-brand-sfblue text-white font-black text-base py-4 px-6 rounded-xl hover:bg-brand-navy transition-all duration-300 shadow-md">
+                    資料・デモ動画をリクエストする (無料)
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white py-12 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="flex items-center gap-2">
+                <img src="logo11.png" alt="1Approval" class="h-9 w-auto" onerror="this.style.display='none'; document.getElementById('footer-logo-fallback').style.display='block'">
+                <span id="footer-logo-fallback" class="hidden text-base font-black tracking-tight text-slate-800">1Approval <span class="text-brand-sfblue">Event</span></span>
+            </div>
+            
+            <div class="text-center md:text-right space-y-2">
+                <p class="text-xs text-slate-500">叡知を統合して、ビジネスのつながりをなめらかに。</p>
+                <p class="text-[11px] text-slate-400 font-bold">株式会社エイチ</p>
+                <p class="text-[9px] text-slate-400">© 2026 1Approval (H1Approval) Event for Salesforce. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Form Success Modal Popup -->
+    <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-navy/80 backdrop-blur-sm hidden">
+        <div class="bg-white border border-slate-200 p-8 rounded-3xl max-w-md w-full text-center space-y-6 shadow-2xl">
+            <div class="w-16 h-16 rounded-full bg-brand-sfbg text-brand-sfblue flex items-center justify-center text-3xl mx-auto">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl font-bold text-slate-900">リクエストを送信しました</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    フォーム送信が完了しました。製薬企業様専属の担当コンサルタントより、折り返しメールにて詳細な製品仕様PDF・EBOSS/MOP等連携マニュアル資料の案内URLをお送りいたします。
+                </p>
+            </div>
+            <button id="close-modal" class="bg-brand-sfblue text-white font-extrabold text-sm py-2.5 px-6 rounded-full hover:bg-brand-navy transition-all duration-300">
+                閉じる
+            </button>
+        </div>
+    </div>
+
+    <!-- Active Interactivity Logic -->
+    <script>
+        // 1. FAQ Accordion handler
+        const faqToggles = document.querySelectorAll('.faq-toggle');
+        faqToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector('i');
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+        // 2. Cost and Hours Saving Simulation Engine (Customized for SF Pharma Event)
+        const tripsInput = document.getElementById('trips-input');
+        const wageInput = document.getElementById('wage-input');
+        const tripsVal = document.getElementById('trips-val');
+        const wageVal = document.getElementById('wage-val');
+        
+        const savedHoursEl = document.getElementById('saved-hours');
+        const savedCostEl = document.getElementById('saved-cost');
+
+        function updateROI() {
+            const trips = parseInt(tripsInput.value);
+            const wage = parseInt(wageInput.value);
+
+            // Update user indicators
+            tripsVal.textContent = `${trips}件 / 月`;
+            wageVal.textContent = `${wage.toLocaleString()}円 / 時間`;
+
+            // Math: 
+            // Traditional = 210 mins. 1Approval = 30 mins. Saved = 180 mins (3.0 hours) per trip.
+            const savedHoursPerTrip = 3.0; 
+            const monthlySavedHours = trips * savedHoursPerTrip;
+            const annualSavedHours = monthlySavedHours * 12;
+            const annualSavedCost = annualSavedHours * wage;
+
+            // Render
+            savedHoursEl.textContent = `${annualSavedHours.toLocaleString()} 時間`;
+            savedCostEl.textContent = `¥${annualSavedCost.toLocaleString()}`;
+        }
+
+        tripsInput.addEventListener('input', updateROI);
+        wageInput.addEventListener('input', updateROI);
+        
+        // Initializer
+        updateROI();
+
+        // 3. Tab mapping switcher
+        const tabData = {
+            tab1: {
+                title: "会議室レンタル料（ビュッフェ会場を除く）",
+                desc: "ビュッフェ形式などの飲食費を伴わない、純粋な講演会やセミナーの開催に伴う会場手配の実費仕訳データ。",
+                tax: "非交際費",
+                taxRate: "課税 10%",
+                amgen: "Meeting Room Rental - Except Buffet Venue",
+                eboss: "1. 講演会 会場費 (課税10%)",
+                eoss: "0101: 講演会/セミナー 会場費"
+            },
+            tab2: {
+                title: "医療従事者の夕食 / レセプション / ビュッフェ",
+                desc: "講演会に付随する情報交換会、飲食を伴う懇親・接待に関わる精緻な実費マッピング仕訳データ。",
+                tax: "交際費",
+                taxRate: "課税 10%",
+                amgen: "HCP Dinner / Reception / Buffet",
+                eboss: "5. 情報交換会 飲食費 (課税10%)",
+                eoss: "0502: 情報交換会 / 飲食費"
+            },
+            tab3: {
+                title: "医療従事者の昼食（お弁当代）",
+                desc: "学術講演会において一般参加医師や演者、座長へ手配されるお弁当、茶菓等の経費の計上処理。",
+                tax: "非交際費",
+                taxRate: "軽減 8% / 課税 10%",
+                amgen: "HCP Lunch",
+                eboss: "7. 講演会 一般参加者 弁当代 (標準/軽減率)",
+                eoss: "0110: 講演会/セミナー 一般参加者 茶菓・弁当代"
+            },
+            tab4: {
+                title: "医師（一般演者・参加者）宿泊費（サービス料込）",
+                desc: "遠方からの医師の招請に伴って発生したホテル宿泊費、宿泊パッケージ手配分のEOSS適合計上。",
+                tax: "交際費",
+                taxRate: "課税 10%",
+                amgen: "HCP Accommodation",
+                eboss: "33. 一般参加者 宿泊費（サービス料込）",
+                eoss: "0109: 講演会/セミナー 一般参加者 交通費"
+            }
+        };
+
+        function switchTab(tabKey, element) {
+            // Remove active classes
+            document.querySelectorAll('#mapping-tabs .tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors";
+            });
+
+            // Set active class
+            element.className = "tab-btn px-4 py-2 text-xs font-extrabold rounded-lg bg-brand-sfbg text-brand-sfblue border border-brand-sfblue/30 transition-colors";
+
+            // Update Panel
+            const data = tabData[tabKey];
+            const panel = document.getElementById('mapping-panel');
+            panel.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="space-y-3">
+                        <span class="bg-blue-100 text-brand-sfblue text-[10px] font-black px-2.5 py-1 rounded">手配項目: ${data.title}</span>
+                        <div class="space-y-1">
+                            <p class="text-sm font-bold text-slate-800">${data.title}</p>
+                            <p class="text-xs text-slate-500 leading-relaxed">${data.desc}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="${data.tax === '交際費' ? 'bg-red-50 text-red-500' : 'bg-brand-teallight text-brand-medicalteal'} text-[10px] font-bold px-2 py-0.5 rounded">${data.tax}</span>
+                            <span class="bg-slate-200 text-slate-700 text-[10px] font-bold px-2 py-0.5 rounded">${data.taxRate}</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center py-1">
+                            <span class="text-slate-500 font-bold">AMGENコード:</span>
+                            <span class="font-extrabold text-slate-800">${data.amgen}</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-t border-slate-100">
+                            <span class="text-slate-500 font-bold">EBOSS/MOP経費タイプ:</span>
+                            <span class="font-extrabold text-slate-800">${data.eboss}</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-t border-slate-100">
+                            <span class="text-slate-500 font-bold">製薬企業標準コード (EOSS):</span>
+                            <span class="font-black text-brand-sfblue">${data.eoss}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 4. Simulated Submit Modal
+        const leadForm = document.getElementById('lead-form');
+        const successModal = document.getElementById('success-modal');
+        const closeModal = document.getElementById('close-modal');
+
+        leadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            successModal.classList.remove('hidden');
+            leadForm.reset();
+        });
+
+        closeModal.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
