@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1Approval for kintone | 承認したら購買、そのまま完了。出張・購買業務をDXする究極のプラグイン</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            yellow: '#FFB800',       /* ブランドを象徴するオレンジイエロー */
+                            yellowlight: '#FFFDF0',  /* ライトテーマ用の柔らかな背景イエロー */
+                            dark: '#0F172A',         /* アクセントダーク */
+                            primary: '#2563EB',      /* 信頼性の高いブルー */
+                            success: '#10B981',      /* 成功・削減グリーン */
+                            danger: '#EF4444',       /* 警告・課題レッド */
+                            slatebg: '#F8FAFC',      /* 薄いグレー背景 */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ソフトなシャドウとカードに深みを出すデコレーション */
+        .card-shadow {
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+        }
+        .hero-shadow {
+            box-shadow: 0 20px 40px -15px rgba(255, 184, 0, 0.15);
+        }
+        .text-glow {
+            text-shadow: 0 2px 10px rgba(255, 184, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <!-- Brand Logo from logo11.png -->
+            <div class="flex items-center gap-2 shrink-0">
+                <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
+                <!-- Fallback text logo if image is not loaded -->
+                <div id="logo-fallback" class="hidden items-center gap-2">
+                    <span class="text-xl font-black text-brand-dark">1Approval <span class="text-brand-yellow text-xs font-bold">for kintone</span></span>
+                </div>
+            </div>
+            
+            <!-- Navigation Desktop -->
+            <nav class="hidden xl:flex items-center gap-6 text-sm font-semibold text-slate-600 shrink-0">
+                <a href="#problem" class="hover:text-brand-yellow transition-colors">解決する課題</a>
+                <a href="#features" class="hover:text-brand-yellow transition-colors">機能・ステップ</a>
+                <a href="#simulator" class="hover:text-brand-yellow transition-colors">削減シミュレーター</a>
+                <a href="#case" class="hover:text-brand-yellow transition-colors">導入事例</a>
+                <a href="#pricing" class="hover:text-brand-yellow transition-colors">料金体系</a>
+                <a href="#roadmap" class="hover:text-brand-yellow transition-colors">今後の展開</a>
+            </nav>
+
+            <div class="flex items-center gap-3 shrink-0">
+                <a href="#contact" class="hidden sm:inline-flex items-center justify-center border border-slate-300 text-slate-700 hover:border-brand-yellow hover:text-brand-yellow transition-all duration-300 font-bold px-4 py-2 rounded-full text-xs">
+                    資料・デモ請求
+                </a>
+                <a href="#contact" class="inline-flex items-center justify-center bg-brand-yellow text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300 font-extrabold px-5 py-2.5 rounded-full text-xs shadow-md shadow-brand-yellow/10">
+                    無料相談・POC
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-brand-yellowlight/50 via-white to-white">
+        <!-- Visual Decor element -->
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+                <!-- Hero Left text -->
+                <div class="md:col-span-7 space-y-6 text-left">
+                    <div class="inline-flex items-center gap-2 bg-brand-yellow/10 border border-brand-yellow/30 rounded-full py-1.5 px-4 text-xs font-bold text-slate-700">
+                        <span class="flex h-2 w-2 rounded-full bg-brand-yellow"></span>
+                        国内初！出張・購買業務をkintone承認から一気通貫DX
+                    </div>
+                    
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.2] text-slate-900 tracking-tight">
+                        承認したら購買、<br class="hidden sm:block">
+                        <span class="text-brand-yellow text-glow">そのまま完了。</span>
+                    </h1>
+                    
+                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+                        kintoneの「承認ボタン」をクリックするだけで、システムが自動でフライトやホテルを即時購入。価格変更による「在庫切れ」「再申請」のストレスや、面倒な立替・経費精算を根こそぎ削減します。
+                    </p>
+
+                    <!-- Core Metrics Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">間接業務工数</span>
+                            <span class="text-2xl font-black text-brand-yellow">85%削減</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">手配手続き工数</span>
+                            <span class="text-2xl font-black text-slate-800">最短15分に</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm col-span-2 sm:col-span-1">
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">社員の個人立替</span>
+                            <span class="text-2xl font-black text-brand-success">0円一括請求</span>
+                        </div>
+                    </div>
+
+                    <!-- Hero CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <a href="#contact" class="bg-brand-yellow text-brand-dark font-black text-center px-8 py-4 rounded-xl text-base hover:bg-brand-dark hover:text-white transition-all duration-300 shadow-lg hover:shadow-brand-yellow/20 flex items-center justify-center gap-2 group">
+                            資料請求・オンラインデモを依頼 <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#simulator" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-center px-8 py-4 rounded-xl text-base transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator text-brand-yellow"></i> 削減効果をシミュレーション
+                        </a>
+                    </div>
+
+
+                </div>
+
+                <!-- Hero Right Content: Visual interactive preview -->
+                <div class="md:col-span-5 relative mt-6 md:mt-0">
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-yellow to-brand-primary rounded-3xl blur opacity-15"></div>
+                    <div class="bg-white border border-slate-200/80 p-6 sm:p-8 rounded-3xl shadow-xl relative space-y-6">
+                        
+                        <!-- Logo Header inside UI Mock -->
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                            <img src="logo11.png" alt="Logo" class="h-7 w-auto">
+                            <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-1 rounded">RICOH kintone plus 連携</span>
+                        </div>
+
+                        <!-- kintone app visual component -->
+                        <div class="bg-brand-slatebg rounded-xl p-4 border border-slate-200/60 space-y-3">
+                            <div class="flex items-center justify-between text-xs font-bold">
+                                <span class="text-slate-800"><i class="fa-solid fa-suitcase mr-1"></i> 出張手配申請</span>
+                                <span class="text-brand-success"><i class="fa-solid fa-circle-check"></i> カート情報自動取得済</span>
+                            </div>
+                            <div class="h-px bg-slate-200"></div>
+                            
+                            <!-- Travel details mapped -->
+                            <div class="space-y-2.5 text-xs text-slate-600">
+                                <div class="flex justify-between items-center bg-white px-3 py-2 rounded border border-slate-100">
+                                    <span>JAL 福岡-羽田 (普通席)</span>
+                                    <span class="font-bold text-slate-800">¥16,800</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-white px-3 py-2 rounded border border-slate-100">
+                                    <span>品川エキチカホテル 1泊</span>
+                                    <span class="font-bold text-slate-800">¥12,500</span>
+                                </div>
+                                <div class="h-px bg-slate-200 my-1"></div>
+                                <div class="flex justify-between items-center font-bold text-brand-yellow text-sm px-1">
+                                    <span class="text-slate-800">申請合計金額 (会社請求)</span>
+                                    <span class="text-lg">¥29,300</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action trigger box -->
+                        <div class="bg-brand-yellowlight border border-brand-yellow/30 rounded-xl p-4 text-center space-y-3">
+                            <p class="text-xs text-slate-500 font-medium">上司がkintone標準の「承認」ボタンを押すと</p>
+                            <div class="inline-flex items-center gap-2 bg-brand-yellow text-brand-dark font-black text-sm px-6 py-2.5 rounded-lg shadow-md">
+                                <i class="fa-solid fa-stamp"></i> 承認 (自動で購買・発券)
+                            </div>
+                            <p class="text-[10px] text-slate-400">
+                                瞬時に各提携ECサイトで予約発券が自動完了。個人精算の手間はゼロへ
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section ("こんなことありませんか？" directly from Flyer) -->
+    <section id="problem" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">THE HIDDEN WASTE</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    出張購買承認のツギハギ連携が<br class="hidden sm:block">「煩雑な雑務」を発生させています
+                </h2>
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                    システムがバラバラ、各自がバラバラなECサイトで予約、事後に領収書をかき集めて申請。この「分断」が組織全体の隠れたコストとなっています。
+                </p>
+            </div>
+
+            <!-- Problem Cards copy directly from flyer bullet points -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">承認待ってたら価格・在庫変動</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        最安フライトを選んで申請しても、承認を待つ数時間のうちに空室がなくなり、またはチケット価格が高騰。「価格変更による後戻りや二度手間」という不毛なやり直しが発生。
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-stamp"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">承認されたのに購買漏れが発生</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        「事前承認は下りたのに、出張者が忙しくてチケットを実購買し忘れていた」「予約完了したと思い込んでいた」など、システム未連携による土壇場での手配漏れリスク。
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">承認・購買・精算に多大な時間</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        出張者本人はサイト比較で時間を溶かし、上司は全体像がわからず仕方なく「メクラ承認」。管理部門は領収書回収の督促やコンプラ違反チェックに追われ、見えない人件費コストが莫大に。
+                    </p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">不正出張や規定違反のチェック困難</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        各自が個別サイトで手配するため、「本当に旅費上限規定を守っているか」「過剰に高いグレードのホテルを予約していないか」のガバナンス管理・監査体制がブラックボックス化。
+                    </p>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">各自の自己判断による経営リスク</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        統一された承認フローがない手配や、直前の判断がまかり通る体制はガバナンス崩壊のもと。企業の出張コンプライアンス上、極めて大きな損失につながるリスクになります。
+                    </p>
+                </div>
+
+                <!-- Highlight Info Box directly from page 5 -->
+                <div class="bg-brand-yellowlight p-6 rounded-2xl border-2 border-dashed border-brand-yellow/60 flex flex-col justify-center space-y-3">
+                    <p class="text-xs font-bold text-slate-900">【現実】膨大な間接コストが発生中</p>
+                    <div class="text-xs text-slate-600 space-y-1">
+                        <div class="flex justify-between"><span>ホテル・新幹線代（実費）：</span><span class="font-bold text-slate-800">約35,000円</span></div>
+                        <div class="flex justify-between border-t border-slate-200/50 pt-1"><span>出張手続き間接工数（人件費換算）：</span><span class="font-bold text-brand-danger text-sm">180分＝約9,000円分</span></div>
+                    </div>
+                    <p class="text-[10px] text-slate-400">※チケット代の約25%に等しい「見えない労働工数」が浪費されています。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section (Before vs After) -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">THE 1APPROVAL SOLUTION</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">プラグインを入れるだけで雑務を根こそぎ削減</h2>
+                <p class="text-slate-500 text-sm">
+                    kintoneの中に自動購買・自動ログイン連携プラグインを導入し、起案から完了までを一気通貫でつなぎます。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-16 items-center">
+                <!-- Left: 4 Step Workflow from Flyer -->
+                <div class="lg:col-span-7 space-y-5">
+                    <h3 class="text-lg font-bold text-slate-900 border-l-4 border-brand-yellow pl-3">一気通貫フローを支える4つのアクション</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex gap-4 p-4 rounded-xl border border-slate-200 bg-brand-slatebg hover:bg-white transition-colors duration-200">
+                            <span class="w-7 h-7 rounded-full bg-brand-dark text-brand-yellow font-black text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">kintoneに購買承認プラグインを設置</h4>
+                                <p class="text-xs text-slate-500 mt-1">RICOH kintone plus（RKP）環境など、すでにお使いのkintone環境にプラグインファイルをインストールするだけ。テンプレートアプリも揃っており、すぐに展開可能です。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 p-4 rounded-xl border border-slate-200 bg-brand-slatebg hover:bg-white transition-colors duration-200">
+                            <span class="w-7 h-7 rounded-full bg-brand-dark text-brand-yellow font-black text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">各種購買サービスと連携・自動ログイン</h4>
+                                <p class="text-xs text-slate-500 mt-1">手配システム（ピカパカ出張DX等）に自動連携・ログイン。国内ホテル、新幹線、航空券（LCC12社含む）を一発で横断検索・仮キープ。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 p-4 rounded-xl border border-slate-200 bg-brand-slatebg hover:bg-white transition-colors duration-200">
+                            <span class="w-7 h-7 rounded-full bg-brand-dark text-brand-yellow font-black text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">自動反映されたカート内容を確認して承認申請</h4>
+                                <p class="text-xs text-slate-500 mt-1">カートで選んだ内容が、kintoneの申請レコード項目に自動でそのまま転記・マッピングされます。申請時の「入力の手間・手入力ミス」は発生しません。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 p-4 rounded-xl border border-slate-200 bg-brand-slatebg hover:bg-white transition-colors duration-200">
+                            <span class="w-7 h-7 rounded-full bg-brand-dark text-brand-yellow font-black text-xs flex items-center justify-center shrink-0 mt-0.5">4</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">承認者が承認したら、購買もそのまま完了</h4>
+                                <p class="text-xs text-slate-500 mt-1">承認者がkintone上で「承認」した瞬間にロボットが自動購入を完了。請求は全て会社に届く（会社一括請求）ので、個人立替精算業務自体が消滅します。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Visual graph on Flyer -->
+                <div class="lg:col-span-5 bg-brand-slatebg p-6 sm:p-8 rounded-3xl border border-slate-200 space-y-6">
+                    <h3 class="text-center font-bold text-xs text-slate-500 tracking-wider uppercase">1件あたりの間接コスト比較</h3>
+                    
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="bg-white border border-slate-200 p-4 rounded-xl flex-1 text-center">
+                            <span class="text-[10px] text-slate-500 block">従来 (システム乱立)</span>
+                            <span class="text-2xl font-black text-slate-400 block mt-1">210 <span class="text-xs">分/件</span></span>
+                        </div>
+                        <div class="text-brand-yellow text-xl">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
+                        <div class="bg-brand-yellowlight border-2 border-brand-yellow p-4 rounded-xl flex-1 text-center shadow-md">
+                            <span class="text-[10px] text-brand-yellow font-black block">1Approval 導入後</span>
+                            <span class="text-2xl font-black text-brand-yellow block mt-1">30 <span class="text-xs">分/件</span></span>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-yellow text-brand-dark rounded-xl p-4 text-center shadow-md">
+                        <span class="text-xs font-bold block text-brand-dark/80">間接業務工数をなんと</span>
+                        <span class="text-3xl font-black block my-0.5">85% 削減 (180分削減)</span>
+                        <span class="text-[10px] block text-brand-dark/80">※月100件の出張申請を走らせる会社で、毎月「90万円分」のコストがカット。</span>
+                    </div>
+
+                    <!-- Flyer Feature: Dynamic Policy -->
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-brand-yellow/10 text-brand-yellow text-[10px] font-extrabold px-2 py-0.5 rounded">独自機能</span>
+                            <h4 class="text-xs font-bold text-slate-800">ダイナミックポリシー機能搭載</h4>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            「申請時から承認時」までに発生した軽微な価格変動（例：20%など許容閾値をマニュアル設定）をシステムが自動許容. 価格変動による不毛な予約やり直しループを防ぎます。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Cost Simulator Section -->
+    <section id="simulator" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">ROI CALCULATOR</span>
+                <p class="text-3xl font-extrabold text-slate-900">削減効果シミュレーター</p>
+                <p class="text-slate-500 text-sm">
+                    月間の出張申請件数と、従業員の時間単価から、1Approval導入により削減できる年間時間を試算します。
+                </p>
+            </div>
+
+            <div class="mt-12 bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-lg grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Range Inputs -->
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-700 tracking-wider">月間の出張手配件数（社内合計）</label>
+                            <span class="text-brand-yellow font-black text-sm" id="trips-val">100件</span>
+                        </div>
+                        <input type="range" id="trips-input" min="10" max="500" step="10" value="100" class="w-full accent-brand-yellow bg-slate-200 h-2 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-700 tracking-wider">出張者・上司・経理の想定平均時間単価</label>
+                            <span class="text-brand-yellow font-black text-sm" id="wage-val">3,000円 / 時間</span>
+                        </div>
+                        <input type="range" id="wage-input" min="1500" max="6000" step="500" value="3000" class="w-full accent-brand-yellow bg-slate-200 h-2 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div class="text-[11px] text-slate-400 leading-relaxed pt-3 border-t border-slate-100">
+                        ※ 資料11ページに則り、1手配あたり210分 → 30分（削減効果180分 / 3時間）削減の実データに即して算出。
+                    </div>
+                </div>
+
+                <!-- Simulation Output -->
+                <div class="bg-brand-slatebg p-6 sm:p-8 rounded-2xl border border-slate-200 text-center space-y-5">
+                    <div>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">年間で削減できる労働工数</p>
+                        <p class="text-3.5xl sm:text-4xl font-black text-slate-800 mt-1" id="saved-hours">3,600時間</p>
+                    </div>
+                    <div class="h-px bg-slate-200 w-2/3 mx-auto"></div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">削減できる年間コスト (労働人件費)</p>
+                        <p class="text-4xl sm:text-5xl font-black text-brand-yellow text-glow mt-1" id="saved-cost">¥10,800,000</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coverage Range & Capabilities -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">COVERAGE & FEATURES</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">国内ホテル・新幹線・航空券をワンストップでカバー</h2>
+                <p class="text-slate-500 text-sm">最安値横断検索から高度な旅費上限管理ポリシーまで、法人手配に必要なシステム要件をすべて網羅。</p>
+            </div>
+
+            <!-- Page 13-14 content: Coverage grids -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-16">
+                <!-- 1. Flight -->
+                <div class="bg-brand-slatebg rounded-2xl border border-slate-200 p-6 space-y-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-plane"></i>
+                        </div>
+                        <h3 class="font-extrabold text-slate-900 text-base">国内航空券 (LCC含む12社)</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        JAL、ANAはもちろん、スターフライヤー、ソラシドエア、AIRDO、ピーチ、ジェットスターなどの国内格安LCC 12社をまとめて一括横断比較。
+                    </p>
+                    <div class="bg-white p-3 rounded-xl text-[11px] text-slate-600 border border-slate-100/60 flex justify-between items-center">
+                        <span class="font-bold text-brand-yellow">割引運賃</span>
+                        <span>と</span>
+                        <span class="font-bold text-slate-800">変更可能運賃</span>
+                        <span>を2枠一括同時検索！</span>
+                    </div>
+                </div>
+
+                <!-- 2. Shinkansen -->
+                <div class="bg-brand-slatebg rounded-2xl border border-slate-200 p-6 space-y-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-train"></i>
+                        </div>
+                        <h3 class="font-extrabold text-slate-900 text-base">新幹線・JR特急</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        JR東海エクスプレス予約（EXビジネス）、えきねっと等の予約サービスに対応。目的地までのチケットをお好みの3つの受取方法（チケットレス、配送、駅受取）から自由に手配可能。
+                    </p>
+                </div>
+
+                <!-- 3. Hotel -->
+                <div class="bg-brand-slatebg rounded-2xl border border-slate-200 p-6 space-y-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-hotel"></i>
+                        </div>
+                        <h3 class="font-extrabold text-slate-900 text-base">国内ホテル (4万件以上)</h3>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        国内主要の宿泊施設40,000軒以上の充実したプラン。オンラインで即時にキープできるほか、複雑な条件の場合は手配サポートコンシェルジュが代替提案を行うことも可能です。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Page 15: Corporate detailed features table -->
+            <div class="mt-16 bg-brand-slatebg rounded-3xl p-6 sm:p-10 border border-slate-200 space-y-8 shadow-sm">
+                <h3 class="text-center font-black text-slate-900 text-lg">法人利用に便利なその他機能群（標準マッピング可能）</h3>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-xs">
+                    <div class="space-y-1 bg-white p-4 rounded-xl border border-slate-100/80">
+                        <span class="font-bold text-slate-800 block"><i class="fa-solid fa-user-gear text-brand-yellow mr-1"></i> 代理申込機能</span>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">出張者以外の事務担当者や同僚が、同行者の出張・購買をスピード代理入力・手配する機能。</p>
+                    </div>
+                    <div class="space-y-1 bg-white p-4 rounded-xl border border-slate-100/80">
+                        <span class="font-bold text-slate-800 block"><i class="fa-solid fa-sliders text-brand-yellow mr-1"></i> 旅費上限設定機能</span>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">役職等に応じた座席グレードや1泊あたりホテルの上限を登録し、規定外予約をシステムで未然に防止。</p>
+                    </div>
+                    <div class="space-y-1 bg-white p-4 rounded-xl border border-slate-100/80">
+                        <span class="font-bold text-slate-800 block"><i class="fa-solid fa-envelope-open-text text-brand-yellow mr-1"></i> 報告先メール連携</span>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">発券や手配申し込みがあった内容が、リアルタイムに管理者のメールアドレスに自動転送されるガバナンス機能。</p>
+                    </div>
+                    <div class="space-y-1 bg-white p-4 rounded-xl border border-slate-100/80">
+                        <span class="font-bold text-slate-800 block"><i class="fa-solid fa-network-wired text-brand-yellow mr-1"></i> 精算連携（楽楽精算等）</span>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">Concur、楽楽精算、マネーフォワード等の各精算アプリに手配情報を自動送信。入力ミスを徹底排除。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Study (ユーグレナ様) -->
+    <section id="case" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">USER SUCCESS CASE</span>
+                <p class="text-3xl font-extrabold text-slate-900">導入企業実績</p>
+            </div>
+
+            <!-- Page 12 Case Study Detail (White layout) -->
+            <div class="mt-12 bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+                <!-- Left Details -->
+                <div class="lg:col-span-5 bg-slate-900 text-white p-8 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <span class="bg-brand-yellow text-brand-dark text-[10px] font-black px-2.5 py-1 rounded-full tracking-widest">NPS 10点満点獲得</span>
+                        <div class="space-y-1">
+                            <h3 class="text-2xl font-black">株式会社ユーグレナ</h3>
+                            <p class="text-xs text-slate-400">管理部門・出張申請統括 楠美 様</p>
+                        </div>
+                        <div class="h-0.5 bg-brand-yellow w-12 my-3"></div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            「他部署やグループ会社全体にもぜひ勧めたいと思います。承認と手配予約が直結するので、タイムラグによる“手配し直し”の負担が完全に消えました」
+                        </p>
+                    </div>
+
+                    <!-- Before/After data visual -->
+                    <div class="bg-white/10 p-4 rounded-xl mt-6 space-y-2 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">従来の手続き工数</span>
+                            <span class="font-bold text-slate-200">約1.5時間（90分）</span>
+                        </div>
+                        <div class="flex justify-between border-t border-white/10 pt-1">
+                            <span class="text-brand-yellow font-bold">1Approval導入後</span>
+                            <span class="font-bold text-brand-yellow text-sm">15〜30分に短縮</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Quote -->
+                <div class="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-center space-y-6">
+                    <p class="text-sm sm:text-base text-slate-600 leading-relaxed italic">
+                        「以前は他社の出張管理システムを別途使っていましたが、承認を待っているうちに価格変更や満席になり、また最初からやり直しになることが社内の大きなストレスでした。また、出張の実費総額が見えないまま『メクラ承認』をせざるを得ない点も課題でした。
+                        <br><br>
+                        1ApprovalのPOC導入を行ったところ、承認から購買決定までの処理スピードが他社システムに比べて圧倒的に早く、これまでの二度手間が完全に解消されました。同じ作業が15〜30分程度で終わり、出張後の経費精算書類の作成も5分以内に収まっています。非常に価値を感じており、今後も期待しています。」
+                    </p>
+                    <div class="grid grid-cols-3 gap-2 pt-4 border-t border-slate-100 text-center text-xs">
+                        <div>
+                            <span class="text-slate-500 block">手配手続き時間</span>
+                            <span class="font-bold text-brand-yellow text-sm">約83%削減</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block">事後の経費精算</span>
+                            <span class="font-bold text-brand-yellow text-sm">5分以内</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block">他社への推奨度</span>
+                            <span class="font-bold text-brand-yellow text-sm">10 / 10点満点</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section (Detailed & Compliant with slides 16, 17, 18) -->
+    <section id="pricing" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">PRICING</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">シンプルで明快な2階建ての料金体系</h2>
+                <p class="text-slate-500 text-sm">
+                    導入から実利用まで、成果をすぐに感じられるように設計されています。
+                </p>
+            </div>
+
+            <!-- Two Column Pricing based on page 18 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16 max-w-5xl mx-auto">
+                
+                <!-- 1. Ricoh Plugin SaaS (Left) -->
+                <div class="bg-brand-slatebg rounded-2xl border border-slate-200 p-8 space-y-6 flex flex-col justify-between relative overflow-hidden card-shadow">
+                    <div class="absolute top-0 right-0 bg-brand-primary text-white text-[10px] font-extrabold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
+                        RICOH kintone plus 対応
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <span class="text-brand-primary font-bold text-xs uppercase tracking-widest block">① プラグインライセンス料金</span>
+                        <h3 class="text-xl font-bold text-slate-900">1Approval 宿泊交通プラグイン</h3>
+                        <p class="text-xs text-slate-500">kintoneに環境を構築し、手配システムと自動データ同期・自動マッピングするためのプラグイン費用</p>
+                        
+                        <div class="pt-4 border-t border-slate-200 space-y-2 text-xs">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-600 font-bold">初期設定費用</span>
+                                <span class="font-extrabold text-slate-950 text-sm">¥200,000 <span class="text-[10px] text-slate-500">(税抜/仮)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-t border-slate-200/50">
+                                <span class="text-slate-600 font-bold">プラグイン月額費用</span>
+                                <span class="font-black text-brand-yellow text-xl">¥98,000 <span class="text-[10px] text-slate-500">(税抜) / 月・社</span></span>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-400">※1年契約（年間一括お支払い：¥1,176,000 税抜）。納品月は初月無料。翌月1日から課金開始、課金開始月の翌月末お支払いとなります。</p>
+                    </div>
+                </div>
+
+                <!-- 2. Pikapaka system fee (Right) -->
+                <div class="bg-brand-yellowlight rounded-2xl border-2 border-brand-yellow p-8 space-y-6 flex flex-col justify-between relative overflow-hidden shadow-md">
+                    <div class="absolute top-0 right-0 bg-brand-yellow text-brand-dark text-[10px] font-black px-4 py-1 rounded-bl-xl uppercase tracking-wider">
+                        手配額に応じた手数料スライド
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <span class="text-brand-yellow font-bold text-xs uppercase tracking-widest block">② 購買手配DX利用料</span>
+                        <h3 class="text-xl font-bold text-slate-900">ピカパカ出張DX 手配システム</h3>
+                        <p class="text-xs text-slate-500">ホテル仮キープ、新幹線/航空券手配、コールセンターサポート、24時間運行管理サポートなど</p>
+                        
+                        <div class="pt-4 border-t border-slate-200 space-y-2 text-xs">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-600 font-bold">導入初期費用</span>
+                                <span class="font-extrabold text-slate-950 text-sm">¥0</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-t border-slate-200/50">
+                                <span class="text-slate-600 font-bold">システム利用料</span>
+                                <span class="font-black text-brand-yellow text-xl">当月手配総額の 5% 〜 無料 (0%)</span>
+                            </div>
+                        </div>
+
+                        <!-- Slide 17 table representation -->
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 text-[10px] space-y-1.5 shadow-sm">
+                            <p class="font-bold text-slate-800">【月間合計手配金額に応じた手数料スライド】</p>
+                            <div class="flex justify-between"><span>月額利用 100万円以下:</span> <span class="font-bold text-slate-700">5%</span></div>
+                            <div class="flex justify-between border-t border-slate-100 pt-1"><span>月額利用 100万〜200万円:</span> <span class="font-bold text-slate-700">3%</span></div>
+                            <div class="flex justify-between border-t border-slate-100 pt-1"><span>月額利用 200万〜300万円:</span> <span class="font-bold text-slate-700">2%</span></div>
+                            <div class="flex justify-between border-t border-slate-100 pt-1"><span>月額利用 300万〜500万円:</span> <span class="font-bold text-slate-700">1%</span></div>
+                            <div class="flex justify-between border-t border-slate-100 pt-1"><span>月額利用 500万円以上:</span> <span class="font-extrabold text-brand-success">無料 (0円)</span></div>
+                        </div>
+                        <p class="text-[10px] text-slate-400">※最低料金として11,000円/月（税込）を別途頂戴いたします。（表示はすべて税込表記です）</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment cycle flowchart (Slide 18 details) -->
+            <div class="mt-12 bg-brand-slatebg rounded-3xl p-6 sm:p-8 max-w-5xl mx-auto space-y-4 border border-slate-200">
+                <h3 class="text-sm font-bold text-slate-900 text-center flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-credit-card text-brand-yellow"></i> 契約後のお支払いの流れ・サイクル
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+                    <div class="p-4 bg-white rounded-xl border border-slate-200/60 space-y-2 shadow-sm">
+                        <span class="font-bold text-brand-primary block"><i class="fa-solid fa-file-invoice mr-1"></i> リコージャパン株式会社から請求</span>
+                        <ul class="list-disc pl-4 space-y-1">
+                            <li>初期設定費用：¥200,000 (税抜/仮)</li>
+                            <li>月額費用（年間契約）：¥1,176,000 (税抜)</li>
+                            <li>納品月の初月は無償。翌月1日から課金開始、課金開始月の翌月末お支払い。（自動更新となります）</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-white rounded-xl border border-slate-200/60 space-y-2 shadow-sm">
+                        <span class="font-bold text-brand-yellow block"><i class="fa-solid fa-file-invoice-dollar mr-1"></i> 株式会社ピカパカから請求</span>
+                        <ul class="list-disc pl-4 space-y-1">
+                            <li>出張交通ホテル利用実費 ＋ 手配システム手数料</li>
+                            <li>当月利用分について翌月初旬に合算請求書データをご送信（インボイス制度対応）。翌月末お支払い。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Roadmap (Slide 19 Product portfolio integrated visually) -->
+    <section id="roadmap" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <img src="logo11.png" alt="1Approval" class="h-8 mx-auto">
+                <h2 class="text-3xl font-extrabold text-slate-900">すべての購買管理を、1つの「承認」へ。</h2>
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                    1Approvalシリーズは今後、出張手配に留まらず、オフィス消耗品からイベント会場、駐車場、ITライセンスにいたるまで、社内の購買を一気通貫フローに統合します。
+                </p>
+            </div>
+
+            <!-- Page 19 modular grid with logo color mapping -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-16 max-w-5xl mx-auto">
+                <!-- Trip -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-brand-yellow"></span>
+                    <i class="fa-solid fa-plane-departure text-brand-yellow text-xl"></i>
+                    <h4 class="text-xs font-bold text-slate-800">出張宿泊手配</h4>
+                    <span class="text-[9px] bg-brand-yellow/10 text-brand-yellow px-2 py-0.5 rounded font-extrabold block">1Approval 4 Trip</span>
+                    <span class="text-[8px] text-slate-400 font-bold block mt-1">ピカパカ社他連携</span>
+                </div>
+
+                <!-- Goods -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-brand-logoGreen"></span>
+                    <i class="fa-solid fa-cubes text-brand-success text-xl"></i>
+                    <h4 class="text-xs font-bold text-slate-800">消耗品・備品</h4>
+                    <span class="text-[9px] bg-brand-success/10 text-brand-success px-2 py-0.5 rounded font-extrabold block">1Approval 4 Goods</span>
+                    <span class="text-[8px] text-slate-400 font-bold block mt-1">amazon business他連携</span>
+                </div>
+
+                <!-- MICE -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-brand-logoBlue"></span>
+                    <i class="fa-solid fa-users text-brand-primary text-xl"></i>
+                    <h4 class="text-xs font-bold text-slate-800">会議室・MICE</h4>
+                    <span class="text-[9px] bg-brand-primary/10 text-brand-primary px-2 py-0.5 rounded font-extrabold block">1Approval 4 MICE</span>
+                    <span class="text-[8px] text-slate-400 font-bold block mt-1">H'T、SPACEE他連携</span>
+                </div>
+
+                <!-- Parking -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-brand-logoPink"></span>
+                    <i class="fa-solid fa-square-parking text-brand-logoPink text-xl"></i>
+                    <h4 class="text-xs font-bold text-slate-800">駐車場手配</h4>
+                    <span class="text-[9px] bg-brand-logoPink/10 text-brand-logoPink px-2 py-0.5 rounded font-extrabold block">1Approval 4 Parking</span>
+                    <span class="text-[8px] text-slate-400 font-bold block mt-1">akippa連携予定</span>
+                </div>
+
+                <!-- SaaS -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-slate-400"></span>
+                    <i class="fa-solid fa-laptop-code text-slate-400 text-xl"></i>
+                    <h4 class="text-xs font-bold text-slate-800">IT SaaS契約</h4>
+                    <span class="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-extrabold block">1Approval 4 SaaS</span>
+                    <span class="text-[8px] text-slate-400 font-bold block mt-1">ライセンス管理拡張</span>
+                </div>
+
+                <!-- Tools -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-slate-400"></span>
+                    <i class="fa-solid fa-screwdriver-wrench text-slate-400 text-xl"></i>
+                    <h4 class="text-xs font-bold text-slate-800">工業・建築工具</h4>
+                    <span class="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-extrabold block">1Approval 4 Tools</span>
+                    <span class="text-[8px] text-slate-400 font-bold block mt-1">製造・建設特化</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Onboarding Process Section (Page 20 of slides) -->
+    <section class="py-20 bg-brand-slatebg border-y border-slate-200/80">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
+            <div class="space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">ONBOARDING</span>
+                <h2 class="text-3xl font-extrabold text-slate-900">ご契約から運用開始までのスムーズなステップ</h2>
+                <p class="text-slate-500 text-sm">
+                    プラグインZIP資材、マニュアル、利用説明会がパッケージ化されており、約1週間で稼働に入れます。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left max-w-4xl mx-auto">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-2 relative shadow-sm">
+                    <span class="text-brand-yellow font-black text-2xl block">01</span>
+                    <h4 class="font-bold text-slate-800 text-sm">キックオフ（日程確定）</h4>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">申込後、引き渡し資材（プラグインファイル、マニュアル、ピカパカ申込書）の受け渡しと今後の初期日程を合意決定します。</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-2 relative shadow-sm">
+                    <span class="text-brand-yellow font-black text-2xl block">02</span>
+                    <h4 class="font-bold text-slate-800 text-sm">環境構築（1週間程度）</h4>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">kintoneへのプラグインZIPインストール、初期設定（手配アプリ設置、閾値・旅費上限設定）をサポートいたします。</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-2 relative shadow-sm">
+                    <span class="text-brand-yellow font-black text-2xl block">03</span>
+                    <h4 class="font-bold text-slate-800 text-sm">利用者向け説明会</h4>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">実際に申請を行う利用者や承認上司向けに、自動転記や発券購買など具体的な手配フローのデモを随時レクチャーします。</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-2 relative shadow-sm">
+                    <span class="text-brand-yellow font-black text-2xl block">04</span>
+                    <h4 class="font-bold text-slate-800 text-sm">運用開始（実稼働）</h4>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">お申し込みから早くて翌週には本運用がスタート。経費精算削減の実感が定着するまで、専属サポートが並走します。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">FAQ</span>
+                <p class="text-3xl font-extrabold text-slate-900">よくあるご質問</p>
+            </div>
+
+            <div class="mt-12 space-y-4 max-w-3xl mx-auto">
+                <!-- Q1 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-bold flex items-center justify-between text-slate-800 hover:text-brand-yellow transition-colors text-sm sm:text-base">
+                        <span>Q. RICOH kintone plus（RKP）以外の標準kintoneクラウド環境でも使えますか？</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300 shrink-0 ml-4 text-slate-400"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-4">
+                        A. はい、動作いたします。サイボウズ社が提供する標準的なkintoneクラウド環境に、同梱されているプラグインファイルをZIPで適用し、テンプレートの「出張手配アプリ」をインポートしていただくことで同様にお使いいただけます。
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-bold flex items-center justify-between text-slate-800 hover:text-brand-yellow transition-colors text-sm sm:text-base">
+                        <span>Q. JR新幹線の発券は、EXビジネスとえきねっとどちらに対応していますか？</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300 shrink-0 ml-4 text-slate-400"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-4">
+                        A. 提携しているピカパカ社の購買システム側にて、EX予約（EXビジネス）およびJR東日本のえきねっと等の各種JR手配サービスにシームレスにデータ接続しており、新幹線、特急券の手配がワンストップで完了します。
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-bold flex items-center justify-between text-slate-800 hover:text-brand-yellow transition-colors text-sm sm:text-base">
+                        <span>Q. 領収書の回収と保管作業は完全に不要になりますか？</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300 shrink-0 ml-4 text-slate-400"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-4">
+                        A. はい、不要です。すべてのフライト、ホテル、新幹線実費が月次で「株式会社ピカパカ」より一括でインボイス対応請求書として発行・お支払いとなります。個々の社員がバラバラな領収書を手動回収して経費精算する必要は一切ありません。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Lead Form -->
+    <section id="contact" class="py-20 bg-brand-slatebg border-t border-slate-200 relative overflow-hidden">
+        <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>
+        
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center space-y-4 mb-12">
+                <img src="logo11.png" alt="1Approval" class="h-8 mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">まずは詳しい資料請求・無料デモへ</h2>
+                <p class="text-slate-500 text-xs sm:text-sm">
+                    テスト環境での実際の「カート自動連携」や「kintone承認ボタン動作」のご紹介、個別見積を承っております。
+                </p>
+            </div>
+
+            <!-- Stylized Form -->
+            <form id="lead-form" class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 space-y-6 shadow-md">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">お名前 <span class="text-red-500">*</span></label>
+                        <input type="text" required placeholder="山田 太郎" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-yellow transition-colors text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">貴社名 <span class="text-red-500">*</span></label>
+                        <input type="text" required placeholder="株式会社〇〇〇〇" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-yellow transition-colors text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">ビジネスメールアドレス <span class="text-red-500">*</span></label>
+                    <input type="email" required placeholder="name@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-yellow transition-colors text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">お問い合わせ目的 <span class="text-red-500">*</span></label>
+                    <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-yellow transition-colors text-sm">
+                        <option>詳しい営業資料・導入事例集が欲しい</option>
+                        <option>オンラインでの実際のデモ動画・説明を希望</option>
+                        <option>POC（部分的なテスト運用導入）について相談したい</option>
+                        <option>見積もり・旅費規定マッピングの相談</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">メッセージ・事前質問 (任意)</label>
+                    <textarea rows="3" placeholder="「RICOH kintone plus環境で使用予定」など現状の環境や課題をご記入ください。" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-brand-yellow transition-colors text-sm"></textarea>
+                </div>
+
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" required id="privacy" class="mt-1 accent-brand-yellow">
+                    <label for="privacy" class="text-[11px] text-slate-500 leading-relaxed">
+                        個人情報の取り扱い方針（プライバシーポリシー）に同意の上、送信します。
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-brand-yellow text-brand-dark font-black text-base py-4 px-6 rounded-xl hover:bg-brand-dark hover:text-white transition-all duration-300 shadow-lg shadow-brand-yellow/10">
+                    資料・デモ動画をリクエストする (無料)
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white py-12 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="flex items-center gap-2">
+                <img src="logo11.png" alt="1Approval" class="h-9 w-auto" onerror="this.style.display='none'; document.getElementById('footer-logo-fallback').style.display='block'">
+                <span id="footer-logo-fallback" class="hidden text-base font-black tracking-tight text-slate-800">1Approval <span class="text-brand-yellow">for kintone</span></span>
+            </div>
+            
+            <div class="text-center md:text-right space-y-2">
+                <p class="text-xs text-slate-500">叡知を統合して、つながりをなめらかに。</p>
+                <p class="text-[11px] text-slate-400 font-bold">株式会社エイチ</p>
+                <p class="text-[9px] text-slate-400">© 2026 1Approval (H1Approval) for kintone. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Form Success Modal Popup -->
+    <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/80 backdrop-blur-sm hidden">
+        <div class="bg-white border border-brand-yellow/30 p-8 rounded-3xl max-w-md w-full text-center space-y-6 shadow-2xl">
+            <div class="w-16 h-16 rounded-full bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-3xl mx-auto">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl font-bold text-slate-900">リクエストを送信しました</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    フォーム送信が完了しました。担当者より、折り返しメールにて詳細な営業PDF・導入マニュアル資材・製品デモ動画の案内URLをお送りいたします。
+                </p>
+            </div>
+            <button id="close-modal" class="bg-brand-yellow text-brand-dark font-extrabold text-sm py-2.5 px-6 rounded-full hover:bg-brand-dark hover:text-white transition-all duration-300">
+                閉じる
+            </button>
+        </div>
+    </div>
+
+    <!-- Active Interactivity Logic -->
+    <script>
+        // 1. FAQ Accordion handler
+        const faqToggles = document.querySelectorAll('.faq-toggle');
+        faqToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector('i');
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+        // 2. Cost and Hours Saving Simulation Engine (Slide 11 & Page 10 math)
+        const tripsInput = document.getElementById('trips-input');
+        const wageInput = document.getElementById('wage-input');
+        const tripsVal = document.getElementById('trips-val');
+        const wageVal = document.getElementById('wage-val');
+        
+        const savedHoursEl = document.getElementById('saved-hours');
+        const savedCostEl = document.getElementById('saved-cost');
+
+        function updateROI() {
+            const trips = parseInt(tripsInput.value);
+            const wage = parseInt(wageInput.value);
+
+            // Update user indicators
+            tripsVal.textContent = `${trips}件 / 月`;
+            wageVal.textContent = `${wage.toLocaleString()}円 / 時間`;
+
+            // Math: 
+            // Traditional = 210 mins. 1Approval = 30 mins. Saved = 180 mins (3.0 hours) per trip.
+            const savedHoursPerTrip = 3.0; 
+            const monthlySavedHours = trips * savedHoursPerTrip;
+            const annualSavedHours = monthlySavedHours * 12;
+            const annualSavedCost = annualSavedHours * wage;
+
+            // Render
+            savedHoursEl.textContent = `${annualSavedHours.toLocaleString()} 時間`;
+            savedCostEl.textContent = `¥${annualSavedCost.toLocaleString()}`;
+        }
+
+        tripsInput.addEventListener('input', updateROI);
+        wageInput.addEventListener('input', updateROI);
+        
+        // Initializer
+        updateROI();
+
+        // 3. Simulated Submit Modal
+        const leadForm = document.getElementById('lead-form');
+        const successModal = document.getElementById('success-modal');
+        const closeModal = document.getElementById('close-modal');
+
+        leadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            successModal.classList.remove('hidden');
+            leadForm.reset();
+        });
+
+        closeModal.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
