@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1Approval for kintone | 承認したら購買、そのまま完了。出張・購買業務をDXする究極のプラグイン</title>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -32,7 +30,6 @@
             }
         }
     </script>
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* ソフトなシャドウとカードに深みを出すデコレーション */
@@ -188,19 +185,15 @@ h2 {
 </head>
 <body class="bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
 
-    <!-- Header -->
     <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-            <!-- Brand Logo from logo11.png -->
             <div class="flex items-center gap-2 shrink-0">
                 <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
-                <!-- Fallback text logo if image is not loaded -->
                 <div id="logo-fallback" class="hidden items-center gap-2">
                     <span class="text-xl font-black text-brand-dark">1Approval <span class="text-brand-yellow text-xs font-bold">for kintone</span></span>
                 </div>
             </div>
             
-            <!-- Navigation Desktop -->
             <nav class="hidden xl:flex items-center gap-6 text-sm font-semibold text-slate-600 shrink-0">
                 <a href="#problem" class="hover:text-brand-yellow transition-colors">解決する課題</a>
                 <a href="#features" class="hover:text-brand-yellow transition-colors">機能・ステップ</a>
@@ -222,15 +215,12 @@ h2 {
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-brand-yellowlight/50 via-white to-white">
-        <!-- Visual Decor element -->
         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>
         <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
-                <!-- Hero Left text -->
                 <div class="md:col-span-7 space-y-6 text-left">
                     <div class="inline-flex items-center gap-2 bg-brand-yellow/10 border border-brand-yellow/30 rounded-full py-1.5 px-4 text-xs font-bold text-slate-700">
                         <span class="flex h-2 w-2 rounded-full bg-brand-yellow"></span>
@@ -246,7 +236,6 @@ h2 {
                         kintoneの「承認ボタン」をクリックするだけで、システムが自動でフライトやホテルを即時購入。価格変更による「在庫切れ」「再申請」のストレスや、面倒な立替・経費精算、経理部門のダブルチェックなどを根こそぎ削減します。
                     </p>
 
-                    <!-- Core Metrics Grid -->
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
                         <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
                             <span class="text-[11px] text-slate-500 font-bold block mb-1">間接業務工数</span>
@@ -262,7 +251,6 @@ h2 {
                         </div>
                     </div>
 
-                    <!-- Hero CTA Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4 pt-2">
                         <a href="#contact" class="bg-brand-yellow text-brand-dark font-black text-center px-8 py-4 rounded-xl text-base hover:bg-brand-dark hover:text-white transition-all duration-300 shadow-lg hover:shadow-brand-yellow/20 flex items-center justify-center gap-2 group">
                             資料請求・オンラインデモを依頼 <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
@@ -273,19 +261,16 @@ h2 {
                     </div>
                 </div>
 
-                <!-- Hero Right Content: Visual interactive preview -->
                 <div class="md:col-span-5 relative mt-6 md:mt-0">
                     <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-yellow to-brand-primary rounded-3xl blur opacity-15"></div>
                     <div class="bg-white border border-slate-200/80 p-6 sm:p-8 rounded-3xl shadow-xl relative space-y-6">
                         
-                        <!-- Logo Header inside UI Mock -->
                         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                             <img src="logo11.png" alt="Logo" class="h-7 w-auto" onerror="this.style.display='none'; document.getElementById('hero-mock-fallback').style.display='block'">
                             <span id="hero-mock-fallback" class="hidden text-xs font-black">1Approval <span class="text-brand-yellow">for kintone</span></span>
                             <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-1 rounded">RICOH kintone plus 連携</span>
                         </div>
 
-                        <!-- kintone app visual component -->
                         <div class="bg-brand-slatebg rounded-xl p-4 border border-slate-200/60 space-y-3">
                             <div class="flex items-center justify-between text-xs font-bold">
                                 <span class="text-slate-800"><i class="fa-solid fa-suitcase mr-1"></i> 出張手配申請</span>
@@ -293,7 +278,6 @@ h2 {
                             </div>
                             <div class="h-px bg-slate-200"></div>
                             
-                            <!-- Travel details mapped -->
                             <div class="space-y-2.5 text-xs text-slate-600">
                                 <div class="flex justify-between items-center bg-white px-3 py-2 rounded border border-slate-100">
                                     <span>JAL 福岡-羽田 (普通席)</span>
@@ -311,7 +295,6 @@ h2 {
                             </div>
                         </div>
 
-                        <!-- Action trigger box -->
                         <div class="bg-brand-yellowlight border border-brand-yellow/30 rounded-xl p-4 text-center space-y-3">
                             <p class="text-xs text-slate-500 font-medium">上司がkintone標準の「承認」ボタンを押すと</p>
                             <div class="inline-flex items-center gap-2 bg-brand-yellow text-brand-dark font-black text-sm px-6 py-2.5 rounded-lg shadow-md">
@@ -326,7 +309,6 @@ h2 {
             </div>
         </div>
     </section>
-<!-- ─── Problem ───────────────────────────────────────────────── -->
 <section id="problem" class="section">
   <div class="container">
     <div class="section-header">
@@ -339,7 +321,7 @@ h2 {
       <div class="problem-card">
         <span class="prob-num">──  01</span>
         <div class="prob-title">承認待ちの間に価格・在庫が変動</div>
-        <p class="prob-body">最安値で申請しても承認まで数時間。その間に空室消滅、価格高騰。承認後にまた最初からやり直す「不毛なループ」が常態化。</p>
+        <p class="prob-body">最安値で申請しても承認まで数時間。その間に空室消滅、価格高騰。承認後にまた最初からやりやり直す「不毛なループ」が常態化。</p>
       </div>
       <div class="problem-card">
         <span class="prob-num">──  02</span>
@@ -373,7 +355,6 @@ h2 {
   </div>
 </section>
 
-    <!-- Problem Section ("こんなことありませんか？" directly from Flyer) -->
     <section id="problem" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
@@ -386,9 +367,7 @@ h2 {
                 </p>
             </div>
 
-            <!-- Problem Cards copy directly from flyer bullet points -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
-                <!-- Card 1 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
                     <div class="flex items-center gap-3">
@@ -402,7 +381,6 @@ h2 {
                     </p>
                 </div>
 
-                <!-- Card 2 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
                     <div class="flex items-center gap-3">
@@ -416,7 +394,6 @@ h2 {
                     </p>
                 </div>
 
-                <!-- Card 3 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
                     <div class="flex items-center gap-3">
@@ -430,7 +407,6 @@ h2 {
                     </p>
                 </div>
 
-                <!-- Card 4 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
                     <div class="flex items-center gap-3">
@@ -440,11 +416,10 @@ h2 {
                         <h3 class="text-base font-bold text-slate-900">不正出張や規定違反のチェック困難</h3>
                     </div>
                     <p class="text-xs text-slate-500 leading-relaxed">
-                        各自が個別サイトで手配するため、「本当に旅費上限規定を守っているか」「過剰に高いグレードのホテルを予約していないか」のガバナンス管理・監査体制がブラックボックス化。
+                        各各自が個別サイトで手配するため、「本当に旅費上限規定を守っているか」「過剰に高いグレードのホテルを予約していないか」のガバナンス管理・監査体制がブラックボックス化。
                     </p>
                 </div>
 
-                <!-- Card 5 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
                     <div class="flex items-center gap-3">
@@ -458,7 +433,6 @@ h2 {
                     </p>
                 </div>
 
-                <!-- Highlight Info Box directly from page 5 -->
                 <div class="bg-brand-yellowlight p-6 rounded-2xl border-2 border-dashed border-brand-yellow/60 flex flex-col justify-center space-y-3">
                     <p class="text-xs font-bold text-slate-900">【現実】膨大な間接コストが発生中</p>
                     <div class="text-xs text-slate-600 space-y-1">
@@ -471,7 +445,6 @@ h2 {
         </div>
     </section>
 
-    <!-- Solution Section (Before vs After) -->
     <section id="features" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
@@ -483,7 +456,6 @@ h2 {
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-16 items-center">
-                <!-- Left: 4 Step Workflow from Flyer -->
                 <div class="lg:col-span-7 space-y-5">
                     <h3 class="text-lg font-bold text-slate-900 border-l-4 border-brand-yellow pl-3">一気通貫フローを支える4つのアクション</h3>
                     
@@ -522,15 +494,11 @@ h2 {
                     </div>
                 </div>
 
-                <!-- Right: Visual graph on Flyer (Replaced with record.png with fallback UI for previews) -->
                 <div class="lg:col-span-5">
                     <div class="relative overflow-hidden border border-slate-200 shadow-xl bg-slate-50 aspect-[4/3.5] flex items-center justify-center">
-                        <!-- Image Element targeting record.png -->
                         <img id="record-image" src="record.png" alt="kintone 連携レコード画面プレビュー" class="w-full h-full object-cover hidden" onload="this.classList.remove('hidden'); document.getElementById('record-fallback').classList.add('hidden')">
                         
-                        <!-- Premium Fallback UI that operates beautifully inside browser previews when local asset is not yet loaded -->
                         <div id="record-fallback" class="p-6 sm:p-8 w-full h-full flex flex-col justify-between bg-white text-left relative">
-                            <!-- kintone UI Header Simulated -->
                             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                                 <div class="flex items-center gap-1.5">
                                     <span class="w-3 h-3 rounded-full bg-[#E11D48]"></span>
@@ -541,7 +509,6 @@ h2 {
                                 <span class="text-[9px] bg-slate-100 text-slate-600 font-extrabold px-2 py-0.5 rounded uppercase">kintone Record UI</span>
                             </div>
                             
-                            <!-- Record Details Mock -->
                             <div class="space-y-3.5 my-auto">
                                 <div class="bg-brand-slatebg p-4 rounded-xl border border-slate-100 space-y-2 text-xs">
                                     <div class="flex justify-between items-center pb-2 border-b border-slate-200/50">
@@ -578,7 +545,6 @@ h2 {
         </div>
     </section>
 
-    <!-- New Section: Cost Comparison & Dynamic Policy Highlighting (w-full width / Part designed directly above ROI Calculator) -->
     <section id="comparison" class="py-16 bg-gradient-to-r from-brand-dark to-slate-900 text-white relative overflow-hidden border-t border-white/10">
         <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div class="absolute -top-40 -right-40 w-80 h-80 bg-brand-yellow/10 rounded-full blur-3xl"></div>
@@ -590,21 +556,17 @@ h2 {
                 <p class="text-slate-400 text-xs sm:text-sm">システム間の分断をなくし、承認から購買までを一気通貫にすることで圧倒的な業務効率化を実現します。</p>
             </div>
 
-            <!-- Horizontal 100% width Comparison & Features Cards -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                <!-- Left: Cost Comparison Card (Wide size) -->
                 <div class="lg:col-span-7 bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
                     <h3 class="text-sm font-bold text-slate-300 tracking-wider uppercase border-b border-white/10 pb-4"><i class="fa-solid fa-clock-rotate-left text-brand-yellow mr-2"></i>1件あたりの間接コスト・工数比較</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center py-4">
-                        <!-- Traditional -->
                         <div class="md:col-span-4 bg-white/5 border border-white/10 p-5 rounded-2xl text-center relative overflow-hidden">
                             <span class="text-[11px] text-slate-400 block mb-2">従来（複数システム乱立）</span>
                             <span class="text-3xl font-black text-slate-300 block">210 <span class="text-xs font-normal text-slate-400">分/件</span></span>
                             <p class="text-[10px] text-slate-500 mt-2">サイト検索、転記、立替申請、経理チェック</p>
                         </div>
                         
-                        <!-- Arrow -->
                         <div class="md:col-span-3 flex flex-col items-center justify-center text-brand-yellow py-2 md:py-0">
                             <span class="text-[10px] text-brand-yellow/80 font-bold mb-1">工数削減</span>
                             <i class="fa-solid fa-circle-arrow-right text-3xl hidden md:block"></i>
@@ -612,7 +574,6 @@ h2 {
                             <span class="text-xs font-bold text-brand-yellow mt-1">約85%カット</span>
                         </div>
                         
-                        <!-- 1Approval -->
                         <div class="md:col-span-4 bg-gradient-to-br from-brand-yellow/20 to-brand-yellow/5 border-2 border-brand-yellow p-5 rounded-2xl text-center shadow-lg relative overflow-hidden">
                             <span class="absolute top-0 right-0 bg-brand-yellow text-brand-dark text-[9px] font-black px-2.5 py-0.5 rounded-bl">最速</span>
                             <span class="text-[11px] text-brand-yellow font-bold block mb-2">1Approval 導入後</span>
@@ -633,12 +594,10 @@ h2 {
                     </div>
                 </div>
 
-                <!-- Right: Dynamic Policy Card -->
                 <div class="lg:col-span-5 bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
                     <h3 class="text-sm font-bold text-slate-300 tracking-wider uppercase border-b border-white/10 pb-4"><i class="fa-solid fa-sliders text-brand-yellow mr-2"></i>管理者＆利用者 想定システム機能</h3>
                     
                     <div class="space-y-4">
-                        <!-- Dynamic Policy Block -->
                         <div class="bg-white/5 border border-white/10 p-5 rounded-2xl space-y-2">
                             <div class="flex items-center gap-2">
                                 <span class="bg-brand-yellow/20 text-brand-yellow text-[10px] font-extrabold px-2 py-0.5 rounded border border-brand-yellow/30">独自機能</span>
@@ -649,7 +608,6 @@ h2 {
                             </p>
                         </div>
 
-                        <!-- One billing system Block -->
                         <div class="bg-white/5 border border-white/10 p-5 rounded-2xl space-y-2">
                             <div class="flex items-center gap-2">
                                 <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold px-2 py-0.5 rounded border border-emerald-500/30">標準対応</span>
@@ -667,8 +625,7 @@ h2 {
         </div>
     </section>
 
-    <!-- Interactive Cost Simulator Section -->
-    <section id="simulator" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
+         <section id="simulator" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto space-y-4">
                 <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">ROI CALCULATOR</span>
@@ -679,7 +636,6 @@ h2 {
             </div>
 
             <div class="mt-12 bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-lg grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <!-- Range Inputs -->
                 <div class="space-y-6">
                     <div>
                         <div class="flex justify-between mb-2">
@@ -700,7 +656,6 @@ h2 {
                     </div>
                 </div>
 
-                <!-- Simulation Output -->
                 <div class="bg-brand-slatebg p-6 sm:p-8 rounded-2xl border border-slate-200 text-center space-y-5">
                     <div>
                         <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">年間で削減できる労働工数</p>
@@ -716,7 +671,6 @@ h2 {
         </div>
     </section>
 
-    <!-- Coverage Range & Capabilities -->
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
@@ -725,9 +679,7 @@ h2 {
                 <p class="text-slate-500 text-sm">最安値横断検索から高度な旅費上限管理ポリシーまで、法人手配に必要なシステム要件をすべて網羅。</p>
             </div>
 
-            <!-- Page 13-14 content: Coverage grids -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-16">
-                <!-- 1. Flight -->
                 <div class="bg-brand-slatebg rounded-2xl border border-slate-200 p-6 space-y-4 shadow-sm">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
@@ -746,7 +698,6 @@ h2 {
                     </div>
                 </div>
 
-                <!-- 2. Shinkansen -->
                 <div class="bg-brand-slatebg rounded-2xl border border-slate-200 p-6 space-y-4 shadow-sm">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
@@ -759,7 +710,6 @@ h2 {
                     </p>
                 </div>
 
-                <!-- 3. Hotel -->
                 <div class="bg-brand-slatebg rounded-2xl border border-slate-200 p-6 space-y-4 shadow-sm">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
@@ -773,9 +723,7 @@ h2 {
                 </div>
             </div>
 
-            <!-- Highlighted Core Benefits Section (Cross-Search & Seamless Payments) -->
             <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Benefit 1: Multi-Carrier Search -->
                 <div class="bg-gradient-to-br from-white to-brand-slatebg border border-slate-200 p-8 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group">
                     <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-brand-yellow/5 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
                     <div class="flex items-start gap-4">
@@ -786,13 +734,12 @@ h2 {
                             <span class="text-xs font-black tracking-widest text-brand-yellow uppercase block">お客様のメリット01</span>
                             <h3 class="text-lg sm:text-xl font-extrabold text-slate-950">横断検索によるコスト削減</h3>
                             <p class="text-sm text-slate-600 leading-relaxed">
-                                航空券は大手航空会社だけでなく、<strong class="text-slate-900 font-bold">LCC（格安航空会社）やMCC（ミドルコストキャリア）も含めて一括で横断検索</strong>できます。コードシェア便の価格差も一目でわかるため、自然と一番安いルートを選べてコストを抑えられます。
+                                航空券は大手航空会社だけでなく、<strong class="text-slate-900 font-bold">LCC（格安航空会社）やMCC（ミドルコストキャリア）も含めて一括で横断検索</strong>できます。コードシェア便の価格差も一目でわかるため、自然と一番安いルートを選めてコストを抑えられます。
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Benefit 2: Elimination of Reimbursement -->
                 <div class="bg-gradient-to-br from-white to-brand-slatebg border border-slate-200 p-8 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group">
                     <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-brand-primary/5 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
                     <div class="flex items-start gap-4">
@@ -810,7 +757,6 @@ h2 {
                 </div>
             </div>
 
-            <!-- Page 15: Corporate detailed features table -->
             <div class="mt-16 bg-brand-slatebg rounded-3xl p-6 sm:p-10 border border-slate-200 space-y-8 shadow-sm">
                 <h3 class="text-center font-black text-slate-900 text-lg">法人利用に便利なその他機能群（標準マッピング可能）</h3>
                 
@@ -836,7 +782,6 @@ h2 {
         </div>
     </section>
 
-    <!-- Case Study (ユーグレナ様) -->
     <section id="case" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto space-y-4">
@@ -844,9 +789,7 @@ h2 {
                 <p class="text-3xl font-extrabold text-slate-900">導入企業実績</p>
             </div>
 
-            <!-- Page 12 Case Study Detail (White layout) -->
             <div class="mt-12 bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden grid grid-cols-1 lg:grid-cols-12">
-                <!-- Left Details -->
                 <div class="lg:col-span-5 bg-slate-900 text-white p-8 flex flex-col justify-between">
                     <div class="space-y-4">
                         <span class="bg-brand-yellow text-brand-dark text-[10px] font-black px-2.5 py-1 rounded-full tracking-widest">NPS 10点満点獲得</span>
@@ -860,7 +803,6 @@ h2 {
                         </p>
                     </div>
 
-                    <!-- Before/After data visual -->
                     <div class="bg-white/10 p-4 rounded-xl mt-6 space-y-2 text-xs">
                         <div class="flex justify-between">
                             <span class="text-slate-400">従来の手続き工数</span>
@@ -873,7 +815,6 @@ h2 {
                     </div>
                 </div>
 
-                <!-- Right Quote -->
                 <div class="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-center space-y-6">
                     <p class="text-sm sm:text-base text-slate-600 leading-relaxed italic">
                         「以前は他社の出張管理システムを別途使っていましたが、承認を待っているうちに価格変更や満席になり、また最初からやり直しになることが社内の大きなストレスでした。また、出張の実費総額が見えないまま『メクラ承認』をせざるを得ない点も課題でした。
@@ -899,7 +840,6 @@ h2 {
         </div>
     </section>
 
-    <!-- Pricing Section (Detailed & Compliant with slides 16, 17, 18) -->
     <section id="pricing" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
@@ -910,10 +850,8 @@ h2 {
                 </p>
             </div>
 
-            <!-- Two Column Pricing based on page 18 -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16 max-w-5xl mx-auto">
                 
-                <!-- 1. Ricoh Plugin SaaS (Left) -->
                 <div class="bg-brand-slatebg rounded-2xl border border-slate-200 p-8 space-y-6 flex flex-col justify-between relative overflow-hidden card-shadow">
                     <div class="absolute top-0 right-0 bg-brand-primary text-white text-[10px] font-extrabold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
                         RICOH kintone plus 対応
@@ -927,7 +865,7 @@ h2 {
                         <div class="pt-4 border-t border-slate-200 space-y-2 text-xs">
                             <div class="flex justify-between items-center py-1">
                                 <span class="text-slate-600 font-bold">初期設定費用</span>
-                                <span class="font-extrabold text-slate-950 text-sm">¥200,000 <span class="text-[10px] text-slate-500">(税抜/仮)</span></span>
+                                <span class="font-extrabold text-slate-950 text-sm">¥200,000 <span class="text-[10px] text-slate-500">(税抜)</span></span>
                             </div>
                             <div class="flex justify-between items-center py-1 border-t border-slate-200/50">
                                 <span class="text-slate-600 font-bold">プラグイン月額費用</span>
@@ -938,7 +876,6 @@ h2 {
                     </div>
                 </div>
 
-                <!-- 2. Pikapaka system fee (Right) -->
                 <div class="bg-brand-yellowlight rounded-2xl border-2 border-brand-yellow p-8 space-y-6 flex flex-col justify-between relative overflow-hidden shadow-md">
                     <div class="absolute top-0 right-0 bg-brand-yellow text-brand-dark text-[10px] font-black px-4 py-1 rounded-bl-xl uppercase tracking-wider">
                         手配額に応じた手数料スライド
@@ -960,7 +897,6 @@ h2 {
                             </div>
                         </div>
 
-                        <!-- Slide 17 table representation -->
                         <div class="bg-white p-3 rounded-xl border border-slate-200 text-[10px] space-y-1.5 shadow-sm">
                             <p class="font-bold text-slate-800">【月間合計手配金額に応じた手数料スライド】</p>
                             <div class="flex justify-between"><span>月額利用 100万円以下:</span> <span class="font-bold text-slate-700">5%</span></div>
@@ -969,7 +905,7 @@ h2 {
                             <div class="flex justify-between border-t border-slate-100 pt-1"><span>月額利用 300万〜500万円:</span> <span class="font-bold text-slate-700">1%</span></div>
                             <div class="flex justify-between border-t border-slate-100 pt-1"><span>月額利用 500万円以上:</span> <span class="font-extrabold text-brand-success">無料 (0円)</span></div>
                         </div>
-                        <p class="text-[10px] text-slate-400">※最低料金として11,000円/月（税込）を別途頂戴いたします。（表示はすべて税込表記です）</p>
+                        <p class="text-[10px] text-slate-400">※最低料金として11,000円/月（税込）を別途頂戴いたします。また、ご利用サービス毎に別途、規定の取扱手数料が発生いたします。（※プラグイン費用、最低料金は税抜表記です）</p>
                     </div>
                 </div>
             </div>
@@ -978,7 +914,6 @@ h2 {
         </div>
     </section>
 
-    <!-- Future Roadmap (Slide 19 Product portfolio integrated visually) -->
     <section id="roadmap" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
@@ -991,18 +926,15 @@ h2 {
                 </p>
             </div>
 
-            <!-- Page 19 modular grid with logo color mapping -->
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-16 max-w-5xl mx-auto">
-                <!-- Trip -->
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
                     <span class="absolute top-0 left-0 right-0 h-1 bg-brand-yellow"></span>
                     <i class="fa-solid fa-plane-departure text-brand-yellow text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">出張宿泊手配</h4>
                     <span class="text-[9px] bg-brand-yellow/10 text-brand-yellow px-2 py-0.5 rounded font-extrabold block">1Approval 4 Trip</span>
-                    <span class="text-[8px] text-slate-400 font-bold block mt-1">ピカパカ社他連携</span>
+                    <span class="text-[8px] text-slate-400 font-bold block mt-1">ピカパカ社連携</span>
                 </div>
 
-                <!-- Goods -->
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
                     <span class="absolute top-0 left-0 right-0 h-1 bg-brand-success"></span>
                     <i class="fa-solid fa-cubes text-brand-success text-xl"></i>
@@ -1011,7 +943,6 @@ h2 {
                     <span class="text-[8px] text-slate-400 font-bold block mt-1">amazon business他連携</span>
                 </div>
 
-                <!-- MICE -->
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
                     <span class="absolute top-0 left-0 right-0 h-1 bg-brand-primary"></span>
                     <i class="fa-solid fa-users text-brand-primary text-xl"></i>
@@ -1020,7 +951,6 @@ h2 {
                     <span class="text-[8px] text-slate-400 font-bold block mt-1">H'T、SPACEE他連携</span>
                 </div>
 
-                <!-- Parking -->
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
                     <span class="absolute top-0 left-0 right-0 h-1 bg-pink-500"></span>
                     <i class="fa-solid fa-square-parking text-pink-500 text-xl"></i>
@@ -1029,7 +959,6 @@ h2 {
                     <span class="text-[8px] text-slate-400 font-bold block mt-1">akippa連携予定</span>
                 </div>
 
-                <!-- SaaS -->
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
                     <span class="absolute top-0 left-0 right-0 h-1 bg-slate-400"></span>
                     <i class="fa-solid fa-laptop-code text-slate-400 text-xl"></i>
@@ -1038,7 +967,6 @@ h2 {
                     <span class="text-[8px] text-slate-400 font-bold block mt-1">ライセンス管理拡張</span>
                 </div>
 
-                <!-- Tools -->
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
                     <span class="absolute top-0 left-0 right-0 h-1 bg-slate-400"></span>
                     <i class="fa-solid fa-screwdriver-wrench text-slate-400 text-xl"></i>
@@ -1050,7 +978,6 @@ h2 {
         </div>
     </section>
 
-    <!-- Onboarding Process Section (Page 20 of slides) -->
     <section class="py-20 bg-brand-slatebg border-y border-slate-200/80">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
             <div class="space-y-4">
@@ -1086,7 +1013,6 @@ h2 {
         </div>
     </section>
 
-    <!-- FAQ Section -->
     <section id="faq" class="py-20 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center space-y-4">
@@ -1095,7 +1021,6 @@ h2 {
             </div>
 
             <div class="mt-12 space-y-4 max-w-3xl mx-auto">
-                <!-- Q1 -->
                 <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
                     <button class="faq-toggle w-full px-6 py-4 text-left font-bold flex items-center justify-between text-slate-800 hover:text-brand-yellow transition-colors text-sm sm:text-base">
                         <span>Q. RICOH kintone plus（RKP）以外の標準kintoneクラウド環境でも使えますか？</span>
@@ -1106,7 +1031,6 @@ h2 {
                     </div>
                 </div>
 
-                <!-- Q2 -->
                 <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
                     <button class="faq-toggle w-full px-6 py-4 text-left font-bold flex items-center justify-between text-slate-800 hover:text-brand-yellow transition-colors text-sm sm:text-base">
                         <span>Q. JR新幹線の発券は、EXビジネスとえきねっとどちらに対応していますか？</span>
@@ -1117,7 +1041,6 @@ h2 {
                     </div>
                 </div>
 
-                <!-- Q3 -->
                 <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
                     <button class="faq-toggle w-full px-6 py-4 text-left font-bold flex items-center justify-between text-slate-800 hover:text-brand-yellow transition-colors text-sm sm:text-base">
                         <span>Q. 領収書の回収と保管作業は完全に不要になりますか？</span>
@@ -1127,11 +1050,20 @@ h2 {
                         A. はい、不要です。すべてのフライト、ホテル、新幹線実費が月次で「株式会社ピカパカ」より一括でインボイス対応請求書として発行・お支払いとなります。個々の社員がバラバラな領収書を手動回収して経費精算する必要は一切ありません。
                     </div>
                 </div>
+
+                <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-bold flex items-center justify-between text-slate-800 hover:text-brand-yellow transition-colors text-sm sm:text-base">
+                        <span>Q. システムの利用費用と、出張実費の請求元（支払先）はどこになりますか？</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300 shrink-0 ml-4 text-slate-400"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-5 text-xs sm:text-sm text-slate-500 leading-relaxed border-t border-slate-100 pt-4">
+                        A. ①の「プラグインライセンス料金」については開発元である**株式会社エイチ**からのご請求となります。②の「購買手配DX利用料（システム利用料）」およびホテル・航空券・新幹線代などの「出張実費」については、手配主体である**株式会社ピカパカ**からの会社一括請求となります。お客様の混乱を招かないよう、窓口や請求主体の切り分け等についても事前に詳しくご説明いたします。
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact & Lead Form -->
     <section id="contact" class="py-20 bg-brand-slatebg border-t border-slate-200 relative overflow-hidden">
         <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>
         
@@ -1146,7 +1078,6 @@ h2 {
                 </p>
             </div>
 
-            <!-- Stylized Form -->
             <form id="lead-form" class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 space-y-6 shadow-md">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
@@ -1193,7 +1124,6 @@ h2 {
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="bg-white py-12 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
             <div class="flex items-center gap-2">
@@ -1208,7 +1138,6 @@ h2 {
         </div>
     </footer>
 
-    <!-- Form Success Modal Popup -->
     <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/80 backdrop-blur-sm hidden">
         <div class="bg-white border border-brand-yellow/30 p-8 rounded-3xl max-w-md w-full text-center space-y-6 shadow-2xl">
             <div class="w-16 h-16 rounded-full bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-3xl mx-auto">
@@ -1226,7 +1155,6 @@ h2 {
         </div>
     </div>
 
-    <!-- Active Interactivity Logic -->
     <script>
         // 1. FAQ Accordion handler
         const faqToggles = document.querySelectorAll('.faq-toggle');
