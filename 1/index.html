@@ -45,6 +45,145 @@
         .text-glow {
             text-shadow: 0 2px 10px rgba(255, 184, 0, 0.2);
         }
+        /* ==========================================================================
+   1. 共通の変数定義（色の設定など）
+   ========================================================================== */
+:root {
+  --amber:       #FFB800;
+  --void:        #0A0A0F;
+  --ink:         #111118;
+  --slate:       #3B3B4A;
+  --muted:       #6E6E80;
+  --line:        #E4E4EC;
+  --surface:     #F7F7F9;
+  --white:       #FFFFFF;
+  --mono:        'DM Mono', monospace;
+  --display:     'Syne', 'Noto Sans JP', sans-serif;
+  --body:        'Noto Sans JP', sans-serif;
+}
+
+/* ==========================================================================
+   2. 基本スタイル & レイアウト・タイポグラフィ共通設定
+   ========================================================================== */
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--body);
+  line-height: 1.7;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 4vw, 3rem);
+}
+
+.section { 
+  padding: clamp(4rem, 8vw, 8rem) 0; 
+}
+
+/* セクション共通の見出しエリア */
+.section-header {
+  margin-bottom: 3.5rem;
+}
+.section-header .eyebrow { 
+  display: block; 
+  margin-bottom: .75rem; 
+}
+.section-header h2 { 
+  margin-bottom: .75rem; 
+}
+.section-header p { 
+  font-size: .9rem; 
+  color: var(--muted); 
+  max-width: 56ch; 
+  line-height: 1.8; 
+}
+
+/* 文字の装飾クラス */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.eyebrow-amber { 
+  color: var(--amber); 
+}
+
+h2 { 
+  font-family: var(--display); 
+  line-height: 1.15; 
+}
+.display-md {
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   3. Problemセクション専用スタイル
+   ========================================================================== */
+#problem { 
+  background: var(--white); 
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 3.5rem;
+}
+
+.problem-card {
+  background: var(--white);
+  padding: 2rem 1.75rem;
+  transition: background .2s;
+  position: relative;
+}
+
+.problem-card:hover { 
+  background: var(--surface); 
+}
+
+.prob-num {
+  font-family: var(--mono);
+  font-size: .65rem; 
+  color: var(--amber);
+  margin-bottom: .75rem; 
+  display: block;
+}
+
+.prob-title {
+  font-family: var(--display);
+  font-size: 1rem; 
+  font-weight: 700;
+  color: var(--ink); 
+  margin-bottom: .6rem;
+}
+
+.prob-body { 
+  font-size: .82rem; 
+  color: var(--muted); 
+  line-height: 1.75; 
+}
+
+/* ==========================================================================
+   4. レスポンシブ対応（ブレイクポイント設定）
+   ========================================================================== */
+@media (max-width: 900px) {
+  /* （※該当箇所は最大幅900px時はグリッドの構成変化なし） */
+}
+
+@media (max-width: 640px) {
+  .problem-grid { 
+    grid-template-columns: 1fr; 
+  }
+}
     </style>
 </head>
 <body class="bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
