@@ -1,0 +1,907 @@
+import React, { useState, useMemo } from 'react';
+import { 
+  Building2, 
+  DollarSign, 
+  Maximize2, 
+  ShieldCheck, 
+  Volume2, 
+  CheckCircle, 
+  AlertTriangle, 
+  FileText, 
+  Layers, 
+  Sparkles, 
+  ArrowRight, 
+  ChevronRight, 
+  Info, 
+  ThumbsUp,
+  UserCheck,
+  ClipboardCheck,
+  Printer
+} from 'lucide-react';
+
+const PROPOSAL_DATA = {
+  clientName: "アポプラスステーション株式会社",
+  scenarios: [
+    {
+      id: "kaguyasu",
+      name: "プランA：防音ブース (カグヤス JYC-C001)",
+      maker: "カグヤス",
+      price: 352000,
+      imageSvg: (
+        <svg viewBox="0 0 100 120" className="w-full h-full text-indigo-600">
+          <rect x="25" y="10" width="50" height="100" rx="4" fill="#312e81" stroke="#818cf8" strokeWidth="2" />
+          <rect x="32" y="20" width="36" height="40" rx="2" fill="#1e1b4b" stroke="#818cf8" />
+          <rect x="35" y="25" width="30" height="30" rx="1" fill="#818cf8" fillOpacity="0.2" />
+          <rect x="35" y="75" width="30" height="25" fill="#4338ca" />
+          <text x="50" y="108" textAnchor="middle" fontSize="5" fill="#e0e7ff" fontWeight="bold">完全個室メタルフレーム</text>
+        </svg>
+      ),
+      realCostCalc: {
+        delivery: 80000, 
+        fireDoc: 0, 
+        sprinkler: 150000, 
+        furniture: 0, 
+        total: 582000
+      },
+      soundproof: "高（完全密閉パネル・ガラス扉仕様 / 声漏れを完全シャットアウト）",
+      fireLaw: "【自身で申請対応・代行費0円】天井が閉じた完全個室のため消防法が適用されますが、消火装置を自主手配し、消防署への申請・図面作成は自身（自社）で実施することで、申請代行費を0円にカット。約58.2万円という最小予算で適法クリア可能です。",
+      suitability: "【最推奨】リードプラン（プランA）",
+      suitabilityReason: "アポプラス様の予算上限に対して約58.2万円と非常に理想的な着地となります。申請を自身で実施（0円）することで、デリケートな個人情報や医薬情報の漏洩を100%防げる「完全個室」を予算内で手に入れる現実的なベスト解です。",
+      pros: "30万円台の本体価格に加え、消防申請・図面作成を自身で手配・実施することで費用を0円に削減。消火装置のみの自主手配に抑え、予算内で本格的な防音密閉個室を導入。",
+      cons: "重量が250kg以上あるためOA床の耐荷重に注意。消防届出やビル管理会社との提出書類作成のため、自身（自社）の申請実務稼働が発生します。",
+      url: "https://kaguyasujp.com/products/jyc-c001"
+    },
+    {
+      id: "remute",
+      name: "プランB：吸音ブース (REMUTE サイドイン)",
+      maker: "リス (オフィスコム取扱)",
+      price: 473000,
+      imageSvg: (
+        <svg viewBox="0 0 100 120" className="w-full h-full text-emerald-600">
+          <rect x="20" y="15" width="60" height="95" rx="2" fill="#064e3b" stroke="#34d399" strokeWidth="2" />
+          <rect x="25" y="25" width="50" height="55" rx="1" fill="#022c22" />
+          <line x1="20" y1="15" x2="80" y2="15" stroke="#34d399" strokeWidth="4" />
+          <text x="50" y="105" textAnchor="middle" fontSize="5" fill="#a7f3d0" fontWeight="bold">天面開放スライドドア</text>
+        </svg>
+      ),
+      realCostCalc: {
+        delivery: 60000,
+        fireDoc: 0,
+        sprinkler: 0,
+        furniture: 15000, 
+        total: 548000
+      },
+      soundproof: "中（天井開放型のため、上部への音漏れが一定数発生します）",
+      fireLaw: "【消防申請・工事不要】天井が完全に開いている「天面開放設計」のため、ビル防災システムとの連動工事や、スプリンクラー設置、消防署への工事計画届出などの手続きは一切不要。設置するだけで即日運用可能です。",
+      suitability: "【代替案】サブプラン（プランB）",
+      suitabilityReason: "「申請や防災調整の手間を一切かけずに、50万円台半ばでスピード導入したい」という場合の強力なセカンドプランです。ただし天井が空いているため、機密情報を話すWeb面談には不向きです。",
+      pros: "天井オープン型のため防災スプリンクラーや複雑な消防申請が一切不要。配送・組立調整費のみで、最も手軽に50万円台半ば（約54.8万円）で導入可能。",
+      cons: "上部に声が逃げるため、隣に人がいる状況での極秘会議やデリケートな人事相談など、100%の声漏れ防止は物理的に不可能です。横幅が1.5mとやや大型。",
+      url: "https://www.office-com.jp/products/detail.php?product_id=400369"
+    },
+    {
+      id: "chatbox",
+      name: "参考プランC：CHATBOX (再生品・フルコミパック)",
+      maker: "ワイムシェアリング",
+      price: 1344407,
+      imageSvg: (
+        <svg viewBox="0 0 100 120" className="w-full h-full text-amber-600">
+          <rect x="28" y="8" width="44" height="104" rx="6" fill="#78350f" stroke="#fbbf24" strokeWidth="2" />
+          <rect x="34" y="18" width="32" height="42" rx="2" fill="#451a03" stroke="#fbbf24" />
+          <rect x="37" y="22" width="26" height="32" rx="1" fill="#fbbf24" fillOpacity="0.2" />
+          <rect x="34" y="80" width="32" height="20" fill="#fbbf24" fillOpacity="0.1" />
+          <text x="50" y="106" textAnchor="middle" fontSize="5" fill="#fef3c7" fontWeight="bold">超高性能フルコミ価格</text>
+        </svg>
+      ),
+      realCostCalc: {
+        delivery: 0, 
+        fireDoc: 0, 
+        sprinkler: 0, 
+        furniture: 0, 
+        total: 1344407
+      },
+      soundproof: "極高（国内最高クラスの遮音＆抗菌機能内蔵）",
+      fireLaw: "【完全コミコミ】スプリンクラー本体代金、消防署折衝、設置届出図面作成、平日配送設置費が、すべて「1,344,407円」の本体価格に内包されています。",
+      suitability: "【参考除外】予算超過プラン（プランC）",
+      suitabilityReason: "消火装置の設置や申請などの「丸投げフルパック」としては極めて優秀ですが、アポプラス様の指定予算「50万〜70万円」に対して「約2倍」と大幅に高額。今回の予算枠からは選定対象外とします。",
+      pros: "消防の事前調整、図面作成、簡易スプリンクラー、設置工事まで一連のオフィス付帯作業がすべて価格内にオールインワン。稼働が一切不要な究極のプラン。",
+      cons: "税込で約134.4万円と非常に高額なため、アポプラス様の予算上限である70万円を大幅に上回り、承認（稟議）を通すハードルが極めて高いこと。",
+      url: "添付お見積書 (2026/06/09)"
+    }
+  ]
+};
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('overview'); // overview, calc_matrix, apoplus_best, approval_support
+  const [selectedScenario, setSelectedScenario] = useState('kaguyasu');
+
+  // カグヤス（プランA）の自社努力で削れる費用ステート
+  const [kaguyasuDeliveryCost, setKaguyasuDeliveryCost] = useState(80000); 
+  const [kaguyasuFireDoc, setKaguyasuFireDoc] = useState(0); // 自身で実施（申請代行費0円）
+  const [kaguyasuSprinkler, setKaguyasuSprinkler] = useState(150000); 
+
+  // REMUTEの配送設置費調整
+  const [remuteDeliveryCost, setRemuteDeliveryCost] = useState(60000);
+  const [remuteFurnitureCost, setRemuteFurnitureCost] = useState(15000);
+
+  // コピー完了トーストの簡易ステート
+  const [copied, setCopied] = useState(false);
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY', maximumFractionDigits: 0 }).format(price);
+  };
+
+  const computedCosts = useMemo(() => {
+    const kaguyasuTotal = 352000 + kaguyasuDeliveryCost + kaguyasuFireDoc + kaguyasuSprinkler;
+    const remuteTotal = 473000 + remuteDeliveryCost + remuteFurnitureCost;
+    const chatboxTotal = 1344407; // 固定コミコミ価格
+
+    return {
+      kaguyasu: kaguyasuTotal,
+      remute: remuteTotal,
+      chatbox: chatboxTotal
+    };
+  }, [kaguyasuDeliveryCost, kaguyasuFireDoc, kaguyasuSprinkler, remuteDeliveryCost, remuteFurnitureCost]);
+
+  // クリップボードに稟議テキストをコピーする関数
+  const handleCopyText = (textId) => {
+    const element = document.getElementById(textId);
+    if (element) {
+      navigator.clipboard.writeText(element.innerText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased">
+      
+      {/* ==========================================
+          HEADER PANEL WITH CLIENT CUSTOMIZATION
+          ========================================== */}
+      <header className="bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-900 text-white shadow-xl">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2 text-indigo-400 font-semibold tracking-wider text-sm uppercase">
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                アポプラスステーション株式会社 様 ご提案書
+              </div>
+              <h1 className="text-3xl font-extrabold tracking-tight mt-2 sm:text-4xl text-white">
+                総予算 50万円〜70万円枠で実現する、ワークブース最適導入プラン
+              </h1>
+              <p className="mt-2 text-slate-300 text-sm sm:text-base max-w-4xl leading-relaxed">
+                アポプラスステーション様の指定予算<strong>「50万〜70万円」を厳守</strong>し、最推奨リードプランとして「カグヤス（完全密閉個室）」を推す比較提案書です。
+                <strong>消防申請・図面作成は自身（自社対応）で実施する前提（代行費0円）</strong>として、現実的かつ極めて高効率な導入コストを算定しています。
+              </p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10 self-start lg:self-auto flex flex-col gap-1">
+              <span className="text-[10px] text-indigo-300 uppercase font-bold tracking-wider">PROPOSAL STANDARD</span>
+              <span className="font-bold text-sm">予算上限：700,000円 (厳守)</span>
+              <span className="text-xs text-amber-300">※プランA（カグヤス）なら約58.2万円で適法導入</span>
+            </div>
+          </div>
+        </div>
+
+        {}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex border-b border-white/10 overflow-x-auto no-scrollbar">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`py-4 px-6 font-medium text-sm border-b-2 whitespace-nowrap transition-all duration-200 flex items-center gap-2 ${
+                activeTab === 'overview'
+                  ? 'border-indigo-400 text-white font-bold'
+                  : 'border-transparent text-indigo-200 hover:text-white hover:border-white/20'
+              }`}
+            >
+              <Layers className="w-4 h-4" />
+              1. 提案アプローチ概要
+            </button>
+            <button
+              onClick={() => setActiveTab('calc_matrix')}
+              className={`py-4 px-6 font-medium text-sm border-b-2 whitespace-nowrap transition-all duration-200 flex items-center gap-2 ${
+                activeTab === 'calc_matrix'
+                  ? 'border-indigo-400 text-white font-bold'
+                  : 'border-transparent text-indigo-200 hover:text-white hover:border-white/20'
+              }`}
+            >
+              <DollarSign className="w-4 h-4" />
+              2. 費用削減シミュレーション
+            </button>
+            <button
+              onClick={() => setActiveTab('apoplus_best')}
+              className={`py-4 px-6 font-medium text-sm border-b-2 whitespace-nowrap transition-all duration-200 flex items-center gap-2 ${
+                activeTab === 'apoplus_best'
+                  ? 'border-indigo-400 text-white font-bold'
+                  : 'border-transparent text-indigo-200 hover:text-white hover:border-white/20'
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              3. 各種製品・詳細スペック比較
+            </button>
+            <button
+              onClick={() => setActiveTab('approval_support')}
+              className={`py-4 px-6 font-medium text-sm border-b-2 whitespace-nowrap transition-all duration-200 flex items-center gap-2 ${
+                activeTab === 'approval_support'
+                  ? 'border-indigo-400 text-white font-bold'
+                  : 'border-transparent text-indigo-200 hover:text-white hover:border-white/20'
+              }`}
+            >
+              <ClipboardCheck className="w-4 h-4" />
+              4. 社内稟議・承認申請サポート文面
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* ==========================================
+          MAIN AREA FOR INTERACTIVE TABS
+          ========================================== */}
+      <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        {/* ==================================================
+            TAB 1: OVERVIEW (提案骨子＆アポプラス様に最適な要件)
+            ================================================== */}
+        {activeTab === 'overview' && (
+          <div className="space-y-8 animate-fadeIn">
+            
+            {/* KEY EXPLANATORY STATEMENT CARD */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                <div className="bg-indigo-50 text-indigo-800 p-4 rounded-xl shadow-xs border border-indigo-100 flex-shrink-0">
+                  <Building2 className="w-8 h-8" />
+                </div>
+                <div className="space-y-4">
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+                    なぜ「カグヤス（完全密閉個室）」がアポプラスステーション様にとって最善なのか？
+                  </h2>
+                  <p className="text-slate-600 leading-relaxed text-sm md:text-base">
+                    アポプラスステーション様では、調剤薬局事業の顧客、登録MR・CRA、その他人材紹介登録者などの**極めてセンシティブな「個人情報」や「医療機密」**を扱うWeb会議・面接が多く発生します。
+                    そのため、天面が空いたブースでは「声漏れによる漏洩リスク」を完全に排除できません。
+                    <br />
+                    本提案では、遮音性が最も高く、かつアポプラスステーション様の指定予算<strong>「50万〜70万円」の枠内に美しく収まる「カグヤス」をリードプラン（プランA）</strong>として強く推奨します。
+                    申請代理店を使用せず、<strong>消防署への書類・図面申請は自身（自社）で実施することで申請代行費用を「0円」</strong>に抑え、実質総額を約58.2万円まで引き下げる計画です。
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <div className="bg-indigo-50/50 border border-indigo-100 p-4 rounded-xl space-y-2">
+                      <div className="flex items-center gap-2 text-indigo-800 font-bold text-sm">
+                        <CheckCircle className="w-4 h-4 text-indigo-600" />
+                        最推奨プランA：カグヤス（完全個室）
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        **「予算内（約58.2万円）で手に入る完全密閉防音個室」**。消火装置を自主調達し、消防への申請一式を自身で実施（申請代行費0円）することで極限までコストカット。情報漏洩を100%防ぐ本命の提案です。
+                      </p>
+                    </div>
+
+                    <div className="bg-emerald-50/50 border border-emerald-100 p-4 rounded-xl space-y-2">
+                      <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
+                        <Maximize2 className="w-4 h-4 text-emerald-600" />
+                        代替プランB：REMUTE（リミュート）
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        **「消防工事や面倒な届出を100%回避する」**スピード重視プランです。天面開放設計のためビル防災規定を回避し、配送設置のみで<strong>約54.8万円</strong>で早期導入が可能です。
+                      </p>
+                    </div>
+
+                    <div className="bg-red-50/50 border border-red-100 p-4 rounded-xl space-y-2">
+                      <div className="flex items-center gap-2 text-red-800 font-bold text-red-600 font-bold text-sm">
+                        <AlertTriangle className="w-4 h-4 text-red-600" />
+                        参考プランC：CHATBOX（高額除外）
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        消火装置や申請がフルコミコミですが、総額が<strong>1,344,407円（高い）</strong>となり、指定予算枠を大幅（約2倍）に超過するため、今回の選定からは明確に除外とします。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {}
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+              <h3 className="text-lg font-bold text-slate-900 border-b pb-4 flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-indigo-600" />
+                実質総コスト＆予算適合性グラフ
+              </h3>
+              
+              <div className="space-y-6">
+                {PROPOSAL_DATA.scenarios.map((scenario) => {
+                  const isPlanA = scenario.id === 'kaguyasu';
+                  const isPlanB = scenario.id === 'remute';
+                  const isOver = scenario.id === 'chatbox';
+                  const realTotal = computedCosts[scenario.id];
+                  
+                  // 1,400,000円を基準とした100%幅の割合
+                  const percentWidth = Math.min(100, (realTotal / 1400000) * 100);
+
+                  return (
+                    <div key={scenario.id} className="space-y-1.5">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-1">
+                        <div>
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded mr-2 ${
+                            isPlanA ? 'bg-indigo-100 text-indigo-800' :
+                            isPlanB ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                          }`}>
+                            {isPlanA ? 'プランA最推奨' : isPlanB ? 'プランB代替案' : 'プランC参考外'}
+                          </span>
+                          <span className="font-bold text-sm text-slate-900">{scenario.name}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xs text-slate-400 block line-through">本体のみ: {formatPrice(scenario.price)}</span>
+                          <span className={`text-base font-extrabold ${isPlanA ? 'text-indigo-600' : isPlanB ? 'text-emerald-600' : 'text-slate-500'}`}>
+                            実質総額（自身対応込）: {formatPrice(realTotal)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 bg-slate-100 h-6 rounded-lg overflow-hidden flex relative">
+                          {/* 予算ライン 50万-70万を薄い緑の背景として描画 */}
+                          <div className="absolute left-[35.7%] w-[14.3%] h-full bg-emerald-500/10 pointer-events-none border-x border-dashed border-emerald-500/30" />
+                          
+                          {/* 各プランの実質総額バー */}
+                          <div 
+                            className={`h-full transition-all duration-300 ${
+                              isPlanA ? 'bg-indigo-600' :
+                              isPlanB ? 'bg-emerald-500' : 'bg-slate-400'
+                            }`} 
+                            style={{ width: `${percentWidth}%` }}
+                          />
+                        </div>
+                        <span className={`text-xs font-bold w-24 text-right ${
+                          isOver ? 'text-red-600' : 'text-emerald-700'
+                        }`}>
+                          {isOver ? '予算超過（高い）' : '予算内適合'}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* GRAPH LEGEND AND WARNING NOTES */}
+              <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-col md:flex-row justify-between text-xs text-slate-500 gap-4">
+                <div className="flex flex-wrap gap-4 items-center">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-3.5 h-3.5 bg-indigo-600 rounded" />
+                    <span>プランA（カグヤス：完全個室・消防自身対応）</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-3.5 h-3.5 bg-emerald-500 rounded" />
+                    <span>プランB（リミュート：天井開放・申請工事不要）</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-red-500 font-semibold">
+                    <span className="w-3.5 h-3.5 bg-slate-400 rounded" />
+                    <span>参考プランC（CHATBOX：高い・約2倍の予算超過）</span>
+                  </div>
+                </div>
+                <div className="font-semibold text-emerald-800">
+                  ※緑色点線エリア＝アポプラス様指定予算枠【50万〜70万円】
+                </div>
+              </div>
+            </div>
+
+            {/* ACTION TRIGGERS */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center py-5 bg-indigo-50/50 rounded-xl px-6 border border-indigo-100">
+              <span className="text-sm text-slate-700 font-medium">シミュレーターでお見積りを調整、または詳細な製品比較へ進みますか？</span>
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setActiveTab('calc_matrix')}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg shadow-xs transition-all flex items-center gap-1.5"
+                >
+                  費用削減シミュレーターを動かす <DollarSign className="w-4 h-4" />
+                </button>
+                <button 
+                  onClick={() => setActiveTab('apoplus_best')}
+                  className="bg-white hover:bg-slate-100 text-indigo-700 border border-indigo-200 text-xs font-bold px-4 py-2.5 rounded-lg shadow-xs transition-all flex items-center gap-1.5"
+                >
+                  詳細スペック比較を見る <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ==================================================
+            TAB 2: CALC MATRIX (付帯・追加工事費用削減シミュレーション)
+            ================================================== */}
+        {activeTab === 'calc_matrix' && (
+          <div className="space-y-8 animate-fadeIn">
+            {/* SLIDERS AND CONTROLS FOR COSTS */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+              <h2 className="text-xl font-bold text-slate-900 border-b pb-4 flex items-center gap-2">
+                <DollarSign className="w-6 h-6 text-indigo-600" />
+                アポプラス様 予算50万〜70万円内 費用調整シミュレーター
+              </h2>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                天井がある最推奨「カグヤス」や、天面が空いている「REMUTE」を導入する際、**どこにどれだけの追加付帯費用をかけるか**をリアルタイムに変更できます。
+                カグヤスプランは、<strong>消防署事前協議や申請書類・図面の作成を自身（自社）で実施（代行費0円）する前提</strong>となっており、初期状態を0円に設定しています。
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                
+                {/* カグヤス (プランA) 費用調整 */}
+                <div className="space-y-4 bg-indigo-50/30 p-5 rounded-xl border border-indigo-100">
+                  <h3 className="font-bold text-indigo-950 text-sm flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full" />
+                    【リードプラン】プランA：カグヤス（完全個室）費用調整
+                  </h3>
+
+                  {/* Slider 1: Delivery */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600 font-medium">配送・搬入組み立て費（高重量250kg製品）</span>
+                      <span className="font-bold text-slate-900">{formatPrice(kaguyasuDeliveryCost)}</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="50000" 
+                      max="150000" 
+                      step="5000"
+                      value={kaguyasuDeliveryCost} 
+                      onChange={(e) => setKaguyasuDeliveryCost(Number(e.target.value))}
+                      className="w-full accent-indigo-600"
+                    />
+                    <span className="text-[10px] text-slate-400 block">※250kgのオフィス家具配送専門料金（標準約¥80,000）</span>
+                  </div>
+
+                  {/* Slider 2: Fire Doc */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600 font-bold text-indigo-900">★ 消防申請・図面作成代行費 (自社で書類作成し自身で実施)</span>
+                      <span className="font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded text-xs">{formatPrice(kaguyasuFireDoc)} (自社実施)</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="150000" 
+                      step="5000"
+                      value={kaguyasuFireDoc} 
+                      onChange={(e) => setKaguyasuFireDoc(Number(e.target.value))}
+                      className="w-full accent-indigo-600"
+                    />
+                    <span className="text-[10px] text-slate-500 font-semibold block">【重要注意点】消防署との折衝・レイアウト構成配置図面の作成など、一連の届出実務をすべて自身で実施するため、外注委託代行費用を「0円」で計上しています。</span>
+                  </div>
+
+                  {/* Slider 3: Sprinkler */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600 font-medium">簡易スプリンクラー（自動消火装置）自主手配費</span>
+                      <span className="font-bold text-slate-900">{formatPrice(kaguyasuSprinkler)}</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="120000" 
+                      max="250000" 
+                      step="10000"
+                      value={kaguyasuSprinkler} 
+                      onChange={(e) => setKaguyasuSprinkler(Number(e.target.value))}
+                      className="w-full accent-indigo-600"
+                    />
+                    <span className="text-[10px] text-slate-400 block">※不活性ガス消火装置など、天井適合型自動消火装置の自主手配（相場¥150,000）</span>
+                  </div>
+
+                  <div className="bg-white p-3 rounded-lg border border-indigo-100 flex justify-between items-center mt-4">
+                    <span className="text-xs font-bold text-slate-700">プランA 推定総額（消防自身対応）：</span>
+                    <span className="text-lg font-extrabold text-indigo-700">{formatPrice(computedCosts.kaguyasu)}</span>
+                  </div>
+                </div>
+
+                {/* REMUTE (プランB) 費用調整 */}
+                <div className="space-y-4 bg-emerald-50/30 p-5 rounded-xl border border-emerald-100">
+                  <h3 className="font-bold text-emerald-950 text-sm flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full" />
+                    【代替案】プランB：リミュート（天面開放）費用調整
+                  </h3>
+
+                  {/* Slider 1: Delivery */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600 font-medium">配送・搬入組み立て設置費</span>
+                      <span className="font-bold text-slate-900">{formatPrice(remuteDeliveryCost)}</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="40000" 
+                      max="120000" 
+                      step="5000"
+                      value={remuteDeliveryCost} 
+                      onChange={(e) => setRemuteDeliveryCost(Number(e.target.value))}
+                      className="w-full accent-emerald-500"
+                    />
+                    <span className="text-[10px] text-slate-400 block">※天面開放パネル、組立設置工賃（相場約¥60,000）</span>
+                  </div>
+
+                  {/* Slider 2: Furniture */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-600 font-medium">追加調達家具類（チェア・内部LED照明等）</span>
+                      <span className="font-bold text-slate-900">{formatPrice(remuteFurnitureCost)}</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="5000" 
+                      max="40000" 
+                      step="2500"
+                      value={remuteFurnitureCost} 
+                      onChange={(e) => setRemuteFurnitureCost(Number(e.target.value))}
+                      className="w-full accent-emerald-500"
+                    />
+                    <span className="text-[10px] text-slate-400 block">※リミュート内部にデスクは付属しますが、椅子は別売りのため自主購入</span>
+                  </div>
+
+                  {/* Informative info */}
+                  <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3 text-[10px] text-emerald-800 space-y-1">
+                    <p className="font-bold">⭐ プランBの消防法メリット：</p>
+                    <p>天面開放型のため、消防署事前届出・スプリンクラーの設置はビル管理者より【対象外】と判定される確率が極めて高く、各種申請手続きの稼働そのものをスキップできます。</p>
+                  </div>
+
+                  <div className="bg-white p-3 rounded-lg border border-emerald-100 flex justify-between items-center mt-4">
+                    <span className="text-xs font-bold text-slate-700">プランB 推定総額（工事・手配不要）：</span>
+                    <span className="text-lg font-extrabold text-emerald-600">{formatPrice(computedCosts.remute)}</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* REALISTIC SCENARIO EVALUATION FOR THE BOARD */}
+            <div className="bg-gradient-to-br from-indigo-950 to-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4">
+              <h3 className="text-lg font-bold text-indigo-300 flex items-center gap-2">
+                <Info className="w-5 h-5 text-indigo-400" />
+                アポプラスステーション様 予算内での削減アドバイス
+              </h3>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                アポプラスステーション様の指定予算上限である「70万円以下」を達成するために、今回のプランAでは、他社の丸投げ代行業者を利用せず、<strong>「総務・自社担当者による消防署提出書類作成＆申請実施（稼働代行費0円）」</strong>を条件としています。
+                メーカー支給の仕様データ図面などをそのまま消防署へ持ち込んで自身で手続きしていただく必要がありますが、それだけで**約15万円のコスト削減**となり、高額な完全クローズド防音ブース（カグヤス）をわずか<strong>約58.2万円</strong>という価格でオフィスに導入できます。個人情報を100%保護できるため最もお勧めです。
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* ==================================================
+            TAB 3: DETAILED MATRIX (各社仕様の徹底比較)
+            ================================================== */}
+        {activeTab === 'apoplus_best' && (
+          <div className="space-y-8 animate-fadeIn">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              
+              {/* PLAN A: KAGUYASU (リードプラン) */}
+              <div className="bg-white border-2 border-indigo-500 rounded-2xl shadow-md overflow-hidden flex flex-col justify-between lg:col-span-1">
+                <div>
+                  <div className="bg-indigo-600 text-white px-4 py-2 font-bold text-xs uppercase tracking-wider flex justify-between items-center">
+                    <span>プランA：最推奨リードプラン（完全個室）</span>
+                    <span className="bg-white text-indigo-800 px-2 py-0.5 rounded-full text-[10px] font-bold">総額 約58.2万円</span>
+                  </div>
+
+                  <div className="p-5 space-y-4">
+                    <div className="flex gap-4 items-center border-b pb-4">
+                      <div className="w-16 h-20 flex-shrink-0 border bg-slate-50 rounded-lg p-1">
+                        {PROPOSAL_DATA.scenarios.find(s => s.id === 'kaguyasu').imageSvg}
+                      </div>
+                      <div>
+                        <h3 className="font-extrabold text-slate-900 text-md">防音ブース JYC-C001 (カグヤス)</h3>
+                        <p className="text-[11px] text-slate-500 mt-1">完全クローズド（密閉）個室型 | 外寸：W1000×D1000×H2000</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 text-xs leading-relaxed text-slate-600">
+                      <div className="bg-indigo-100/60 p-2.5 rounded-lg border border-indigo-200 text-[11px] text-indigo-950 font-medium">
+                        <strong className="text-indigo-900 block mb-1">⚠️ 自身対応に関する注意点：</strong>
+                        消防署への事前相談や設置届出（提出書類・簡易配置図面の作成）は、アポプラス様の総務・担当部門で<strong>自身で実施（自社対応）</strong>します。そのため、専門業者への代行外注費用は<strong>「0円」</strong>として計上しています。
+                      </div>
+
+                      <div>
+                        <strong className="text-slate-800 block mb-0.5">【消防法：自主消火装置の手配】</strong>
+                        <p className="text-[11px]">
+                          天井が閉じた完全個室となるため自動消火装置が必須です。高額なビル全体の防災連動工事ではなく、簡易スプリンクラー（不活性ガス消火装置など）の機器類（約15万円）を自主調達して設置することで適法化をクリアします。
+                        </p>
+                      </div>
+
+                      <div>
+                        <strong className="text-slate-800 block mb-0.5">【遮音性能：極めて高い機密性】</strong>
+                        <p className="text-[11px]">
+                          多重遮音パネルとガラス面ドアにより、完璧な完全密閉空間を作ります。登録MR様や重要個人情報を含む面談でも、声が外に漏れるリスクを完全に排除します。
+                        </p>
+                      </div>
+
+                      <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-100 text-[11px] text-indigo-950 font-medium space-y-1">
+                        <p className="font-bold">🎯 選定理由：</p>
+                        <p>・センシティブな個人情報を扱うアポプラス様に必須の最高防音</p>
+                        <p>・申請の自身対応で外注費をカットし、予算制限内で個室を実現</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400">カグヤス直営販売サイト</span>
+                  <a 
+                    href={PROPOSAL_DATA.scenarios.find(s => s.id === 'kaguyasu').url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-semibold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1"
+                  >
+                    製品リンクを確認する <ArrowRight className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+
+              {/* PLAN B: REMUTE (サブプラン) */}
+              <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between lg:col-span-1">
+                <div>
+                  <div className="bg-emerald-600 text-white px-4 py-2 font-bold text-xs uppercase tracking-wider flex justify-between items-center">
+                    <span>プランB：手軽さ優先代替案（天井開放）</span>
+                    <span className="bg-white text-emerald-800 px-2 py-0.5 rounded-full text-[10px] font-bold">総額 約54.8万円</span>
+                  </div>
+
+                  <div className="p-5 space-y-4">
+                    <div className="flex gap-4 items-center border-b pb-4">
+                      <div className="w-16 h-20 flex-shrink-0 border bg-slate-50 rounded-lg p-1">
+                        {PROPOSAL_DATA.scenarios.find(s => s.id === 'remute').imageSvg}
+                      </div>
+                      <div>
+                        <h3 className="font-extrabold text-slate-900 text-md">吸音ブース サイドイン (リミュート)</h3>
+                        <p className="text-[11px] text-slate-500 mt-1">天井開放型 | 外寸：W1510×D1000×H1900</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 text-xs leading-relaxed text-slate-600">
+                      <div className="bg-emerald-50 p-2.5 rounded-lg border border-emerald-100 text-[11px] text-emerald-950 font-medium">
+                        <strong className="text-emerald-900 block mb-1">⭐ 消防申請不要メリット：</strong>
+                        天井が開いているセミクローズド構造であるため、簡易スプリンクラーの設置義務が発生せず、消防署への工事図面提出といった各種申請手続きが<strong>100%一切不要</strong>です。
+                      </div>
+
+                      <div>
+                        <strong className="text-slate-800 block mb-0.5">【導入スピード：極めて早い】</strong>
+                        <p className="text-[11px]">
+                          配送と組み立て設置（約6万円）を調整するのみで、消防署との協議期間を省略できるため、発注から1〜2週間で即座に使用開始可能です。
+                        </p>
+                      </div>
+
+                      <div>
+                        <strong className="text-slate-800 block mb-0.5">【遮音性能：会話内容の完全遮音は不可】</strong>
+                        <p className="text-[11px]">
+                          再生PET吸音フェルトパネルは高品質ですが、上部が完全に開いているため、声の高い周波数は抑えられても、「会話している内容」がブースの外に微細に聞こえる音漏れが発生します。
+                        </p>
+                      </div>
+
+                      <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-[11px] text-slate-600 space-y-1">
+                        <p className="font-bold text-slate-700">🎯 選定理由：</p>
+                        <p>・面倒な消防署関連の稼働や図面準備を100%ゼロに抑えたい</p>
+                        <p>・50万円台前半で、手軽に集中スペースを設置したい場合</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400">オフィスコム取扱サイト</span>
+                  <a 
+                    href={PROPOSAL_DATA.scenarios.find(s => s.id === 'remute').url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-semibold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1"
+                  >
+                    製品リンクを確認する <ArrowRight className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+
+              {/* PLAN C: CHATBOX (高額参考除外) */}
+              <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between lg:col-span-1 opacity-70 hover:opacity-100 transition-opacity duration-200">
+                <div>
+                  <div className="bg-red-600 text-white px-4 py-2 font-bold text-xs uppercase tracking-wider flex justify-between items-center">
+                    <span>参考：高額・予算超過プラン（除外）</span>
+                    <span className="bg-white text-red-800 px-2 py-0.5 rounded-full text-[10px] font-bold">総額 約134.4万円</span>
+                  </div>
+
+                  <div className="p-5 space-y-4">
+                    <div className="flex gap-4 items-center border-b pb-4">
+                      <div className="w-16 h-20 flex-shrink-0 border bg-slate-50 rounded-lg p-1">
+                        {PROPOSAL_DATA.scenarios.find(s => s.id === 'chatbox').imageSvg}
+                      </div>
+                      <div>
+                        <h3 className="font-extrabold text-slate-900 text-md">CHATBOX 再生品 (ワイム)</h3>
+                        <p className="text-[11px] text-slate-500 mt-1">完全個室コミコミプラン | 外寸：W910×D910×H2172</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 text-xs leading-relaxed text-slate-600">
+                      <div className="bg-red-50 p-2.5 rounded-lg border border-red-100 text-[11px] text-red-950 font-medium">
+                        <strong className="text-red-900 block mb-1">⚠️ 予算対比：高額な超過（約2倍）</strong>
+                        消防申請や消火装置がフルセットされていますが、お見積価格は<strong>1,344,407円 (税込)</strong>。指定予算上限の70万円を大幅に上回っており、今回は不採用とせざるを得ません。
+                      </div>
+
+                      <div>
+                        <strong className="text-slate-800 block mb-0.5">【消火装置＆申請：丸投げ可能】</strong>
+                        <p className="text-[11px]">
+                          スプリンクラーの設置、図面作成、消防署申請まですべて一括お任せであるため、自社での総務実務稼働はゼロとなります。
+                        </p>
+                      </div>
+
+                      <div>
+                        <strong className="text-slate-800 block mb-0.5">【納期：即納不可】</strong>
+                        <p className="text-[11px]">
+                          現在、格安な「再生品」の在庫が完全に切れており、次回の入荷が最短でも26年8/7以降順次となっており、迅速な導入計画にも難があります。
+                        </p>
+                      </div>
+
+                      <div className="bg-slate-100 p-3 rounded-lg border border-slate-200 text-[11px] text-slate-500 space-y-1">
+                        <p className="font-bold text-slate-600">🎯 除外判定理由：</p>
+                        <p className="text-red-600 font-semibold">・50万〜70万円の予算枠を完全に崩壊させてしまうため、本検討プロセスからは明確に除外とします。</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400">提出お見積書より</span>
+                  <span className="text-red-600 text-[10px] font-bold">予算適合NG (除外)</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* ==================================================
+            TAB 4: APPROVAL SUPPORT (社内稟議コピペ用＆詳細な推奨起案書)
+            ================================================== */}
+        {activeTab === 'approval_support' && (
+          <div className="space-y-6 animate-fadeIn">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+              <h2 className="text-xl font-bold text-slate-900 border-b pb-4 flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <ClipboardCheck className="w-6 h-6 text-indigo-600" />
+                  アポプラス様 社内起案用 稟議ドラフト生成ツール
+                </span>
+                <span className="text-xs bg-slate-100 text-slate-500 font-normal px-2.5 py-1 rounded-md">
+                  2026年度 ワークスペース構築案件用
+                </span>
+              </h2>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                アポプラスステーション様の社内承認をスムーズに獲得するための稟議文面を用意しました。
+                <strong>「予算50万〜70万以内で、申請を自社対応（0円）しカグヤスを最安で導入する（プランA）」</strong>、または<strong>「申請や防災設備を完全に回避してリミュートを導入する（プランB）」</strong>のどちらかの推奨シナリオを切り替え、テキストをワンクリックでコピーできます。
+              </p>
+
+              <div className="flex gap-4 border-b border-slate-100 pb-4">
+                <button
+                  onClick={() => setSelectedScenario('kaguyasu')}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                    selectedScenario === 'kaguyasu' 
+                      ? 'bg-indigo-600 text-white shadow-xs' 
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  プランA：カグヤス（完全個室・消防自身対応）稟議書
+                </button>
+                <button
+                  onClick={() => setSelectedScenario('remute')}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                    selectedScenario === 'remute' 
+                      ? 'bg-emerald-600 text-white shadow-xs' 
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  プランB：リミュート（天面開放・届出不要）稟議書
+                </button>
+              </div>
+
+              {/* RENDER EDITABLE / COPYABLE TEXT BOX */}
+              <div className="relative border border-slate-200 rounded-xl overflow-hidden bg-slate-950">
+                
+                {/* Copy Overlay button */}
+                <div className="absolute top-3 right-3 z-10">
+                  <button
+                    onClick={() => handleCopyText('ringi-text')}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-1.5 rounded-md flex items-center gap-1 transition-all shadow-md"
+                  >
+                    <ClipboardCheck className="w-3.5 h-3.5" />
+                    {copied ? 'コピーしました！' : '稟議文面をコピー'}
+                  </button>
+                </div>
+
+                {/* Text Box Content */}
+                <div id="ringi-text" className="p-6 font-mono text-xs sm:text-sm leading-relaxed max-h-[480px] overflow-y-auto bg-slate-950 text-slate-200">
+                  
+                  {selectedScenario === 'kaguyasu' && (
+                    <div className="space-y-4">
+                      <p className="font-bold text-indigo-400">【起案趣旨】完全密閉型個室防音ブース導入の件（プランA・カグヤス最推奨）</p>
+                      
+                      <p>
+                        <strong>1. 導入目的と課題背景：</strong><br />
+                        現在、CRA・MR登録面談、調剤薬局事業に関連するセンシティブな個人情報の取り扱いが日常化している。
+                        オフィスの自席や天面開放型のブースでは「会話の漏洩リスク」を完全に払拭できず、企業のコンプライアンス順守、および機密情報の漏洩防止のために、100%遮音された「完全クローズド個室」を1台配備したい。
+                      </p>
+
+                      <p>
+                        <strong>2. 製品選定における条件（予算50万〜70万円枠の厳守）：</strong><br />
+                        他社の大手完全個室ブース（CHATBOX等）は、消火装置や申請代行費などを含むフルコミパックであるが、見積総額が【1,344,407円】と非常に高額であり、今期予算枠（70万円以下）を約2倍超過するため今回の選定からは除外とする。<br />
+                        そこで、ネット直販で本体価格が安価な「カグヤス JYC-C001（税込35.2万円）」を採用。
+                        消防署への工事事前計画届出、書類作成、配置図面の作成等の一連の申請実務を**当社の担当部門で自身（自社対応）で実施（代行費用0円）**。これにより付帯費用を極限まで圧縮。<br />
+                        これにより、最も課題であった完全密閉個室を**【総額約58.2万円（税込・防災機器代込）】**という、予算上限70万円以内の非常に理想的なコストで設置することを提案する。
+                      </p>
+
+                      <p>
+                        <strong>3. カグヤス選定の理由と付帯費用削減・自身対応内訳：</strong><br />
+                        ・<strong>本体価格が税込35.2万円</strong>と安価。<br />
+                        ・配送組立諸費用：高重量250kg製品の専門組立を配送業者へ一任（約8万円）<br />
+                        ・簡易スプリンクラー：消防認定適合モデルの自動消火装置を自主手配（約15万円）<br />
+                        ・消防署届出・書類作成：自社図面やメーカー仕様書データを活用し、<strong>申請実務を自身で実施するため 0円</strong>。専門業者への外注代行費用を100%カット。<br />
+                        ・メタルフレーム＆防音ガラス仕様により、Web面談での最高遮音性を確保。
+                      </p>
+
+                      <p>
+                        <strong>4. 導入費用：</strong><br />
+                        ・総見積費用：約582,000円（税込・組立配送、自主防災機器代を含む。申請は自社手配・自身稼働のため実質0円）<br />
+                        ・納期：販売店在庫確認後、防災手配・組立完了まで約3〜4週間。
+                      </p>
+                    </div>
+                  )}
+
+                  {selectedScenario === 'remute' && (
+                    <div className="space-y-4">
+                      <p className="font-bold text-emerald-400">【起案趣旨】天面開放型吸音ブース導入の件（プランB・リミュート代替推奨）</p>
+                      
+                      <p>
+                        <strong>1. 導入目的と課題背景：</strong><br />
+                        オフィス内での急なオンライン面談やWeb通話の増加に伴う、周囲の声や雑音の低減用スペースをオフィス内に1箇所構築したい。
+                        完全個室ブースを置く場合、自動消火装置（スプリンクラー）の設置工事や、消防署・ビル管理者への非常に煩雑な図面提出等が発生し、総務稼働および防災追加工事費用がかさむという課題がある。
+                      </p>
+
+                      <p>
+                        <strong>2. 導入ブース選定：</strong><br />
+                        天井部が完全に解放されたセミクローズド設計の「リス製 REMUTE 吸音ブースサイドイン（税込47.3万円）」を採用する。<br />
+                        本ブースは、天井が開いている設計のため消防上の「完全クローズド個室」とは判定されず、ビル管理防災規程の【スプリンクラー増設】および【消防申請手続き】が<strong>原則不要</strong>となり、付帯工事費を**100%ゼロにカット**できるメリットがある。
+                      </p>
+
+                      <p>
+                        <strong>3. リミュート選定の理由と内訳：</strong><br />
+                        ・<strong>本体価格：税込473,000円</strong><br />
+                        ・配送組立設置費：約60,000円（消防書類提出不要のため追加工事はこれのみ）<br />
+                        ・椅子・自主備品調達：約15,000円<br />
+                        ・<strong>実質総合コスト：約548,000円（税込）</strong>で、アポプラス様の指定予算枠（50万〜70万円）に完全に合致。<br />
+                        ・注意点：天井開放のため100%の防音ではないが、吸音PETフェルト素材により、周囲の雑音・通話の不快感を一定レベルまで劇的に軽減可能。
+                      </p>
+
+                      <p>
+                        <strong>4. 導入費用：</strong><br />
+                        ・総見積費用：約548,000円（税込・配送組立、内部椅子等込。スプリンクラー等消防対応工事は0円）<br />
+                        ・納期：発注確定後、納品組立まで約1〜2週間と非常にスピーディ。
+                      </p>
+                    </div>
+                  )}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </main>
+
+      {/* ==========================================
+          FOOTER WITH CLIENT PROPERTY RIGHTS
+          ========================================== */}
+      <footer className="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+              <p className="font-bold text-slate-300 text-sm">アポプラスステーション株式会社様 ワークスペース構築提案ダッシュボード</p>
+              <p className="mt-1">※本データは、50万〜70万円以内で安全かつ確実に導入するための比較データです。消防届出実務を自身で実施（申請費0円）する想定でカグヤスを最安構成しています。</p>
+            </div>
+            <div className="text-right">
+              <p>ワークスペース・コンサルティング代理提案</p>
+              <p className="mt-1 text-[10px]">有効期限：2026年7月末日</p>
+            </div>
+          </div>
+          <p className="border-t border-slate-800 pt-4 text-[10px] text-slate-500 text-center">
+            &copy; 2026 アポプラスステーション株式会社. All Rights Reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
