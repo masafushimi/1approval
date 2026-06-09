@@ -344,14 +344,28 @@ h2 {
         <div class="prob-title">経理部門の督促・突合業務が爆発</div>
         <p class="prob-body">月末に領収書を集め、経費精算書と突合し、不備があれば差し戻し。経理担当者の生産性を著しく損なう繰り返し業務が発生。</p>
       </div>
-      <div class="problem-card" style="background:var(--void);">
-        <span class="prob-num" style="color:rgba(255,184,0,.5);">実数値</span>
-        <div style="display:flex;align-items:baseline;gap:.5rem;margin-bottom:.35rem;">
-          <span style="font-family:var(--mono);font-size:2.5rem;color:var(--amber);line-height:1;font-weight:500;">180分</span>
-          <span style="font-family:var(--mono);font-size:.75rem;color:rgba(255,255,255,.3);">/ 1件あたり</span>
-        </div>
-        <p style="font-size:.78rem;color:rgba(255,255,255,.35);line-height:1.7;">の間接業務が、1Approvalにより30分に短縮。月100件の企業で毎月250時間・年間3,000時間が解放されます。</p>
-      </div>
+<!-- 03 / 【改修・再デザイン箇所】1pxボーダー構造を継承した「現実」コスト警告カード -->
+                <div class="problem-card bg-rose-50/45 hover:bg-rose-50/70 border-l-2 border-rose-300">
+                    <span class="prob-num text-rose-500 font-bold">──  03 / REALITY</span>
+                    <div class="prob-title text-rose-950 font-black">1件あたり180分以上の間接工数</div>
+                    
+                    <!-- 実費と人件費のスマートな対比構造 -->
+                    <div class="my-3.5 bg-white p-3.5 rounded-xl border border-rose-100/90 space-y-2.5 shadow-sm text-xs">
+                        <div class="flex justify-between items-center text-slate-500">
+                            <span>ホテル・新幹線代（実費）：</span>
+                            <span class="font-extrabold text-slate-800">約35,000円</span>
+                        </div>
+                        <div class="h-px bg-slate-100"></div>
+                        <div class="flex justify-between items-start">
+                            <span class="text-rose-950 font-bold leading-tight">
+                                出張手続き間接工数<span class="text-[9px] font-normal text-slate-400 block mt-0.5">(人件費換算)</span>：
+                            </span>
+                            <span class="font-black text-rose-600 text-right leading-none shrink-0">
+                                <span class="block text-sm font-extrabold">180分</span>
+                                <span class="text-[9px] text-slate-500 font-bold block mt-1">＝ 約9,000円分</span>
+                            </span>
+                        </div>
+                    </div>
     </div>
   </div>
 </section>
