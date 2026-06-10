@@ -1175,19 +1175,32 @@ h2 {
         </div>
     </section>
 
+    <!-- フッター -->
     <footer class="bg-white py-12 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div class="flex items-center gap-2">
-                <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
-                <!--
-                <span class="text-lg font-black tracking-tight text-slate-800">1Approval <span class="text-brand-yellow">for kintone</span></span>
-                -->
+            <!-- 左側: ブランドロゴと外部リンクナビゲーション -->
+            <div class="flex flex-col items-center md:items-start gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg font-black tracking-tight text-slate-800">1Approval <span class="text-brand-yellow">for kintone</span></span>
+                </div>
+                <div class="flex items-center gap-6 text-xs text-slate-500 font-medium">
+                    <a href="https://eichiii.co.jp/" target="_blank" rel="noopener noreferrer" class="hover:text-brand-yellow hover:underline transition-colors flex items-center gap-1.5 group">
+                        会社概要 
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-400 group-hover:text-brand-yellow transition-colors"></i>
+                    </a>
+                    <span class="text-slate-300">|</span>
+                    <a href="https://eichiii.notion.site/ff4b77597e97434790d8016a8fee9616" target="_blank" rel="noopener noreferrer" class="hover:text-brand-yellow hover:underline transition-colors flex items-center gap-1.5 group">
+                        プライバシーポリシー 
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-400 group-hover:text-brand-yellow transition-colors"></i>
+                    </a>
+                </div>
             </div>
             
+            <!-- 右側: コピーライトおよびステートメント -->
             <div class="text-center md:text-right space-y-2">
                 <p class="text-xs text-slate-500">叡知を統合して、つながりをなめらかに。</p>
-                <p class="text-[11px] text-slate-400 font-bold">株式会社エイチ</p>
-                <p class="text-[9px] text-slate-400">© 2026 eichiii Inc. All rights reserved.</p>
+                <p class="text-[11px] text-slate-600 font-bold">株式会社エイチ</p>
+                <p class="text-[10px] text-slate-400">© 2026 eichiii Inc. All rights reserved.</p>
             </div>
         </div>
     </footer>
