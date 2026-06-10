@@ -310,6 +310,30 @@ h2 {
             </div>
         </div>
     </section>
+<!-- 新設：動作デモ動画プレイヤー（課題セクションヘッダーの上部に配置） -->
+            <div class="max-w-4xl mx-auto mb-20">
+                <div class="text-center mb-6">
+                    <span class="text-xs font-bold tracking-widest text-brand-primary bg-brand-primary/10 px-3.5 py-1 rounded-full uppercase">PRODUCT MOVIE</span>
+                    <h3 class="text-xl font-extrabold text-slate-900 mt-2.5">1Approval for kintone 1分半かんたん動作デモ</h3>
+                    <p class="text-xs text-slate-500 mt-1">kintoneの承認と自動購買予約システムが連動する瞬間をご覧ください</p>
+                </div>
+                
+                <div class="relative bg-slate-950 aspect-video rounded-3xl overflow-hidden shadow-2xl border border-slate-200/90 group">
+                    <!-- HTML5 ビデオタグ -->
+                    <video id="demo-video" class="w-full h-full object-cover" controls poster="https://placehold.co/1280x720/1e293b/ffffff?text=1Approval+Product+Demo+Movie">
+                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+                        お使いのブラウザは動画の再生に対応していません。
+                    </video>
+                    
+                    <!-- デモ用カスタムプレイオーバーレイ -->
+                    <div id="video-overlay" class="absolute inset-0 bg-slate-900/60 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:bg-slate-900/50">
+                        <div class="w-20 h-20 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center text-3xl shadow-xl shadow-brand-yellow/20 transition-transform duration-300 hover:scale-110">
+                            <i class="fa-solid fa-play ml-1"></i>
+                        </div>
+                        <span class="text-white text-xs sm:text-sm font-bold mt-4 tracking-wider drop-shadow-md">デモ動画を再生する (音声あり)</span>
+                    </div>
+                </div>
+            </div>
 
 <section id="problem" class="section">
   <div class="container">
