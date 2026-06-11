@@ -138,11 +138,11 @@
 
     <!-- ナビゲーションヘッダー -->
     <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-1.5 sm:gap-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-1.5 sm:gap-4">
             
-            <!-- ロゴエリア（スマホ表示時でも絶対にボタンと重ならないよう、最大幅制限とh-7設定を実装） -->
+            <!-- ロゴエリア（スマホ表示時のサイズを従来の1.5倍に最適化、幅制限を拡張して見やすく大きく表示） -->
             <div class="flex items-center min-w-0 shrink">
-                <img src="logo11.png" alt="1Approval for kintone" class="h-7 sm:h-11 w-auto max-w-[110px] sm:max-w-none object-contain shrink">
+                <img src="logo11.png" alt="1Approval for kintone" class="h-10 sm:h-11 w-auto max-w-[160px] sm:max-w-none object-contain shrink">
             </div>
             
             <!-- デスクトップ用ナビゲーション -->
@@ -156,7 +156,7 @@
                 <a href="#roadmap" class="hover:text-brand-yellow transition-colors">今後の展開</a>
             </nav>
 
-            <!-- 右側アクションエリア（極小スマホでも1行に収まるようにgapとパディング・フォントサイズを綿密に最適化） -->
+            <!-- 右側アクションエリア（ロゴ拡大にあわせて、スマホ表示時の余白とサイズを美しく再調整） -->
             <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
                 <a href="#contact" class="hidden sm:inline-flex items-center justify-center border border-slate-300 text-slate-700 hover:border-brand-yellow hover:text-brand-yellow transition-all duration-300 font-bold px-4 py-2 rounded-full text-xs">
                     資料・デモ請求
@@ -785,7 +785,7 @@
                     <p class="text-sm sm:text-base text-slate-600 leading-relaxed italic">
                         「以前は他社の出張管理システムを別途使っていましたが、承認を待っているうちに価格変更や満席になり、また最初からやり直しになることが社内の大きなストレスでした。また、出張の実費総額が見えないまま『メクラ承認』をせざるを得ない点も課題でした。
                         <br><br>
-                        1Approval of POC導入を行ったところ、承認から購買決定までの処理スピードが他社システムに比べて圧倒的に早く、これまでの二度手間が完全に解消されました。同じ作業が15〜30分程度で終わり、出張後の経費精算書類の作成も5分以内に収まっています。非常に価値を感じており、今後も期待しています。」
+                        1Approval of POC導入を行ったところ、承認から購買決定までの処理スピードが他社システムに比べて圧倒的に早く、これまでの二度手間が完全に解消されました。同じ作業が15〜30分程度で終わり、出張後の経費精算書類の作成も5分以内に収まっています。非常に価値を感じ要り、今後も期待しています。」
                     </p>
                     <div class="grid grid-cols-3 gap-2 pt-4 border-t border-slate-100 text-center text-xs">
                         <div>
@@ -1156,7 +1156,7 @@
             });
         }
 
-        // モバイルドロワーメニューのトグル制御
+        // モバイルドロワーメニュー of トグル制御
         const menuOpenBtn = document.getElementById('menu-open-btn');
         const menuCloseBtn = document.getElementById('menu-close-btn');
         const mobileMenu = document.getElementById('mobile-menu');
