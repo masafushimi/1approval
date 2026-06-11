@@ -138,11 +138,11 @@
 
     <!-- ナビゲーションヘッダー -->
     <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-1.5 sm:gap-4">
             
-            <!-- ロゴエリア（フォールバック表示ロジックを完全廃止、画像logo11.pngのみでレンダリング） -->
-            <div class="flex items-center min-w-0 shrink-0">
-                <img src="logo11.png" alt="1Approval for kintone" class="h-8 sm:h-11 w-auto object-contain">
+            <!-- ロゴエリア（スマホ表示時でも絶対にボタンと重ならないよう、最大幅制限とh-7設定を実装） -->
+            <div class="flex items-center min-w-0 shrink">
+                <img src="logo11.png" alt="1Approval for kintone" class="h-7 sm:h-11 w-auto max-w-[110px] sm:max-w-none object-contain shrink">
             </div>
             
             <!-- デスクトップ用ナビゲーション -->
@@ -156,17 +156,17 @@
                 <a href="#roadmap" class="hover:text-brand-yellow transition-colors">今後の展開</a>
             </nav>
 
-            <!-- 右側アクションエリア -->
-            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+            <!-- 右側アクションエリア（極小スマホでも1行に収まるようにgapとパディング・フォントサイズを綿密に最適化） -->
+            <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
                 <a href="#contact" class="hidden sm:inline-flex items-center justify-center border border-slate-300 text-slate-700 hover:border-brand-yellow hover:text-brand-yellow transition-all duration-300 font-bold px-4 py-2 rounded-full text-xs">
                     資料・デモ請求
                 </a>
-                <a href="#contact" class="inline-flex items-center justify-center bg-brand-yellow text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300 font-extrabold px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs shadow-md shadow-brand-yellow/10 whitespace-nowrap">
+                <a href="#contact" class="inline-flex items-center justify-center bg-brand-yellow text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300 font-extrabold px-2.5 py-1.5 sm:px-5 sm:py-2.5 rounded-full text-[10px] sm:text-xs shadow-md shadow-brand-yellow/10 whitespace-nowrap shrink-0">
                     無料相談・POC
                 </a>
                 <!-- スマホ・タブレット用メニュー開閉ボタン -->
-                <button id="menu-open-btn" class="lg:hidden w-9 h-9 flex items-center justify-center text-slate-700 hover:text-brand-yellow transition-colors focus:outline-none" aria-label="メニューを開く">
-                    <i class="fa-solid fa-bars text-xl"></i>
+                <button id="menu-open-btn" class="lg:hidden w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-slate-700 hover:text-brand-yellow transition-colors focus:outline-none shrink-0" aria-label="メニューを開く">
+                    <i class="fa-solid fa-bars text-lg sm:text-xl"></i>
                 </button>
             </div>
         </div>
