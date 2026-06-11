@@ -43,159 +43,110 @@
             text-shadow: 0 2px 10px rgba(255, 184, 0, 0.2);
         }
         /* ==========================================================================
-   1. 共通の変数定義（色の設定など）
-   ========================================================================== */
-:root {
-  --amber:       #FFB800;
-  --void:        #0A0A0F;
-  --ink:         #111118;
-  --slate:       #3B3B4A;
-  --muted:       #6E6E80;
-  --line:        #E4E4EC;
-  --surface:     #F7F7F9;
-  --white:       #FFFFFF;
-  --mono:        'DM Mono', monospace;
-  --display:     'Syne', 'Noto Sans JP', sans-serif;
-  --body:        'Noto Sans JP', sans-serif;
-}
+        共通の変数定義
+        ========================================================================== */
+        :root {
+            --amber:       #FFB800;
+            --void:        #0A0A0F;
+            --ink:         #111118;
+            --slate:       #3B3B4A;
+            --muted:       #6E6E80;
+            --line:        #E4E4EC;
+            --surface:     #F7F7F9;
+            --white:       #FFFFFF;
+            --mono:        'DM Mono', monospace;
+            --display:     'Syne', 'Noto Sans JP', sans-serif;
+            --body:        'Noto Sans JP', sans-serif;
+        }
 
-/* ==========================================================================
-   2. 基本スタイル & レイアウト・タイポグラフィ共通設定
-   ========================================================================== */
-body {
-  background: var(--white);
-  color: var(--ink);
-  font-family: var(--body);
-  line-height: 1.7;
-}
+        body {
+            background: var(--white);
+            color: var(--ink);
+            font-family: var(--body);
+            line-height: 1.7;
+        }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 clamp(1.25rem, 4vw, 3rem);
-}
+        /* ==========================================================================
+        Problemセクション専用スタイル（1px境界線のミニマル構造）
+        ========================================================================== */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--line);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 3.5rem;
+        }
 
-.section { 
-  padding: clamp(4rem, 8vw, 8rem) 0; 
-}
+        .problem-card {
+            background: var(--white);
+            padding: 2.25rem 2rem;
+            transition: background 0.25s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
 
-/* セクション共通の見出しエリア */
-.section-header {
-  margin-bottom: 3.5rem;
-}
-.section-header .eyebrow { 
-  display: block; 
-  margin-bottom: .75rem; 
-}
-.section-header h2 { 
-  margin-bottom: .75rem; 
-}
-.section-header p { 
-  font-size: .9rem; 
-  color: var(--muted); 
-  max-width: 56ch; 
-  line-height: 1.8; 
-}
+        .problem-card:hover { 
+            background: var(--surface); 
+        }
 
-/* 文字の装飾クラス */
-.eyebrow {
-  font-family: var(--mono);
-  font-size: .68rem;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.eyebrow-amber { 
-  color: var(--amber); 
-}
+        .prob-num {
+            font-family: var(--mono);
+            font-size: .68rem; 
+            color: var(--amber);
+            margin-bottom: 0.85rem; 
+            display: block;
+            font-weight: 600;
+        }
 
-h2 { 
-  font-family: var(--display); 
-  line-height: 1.15; 
-}
-.display-md {
-  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
-  font-weight: 700;
-}
+        .prob-title {
+            font-family: var(--display);
+            font-size: 1.05rem; 
+            font-weight: 800;
+            color: var(--ink); 
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
 
-/* ==========================================================================
-   3. Problemセクション専用スタイル
-   ========================================================================== */
-#problem { 
-  background: var(--white); 
-}
+        .prob-body { 
+            font-size: .82rem; 
+            color: var(--muted); 
+            line-height: 1.75; 
+        }
 
-.problem-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  overflow: hidden;
-  margin-top: 3.5rem;
-  height: 250px:
-}
+        @media (max-width: 1024px) {
+            .problem-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
+        }
 
-.problem-card {
-  background: var(--white);
-  padding: 2rem 1.75rem;
-  transition: background .2s;
-  position: relative;
-}
-
-.problem-card:hover { 
-  background: var(--surface); 
-}
-
-.prob-num {
-  font-family: var(--mono);
-  font-size: .65rem; 
-  color: var(--amber);
-  margin-bottom: .75rem; 
-  display: block;
-}
-
-.prob-title {
-  font-family: var(--display);
-  font-size: 1rem; 
-  font-weight: 700;
-  color: var(--ink); 
-  margin-bottom: .6rem;
-}
-
-.prob-body { 
-  font-size: .82rem; 
-  color: var(--muted); 
-  line-height: 1.75; 
-}
-
-/* ==========================================================================
-   4. レスポンシブ対応（ブレイクポイント設定）
-   ========================================================================== */
-@media (max-width: 900px) {
-  /* （※該当箇所は最大幅900px時はグリッドの構成変化なし） */
-}
-
-@media (max-width: 640px) {
-  .problem-grid { 
-    grid-template-columns: 1fr; 
-  }
-}
+        @media (max-width: 640px) {
+            .problem-grid { 
+                grid-template-columns: 1fr; 
+            }
+            .problem-card {
+                padding: 1.75rem 1.5rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
 
+    <!-- ナビゲーションヘッダー -->
     <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-2 shrink-0">
-                <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
-                <div id="logo-fallback" class="hidden items-center gap-2">
-                    <span class="text-xl font-black text-brand-dark">1Approval <span class="text-brand-yellow text-xs font-bold">for kintone</span></span>
-                </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
+            
+            <!-- ロゴエリア（フォールバック表示ロジックを完全廃止、画像logo11.pngのみでレンダリング） -->
+            <div class="flex items-center min-w-0 shrink-0">
+                <img src="logo11.png" alt="1Approval for kintone" class="h-8 sm:h-11 w-auto object-contain">
             </div>
             
-            <nav class="hidden xl:flex items-center gap-6 text-sm font-semibold text-slate-600 shrink-0">
+            <!-- デスクトップ用ナビゲーション -->
+            <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-xs xl:text-sm font-semibold text-slate-600 shrink-0">
                 <a href="#problem" class="hover:text-brand-yellow transition-colors">解決する課題</a>
                 <a href="#features" class="hover:text-brand-yellow transition-colors">機能・ステップ</a>
                 <a href="#comparison" class="hover:text-brand-yellow transition-colors">導入効果・特徴</a>
@@ -205,17 +156,57 @@ h2 {
                 <a href="#roadmap" class="hover:text-brand-yellow transition-colors">今後の展開</a>
             </nav>
 
-            <div class="flex items-center gap-3 shrink-0">
+            <!-- 右側アクションエリア -->
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                 <a href="#contact" class="hidden sm:inline-flex items-center justify-center border border-slate-300 text-slate-700 hover:border-brand-yellow hover:text-brand-yellow transition-all duration-300 font-bold px-4 py-2 rounded-full text-xs">
                     資料・デモ請求
                 </a>
-                <a href="#contact" class="inline-flex items-center justify-center bg-brand-yellow text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300 font-extrabold px-5 py-2.5 rounded-full text-xs shadow-md shadow-brand-yellow/10">
+                <a href="#contact" class="inline-flex items-center justify-center bg-brand-yellow text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300 font-extrabold px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs shadow-md shadow-brand-yellow/10 whitespace-nowrap">
                     無料相談・POC
                 </a>
+                <!-- スマホ・タブレット用メニュー開閉ボタン -->
+                <button id="menu-open-btn" class="lg:hidden w-9 h-9 flex items-center justify-center text-slate-700 hover:text-brand-yellow transition-colors focus:outline-none" aria-label="メニューを開く">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
             </div>
         </div>
     </header>
 
+    <!-- モバイル用スライドインメニュー（ドロワーメニュー） -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden">
+        <div class="absolute right-0 top-0 h-full w-72 max-w-[80vw] bg-white shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out" id="mobile-menu-content">
+            <div class="space-y-6">
+                <!-- ドロワーヘッダー -->
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <span class="text-sm font-black text-slate-800">メニュー一覧</span>
+                    <button id="menu-close-btn" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-brand-yellow transition-colors focus:outline-none" aria-label="メニューを閉じる">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+                <!-- メニューリンク一覧 -->
+                <nav class="flex flex-col gap-4 text-sm font-bold text-slate-700">
+                    <a href="#problem" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-yellow transition-colors">解決する課題</a>
+                    <a href="#features" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-yellow transition-colors">機能・ステップ</a>
+                    <a href="#comparison" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-yellow transition-colors">導入効果・特徴</a>
+                    <a href="#simulator" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-yellow transition-colors">削減シミュレーター</a>
+                    <a href="#case" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-yellow transition-colors">導入事例</a>
+                    <a href="#pricing" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-yellow transition-colors">料金体系</a>
+                    <a href="#roadmap" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-yellow transition-colors">今後の展開</a>
+                </nav>
+            </div>
+            <!-- ドロワー内CTAボタン -->
+            <div class="pt-6 border-t border-slate-100 space-y-3">
+                <a href="#contact" class="mobile-menu-link flex items-center justify-center w-full border border-slate-300 text-slate-700 font-bold py-2.5 rounded-full text-xs">
+                    資料・デモ請求
+                </a>
+                <a href="#contact" class="mobile-menu-link flex items-center justify-center w-full bg-brand-yellow text-brand-dark font-extrabold py-2.5 rounded-full text-xs shadow-md shadow-brand-yellow/10">
+                    無料相談・POC
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ヒーローセクション -->
     <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-brand-yellowlight/50 via-white to-white">
         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>
         <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
@@ -310,7 +301,12 @@ h2 {
             </div>
         </div>
     </section>
-<!-- 新設：動作デモ動画プレイヤー（課題セクションヘッダーの上部に配置） -->
+
+    <!-- 解決する課題セクション（極薄1pxのミニマルデザイナーズグリッド） -->
+    <section id="problem" class="py-24 bg-white border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- 動作デモ動画プレイヤー -->
             <div class="max-w-4xl mx-auto mb-20">
                 <div class="text-center mb-6">
                     <span class="text-xs font-bold tracking-widest text-brand-primary bg-brand-primary/10 px-3.5 py-1 rounded-full uppercase">PRODUCT MOVIE</span>
@@ -335,41 +331,54 @@ h2 {
                 </div>
             </div>
 
-<section id="problem" class="section">
-  <div class="container">
-    <div class="section-header">
-      <span class="eyebrow eyebrow-amber">The Hidden Cost</span>
-      <h2 class="display-md">出張購買承認のツギハギ連携が<br>「煩雑な雑務」を発生させています</h2>
-      <p>承認・購買・経費精算・会計システムがバラバラ、各自がバラバラなECサイトで予約、事後に領収書をかき集めて申請。この「分断」をワンストップにつなぎ、組織全体の隠れた工数をばっさり削減。</p>
-    </div>
- 
-    <div class="problem-grid">
-      <div class="problem-card">
-        <span class="prob-num">──  01</span>
-        <div class="prob-title">承認待ちの間に価格・在庫が変動</div>
-        <p class="prob-body">最安値で申請しても承認まで数時間。その間に空室消滅、価格高騰。承認後にまた最初からやりやり直す「不毛なループ」が常態化。</p>
-      </div>
-      <div class="problem-card">
-        <span class="prob-num">──  02</span>
-        <div class="prob-title">承認後の手配漏れ・買い忘れ</div>
-        <p class="prob-body">承認は降りたのに、出張者が忙しくて実購買を忘れていた。システム間の断絶が生む「直前の手配漏れ」は経営リスクに直結。</p>
-      </div>
-      <div class="problem-card">
-        <span class="prob-num">──  03</span>
-        <div class="prob-title">ローカル交通などの経費申請は別経路となり全体支出が見えない</div>
-        <p class="prob-body">飛行機とホテルはBTM、新幹線はJREastなどとなり、全体の出張経費がみえないまま上長はメクラ承認をするしかない状況。</p>
-      </div>
-      <div class="problem-card">
-        <span class="prob-num">──  04</span>
-        <div class="prob-title">ガバナンスがブラックボックス化</div>
-        <p class="prob-body">各自が個別ECサイトで手配するため、旅費上限規定の遵守やグレード違反を管理側が把握できない。コンプライアンスリスクが潜在化。</p>
-      </div>
-      <div class="problem-card">
-        <span class="prob-num">──  05</span>
-        <div class="prob-title">経理部門の督促・突合業務が爆発</div>
-        <p class="prob-body">月末に領収書を集め、経費精算書と突合し、不備があれば差し戻し。経理担当者の生産性を著しく損なう繰り返し業務が発生。</p>
-      </div>
+            <!-- 課題ヘッダー -->
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3.5 py-1 rounded-full uppercase">THE HIDDEN WASTE</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-snug">
+                    出張購買承認のツギハギ連携が<br class="hidden sm:block">「煩雑な雑務」を発生させています
+                </h2>
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                    承認・購買・経費精算・会計システムがバラバラ、各自がバラバラなECサイトで予約、事後に領収書をかき集めて申請。<br />この「分断」をワンストップにつなぎ、組織全体の隠れた工数をばっさり削減。
+                </p>
+            </div>
 
+            <div class="problem-grid">
+                <!-- 01 -->
+                <div class="problem-card">
+                    <span class="prob-num">──  01</span>
+                    <div class="prob-title">承認待ちの間に価格・在庫が変動</div>
+                    <p class="prob-body">最安値で申請しても承認まで数時間。その間に空室消滅、価格高騰。承認後にまた最初からやり直す「不毛なループ」が常態化。</p>
+                </div>
+
+                <!-- 02 -->
+                <div class="problem-card">
+                    <span class="prob-num">──  02</span>
+                    <div class="prob-title">承認後の手配漏れ・買い忘れ</div>
+                    <p class="prob-body">承認は降りたのに、出張者が忙しくて実購買を忘れていた。システム間の断絶が生む「直前の手配漏れ」は経営リスクに直結。</p>
+                </div>
+
+                <!-- 03 -->
+                <div class="problem-card">
+                    <span class="prob-num">──  03</span>
+                    <div class="prob-title">ローカル交通などの経費申請は別経路となり全体支出が見えない</div>
+                    <p class="prob-body">飛行機とホテルはBTM、新幹線はJREastなどとなり、全体の出張経費がみえないまま上長はメクラ承認をするしかない状況。</p>
+                </div>
+
+                <!-- 04 -->
+                <div class="problem-card">
+                    <span class="prob-num">──  04</span>
+                    <div class="prob-title">ガバナンスがブラックボックス化</div>
+                    <p class="prob-body">各自が個別ECサイトで手配するため、旅費上限規定の遵守やグレード違反を管理側が把握できない。コンプライアンスリスクが潜在化。</p>
+                </div>
+
+                <!-- 05 -->
+                <div class="problem-card">
+                    <span class="prob-num">──  05</span>
+                    <div class="prob-title">経理部門の督促・突合業務が爆発</div>
+                    <p class="prob-body">月末に領収書を集め、経費精算書と突合し、不備があれば差し戻し。経理担当者の生産性を著しく損なう繰り返し業務が発生。</p>
+                </div>
+
+                <!-- 【Reality】1pxボーダー構造を継承した「現実」コスト警告カード -->
                 <div class="problem-card bg-rose-50/45 hover:bg-rose-50/70 border-l-2 border-rose-300">
                     <span class="prob-num text-rose-500 font-bold">──  REALITY</span>
                     <div class="prob-title text-rose-950 font-black">1件あたり180分以上の間接工数</div>
@@ -389,106 +398,17 @@ h2 {
                                 <span class="block text-sm font-extrabold">180分</span>
                                 <span class="text-[9px] text-slate-500 font-bold block mt-1">＝ 約9,000円分</span>
                             </span>
-                                <div class="flex justify-between items-start">
-                                                <p class="text-[10px] text-slate-400">※チケット代の約25%に等しい「見えない労働工数」が浪費されています。</p>
-                                </div>
+                        </div>
+                        <div class="pt-2 border-t border-rose-100/50">
+                            <p class="text-[10px] text-slate-400">※チケット代の約25%に等しい「見えない労働工数」が浪費されています。</p>
                         </div>
                     </div>
-    </div>
-  </div>
-</section>
-
-    <!--
-    <section id="problem" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto space-y-4">
-                <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">THE HIDDEN WASTE</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
-                    出張購買承認のツギハギ連携が<br class="hidden sm:block">「煩雑な雑務」を発生させています
-                </h2>
-                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
-                    承認・購買・経費精算・会計システムがバラバラ、各自がバラバラなECサイトで予約、事後に領収書をかき集めて申請。<br />この「分断」をワンストップにつなぎ、組織全体の隠れた工数をばっさり削減。
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
-                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </div>
-                        <h3 class="text-base font-bold text-slate-900">承認待ってたら価格・在庫変動</h3>
-                    </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        最安ホテル・フライトを選んで申請しても、承認を待つ数時間のうちに空室がなくなり、またはチケット価格が高騰。「価格変更による後戻りや二度手間」という不毛なやり直しが発生。
-                    </p>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
-                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-stamp"></i>
-                        </div>
-                        <h3 class="text-base font-bold text-slate-900">承認されたのに購買漏れが発生</h3>
-                    </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        「事前承認は下りたのに、出張者が忙しくてチケットを実購買し忘れていた」「予約完了したと思い込んでいた」など、システム未連携による土壇場での手配漏れリスクを回避。
-                    </p>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
-                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-coins"></i>
-                        </div>
-                        <h3 class="text-base font-bold text-slate-900">承認・購買・精算に多大な時間</h3>
-                    </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        出張者本人はサイト比較で時間を溶かし、上司は全体像がわからず仕方なく「メクラ承認」。管理部門は領収書回収の督促やコンプラ違反チェックに追われ、見えない人件費コストが莫大に。1approvalではそれらの雑務から発生する無駄を徹底的に削減できます。
-                    </p>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
-                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-shield-halved"></i>
-                        </div>
-                        <h3 class="text-base font-bold text-slate-900">不正出張や規定違反のチェック困難</h3>
-                    </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        各各自が個別サイトで手配するため、「本当に旅費上限規定を守っているか」「過剰に高いグレードのホテルを予約していないか」のガバナンス管理・監査体制がブラックボックス化。
-                    </p>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-yellow/50 transition-all duration-300 space-y-4 relative overflow-hidden card-shadow group">
-                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-yellow"></div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-briefcase"></i>
-                        </div>
-                        <h3 class="text-base font-bold text-slate-900">各自の自己判断による経営リスク</h3>
-                    </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        統一された承認フローがない手配や、直前の判断がまかり通る体制はガバナンス崩壊のもと。企業の出張コンプライアンス上、極めて大きな損失につながるリスクになります。
-                    </p>
-                </div>
-
-                <div class="bg-brand-yellowlight p-6 rounded-2xl border-2 border-dashed border-brand-yellow/60 flex flex-col justify-center space-y-3">
-                    <p class="text-xs font-bold text-slate-900">【現実】膨大な間接コストが発生中</p>
-                    <div class="text-xs text-slate-600 space-y-1">
-                        <div class="flex justify-between"><span>ホテル・新幹線代（実費）：</span><span class="font-bold text-slate-800">約35,000円</span></div>
-                        <div class="flex justify-between border-t border-slate-200/50 pt-1"><span>出張手続き間接工数（人件費換算）：</span><span class="font-bold text-brand-danger text-sm">180分＝約9,000円分</span></div>
-                    </div>
-                    <p class="text-[10px] text-slate-400">※チケット代の約25%に等しい「見えない労働工数」が浪費されています。</p>
                 </div>
             </div>
         </div>
     </section>
--->
+
+    <!-- 機能・解決セクション -->
     <section id="features" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
@@ -508,7 +428,7 @@ h2 {
                             <span class="w-7 h-7 rounded-full bg-brand-dark text-brand-yellow font-black text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
                             <div>
                                 <h4 class="text-sm font-bold text-slate-900">kintoneに購買承認プラグインを設置</h4>
-                                <p class="text-xs text-slate-500 mt-1">RICOH kintone plus（RKP）環境など、すでにお使いのkintone環境にプラグインファイルをインストールするだけ。テンプレートアプリも揃っており、すぐに展開可能です。</p>
+                                <p class="text-xs text-slate-500 mt-1">RICOH kintone plus（RKP）環境など、すでにお使い of kintone環境にプラグインファイルをインストールするだけ。テンプレートアプリも揃っており、すぐに展開可能です。</p>
                             </div>
                         </div>
 
@@ -524,7 +444,7 @@ h2 {
                             <span class="w-7 h-7 rounded-full bg-brand-dark text-brand-yellow font-black text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
                             <div>
                                 <h4 class="text-sm font-bold text-slate-900">自動反映されたカート内容を確認して承認申請</h4>
-                                <p class="text-xs text-slate-500 mt-1">カートで選んだ内容が、kintoneの申請レコード項目に自動でそのまま転記・マッピングされます。申請時の転記が不要のため「入力の手間・手入力ミス」は発生しません。</p>
+                                <p class="text-xs text-slate-500 mt-1">カートで選んだ内容が、kintone的申請レコード項目に自動でそのまま転記・マッピングされます。申請時の転記が不要のため「入力の手間・手入力ミス」は発生しません。</p>
                             </div>
                         </div>
 
@@ -532,7 +452,7 @@ h2 {
                             <span class="w-7 h-7 rounded-full bg-brand-dark text-brand-yellow font-black text-xs flex items-center justify-center shrink-0 mt-0.5">4</span>
                             <div>
                                 <h4 class="text-sm font-bold text-slate-900">承認者が承認したら、購買もそのまま完了</h4>
-                                <p class="text-xs text-slate-500 mt-1">承認者がkintone上で「承認」した瞬間に自動購入を完了。請求は全て会社に届く（会社一括請求）ので、個人立替精算業務自体が消滅します。</p>
+                                <p class="text-xs text-slate-500 mt-1">承認者がkintone上で「承認」した瞬間に自動購入を完了。請求はすべて会社に届く（会社一括請求）ので、個人立替精算業務自体が消滅します。</p>
                             </div>
                         </div>
                     </div>
@@ -589,6 +509,7 @@ h2 {
         </div>
     </section>
 
+    <!-- プロセスの比較と特徴 -->
     <section id="comparison" class="py-16 bg-gradient-to-r from-brand-dark to-slate-900 text-white relative overflow-hidden border-t border-white/10">
         <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div class="absolute -top-40 -right-40 w-80 h-80 bg-brand-yellow/10 rounded-full blur-3xl"></div>
@@ -662,14 +583,13 @@ h2 {
                             </p>
                         </div>
                     </div>
-
-           
                 </div>
             </div>
         </div>
     </section>
 
-         <section id="simulator" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
+    <!-- 削減シミュレーター -->
+    <section id="simulator" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto space-y-4">
                 <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 px-3 py-1 rounded-full uppercase">ROI CALCULATOR</span>
@@ -715,6 +635,7 @@ h2 {
         </div>
     </section>
 
+    <!-- 手配網羅範囲 -->
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
@@ -776,7 +697,7 @@ h2 {
                         </div>
                         <div class="space-y-3">
                             <span class="text-xs font-black tracking-widest text-brand-yellow uppercase block">お客様のメリット01</span>
-                            <h3 class="text-lg sm:text-xl font-extrabold text-slate-950">横断検索によるコスト削減</h3>
+                            <h3 class="text-lg sm:text-xl font-extrabold text-slate-955">横断検索によるコスト削減</h3>
                             <p class="text-sm text-slate-600 leading-relaxed">
                                 航空券は大手航空会社だけでなく、<strong class="text-slate-900 font-bold">LCC（格安航空会社）やMCC（ミドルコストキャリア）も含めて一括で横断検索</strong>できます。コードシェア便の価格差も一目でわかるため、自然と一番安いルートを選めてコストを抑えられます。
                             </p>
@@ -792,7 +713,7 @@ h2 {
                         </div>
                         <div class="space-y-3">
                             <span class="text-xs font-black tracking-widest text-brand-primary uppercase block">お客様のメリット02</span>
-                            <h3 class="text-lg sm:text-xl font-extrabold text-slate-950">面倒な「立替精算」の撤廃</h3>
+                            <h3 class="text-lg sm:text-xl font-extrabold text-slate-955">面倒な「立替精算」の撤廃</h3>
                             <p class="text-sm text-slate-600 leading-relaxed">
                                 会社への一括請求になるため、<strong class="text-slate-900 font-bold">出張者が自腹で立て替えたり、後から領収書を並べて経費精算書を作ったりする手間がゼロ</strong>になります。面倒な領収書の管理や承認作業など組織全体の非効率が完全に消滅します。
                             </p>
@@ -826,6 +747,7 @@ h2 {
         </div>
     </section>
 
+    <!-- 導入企業実績 -->
     <section id="case" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto space-y-4">
@@ -884,6 +806,7 @@ h2 {
         </div>
     </section>
 
+    <!-- 料金体系 -->
     <section id="pricing" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
@@ -909,7 +832,7 @@ h2 {
                         <div class="pt-4 border-t border-slate-200 space-y-2 text-xs">
                             <div class="flex justify-between items-center py-1">
                                 <span class="text-slate-600 font-bold">初期設定費用</span>
-                                <span class="font-extrabold text-slate-950 text-sm">¥200,000 <span class="text-[10px] text-slate-500">(税抜)</span></span>
+                                <span class="font-extrabold text-slate-955 text-sm">¥200,000 <span class="text-[10px] text-slate-500">(税抜)</span></span>
                             </div>
                             <div class="flex justify-between items-center py-1 border-t border-slate-200/50">
                                 <span class="text-slate-600 font-bold">プラグイン月額費用</span>
@@ -933,7 +856,7 @@ h2 {
                         <div class="pt-4 border-t border-slate-200 space-y-2 text-xs">
                             <div class="flex justify-between items-center py-1">
                                 <span class="text-slate-600 font-bold">導入初期費用</span>
-                                <span class="font-extrabold text-slate-950 text-sm">¥0</span>
+                                <span class="font-extrabold text-slate-955 text-sm">¥0</span>
                             </div>
                             <div class="flex justify-between items-center py-1 border-t border-slate-200/50">
                                 <span class="text-slate-600 font-bold">システム利用料</span>
@@ -949,23 +872,20 @@ h2 {
                             <div class="flex justify-between border-t border-slate-100 pt-1"><span>月額利用 300万〜500万円:</span> <span class="font-bold text-slate-700">1%</span></div>
                             <div class="flex justify-between border-t border-slate-100 pt-1"><span>月額利用 500万円以上:</span> <span class="font-extrabold text-brand-success">無料 (0円)</span></div>
                         </div>
-                        <p class="text-[10px] text-slate-400">※最低料金として10,000円/月（税別）を別途頂戴いたします。また、ご利用サービス毎に別途、規定の取扱手数料が発生いたします。</p>
+                        <p class="text-[10px] text-slate-400">※最低料金として10,000円/月（税別）を別途頂戴いたします。また、ご利用サービス毎に別途、規定 of 取扱手数料が発生いたします。</p>
                     </div>
                 </div>
             </div>
-
-      
         </div>
     </section>
 
+    <!-- ロードマップ -->
     <section id="roadmap" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
-                <div class="flex justify-center mb-2">
-                     <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
-                    <!--
-                    <span class="text-xl font-black text-slate-900">1Approval <span class="text-brand-yellow">for kintone</span></span>
-                    -->
+                <!-- ロードマップセクション：フォールバック用テキスト・余分な制御JSをすべて廃止、imgタグのみで表示 -->
+                <div class="flex justify-center mb-2 shrink-0">
+                    <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto object-contain">
                 </div>
                 <h2 class="text-3xl font-extrabold text-slate-900">すべての購買管理を、1つの「承認」へ。</h2>
                 <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
@@ -979,7 +899,7 @@ h2 {
                     <i class="fa-solid fa-plane-departure text-brand-yellow text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">出張宿泊手配</h4>
                     <span class="text-[9px] bg-brand-yellow/10 text-brand-yellow px-2 py-0.5 rounded font-extrabold block">1Approval 4 Trip</span>
-          
+                    <span class="text-[8px] text-slate-400 font-bold block mt-1">ピカパカ社連携</span>
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
@@ -987,7 +907,6 @@ h2 {
                     <i class="fa-solid fa-cubes text-brand-success text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">消耗品・備品</h4>
                     <span class="text-[9px] bg-brand-success/10 text-brand-success px-2 py-0.5 rounded font-extrabold block">1Approval 4 Goods</span>
-             
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
@@ -995,7 +914,6 @@ h2 {
                     <i class="fa-solid fa-users text-brand-primary text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">会議室・MICE</h4>
                     <span class="text-[9px] bg-brand-primary/10 text-brand-primary px-2 py-0.5 rounded font-extrabold block">1Approval 4 MICE</span>
-     
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
@@ -1003,7 +921,6 @@ h2 {
                     <i class="fa-solid fa-square-parking text-pink-500 text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">駐車場手配</h4>
                     <span class="text-[9px] bg-pink-100 text-pink-600 px-2 py-0.5 rounded font-extrabold block">1Approval 4 Parking</span>
-          
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
@@ -1011,7 +928,6 @@ h2 {
                     <i class="fa-solid fa-laptop-code text-slate-400 text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">IT SaaS契約</h4>
                     <span class="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-extrabold block">1Approval 4 SaaS</span>
-        
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
@@ -1019,12 +935,12 @@ h2 {
                     <i class="fa-solid fa-screwdriver-wrench text-slate-400 text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">工業・建築工具</h4>
                     <span class="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-extrabold block">1Approval 4 Tools</span>
-  
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- スムーズな導入ステップ -->
     <section class="py-20 bg-brand-slatebg border-y border-slate-200/80">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
             <div class="space-y-4">
@@ -1060,6 +976,7 @@ h2 {
         </div>
     </section>
 
+    <!-- よくある質問 -->
     <section id="faq" class="py-20 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center space-y-4">
@@ -1111,17 +1028,15 @@ h2 {
         </div>
     </section>
 
+    <!-- お問い合わせ・フォーム -->
     <section id="contact" class="py-20 bg-brand-slatebg border-t border-slate-200 relative overflow-hidden">
         <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>
         
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center space-y-4 mb-12">
-                <div class="flex justify-center mb-2">
-                    
-                    <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
-                    <!--
-                    <span class="text-lg font-black text-slate-900">1Approval <span class="text-brand-yellow">for kintone</span></span>
-                    -->
+                <!-- お問い合わせセクション：テキストフォールバック用記述・制御JSを完全排除、imgタグのみで表示 -->
+                <div class="flex justify-center mb-2 shrink-0">
+                    <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto object-contain">
                 </div>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">まずは詳しい資料請求・無料デモへ</h2>
                 <p class="text-slate-500 text-xs sm:text-sm">
@@ -1163,8 +1078,8 @@ h2 {
 
                 <div class="flex items-start gap-3">
                     <input type="checkbox" required id="privacy" class="mt-1 accent-brand-yellow">
-                    <label for="privacy" class="text-[11px] text-slate-500 leading-relaxed">
-                        個人情報の取り扱い方針（プライバシーポリシー）に同意の上、送信します。
+                    <label for="privacy" class="text-[11px] text-slate-500 leading-relaxed cursor-pointer">
+                        <a href="https://eichiii.notion.site/ff4b77597e97434790d8016a8fee9616" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-brand-yellow transition-colors font-semibold">個人情報の取り扱い方針（プライバシーポリシー）</a>に同意の上、送信します。
                     </label>
                 </div>
 
@@ -1180,10 +1095,12 @@ h2 {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
             <!-- 左側: ブランドロゴと外部リンクナビゲーション -->
             <div class="flex flex-col items-center md:items-start gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg font-black tracking-tight text-slate-800">1Approval <span class="text-brand-yellow">for kintone</span></span>
+                <!-- フッターロゴエリア（画像への切り替えを完了。onerror属性などの複雑なロジックを完全廃止） -->
+                <div class="flex items-center min-w-0 shrink-0">
+                    <img src="logo11.png" alt="1Approval for kintone" class="h-8 sm:h-11 w-auto object-contain">
                 </div>
-                <div class="flex items-center gap-6 text-xs text-slate-500 font-medium">
+                
+                <div class="flex items-center gap-6 text-xs text-slate-500 font-medium mt-2">
                     <a href="https://eichiii.co.jp/" target="_blank" rel="noopener noreferrer" class="hover:text-brand-yellow hover:underline transition-colors flex items-center gap-1.5 group">
                         会社概要 
                         <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-400 group-hover:text-brand-yellow transition-colors"></i>
@@ -1205,6 +1122,7 @@ h2 {
         </div>
     </footer>
 
+    <!-- 送信完了モーダル -->
     <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/80 backdrop-blur-sm hidden">
         <div class="bg-white border border-brand-yellow/30 p-8 rounded-3xl max-w-md w-full text-center space-y-6 shadow-2xl">
             <div class="w-16 h-16 rounded-full bg-brand-yellow/10 text-brand-yellow flex items-center justify-center text-3xl mx-auto">
@@ -1213,7 +1131,7 @@ h2 {
             <div class="space-y-2">
                 <h3 class="text-xl font-bold text-slate-900">リクエストを送信しました</h3>
                 <p class="text-xs text-slate-500 leading-relaxed">
-                    フォーム送信が完了しました。担当者より、折り返しメールにて詳細な営業PDF・導入マニュアル資材・製品デモ動画の案内URLをお送りいたします。
+                    フォーム送信が完了しました。担当者より、折り返しメールにて詳細な営業PDF・導入マニュアル資材・製品デモ動画 of 案内URLをお送りいたします。
                 </p>
             </div>
             <button id="close-modal" class="bg-brand-yellow text-brand-dark font-extrabold text-sm py-2.5 px-6 rounded-full hover:bg-brand-dark hover:text-white transition-all duration-300">
@@ -1222,8 +1140,69 @@ h2 {
         </div>
     </div>
 
+    <!-- JavaScript 処理ロジック -->
     <script>
-        // 1. FAQ Accordion handler
+        // ビデオ再生制御用のカスタムイベントリスナー
+        const demoVideo = document.getElementById('demo-video');
+        const videoOverlay = document.getElementById('video-overlay');
+
+        if (demoVideo && videoOverlay) {
+            videoOverlay.addEventListener('click', () => {
+                demoVideo.play();
+                videoOverlay.classList.add('hidden');
+            });
+            demoVideo.addEventListener('play', () => {
+                videoOverlay.classList.add('hidden');
+            });
+        }
+
+        // モバイルドロワーメニューのトグル制御
+        const menuOpenBtn = document.getElementById('menu-open-btn');
+        const menuCloseBtn = document.getElementById('menu-close-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuContent = document.getElementById('mobile-menu-content');
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+
+        function openMenu() {
+            mobileMenu.classList.remove('hidden');
+            // アニメーション用のクラス遅延処理
+            setTimeout(() => {
+                mobileMenu.classList.remove('opacity-0');
+                mobileMenu.classList.add('opacity-100');
+                mobileMenuContent.classList.remove('translate-x-full');
+                mobileMenuContent.classList.add('translate-x-0');
+            }, 10);
+        }
+
+        function closeMenu() {
+            mobileMenu.classList.remove('opacity-100');
+            mobileMenu.classList.add('opacity-0');
+            mobileMenuContent.classList.remove('translate-x-0');
+            mobileMenuContent.classList.add('translate-x-full');
+            // アニメーション完了後に完全に隠す
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300);
+        }
+
+        if (menuOpenBtn && menuCloseBtn && mobileMenu) {
+            menuOpenBtn.addEventListener('click', openMenu);
+            menuCloseBtn.addEventListener('click', closeMenu);
+            
+            // 背景クリックでも閉じるようにする
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target === mobileMenu) {
+                    closeMenu();
+                }
+            });
+
+            // メニューリンクがクリックされたらドロワーを閉じる
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+        }
+
+        // 1. FAQ アコーディオン展開制御
         const faqToggles = document.querySelectorAll('.faq-toggle');
         faqToggles.forEach(toggle => {
             toggle.addEventListener('click', () => {
@@ -1234,7 +1213,7 @@ h2 {
             });
         });
 
-        // 2. Cost and Hours Saving Simulation Engine (Slide 11 & Page 10 math)
+        // 2. コスト削減シミュレーター・計算ロジック
         const tripsInput = document.getElementById('trips-input');
         const wageInput = document.getElementById('wage-input');
         const tripsVal = document.getElementById('trips-val');
@@ -1247,18 +1226,17 @@ h2 {
             const trips = parseInt(tripsInput.value);
             const wage = parseInt(wageInput.value);
 
-            // Update user indicators
+            // 表示ラベル更新
             tripsVal.textContent = `${trips}件 / 月`;
             wageVal.textContent = `${wage.toLocaleString()}円 / 時間`;
 
-            // Math: 
-            // Traditional = 210 mins. 1Approval = 30 mins. Saved = 180 mins (3.0 hours) per trip.
+            // 計算モデル： 1件あたり180分（3時間）の削減効果
             const savedHoursPerTrip = 3.0; 
             const monthlySavedHours = trips * savedHoursPerTrip;
             const annualSavedHours = monthlySavedHours * 12;
             const annualSavedCost = annualSavedHours * wage;
 
-            // Render
+            // 結果をDOMへ反映
             savedHoursEl.textContent = `${annualSavedHours.toLocaleString()} 時間`;
             savedCostEl.textContent = `¥${annualSavedCost.toLocaleString()}`;
         }
@@ -1266,10 +1244,10 @@ h2 {
         tripsInput.addEventListener('input', updateROI);
         wageInput.addEventListener('input', updateROI);
         
-        // Initializer
+        // 初回計算の実行
         updateROI();
 
-        // 3. Simulated Submit Modal
+        // 3. モーダルフォームのダミー送信制御
         const leadForm = document.getElementById('lead-form');
         const successModal = document.getElementById('success-modal');
         const closeModal = document.getElementById('close-modal');
