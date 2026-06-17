@@ -41,8 +41,8 @@
 
   <div id="root"></div>
 
-  <!-- Reactコンポーネントコードの埋め込み -->
-  <script type="text/babel">
+  <!-- Reactコンポーネントコードの埋め込み。Babelの自動競合トランスパイルを回避するため、typeをカスタム指定 -->
+  <script type="text/custom-babel">
     const { useState, useMemo, useEffect } = React;
 
     // React内から簡単にLucideアイコンを使用するためのインラインSVG代替コンポーネント
@@ -107,7 +107,7 @@
           soundproof: "高（完全密閉パネル・ガラス扉仕様 / 声漏れを完全シャットアウト）",
           fireLaw: "【自身で申請対応・代行費0円】天井が閉じた完全個室のため消防法が適用されますが、消火装置を自主手配し、消防署への申請・図面作成は自身（自社）で実施することで、申請代行費を0円にカット。約58.2万円という最小予算で適法クリア可能です。",
           suitability: "【最推奨】リードプラン（プランA）",
-          suitabilityReason: "アポプラス様の予算上限に対して約58.2万円と非常に理想的な着地となります。申請を自身で実施（0円）することで、デリケートな個人情報や医薬情報の漏洩を100%防げる「完全個室」を予算内で手に入れる現実的なベスト解です。",
+          suitabilityReason: "アポプラス様の予算上限に対して約58.2万円と非常に理想的な着地となります。申請を自身で実施（0円）することで、デリケートな個人情報や医療情報の漏洩を100%防げる「完全個室」を予算内で手に入れる現実的なベスト解です。",
           pros: "30万円台の本体価格に加え、消防申請・図面作成を自身で手配・実施することで費用を0円に削減。消火装置のみの自主手配に抑え、予算内で本格的な防音密閉個室を導入。",
           cons: "重量が250kg以上あるためOA床の耐荷重に注意。消防届出やビル管理会社との提出書類作成のため、自身（自社）の申請実務稼働が発生します。",
           url: "https://kaguyasujp.com/products/jyc-c001"
@@ -161,11 +161,11 @@
             furniture: 0, 
             total: 1344407
           },
-          soundproof: "極高（国内最高クラスの遮音＆抗菌機能内蔵）",
+          soundproof: "極高（国内最高クラス of 遮音＆抗菌機能内蔵）",
           fireLaw: "【完全コミコミ】スプリンクラー本体代金、消防署折衝、設置届出図面作成、平日配送設置費が、すべて「1,344,407円」の本体価格に内包されています。",
           suitability: "【参考除外】予算超過プラン（プランC）",
           suitabilityReason: "消火装置の設置や申請などの「丸投げフルパック」としては極めて優秀ですが、アポプラス様の指定予算「50万〜70万円」に対して「約2倍」と大幅に高額。今回の予算枠からは選定対象外とします。",
-          pros: "消防の事前調整、図面作成、簡易スプリンクラー、設置工事まで一連のオフィス付帯作業がすべて価格内にオールインワン。稼働が一切不要な究極のプラン。",
+          pros: "消防の事前調整、図面作成、簡易スプリンクラー、設置工事まで一連 of オフィス付帯作業がすべて価格内にオールインワン。稼働が一切不要な究極のプラン。",
           cons: "税込で約134.4万円と非常に高額なため、アポプラス様の予算上限である70万円を大幅に上回り、承認（稟議）を通すハードルが極めて高いこと。",
           url: "添付お見積書 (2026/06/09)"
         }
@@ -496,7 +496,7 @@
                           onChange={(e) => setKaguyasuDeliveryCost(Number(e.target.value))}
                           className="w-full accent-indigo-600"
                         />
-                        <span className="text-[10px] text-slate-400 block">※250kgのオフィス家具配送専門料金（標準約¥80,000）</span>
+                        <span className="text-[10px] text-slate-400 block">※250kg of オフィス家具配送専門料金（標準約¥80,000）</span>
                       </div>
 
                       {/* Slider 2: Fire Doc */}
@@ -532,7 +532,7 @@
                           onChange={(e) => setKaguyasuSprinkler(Number(e.target.value))}
                           className="w-full accent-indigo-600"
                         />
-                        <span className="text-[10px] text-slate-400 block">※不活性ガス消火装置など、天井適合型自動消火装置の自主手配（相場¥150,000）</span>
+                        <span className="text-[10px] text-slate-400 block">※不活性ガス消火装置など、天井適合型自動消火装置 of 自主手配（相場¥150,000）</span>
                       </div>
 
                       <div className="bg-white p-3 rounded-lg border border-indigo-100 flex justify-between items-center mt-4">
@@ -672,7 +672,7 @@
                         rel="noopener noreferrer" 
                         className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-semibold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1"
                       >
-                        製品リンクを確認する <Icon name="arrowRight" className="w-3 h-3" />
+                        製品リンクを確認する <Icon name="arrowRight" className="w-3.5 h-3.5" />
                       </a>
                     </div>
                   </div>
@@ -733,7 +733,7 @@
                         rel="noopener noreferrer" 
                         className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-semibold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1"
                       >
-                        製品リンクを確認する <Icon name="arrowRight" className="w-3 h-3" />
+                        製品リンクを確認する <Icon name="arrowRight" className="w-3.5 h-3.5" />
                       </a>
                     </div>
                   </div>
@@ -874,7 +874,7 @@
                         ・配送組立諸費用：高重量250kg製品の専門組立を配送業者へ一任（約8万円）<br />
                         ・簡易スプリンクラー：消防認定適合モデルの自動消火装置を自主手配（約15万円）<br />
                         ・消防署届出・書類作成：自社図面やメーカー仕様書データを活用し、<strong>申請実務を自身で実施するため 0円</strong>。専門業者への外注代行費用を100%カット。<br />
-                        ・メタルフレーム＆防音ガラス仕様により、Web面談での最高遮音性を確保。
+                        ・METAL FRAME＆防音ガラス仕様により、Web面談での最高遮音性を確保。
                       </p>
 
                       <p>
@@ -951,6 +951,38 @@
     // React アプリケーションのレンダリング
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
+  </script>
+
+  <!-- 手動Babelトランスパイラ（ classic runtime を強制し、ブラウザの自動インポート例外エラーを根絶する ） -->
+  <script>
+    (function() {
+      function compile() {
+        const scripts = document.querySelectorAll('script[type="text/custom-babel"]');
+        scripts.forEach(script => {
+          const source = script.textContent;
+          try {
+            // runtime: 'classic'を明示的に指定して、BabelのReact18自動モジュールインポートバグを無効化
+            const transformed = Babel.transform(source, {
+              presets: [
+                ['react', { runtime: 'classic' }]
+              ]
+            }).code;
+            const newScript = document.createElement('script');
+            newScript.textContent = transformed;
+            document.body.appendChild(newScript);
+          } catch (e) {
+            console.error("Babel Custom Compilation Error: ", e);
+          }
+        });
+      }
+      
+      // BabelがCDNからロードされているタイミングをチェックして確実にトランスパイル
+      if (typeof Babel !== 'undefined') {
+        compile();
+      } else {
+        window.addEventListener('load', compile);
+      }
+    })();
   </script>
 </body>
 </html>
