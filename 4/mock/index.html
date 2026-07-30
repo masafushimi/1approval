@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>One Approval × MonotaRO 統合購買・備品管理システム モックアップ</title>
+    <title>統合購買・資産・貸出・棚卸管理システム</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,19 +13,18 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Noto Sans JP', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Noto Sans JP', 'sans-serif'] },
                     colors: {
                         brand: {
-                            navy: '#0B192C',
-                            slate: '#1E293B',
                             orange: '#E35B3E',
                             orangeHover: '#d14a2d',
                             orangeLight: '#FFF7ED',
+                            navy: '#0B192C',
+                            slate: '#1E293B',
                             blue: '#2563EB',
                             emerald: '#059669',
-                            lightBg: '#F8FAFC'
+                            amber: '#D97706',
+                            purple: '#7C3AED'
                         }
                     }
                 }
@@ -35,70 +34,76 @@
     <style>
         body { font-family: 'Noto Sans JP', sans-serif; background-color: #F8FAFC; color: #334155; }
         .active-nav { background-color: #1E293B; border-left: 4px solid #E35B3E; color: #FFFFFF !important; }
-        .badge-success { background-color: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
-        .badge-warning { background-color: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
-        .badge-danger { background-color: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
-        .badge-info { background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+        .badge { padding: 0.15rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600; }
+        .badge-monotaro { background-color: #FFF7ED; color: #C2410C; border: 1px solid #FFEDD5; }
+        .badge-manual { background-color: #F0FDF4; color: #15803D; border: 1px solid #DCFCE7; }
+        .badge-fixed { background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+        .badge-consumable { background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; }
+        .badge-mdm { background-color: #F3E8FF; color: #6B21A8; border: 1px solid #E9D5FF; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="h-screen flex overflow-hidden select-none">
+<body class="h-screen flex overflow-hidden select-none bg-slate-100">
 
     <!-- サイドバー -->
     <aside class="w-64 bg-brand-navy text-slate-300 flex flex-col justify-between z-20 shadow-xl shrink-0">
         <div>
-            <!-- ブランドヘッダー -->
+            <!-- ブランドヘッダー (ロゴ排除・シンプル表示) -->
             <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-brand-orange to-amber-500 flex items-center justify-center text-white font-bold text-lg shadow-md">
-                    1A
+                    <i class="fa-solid fa-boxes-packing"></i>
                 </div>
                 <div>
                     <h1 class="text-white font-bold text-base leading-tight">One Approval</h1>
-                    <p class="text-[11px] text-orange-400 font-medium">購買・備品統合ミドルウェア</p>
+                    <p class="text-[11px] text-orange-400 font-medium">購買 ＆ 資産統合管理プラットフォーム</p>
                 </div>
             </div>
 
-            <!-- ロール切り替え -->
-            <div class="px-3 py-2 bg-slate-900/70 m-3 rounded-lg border border-slate-800 text-xs">
+            <!-- 操作ユーザー表示 -->
+            <div class="px-3 py-2 bg-slate-900/80 m-3 rounded-lg border border-slate-800 text-xs">
                 <div class="flex items-center justify-between text-[11px] mb-1">
-                    <span class="text-slate-400">操作権限モード</span>
-                    <span id="role-badge" class="px-2 py-0.5 rounded text-[10px] bg-brand-orange/20 text-brand-orange border border-brand-orange/30 font-semibold">全社管理者</span>
+                    <span class="text-slate-400">ログインユーザー</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] bg-brand-orange/20 text-brand-orange border border-brand-orange/30 font-semibold">システム管理者</span>
                 </div>
                 <div class="text-xs font-semibold text-white flex items-center justify-between">
-                    <span id="user-name-display">伏見 氏 (本部管理者)</span>
-                    <button onclick="toggleRole()" class="text-[10px] text-brand-orange hover:underline">切替</button>
+                    <span>伏見 氏 (本社 / 購買・IT統統括部)</span>
                 </div>
             </div>
 
-            <!-- ナビゲーションメニュー -->
+            <!-- メニュー一覧 -->
             <nav class="mt-1 space-y-1 px-2 text-xs">
-                <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active-nav flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active-nav flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
                     <i class="fa-solid fa-chart-pie w-4 text-center"></i>
                     <span>📊 ダッシュボード</span>
                 </a>
-                <a href="#" onclick="switchTab('catalog')" id="nav-catalog" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
-                    <i class="fa-solid fa-store w-4 text-center"></i>
-                    <span>🛒 備品カタログ (パンチアウト)</span>
+                <a href="#" onclick="switchTab('purchases')" id="nav-purchases" class="nav-btn flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-cart-shopping w-4 text-center text-brand-orange"></i>
+                    <span>🛒 購買管理 (モノタロウ/手動)</span>
                 </a>
-                <a href="#" onclick="switchTab('cxml-recovery')" id="nav-cxml-recovery" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition relative">
-                    <i class="fa-solid fa-shield-halved w-4 text-center"></i>
-                    <span>⚠️ cXML通信＆エラーリカバリー</span>
-                    <span class="ml-auto bg-red-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">1</span>
+                <a href="#" onclick="switchTab('assets')" id="nav-assets" class="nav-btn flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-boxes-stacked w-4 text-center text-blue-400"></i>
+                    <span>📦 資産管理 (固定資産/消耗品)</span>
                 </a>
-                <a href="#" onclick="switchTab('matching')" id="nav-matching" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
-                    <i class="fa-solid fa-receipt w-4 text-center"></i>
-                    <span>📑 3-Way Matching (請求照合)</span>
+                <a href="#" onclick="switchTab('mdm')" id="nav-mdm" class="nav-btn flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-laptop-code w-4 text-center text-purple-400"></i>
+                    <span>💻 MDM管理 (IT機器・端末)</span>
                 </a>
-                <a href="#" onclick="switchTab('assets')" id="nav-assets" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
-                    <i class="fa-solid fa-boxes-stacked w-4 text-center"></i>
-                    <span>📦 備品・固定資産台帳 (IT/校正)</span>
+                <a href="#" onclick="switchTab('rentals')" id="nav-rentals" class="nav-btn flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-calendar-days w-4 text-center text-emerald-400"></i>
+                    <span>📅 貸出・予約管理 (カレンダー)</span>
                 </a>
-                <a href="#" onclick="switchTab('calendar-rental')" id="nav-calendar-rental" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
-                    <i class="fa-solid fa-calendar-days w-4 text-center"></i>
-                    <span>📅 貸出予約カレンダー (現場用)</span>
+                <a href="#" onclick="switchTab('audits')" id="nav-audits" class="nav-btn flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-clipboard-check w-4 text-center text-amber-400"></i>
+                    <span>📋 棚卸し機能</span>
                 </a>
-                <a href="#" onclick="switchTab('ai-replenish')" id="nav-ai-replenish" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
-                    <i class="fa-solid fa-robot w-4 text-center"></i>
-                    <span>🤖 AI自動補充 ＆ システム設定</span>
+                <a href="#" onclick="switchTab('maintenance')" id="nav-maintenance" class="nav-btn flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-screwdriver-wrench w-4 text-center text-red-400"></i>
+                    <span>🔧 点検・修理記録</span>
+                </a>
+                <a href="#" onclick="switchTab('members')" id="nav-members" class="nav-btn flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-users w-4 text-center text-slate-400"></i>
+                    <span>👥 メンバー管理</span>
                 </a>
             </nav>
         </div>
@@ -106,413 +111,315 @@
         <!-- フッター -->
         <div class="p-3 border-t border-slate-800 text-[11px] text-slate-400">
             <div class="flex items-center justify-between">
-                <span>cXML Gateway:</span>
-                <span class="text-emerald-400 flex items-center"><i class="fa-solid fa-circle text-[6px] mr-1 animate-pulse"></i> 正常接続</span>
+                <span>kintone Webhook:</span>
+                <span class="text-emerald-400 font-bold flex items-center"><i class="fa-solid fa-circle text-[6px] mr-1 animate-pulse"></i> 接続中</span>
             </div>
-            <div class="text-[10px] text-slate-500 mt-0.5">kintone Webhook 連動中</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">MonotaRO cXML Gateway 連動</div>
         </div>
     </aside>
 
-    <!-- メインエリア -->
+    <!-- メイン表示領域 -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         <!-- ヘッダー -->
         <header class="bg-white border-b border-slate-200 h-14 px-6 flex items-center justify-between shrink-0 shadow-sm z-10">
             <div class="flex items-center space-x-3">
-                <h2 id="page-title" class="text-base font-bold text-slate-800">📊 ダッシュボード ＆ 支出・アラート統合分析</h2>
-                <span class="bg-slate-100 text-slate-600 text-[11px] px-2 py-0.5 rounded border border-slate-200">
-                    東京第一工場 / 製造統括部
+                <h2 id="page-title" class="text-base font-bold text-slate-800">📊 ダッシュボード ＆ 統合概要</h2>
+                <span id="page-subtitle" class="bg-slate-100 text-slate-600 text-[11px] px-2.5 py-0.5 rounded border border-slate-200 font-medium">
+                    全社拠点データ共有中
                 </span>
             </div>
             <div class="flex items-center space-x-3 text-xs">
-                <button onclick="openCartModal()" class="relative p-2 text-slate-600 hover:text-brand-orange transition">
-                    <i class="fa-solid fa-cart-shopping text-base"></i>
-                    <span id="cart-count" class="absolute top-0 right-0 bg-brand-orange text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">0</span>
+                <button onclick="openQrScanModal()" class="px-3 py-1.5 bg-brand-orange hover:bg-brand-orangeHover text-white rounded-lg font-bold flex items-center space-x-1.5 shadow transition">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <span>QRコード受領/貸出スキャン</span>
                 </button>
                 <div class="h-4 w-[1px] bg-slate-200"></div>
-                <span class="text-slate-500 text-[11px]"><i class="fa-solid fa-clock text-slate-400 mr-1"></i>2026/07/30 (木)</span>
+                <span class="text-slate-500 text-[11px] font-mono"><i class="fa-solid fa-clock text-slate-400 mr-1"></i>2026/07/30</span>
             </div>
         </header>
 
-        <!-- メイン画面コンテンツ -->
-        <main class="flex-1 overflow-y-auto p-5 bg-slate-50">
+        <!-- メイン画面コンテンツ領域 -->
+        <main class="flex-1 overflow-y-auto p-5 bg-slate-50 text-xs">
 
             <!-- TAB 1: ダッシュボード -->
             <div id="tab-dashboard" class="tab-content space-y-5">
-                <!-- KPIカード -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="text-xs text-slate-500 mb-1 font-medium">今月度 MonotaRO 発注高</div>
-                        <div class="text-2xl font-bold text-slate-800">￥4,850,000</div>
-                        <p class="text-[11px] text-emerald-600 mt-1"><i class="fa-solid fa-arrow-up mr-0.5"></i> 野良購買の集約により +310%</p>
+                        <div class="text-slate-500 mb-1 font-medium">総登録資産アイテム</div>
+                        <div class="text-2xl font-bold text-slate-800">128 <span class="text-xs font-normal text-slate-500">点</span></div>
+                        <p class="text-[11px] text-blue-600 mt-1 font-semibold">固定資産: 42 / 消耗品: 86</p>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="text-xs text-slate-500 mb-1 font-medium">3-Way Matching 照合完了率</div>
-                        <div class="text-2xl font-bold text-emerald-600">98.2 %</div>
-                        <p class="text-[11px] text-slate-400 mt-1">アンマッチ 2 件（経理確認中）</p>
-                    </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-amber-500">
-                        <div class="text-xs text-slate-500 mb-1 font-medium">IT契約・校正期限アラート</div>
-                        <div class="text-2xl font-bold text-amber-600">3 件</div>
-                        <p class="text-[11px] text-amber-600 mt-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i>30日以内に要対応</p>
+                        <div class="text-slate-500 mb-1 font-medium">現在貸出中 (固定資産)</div>
+                        <div class="text-2xl font-bold text-brand-orange">12 <span class="text-xs font-normal text-slate-500">件</span></div>
+                        <p class="text-[11px] text-red-600 mt-1 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i>返却遅延 1 件発生中</p>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="text-xs text-slate-500 mb-1 font-medium">AI自動補充 実行数 (月間)</div>
-                        <div class="text-2xl font-bold text-brand-blue">14 件</div>
-                        <p class="text-[11px] text-slate-400 mt-1">手動発注工数 約42時間削減</p>
+                        <div class="text-slate-500 mb-1 font-medium">未資産化 購買アイテム</div>
+                        <div class="text-2xl font-bold text-amber-600">3 <span class="text-xs font-normal text-slate-500">件</span></div>
+                        <p class="text-[11px] text-slate-400 mt-1">検収完了・台帳未登録品</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-slate-500 mb-1 font-medium">進行中 棚卸タスク</div>
+                        <div class="text-2xl font-bold text-emerald-600">1 <span class="text-xs font-normal text-slate-500">件</span></div>
+                        <p class="text-[11px] text-slate-400 mt-1">「第2クォーター定期棚卸」</p>
                     </div>
                 </div>
 
-                <!-- アラート通知エリア -->
-                <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-4 text-xs space-y-2">
-                    <div class="font-bold text-amber-800 flex items-center">
-                        <i class="fa-solid fa-bell text-amber-600 mr-2"></i>要対応アラート通知 (システム自動検知)
+                <!-- アラート通知ブロック -->
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs space-y-2">
+                    <div class="font-bold text-amber-900 flex items-center text-xs">
+                        <i class="fa-solid fa-bell text-brand-orange mr-2 text-sm"></i>要対応アラート ＆ 自動リマインド通知
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-                        <div class="bg-white p-2.5 rounded-lg border border-amber-200 flex justify-between items-center">
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 flex justify-between items-center shadow-sm">
+                            <div>
+                                <span class="font-bold text-slate-800">タフブック (AS-2026-901)</span>
+                                <p class="text-[10px] text-amber-700 font-semibold">返却期限切れ (返却予定: 7/28)</p>
+                            </div>
+                            <button onclick="sendAlertMail('佐藤 健太')" class="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded font-bold text-[10px] transition">督促メール</button>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 flex justify-between items-center shadow-sm">
                             <div>
                                 <span class="font-bold text-slate-800">FLIR サーモカメラ (TAG-0711)</span>
-                                <p class="text-[10px] text-red-600 font-semibold">校正期限切れ (2026/07/28経過)</p>
+                                <p class="text-[10px] text-red-600 font-semibold">定期校正 期限切れ</p>
                             </div>
-                            <button onclick="switchTab('assets')" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px] font-bold">確認</button>
+                            <button onclick="switchTab('maintenance')" class="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded font-bold text-[10px] transition">点検記録</button>
                         </div>
-                        <div class="bg-white p-2.5 rounded-lg border border-amber-200 flex justify-between items-center">
-                            <div>
-                                <span class="font-bold text-slate-800">Panasonic タフブック (5台)</span>
-                                <p class="text-[10px] text-amber-600 font-semibold">リース満了 28日前</p>
-                            </div>
-                            <button onclick="switchTab('assets')" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px] font-bold">確認</button>
-                        </div>
-                        <div class="bg-white p-2.5 rounded-lg border border-amber-200 flex justify-between items-center">
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 flex justify-between items-center shadow-sm">
                             <div>
                                 <span class="font-bold text-slate-800">3M 超強力両面テープ</span>
-                                <p class="text-[10px] text-brand-blue font-semibold">在庫残2個 ➔ AI自動起案完了</p>
+                                <p class="text-[10px] text-blue-600 font-semibold">在庫残 2 個 (発注点割れ)</p>
                             </div>
-                            <button onclick="switchTab('ai-replenish')" class="px-2 py-1 bg-brand-blue text-white rounded text-[10px] font-bold">ルール</button>
+                            <button onclick="switchTab('assets')" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded font-bold text-[10px] transition">出庫/確認</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 2: モノタロウ 備品カタログ & WF申請 -->
-            <div id="tab-catalog" class="tab-content hidden space-y-4">
-                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="p-2.5 bg-orange-100 text-brand-orange rounded-lg">
-                            <i class="fa-solid fa-cart-flatbed text-xl"></i>
-                        </div>
+            <!-- TAB 2: 購買管理画面 -->
+            <div id="tab-purchases" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                         <div>
-                            <h3 class="font-bold text-slate-800 text-sm">MonotaRO パンチアウト連携 (kintone内埋め込み)</h3>
-                            <p class="text-[11px] text-slate-500">カート確定時に価格ロック・在庫仮押さえが自動実行されます</p>
+                            <h3 class="font-bold text-slate-800 text-sm">🛒 kintone 購買申請 ＆ 購買履歴データ</h3>
+                            <p class="text-[11px] text-slate-500">モノタロウ連携品と手動購買申請品を一元追跡。検収完了品を「資産管理」へ取り込めます。</p>
                         </div>
-                    </div>
-                    <button onclick="openCartModal()" class="px-4 py-2 bg-brand-orange hover:bg-brand-orangeHover text-white rounded-lg text-xs font-bold transition shadow-md">
-                        <i class="fa-solid fa-cart-shopping mr-1"></i>カートを見る (<span id="cart-btn-count">0</span>)
-                    </button>
-                </div>
-
-                <!-- カタロググリッド -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="catalog-grid">
-                    <!-- JSにて動的生成 -->
-                </div>
-            </div>
-
-            <!-- TAB 3: cXML通信 ＆ エラーリカバリーコンソール -->
-            <div id="tab-cxml-recovery" class="tab-content hidden space-y-4">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-4">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center">
-                                <i class="fa-solid fa-shield-halved text-brand-orange mr-2"></i>
-                                cXML トランザクション・通信エラーリカバリーコンソール
-                            </h3>
-                            <p class="text-[11px] text-slate-500">kintone ⇄ One Approval ⇄ MonotaRO 間の全cXMLログとエラー監視</p>
-                        </div>
-                        <span class="px-2.5 py-1 bg-red-100 text-red-700 rounded-md text-xs font-bold border border-red-200">
-                            未対応エラー: 1 件
-                        </span>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs">
-                            <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
-                                <tr>
-                                    <th class="p-2.5">日時</th>
-                                    <th class="p-2.5">kintone申請No</th>
-                                    <th class="p-2.5">cXML 種別</th>
-                                    <th class="p-2.5">ステータス</th>
-                                    <th class="p-2.5">PayloadID / Cookie</th>
-                                    <th class="p-2.5">HTTP Code</th>
-                                    <th class="p-2.5 text-right">リカバリー操作</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100 text-slate-700">
-                                <tr class="bg-red-50/50">
-                                    <td class="p-2.5 font-mono">10:14:02</td>
-                                    <td class="p-2.5 font-bold">PUR-20260730-002</td>
-                                    <td class="p-2.5 font-semibold">OrderRequest</td>
-                                    <td class="p-2.5"><span class="badge-danger px-2 py-0.5 rounded font-bold">🔴 期限切れエラー</span></td>
-                                    <td class="p-2.5 font-mono text-[10px]">UUID-9920182-EXPIRED</td>
-                                    <td class="p-2.5 font-mono text-red-600 font-bold">409 Conflict</td>
-                                    <td class="p-2.5 text-right">
-                                        <button onclick="openRecoveryModal()" class="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded font-bold transition">
-                                            エラー解析・再送
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2.5 font-mono">09:40:11</td>
-                                    <td class="p-2.5 font-bold">PUR-20260730-001</td>
-                                    <td class="p-2.5 font-semibold">OrderRequest</td>
-                                    <td class="p-2.5"><span class="badge-success px-2 py-0.5 rounded font-bold">🟢 正常完了</span></td>
-                                    <td class="p-2.5 font-mono text-[10px]">UUID-1530498574483</td>
-                                    <td class="p-2.5 font-mono text-emerald-600 font-bold">200 OK</td>
-                                    <td class="p-2.5 text-right">
-                                        <button class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded font-medium">ログ参照</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2.5 font-mono">09:30:00</td>
-                                    <td class="p-2.5 font-bold">PUR-20260730-001</td>
-                                    <td class="p-2.5 font-semibold">PunchOutSetupReq</td>
-                                    <td class="p-2.5"><span class="badge-success px-2 py-0.5 rounded font-bold">🟢 正常完了</span></td>
-                                    <td class="p-2.5 font-mono text-[10px]">UUID-1530498574483</td>
-                                    <td class="p-2.5 font-mono text-emerald-600 font-bold">200 OK</td>
-                                    <td class="p-2.5 text-right">
-                                        <button class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded font-medium">ログ参照</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 4: 3-Way Matching ＆ 会計連動設定 -->
-            <div id="tab-matching" class="tab-content hidden space-y-4">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm">3-Way Matching (PO × 現場検収 × 月次請求 自動照合エンジン)</h3>
-                            <p class="text-[11px] text-slate-500">注文データ・現場受領数・MonotaRO月次請求データをSKU単位で自動突合します</p>
-                        </div>
-                        <div class="flex items-center space-x-2 text-xs">
-                            <span class="text-slate-500 font-medium">仕訳連携タイミング設定:</span>
-                            <select id="accounting-trigger" class="p-1.5 border border-slate-300 rounded font-semibold text-brand-orange bg-amber-50">
-                                <option value="receipt">現場検収完了時点 (発生主義/買掛)</option>
-                                <option value="invoice">月次請求確定時点 (請求照合後)</option>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-slate-500 font-medium">絞り込み:</span>
+                            <select id="purchase-filter" onchange="filterPurchases()" class="p-1.5 border border-slate-300 rounded font-semibold text-slate-700 bg-slate-50">
+                                <option value="all">すべての購買方式</option>
+                                <option value="monotaro">モノタロウ (パンチアウト)</option>
+                                <option value="manual">手動購買 (カタログ外)</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto text-xs">
+                    <!-- 購買テーブル -->
+                    <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
                                 <tr>
-                                    <th class="p-2.5">PO番号 / 申請者</th>
-                                    <th class="p-2.5">SKU / 品名</th>
-                                    <th class="p-2.5">① 注文数 (単価)</th>
-                                    <th class="p-2.5">② 現場検収数</th>
-                                    <th class="p-2.5">③ 請求数 (金額)</th>
-                                    <th class="p-2.5">照合判定</th>
-                                    <th class="p-2.5 text-right">会計連携処理</th>
+                                    <th class="p-2.5">kintone申請No / 日時</th>
+                                    <th class="p-2.5">購買区分</th>
+                                    <th class="p-2.5">申請者 / 部署</th>
+                                    <th class="p-2.5">品名 / SKU</th>
+                                    <th class="p-2.5">金額</th>
+                                    <th class="p-2.5">ステータス</th>
+                                    <th class="p-2.5 text-right">資産化アクション</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100 text-slate-700">
-                                <tr>
-                                    <td class="p-2.5 font-bold">PUR-20260728-001<br><span class="font-normal text-slate-400">佐藤 健太</span></td>
-                                    <td class="p-2.5">MN-44910<br><span class="font-semibold text-slate-800">工事用ヘルメット (白)</span></td>
-                                    <td class="p-2.5">3 個 (￥3,200)</td>
-                                    <td class="p-2.5 text-emerald-600 font-bold">3 個 (受領済)</td>
-                                    <td class="p-2.5">3 個 (￥9,600)</td>
-                                    <td class="p-2.5"><span class="badge-success px-2 py-0.5 rounded font-bold">一致 (OK)</span></td>
-                                    <td class="p-2.5 text-right">
-                                        <span class="text-emerald-600 font-bold"><i class="fa-solid fa-check mr-1"></i>奉行連動済</span>
-                                    </td>
-                                </tr>
-                                <tr class="bg-amber-50/40">
-                                    <td class="p-2.5 font-bold">PUR-20260720-004<br><span class="font-normal text-slate-400">鈴木 一朗</span></td>
-                                    <td class="p-2.5">MN-30012<br><span class="font-semibold text-slate-800">デジタルノギス 150mm</span></td>
-                                    <td class="p-2.5">2 個 (￥5,400)</td>
-                                    <td class="p-2.5 text-amber-600 font-bold">1 個 (一部検収)</td>
-                                    <td class="p-2.5">2 個 (￥10,800)</td>
-                                    <td class="p-2.5"><span class="badge-warning px-2 py-0.5 rounded font-bold">⚠️ 数量アンマッチ</span></td>
-                                    <td class="p-2.5 text-right">
-                                        <button class="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded font-bold">未検収確認</button>
-                                    </td>
-                                </tr>
+                            <tbody class="divide-y divide-slate-100 text-slate-700" id="purchase-table-body">
+                                <!-- JS動的生成 -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 5: 備品・固定資産台帳 (IT資産/点検履歴/添付ファイル) -->
+            <!-- TAB 3: 資産管理画面 -->
             <div id="tab-assets" class="tab-content hidden space-y-4">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                         <div>
-                            <h3 class="font-bold text-slate-800 text-sm">備品・固定資産 統合データベース</h3>
-                            <p class="text-[11px] text-slate-500">購買データから自動起票された個体・ITスペック・校正・添付ドキュメント管理</p>
+                            <h3 class="font-bold text-slate-800 text-sm">📦 資産データベース (固定資産・個体管理 ＆ 消耗品・数量管理)</h3>
+                            <p class="text-[11px] text-slate-500">個体ごとの詳細写真・セット紐付け・管理ラベル出力・出庫管理・変更履歴ログを保持</p>
                         </div>
-                        <div class="flex space-x-2 text-xs">
-                            <button class="px-3 py-1 bg-brand-navy text-white rounded font-medium">全資産</button>
-                            <button class="px-3 py-1 bg-slate-100 text-slate-600 rounded hover:bg-slate-200">IT資産 (MDM)</button>
-                            <button class="px-3 py-1 bg-slate-100 text-slate-600 rounded hover:bg-slate-200">校正・点検機器</button>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="exportAssetsCsv()" class="px-3 py-1.5 border border-slate-300 bg-slate-50 hover:bg-slate-100 rounded font-bold text-slate-700 flex items-center space-x-1">
+                                <i class="fa-solid fa-file-csv text-emerald-600"></i>
+                                <span>CSV出力</span>
+                            </button>
+                            <button onclick="openAssetCreateModal()" class="px-3 py-1.5 bg-brand-orange hover:bg-brand-orangeHover text-white rounded font-bold shadow transition">
+                                <i class="fa-solid fa-plus mr-1"></i>新規 資産登録
+                            </button>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                        <!-- 資産カード 1 (IT資産) -->
-                        <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm space-y-2">
-                            <div class="flex justify-between items-start">
-                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-mono font-bold rounded text-[10px]">IT資産 (PC)</span>
-                                <span class="text-slate-400 font-mono">AS-2026-901</span>
-                            </div>
-                            <h4 class="font-bold text-slate-800 text-sm">Panasonic タフブック FZ-G2</h4>
-                            <div class="p-2 bg-slate-50 rounded border border-slate-100 text-[11px] space-y-1">
-                                <div><span class="text-slate-400">スペック:</span> Core i5 / 16GB / 256GB SSD</div>
-                                <div><span class="text-slate-400">MAC / IMEI:</span> 00:1A:2B:3C:4D:5E</div>
-                                <div class="text-amber-600 font-semibold"><i class="fa-solid fa-clock mr-1"></i>リース満了: 2026/08/28 (残り28日)</div>
-                            </div>
-                            <div class="flex justify-between items-center pt-1 border-t border-slate-100 text-[11px]">
-                                <span class="text-slate-500">取扱説明書.pdf</span>
-                                <button class="text-brand-orange font-bold hover:underline"><i class="fa-solid fa-paperclip mr-1"></i>参照 (1)</button>
-                            </div>
-                        </div>
+                    <!-- 資産種別タブ -->
+                    <div class="flex space-x-2 border-b border-slate-200 pb-2">
+                        <button onclick="switchAssetSubTab('fixed')" id="subtab-fixed" class="px-4 py-1.5 rounded-lg font-bold bg-brand-navy text-white text-xs">
+                            固定資産 (個体管理) <span id="count-fixed" class="bg-blue-600 text-white text-[10px] px-1.5 py-0.2 rounded-full ml-1">3</span>
+                        </button>
+                        <button onclick="switchAssetSubTab('consumable')" id="subtab-consumable" class="px-4 py-1.5 rounded-lg font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs">
+                            消耗品 (数量管理) <span id="count-consumable" class="bg-amber-600 text-white text-[10px] px-1.5 py-0.2 rounded-full ml-1">2</span>
+                        </button>
+                    </div>
 
-                        <!-- 資産カード 2 (校正・点検機器) -->
-                        <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm space-y-2">
-                            <div class="flex justify-between items-start">
-                                <span class="px-2 py-0.5 bg-amber-100 text-amber-800 font-mono font-bold rounded text-[10px]">要校正機器</span>
-                                <span class="text-slate-400 font-mono">TAG-0711</span>
-                            </div>
-                            <h4 class="font-bold text-slate-800 text-sm">FLIR サーモグラフィカメラ E8</h4>
-                            <div class="p-2 bg-red-50 rounded border border-red-100 text-[11px] space-y-1">
-                                <div class="text-red-700 font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i>校正切れ (前回: 2025/07/20)</div>
-                                <div><span class="text-slate-500">ステータス:</span> <span class="text-red-600 font-bold">貸出不可 (校正待ち)</span></div>
-                                <div><span class="text-slate-500">点検周期:</span> 12ヶ月毎</div>
-                            </div>
-                            <div class="flex justify-between items-center pt-1 border-t border-slate-100 text-[11px]">
-                                <span class="text-slate-500">校正証明書_2025.pdf</span>
-                                <button class="text-brand-orange font-bold hover:underline"><i class="fa-solid fa-file-pdf mr-1"></i>証明書</button>
-                            </div>
+                    <!-- 検索バー -->
+                    <div class="flex items-center space-x-2">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400"></i>
+                            <input type="text" id="asset-search" oninput="renderAssets()" placeholder="管理番号、名称、設置場所で検索..." class="w-full pl-9 pr-3 py-1.5 border border-slate-300 rounded-lg text-xs">
                         </div>
+                    </div>
 
-                        <!-- 資産カード 3 (共有工具) -->
-                        <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm space-y-2">
-                            <div class="flex justify-between items-start">
-                                <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-mono font-bold rounded text-[10px]">貸出可能</span>
-                                <span class="text-slate-400 font-mono">TAG-0881</span>
-                            </div>
-                            <h4 class="font-bold text-slate-800 text-sm">マキタ 充電式インパクトドライバ</h4>
-                            <div class="p-2 bg-slate-50 rounded border border-slate-100 text-[11px] space-y-1">
-                                <div><span class="text-slate-400">保管エリア:</span> 本社工場 / 工具棚 B-1</div>
-                                <div><span class="text-slate-400">最終点検:</span> 2026/06/15 (異常なし)</div>
-                                <div class="text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>稼働状況良好</div>
-                            </div>
-                            <div class="flex justify-between items-center pt-1 border-t border-slate-100 text-[11px]">
-                                <span class="text-slate-500">保証書_マキタ.pdf</span>
-                                <button class="text-brand-orange font-bold hover:underline"><i class="fa-solid fa-paperclip mr-1"></i>参照 (1)</button>
-                            </div>
-                        </div>
+                    <!-- 資産グリッド/リスト -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="asset-card-container">
+                        <!-- JS動的生成 -->
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 6: 貸出予約カレンダー (現場用) -->
-            <div id="tab-calendar-rental" class="tab-content hidden space-y-4">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <!-- TAB 4: MDM管理画面 -->
+            <div id="tab-mdm" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b border-slate-100 pb-3">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center">
+                            <i class="fa-solid fa-laptop-code text-purple-600 mr-2"></i>
+                            💻 MDM管理 (IT資産・端末スペック・契約管理)
+                        </h3>
+                        <p class="text-[11px] text-slate-500">固定資産台帳の中からIT機器（PC・タブレット・モバイル）を抽出し、スペックや通信契約・保証期限を管理します</p>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-2.5">管理番号 / 機器名称</th>
+                                    <th class="p-2.5">割り当て使用者</th>
+                                    <th class="p-2.5">ハードウェアスペック</th>
+                                    <th class="p-2.5">MACアドレス / IMEI</th>
+                                    <th class="p-2.5">OSバージョン</th>
+                                    <th class="p-2.5">リース/保証満了日</th>
+                                    <th class="p-2.5 text-right">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-700" id="mdm-table-body">
+                                <!-- JS生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: 貸出・予約管理画面 -->
+            <div id="tab-rentals" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                         <div>
-                            <h3 class="font-bold text-slate-800 text-sm">📅 フルカレンダー型 備品貸出予約＆現場利用スケジュール</h3>
-                            <p class="text-[11px] text-slate-500">現場作業員・一般社員が事前予約および即時返却を行えます</p>
+                            <h3 class="font-bold text-slate-800 text-sm">📅 貸出・予約カレンダー (固定資産対象)</h3>
+                            <p class="text-[11px] text-slate-500">固定資産のスケジュール予約、即時返却、返却遅延アラート通知を管理します</p>
                         </div>
-                        <button onclick="openRentalModal()" class="px-3 py-1.5 bg-brand-orange hover:bg-brand-orangeHover text-white rounded text-xs font-bold transition">
+                        <button onclick="openRentalModal()" class="px-3 py-1.5 bg-brand-orange hover:bg-brand-orangeHover text-white rounded font-bold shadow transition">
                             <i class="fa-solid fa-plus mr-1"></i>新規 貸出予約を作成
                         </button>
                     </div>
 
-                    <!-- 簡易カレンダーグリッド表現 -->
-                    <div class="border border-slate-200 rounded-lg overflow-hidden text-xs">
-                        <div class="bg-slate-100 p-2.5 font-bold text-center text-slate-700 flex justify-between items-center">
-                            <button class="px-2 py-0.5 bg-white border rounded">◀ 前週</button>
+                    <!-- 簡易カレンダー表現 -->
+                    <div class="border border-slate-200 rounded-lg overflow-hidden">
+                        <div class="bg-slate-100 p-2.5 font-bold text-center text-slate-700 flex justify-between items-center text-xs">
+                            <button class="px-2.5 py-1 bg-white border rounded hover:bg-slate-50">◀ 前週</button>
                             <span>2026年 7月27日 ～ 8月2日 (今週)</span>
-                            <button class="px-2 py-0.5 bg-white border rounded">次週 ▶</button>
+                            <button class="px-2.5 py-1 bg-white border rounded hover:bg-slate-50">次週 ▶</button>
                         </div>
-                        <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50 text-center py-2 font-bold text-slate-600">
+                        <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50 text-center py-2 font-bold text-slate-600 text-xs">
                             <div>月 (7/27)</div><div>火 (7/28)</div><div>水 (7/29)</div><div class="text-brand-orange">木 (7/30 今日)</div><div>金 (7/31)</div><div class="text-blue-600">土 (8/1)</div><div class="text-red-600">日 (8/2)</div>
                         </div>
-                        <div class="grid grid-cols-7 gap-1 p-2 min-h-[220px] bg-white text-[11px]">
-                            <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
-                            <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
-                            <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
-                            <!-- 今日 (木) -->
-                            <div class="p-1 border-2 border-brand-orange rounded bg-orange-50/30 space-y-1">
-                                <div class="bg-brand-orange text-white p-1 rounded font-bold text-[10px] truncate">
-                                    [予約] タフブック (佐藤)
-                                </div>
-                                <div class="bg-blue-600 text-white p-1 rounded font-bold text-[10px] truncate">
-                                    [貸出中] FLIRカメラ (鈴木)
-                                </div>
-                            </div>
-                            <div class="p-1 border border-slate-100 rounded bg-slate-50 space-y-1">
-                                <div class="bg-brand-orange text-white p-1 rounded font-bold text-[10px] truncate">
-                                    [予約] タフブック (佐藤)
-                                </div>
-                            </div>
-                            <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
-                            <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                        <div class="grid grid-cols-7 gap-1 p-2 min-h-[200px] bg-white text-[11px]" id="calendar-grid">
+                            <!-- JS生成 -->
+                        </div>
+                    </div>
+
+                    <!-- 現在の貸出中リスト -->
+                    <div class="pt-3 border-t border-slate-100">
+                        <h4 class="font-bold text-slate-800 mb-2">現在 貸出中の備品一覧</h4>
+                        <div id="rental-list-container" class="space-y-2">
+                            <!-- JS生成 -->
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 7: AI自動補充 ＆ システム設定 -->
-            <div id="tab-ai-replenish" class="tab-content hidden space-y-4">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
-                    <div class="border-b border-slate-100 pb-3">
-                        <h3 class="font-bold text-slate-800 text-sm">🤖 AI自動在庫補充エンジン ＆ 条件分岐ルール設定</h3>
-                        <p class="text-[11px] text-slate-500">安全在庫を下回った際、kintoneへ「申請者＝自動AI」として購買起案を完全自動実行します</p>
+            <!-- TAB 6: 棚卸し機能画面 -->
+            <div id="tab-audits" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">📋 棚卸し管理 ＆ 実地状態報告プロジェクト</h3>
+                            <p class="text-[11px] text-slate-500">消耗品・固定資産・MDM端末について棚卸し依頼を発行し、備品状態（正常・破損・紛失）を報告・記録します</p>
+                        </div>
+                        <button onclick="openAuditCreateModal()" class="px-3 py-1.5 bg-brand-navy hover:bg-slate-800 text-white rounded font-bold shadow transition">
+                            <i class="fa-solid fa-bullhorn mr-1"></i>新規 棚卸し依頼を起案
+                        </button>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                        <!-- ロジック設定 1 -->
-                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50 space-y-3">
-                            <h4 class="font-bold text-slate-800 flex items-center">
-                                <i class="fa-solid fa-sliders text-brand-orange mr-2"></i>
-                                在庫閾値 ＆ 自動補充ロジック
-                            </h4>
-                            <div>
-                                <label class="block text-slate-600 mb-1">対象消耗品カテゴリ</label>
-                                <input type="text" value="現場作業用手袋・テープ・コピー用紙" class="w-full p-2 border rounded bg-white">
-                            </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="block text-slate-600 mb-1">規定発注点 (最小在庫)</label>
-                                    <input type="number" value="5" class="w-full p-2 border rounded bg-white font-bold text-brand-orange">
-                                </div>
-                                <div>
-                                    <label class="block text-slate-600 mb-1">自動発注数量 (安全在庫)</label>
-                                    <input type="number" value="20" class="w-full p-2 border rounded bg-white font-bold">
-                                </div>
-                            </div>
-                        </div>
+                    <!-- 棚卸しプロジェクトリスト -->
+                    <div class="space-y-3" id="audit-project-container">
+                        <!-- JS生成 -->
+                    </div>
+                </div>
+            </div>
 
-                        <!-- ロジック設定 2 -->
-                        <div class="p-4 border border-slate-200 rounded-xl bg-orange-50/50 border-orange-200 space-y-3">
-                            <h4 class="font-bold text-brand-orange flex items-center">
-                                <i class="fa-solid fa-bolt mr-2"></i>
-                                金額条件分岐ルール (スキップロジック)
-                            </h4>
-                            <div>
-                                <label class="block text-slate-700 font-bold mb-1">無人自動発注のスキップ閾値 (税込金額)</label>
-                                <input type="text" value="10,000 円 以下" class="w-full p-2 border border-brand-orange/40 rounded bg-white font-bold text-brand-orange text-sm">
-                            </div>
-                            <div class="text-[11px] text-slate-600 space-y-1 bg-white p-2.5 rounded border border-amber-200">
-                                <p><strong>・10,000円以下の発注:</strong> kintone承認スキップ ➔ 即時 MonotaRO へ OrderRequest 送信</p>
-                                <p><strong>・10,000円超の発注:</strong> 人間 (総務課長) の承認フローへ投函</p>
-                            </div>
+            <!-- TAB 7: 点検・修理記録画面 -->
+            <div id="tab-maintenance" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">🔧 固定資産・MDM機器 点検・校正・修理記録</h3>
+                            <p class="text-[11px] text-slate-500">社内工具や精密測定器の定期校正日、点検履歴、修理費用の記録</p>
                         </div>
+                        <button onclick="openMaintenanceModal()" class="px-3 py-1.5 bg-brand-orange hover:bg-brand-orangeHover text-white rounded font-bold shadow transition">
+                            <i class="fa-solid fa-plus mr-1"></i>点検・修理ログを追加
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-2.5">点検日 / 記録ID</th>
+                                    <th class="p-2.5">対象備品名 (管理番号)</th>
+                                    <th class="p-2.5">記録種別</th>
+                                    <th class="p-2.5">担当者 / 業者</th>
+                                    <th class="p-2.5">費用</th>
+                                    <th class="p-2.5">結果 / 状態</th>
+                                    <th class="p-2.5">備考メモ</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-700" id="maintenance-table-body">
+                                <!-- JS生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 8: メンバー管理画面 -->
+            <div id="tab-members" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">👥 ユーザーメンバー ＆ 権限ロール管理</h3>
+                            <p class="text-[11px] text-slate-500">操作権限（全社管理者 / 拠点管理者 / 一般ユーザー）の設定</p>
+                        </div>
+                        <button onclick="openMemberModal()" class="px-3 py-1.5 bg-brand-navy text-white rounded font-bold shadow transition">
+                            <i class="fa-solid fa-user-plus mr-1"></i>メンバー追加
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="member-grid-container">
+                        <!-- JS生成 -->
                     </div>
                 </div>
             </div>
@@ -520,75 +427,191 @@
         </main>
     </div>
 
-    <!-- モーダル: cXML エラーリカバリー -->
-    <div id="recovery-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl mx-4 overflow-hidden border border-slate-200 text-xs">
-            <div class="bg-red-600 p-4 text-white flex justify-between items-center">
-                <h3 class="font-bold text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i>cXML通信エラー・手動リカバリーコンソール</h3>
-                <button onclick="closeRecoveryModal()" class="text-white hover:opacity-80">✕</button>
+    <!-- モーダル: 資産化実行モーダル -->
+    <div id="modal-assetize" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden border border-slate-200 text-xs">
+            <div class="bg-brand-navy p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-sm"><i class="fa-solid fa-boxes-stacked text-brand-orange mr-2"></i>購買品の資産データベース取り込み</h3>
+                <button onclick="closeModal('modal-assetize')" class="text-white hover:opacity-80">✕</button>
             </div>
             <div class="p-5 space-y-3">
-                <div class="p-3 bg-red-50 border border-red-200 rounded text-red-800">
-                    <p class="font-bold">エラー内容: 409 Conflict (Expiration Date Over)</p>
-                    <p class="text-[11px] mt-0.5">上司承認の遅延により、MonotaRO側の「単価・在庫仮押さえ有効期限 (72h)」を超過しました。</p>
-                </div>
+                <input type="hidden" id="assetize-po-id">
                 <div>
-                    <label class="block font-bold mb-1 text-slate-700">cXML Request Payload (OrderRequest)</label>
-                    <textarea class="w-full h-28 font-mono text-[10px] p-2 bg-slate-900 text-emerald-400 rounded" readonly>&lt;OrderRequest&gt;
-  &lt;OrderRequestHeader orderID="PUR-20260730-002" orderDate="2026-07-30T10:14:02"&gt;
-    &lt;Total&gt;&lt;Money currency="JPY"&gt;18500&lt;/Money&gt;&lt;/Total&gt;
-  &lt;/OrderRequestHeader&gt;
-&lt;/OrderRequest&gt;</textarea>
+                    <label class="block font-bold text-slate-700 mb-1">対象品名</label>
+                    <input type="text" id="assetize-item-name" class="w-full p-2 border border-slate-300 rounded bg-slate-50 font-bold text-slate-800" readonly>
                 </div>
-                <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
-                    <p class="font-bold text-slate-800">推奨リカバリーアクション:</p>
-                    <p class="text-slate-600 text-[11px]">最新のMonotaRO価格・在庫APIを再照会し、差額がなければ即時再送信を実行します。</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">管理種別</label>
+                        <select id="assetize-category" class="w-full p-2 border border-slate-300 rounded font-semibold text-brand-orange bg-orange-50">
+                            <option value="fixed">固定資産 (個体管理)</option>
+                            <option value="consumable">消耗品 (数量管理)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">保管・設置エリア</label>
+                        <input type="text" id="assetize-location" value="本社工場 / 工具棚 B-1" class="w-full p-2 border border-slate-300 rounded">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 pt-2">
+                    <input type="checkbox" id="assetize-is-mdm" class="rounded text-brand-orange focus:ring-brand-orange h-4 w-4">
+                    <label for="assetize-is-mdm" class="font-bold text-purple-700">IT機器としてMDM管理にも追加する</label>
                 </div>
             </div>
             <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end space-x-2">
-                <button onclick="closeRecoveryModal()" class="px-3 py-1.5 border border-slate-300 rounded font-semibold text-slate-600">キャンセル</button>
-                <button onclick="executeRecovery()" class="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded font-bold shadow transition">
-                    最新価格で再送信 (Retry)
+                <button onclick="closeModal('modal-assetize')" class="px-3 py-1.5 border border-slate-300 rounded font-semibold text-slate-600">キャンセル</button>
+                <button onclick="confirmAssetize()" class="px-4 py-1.5 bg-brand-orange hover:bg-brand-orangeHover text-white rounded font-bold shadow transition">
+                    資産化を実行
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- モーダル: カート＆kintone WF申請 -->
-    <div id="cart-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden border border-slate-200 text-xs">
-            <div class="bg-brand-navy p-4 text-white flex justify-between items-center">
-                <h3 class="font-bold text-sm"><i class="fa-solid fa-cart-shopping text-brand-orange mr-2"></i>MonotaRO カート・kintone申請画面</h3>
-                <button onclick="closeCartModal()" class="text-white hover:opacity-80">✕</button>
+    <!-- モーダル: 消耗品出庫 (ピックアップ) モーダル -->
+    <div id="modal-pickup" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden border border-slate-200 text-xs">
+            <div class="bg-amber-600 p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-sm"><i class="fa-solid fa-minus-circle mr-2"></i>消耗品 払い出し (使用ピックアップ)</h3>
+                <button onclick="closeModal('modal-pickup')" class="text-white hover:opacity-80">✕</button>
             </div>
-            <div class="p-5 max-h-[50vh] overflow-y-auto space-y-2" id="cart-items">
-                <!-- JS描画 -->
-            </div>
-            <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+            <div class="p-5 space-y-3">
+                <input type="hidden" id="pickup-asset-id">
                 <div>
-                    <span class="text-[10px] text-slate-500 block">合計金額 (税込)</span>
-                    <span class="text-xl font-bold text-brand-orange" id="cart-total">￥0</span>
+                    <span class="text-slate-400 block text-[10px]">対象品名</span>
+                    <span id="pickup-asset-name" class="font-bold text-slate-800 text-sm block"></span>
                 </div>
-                <button onclick="submitWF()" class="px-4 py-2 bg-brand-orange hover:bg-brand-orangeHover text-white rounded font-bold shadow transition">
-                    kintone 購買申請を提出
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">払出・使用数量</label>
+                    <input type="number" id="pickup-qty" value="1" min="1" class="w-full p-2 border border-slate-300 rounded font-bold text-brand-orange text-base">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">使用目的 / 払い出し部署</label>
+                    <input type="text" id="pickup-note" value="製造第一ライン作業用" class="w-full p-2 border border-slate-300 rounded">
+                </div>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end space-x-2">
+                <button onclick="closeModal('modal-pickup')" class="px-3 py-1.5 border border-slate-300 rounded font-semibold text-slate-600">キャンセル</button>
+                <button onclick="confirmPickup()" class="px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded font-bold shadow transition">
+                    出庫を確定 (数量更新)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- モーダル: 管理ラベル (QRコード) 発行表示 -->
+    <div id="modal-label" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden border border-slate-200 text-xs">
+            <div class="bg-brand-navy p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-sm"><i class="fa-solid fa-qrcode text-brand-orange mr-2"></i>資産管理ラベル・QR印刷プレビュー</h3>
+                <button onclick="closeModal('modal-label')" class="text-white hover:opacity-80">✕</button>
+            </div>
+            <div class="p-6 text-center space-y-4">
+                <div class="border-2 border-dashed border-slate-300 p-4 rounded-xl bg-slate-50 inline-block text-center shadow-inner">
+                    <p class="font-bold text-slate-800 text-xs mb-1" id="label-company-name">株式会社ワンアプルーバル 資産用</p>
+                    <div class="bg-white p-3 inline-block rounded border border-slate-200 shadow-sm my-2">
+                        <i class="fa-solid fa-qrcode text-6xl text-slate-800"></i>
+                    </div>
+                    <p class="font-mono font-bold text-brand-orange text-sm" id="label-code">AST-001</p>
+                    <p class="font-bold text-slate-700 text-xs" id="label-name">Panasonic タフブック FZ-G2</p>
+                </div>
+                <p class="text-[11px] text-slate-500">テプラ / ラベルプリンタ用 印刷フォーマット (50mm × 30mm)</p>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end space-x-2">
+                <button onclick="closeModal('modal-label')" class="px-3 py-1.5 border border-slate-300 rounded font-semibold text-slate-600">閉じる</button>
+                <button onclick="alert('プリンタへラベル印刷データを送信しました。'); closeModal('modal-label');" class="px-4 py-1.5 bg-brand-orange hover:bg-brand-orangeHover text-white rounded font-bold shadow transition">
+                    <i class="fa-solid fa-print mr-1"></i>ラベルを印刷
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- モーダル: QR貸出スキャンデモ -->
+    <div id="modal-qr-scan" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden border border-slate-200 text-xs">
+            <div class="bg-brand-navy p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-sm"><i class="fa-solid fa-camera mr-2 text-brand-orange"></i>QRスキャン 即時受領 / 貸出申請</h3>
+                <button onclick="closeModal('modal-qr-scan')" class="text-white hover:opacity-80">✕</button>
+            </div>
+            <div class="p-6 text-center space-y-3">
+                <div class="w-48 h-48 mx-auto bg-slate-900 rounded-xl flex items-center justify-center relative overflow-hidden border-2 border-brand-orange">
+                    <div class="absolute inset-x-0 h-0.5 bg-brand-orange shadow-[0_0_8px_#E35B3E] animate-bounce"></div>
+                    <i class="fa-solid fa-qrcode text-6xl text-slate-600"></i>
+                </div>
+                <p class="font-bold text-slate-800">QRコードをカメラにかざしてください</p>
+                <p class="text-[11px] text-slate-400">現物の備品ラベルを読み取ると、貸出または返却画面へ即時リダイレクトします</p>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-center">
+                <button onclick="demoQrScanSuccess()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold shadow transition">
+                    (デモ) QRコード読み取り成功を実行
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        const catalogProducts = [
-            { id: 1, name: "3M 超強力両面テープ 19mm×4m", price: 890, code: "MN-00123" },
-            { id: 2, name: "トラスコ中山 工事用ヘルメット (白)", price: 3200, code: "MN-44910" },
-            { id: 3, name: "ベッセル ドライバーセット 6本組", price: 2150, code: "MN-88219" },
-            { id: 4, name: "デジタルノギス 150mm 高精度測定器", price: 5400, code: "MN-30012" }
+        // サンプル初期データ構造
+        let purchases = [
+            { id: 1, poNo: "PUR-20260730-001", source: "monotaro", applicant: "佐藤 健太 (第一工場)", item: "工事用ヘルメット (白)", price: 3200, status: "検収済み", isAssetized: true },
+            { id: 2, poNo: "PUR-20260730-002", source: "manual", applicant: "高橋 直樹 (総務部)", item: "理化学用 デジタル粘度計", price: 185000, status: "検収済み", isAssetized: false },
+            { id: 3, poNo: "PUR-20260729-005", source: "monotaro", applicant: "鈴木 一朗 (保全課)", item: "3M 超強力両面テープ 19mm", price: 890, status: "発送中", isAssetized: false }
         ];
 
-        let cart = [];
-        let role = 'admin';
+        let assets = [
+            {
+                id: 101, code: "AST-2026-001", name: "Panasonic タフブック FZ-G2", category: "fixed", isMdm: true,
+                status: "rented", location: "本社工場 / IT棚 A-1", qty: 1, photo: "https://placehold.co/100x80/1E293B/FFF?text=TOUGHBOOK",
+                parentName: "専用防塵ケース ＆ 高耐久スタイラスペン", files: ["取扱説明書.pdf", "保証書_2026.pdf"],
+                history: [
+                    { date: "2026/07/28", user: "佐藤 健太", action: "貸出", note: "現場測定作業用" },
+                    { date: "2026/07/20", user: "伏見 氏", action: "資産登録", note: "購買PO: PUR-20260720より自動登録" }
+                ],
+                mdm: { cpu: "Core i5-1145G7", ram: "16GB", storage: "256GB SSD", mac: "00:1A:2B:3C:4D:5E", os: "Windows 11 Pro", expire: "2026/08/28", user: "佐藤 健太" }
+            },
+            {
+                id: 102, code: "AST-2026-002", name: "FLIR サーモグラフィカメラ E8", category: "fixed", isMdm: false,
+                status: "maintenance", location: "検査課 / 精密保管庫", qty: 1, photo: "https://placehold.co/100x80/0B192C/FFF?text=FLIR+E8",
+                parentName: "ハードキャリングケース ＆ 予備バッテリー", files: ["校正証明書_2025.pdf"],
+                history: [
+                    { date: "2026/07/28", user: "管理システム", action: "ステータス変更", note: "定期校正期限切れに伴い貸出停止" }
+                ]
+            },
+            {
+                id: 103, code: "CSM-2026-001", name: "3M 超強力両面テープ 19mm×4m", category: "consumable", isMdm: false,
+                status: "available", location: "本社工場 / 消耗品棚 B-3", qty: 2, photo: "https://placehold.co/100x80/E35B3E/FFF?text=3M+Tape",
+                parentName: "なし", files: ["SDS安全データシート.pdf"],
+                history: [
+                    { date: "2026/07/29", user: "鈴木 一朗", action: "出庫 (-3)", note: "第1ライン補修用" }
+                ]
+            }
+        ];
+
+        let rentals = [
+            { id: 501, assetId: 101, assetName: "Panasonic タフブック FZ-G2", borrower: "佐藤 健太", startDate: "2026/07/27", endDate: "2026/07/28", status: "overdue" },
+            { id: 502, assetId: 102, assetName: "FLIR サーモカメラ", borrower: "鈴木 一朗", startDate: "2026/07/30", endDate: "2026/07/31", status: "renting" }
+        ];
+
+        let audits = [
+            { id: 1, title: "2026年 第2クォーター定期全社棚卸し", target: "全備品・消耗品", status: "進行中", deadline: "2026/08/15", total: 128, reported: 45 }
+        ];
+
+        let maintenanceLogs = [
+            { id: 801, date: "2026/06/15", assetCode: "AST-2026-002", assetName: "FLIR サーモグラフィカメラ E8", type: "校正・点検", technician: "日本サーモテック社", cost: 45000, result: "異常なし (校正完了)", note: "次回推奨: 2026/07/20" }
+        ];
+
+        let members = [
+            { id: 1, name: "伏見 氏", email: "fushimi@example.com", dept: "本部管理者", role: "全社管理者" },
+            { id: 2, name: "佐藤 健太", email: "sato@example.com", dept: "東京第一工場 / 製造部", role: "一般ユーザー" },
+            { id: 3, name: "鈴木 一朗", email: "suzuki@example.com", dept: "本社 / 設備保全課", role: "拠点管理者" }
+        ];
 
         window.onload = function() {
-            renderCatalog();
+            renderPurchases();
+            renderAssets();
+            renderMdm();
+            renderRentals();
+            renderAudits();
+            renderMaintenance();
+            renderMembers();
         };
 
         function switchTab(tabName) {
@@ -598,102 +621,333 @@
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active-nav'));
             document.getElementById(`nav-${tabName}`).classList.add('active-nav');
 
-            const pageTitles = {
-                'dashboard': '📊 ダッシュボード ＆ 支出・アラート統合分析',
-                'catalog': '🛒 MonotaRO 備品カタログ (パンチアウト連携)',
-                'cxml-recovery': '⚠️ cXML通信 ＆ エラーリカバリーコンソール',
-                'matching': '📑 3-Way Matching (注文・検収・請求自動照合)',
-                'assets': '📦 備品・固定資産台帳 (IT資産/校正/保証期限)',
-                'calendar-rental': '📅 貸出予約カレンダー (現場・一般社員用)',
-                'ai-replenish': '🤖 AI自動補充エンジン ＆ システム設定'
+            const titles = {
+                'dashboard': '📊 ダッシュボード ＆ 統合概要',
+                'purchases': '🛒 購買管理 (モノタロウ連携 ＆ 手動購買データ)',
+                'assets': '📦 資産管理データベース (固定資産・個体管理 / 消耗品・数量管理)',
+                'mdm': '💻 MDM管理 (IT資産・端末スペック・契約満了管理)',
+                'rentals': '📅 貸出・予約管理カレンダー (固定資産対象)',
+                'audits': '📋 棚卸し機能 ＆ 実地状態報告',
+                'maintenance': '🔧 点検・校正・修理記録ログ',
+                'members': '👥 ユーザーメンバー ＆ 権限ロール管理'
             };
-            document.getElementById('page-title').innerText = pageTitles[tabName];
+            document.getElementById('page-title').innerText = titles[tabName];
         }
 
-        function toggleRole() {
-            if (role === 'admin') {
-                role = 'user';
-                document.getElementById('role-badge').innerText = '一般社員';
-                document.getElementById('user-name-display').innerText = '佐藤 健太 (現場ユーザー)';
-            } else {
-                role = 'admin';
-                document.getElementById('role-badge').innerText = '全社管理者';
-                document.getElementById('user-name-display').innerText = '伏見 氏 (本部管理者)';
+        function renderPurchases() {
+            const filter = document.getElementById('purchase-filter').value;
+            const tbody = document.getElementById('purchase-table-body');
+            let filtered = purchases;
+            if (filter !== 'all') {
+                filtered = purchases.filter(p => p.source === filter);
             }
+
+            tbody.innerHTML = filtered.map(p => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-2.5 font-bold font-mono text-slate-800">${p.poNo}<br><span class="text-[10px] text-slate-400 font-normal">2026/07/30 10:14</span></td>
+                    <td class="p-2.5">
+                        ${p.source === 'monotaro' 
+                            ? '<span class="badge badge-monotaro"><i class="fa-solid fa-cart-shopping mr-1"></i>モノタロウ</span>' 
+                            : '<span class="badge badge-manual"><i class="fa-solid fa-pen-to-square mr-1"></i>手動購買</span>'}
+                    </td>
+                    <td class="p-2.5">${p.applicant}</td>
+                    <td class="p-2.5 font-bold text-slate-800">${p.item}</td>
+                    <td class="p-2.5 font-bold text-brand-orange">￥${p.price.toLocaleString()}</td>
+                    <td class="p-2.5"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-emerald-100 text-emerald-800">${p.status}</span></td>
+                    <td class="p-2.5 text-right">
+                        ${p.isAssetized 
+                            ? '<span class="text-slate-400 font-bold text-[11px]"><i class="fa-solid fa-check mr-1 text-emerald-600"></i>資産登録済み</span>' 
+                            : `<button onclick="openAssetizeModal(${p.id})" class="px-3 py-1 bg-brand-orange hover:bg-brand-orangeHover text-white font-bold rounded shadow-sm text-[11px] transition">資産化する</button>`}
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        function renderCatalog() {
-            const grid = document.getElementById('catalog-grid');
-            grid.innerHTML = catalogProducts.map(p => `
-                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm p-3.5 flex flex-col justify-between text-xs">
+        function filterPurchases() { renderPurchases(); }
+
+        let currentSubTab = 'fixed';
+        function switchAssetSubTab(tab) {
+            currentSubTab = tab;
+            document.getElementById('subtab-fixed').className = tab === 'fixed' 
+                ? 'px-4 py-1.5 rounded-lg font-bold bg-brand-navy text-white text-xs' 
+                : 'px-4 py-1.5 rounded-lg font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs';
+            document.getElementById('subtab-consumable').className = tab === 'consumable' 
+                ? 'px-4 py-1.5 rounded-lg font-bold bg-brand-navy text-white text-xs' 
+                : 'px-4 py-1.5 rounded-lg font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs';
+            renderAssets();
+        }
+
+        function renderAssets() {
+            const query = document.getElementById('asset-search').value.toLowerCase();
+            const container = document.getElementById('asset-card-container');
+            const filtered = assets.filter(a => a.category === currentSubTab && (a.name.toLowerCase().includes(query) || a.code.toLowerCase().includes(query)));
+
+            container.innerHTML = filtered.map(a => `
+                <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3 relative flex flex-col justify-between">
                     <div>
-                        <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono text-[10px]">${p.code}</span>
-                        <h4 class="font-bold text-slate-800 mt-1 mb-2">${p.name}</h4>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-mono text-[11px] font-bold text-slate-400">${a.code}</span>
+                            <div>
+                                ${a.category === 'fixed' ? '<span class="badge badge-fixed">固定資産</span>' : '<span class="badge badge-consumable">消耗品</span>'}
+                                ${a.isMdm ? '<span class="badge badge-mdm ml-1">MDM対象</span>' : ''}
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-3 items-center">
+                            <img src="${a.photo}" class="w-16 h-16 rounded-lg object-cover border border-slate-200 shrink-0">
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm leading-snug">${a.name}</h4>
+                                <p class="text-[11px] text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot mr-1 text-slate-400"></i>${a.location}</p>
+                            </div>
+                        </div>
+
+                        <!-- 数量 / 個体ステータス -->
+                        <div class="mt-3 p-2.5 bg-slate-50 rounded-lg border border-slate-100 space-y-1">
+                            ${a.category === 'consumable' ? `
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-500 font-medium">現在在庫数:</span>
+                                    <span class="font-bold text-lg ${a.qty <= 2 ? 'text-red-600' : 'text-slate-800'}">${a.qty} 個</span>
+                                </div>
+                            ` : `
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-500 font-medium">個体状態:</span>
+                                    <span class="font-bold ${a.status === 'rented' ? 'text-brand-orange' : a.status === 'maintenance' ? 'text-red-600' : 'text-emerald-600'}">
+                                        ${a.status === 'rented' ? '貸出中' : a.status === 'maintenance' ? 'メンテナンス/校正待ち' : '保管中 (貸出可)'}
+                                    </span>
+                                </div>
+                            `}
+                            <div class="text-[10px] text-slate-500"><i class="fa-solid fa-link mr-1"></i>セット備品: <span class="font-semibold text-slate-700">${a.parentName}</span></div>
+                        </div>
+
+                        <!-- 関連ファイル -->
+                        <div class="mt-2 flex items-center justify-between text-[11px]">
+                            <span class="text-slate-400">添付資料:</span>
+                            <div class="space-x-1">
+                                ${a.files.map(f => `<span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200 text-[10px]"><i class="fa-solid fa-paperclip mr-0.5"></i>${f}</span>`).join('')}
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between border-t border-slate-100 pt-2.5 mt-2">
-                        <span class="font-bold text-brand-orange text-sm">￥${p.price.toLocaleString()}</span>
-                        <button onclick="addToCart(${p.id})" class="px-2.5 py-1 bg-brand-navy hover:bg-slate-800 text-white rounded font-semibold">カート追加</button>
+
+                    <!-- 下部アクション -->
+                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                        <button onclick="openLabelModal('${a.code}', '${a.name}')" class="text-brand-orange hover:underline font-bold text-[11px]">
+                            <i class="fa-solid fa-print mr-1"></i>ラベル出力
+                        </button>
+                        ${a.category === 'consumable' ? `
+                            <button onclick="openPickupModal(${a.id}, '${a.name}')" class="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded font-bold transition text-[11px]">
+                                出庫 (ピックアップ)
+                            </button>
+                        ` : `
+                            <button onclick="toggleAssetHistory(${a.id})" class="text-slate-500 hover:text-slate-800 font-semibold text-[11px]">
+                                変更履歴 (<span class="font-bold">${a.history.length}</span>)
+                            </button>
+                        `}
                     </div>
                 </div>
             `).join('');
         }
 
-        function addToCart(id) {
-            const prod = catalogProducts.find(p => p.id === id);
-            cart.push(prod);
-            document.getElementById('cart-count').innerText = cart.length;
-            document.getElementById('cart-btn-count').innerText = cart.length;
+        function renderMdm() {
+            const tbody = document.getElementById('mdm-table-body');
+            const mdmItems = assets.filter(a => a.isMdm);
+
+            tbody.innerHTML = mdmItems.map(a => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-2.5 font-bold text-slate-800">${a.name}<br><span class="font-mono text-[10px] text-slate-400">${a.code}</span></td>
+                    <td class="p-2.5 font-semibold text-slate-700">${a.mdm.user}</td>
+                    <td class="p-2.5 text-[11px]">${a.mdm.cpu} / ${a.mdm.ram} / ${a.mdm.storage}</td>
+                    <td class="p-2.5 font-mono text-[10px] text-slate-600">${a.mdm.mac}</td>
+                    <td class="p-2.5 font-semibold text-purple-700">${a.mdm.os}</td>
+                    <td class="p-2.5 font-bold text-amber-600">${a.mdm.expire}</td>
+                    <td class="p-2.5 text-right">
+                        <button class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded font-bold">端末詳細</button>
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        function openCartModal() {
-            const container = document.getElementById('cart-items');
-            if (cart.length === 0) {
-                container.innerHTML = '<p class="text-center text-slate-400 py-6">カートは空です</p>';
-                document.getElementById('cart-total').innerText = '￥0';
-            } else {
-                const total = cart.reduce((s, i) => s + i.price, 0);
-                container.innerHTML = cart.map(i => `
-                    <div class="flex justify-between items-center p-2 bg-slate-50 rounded border border-slate-200">
-                        <div>
-                            <p class="font-bold text-slate-800">${i.name}</p>
-                            <p class="text-[10px] text-slate-400 font-mono">${i.code}</p>
-                        </div>
-                        <span class="font-bold text-brand-orange">￥${i.price.toLocaleString()}</span>
+        function renderRentals() {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = `
+                <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                <div class="p-1 border-2 border-brand-orange rounded bg-orange-50/40 space-y-1">
+                    <div class="bg-brand-orange text-white p-1 rounded font-bold text-[10px] truncate">[予約] タフブック (佐藤)</div>
+                    <div class="bg-blue-600 text-white p-1 rounded font-bold text-[10px] truncate">[貸出中] FLIRカメラ (鈴木)</div>
+                </div>
+                <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+            `;
+
+            const container = document.getElementById('rental-list-container');
+            container.innerHTML = rentals.map(r => `
+                <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <span class="font-bold text-slate-800">${r.assetName}</span>
+                        <span class="text-slate-500 ml-2">借用者: <strong class="text-slate-700">${r.borrower}</strong></span>
+                        <p class="text-[10px] text-slate-400">期間: ${r.startDate} ～ ${r.endDate}</p>
                     </div>
-                `).join('');
-                document.getElementById('cart-total').innerText = `￥${total.toLocaleString()}`;
+                    <div>
+                        ${r.status === 'overdue' 
+                            ? `<span class="px-2 py-0.5 bg-red-100 text-red-700 rounded font-bold mr-2">返却遅延</span><button onclick="alert('返却督促メールを送信しました。');" class="px-2.5 py-1 bg-red-600 text-white rounded font-bold">返却催促</button>`
+                            : `<button onclick="returnRental(${r.id})" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold">返却手続き</button>`}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAudits() {
+            const container = document.getElementById('audit-project-container');
+            container.innerHTML = audits.map(a => `
+                <div class="p-4 border border-slate-200 rounded-xl bg-slate-50 space-y-2">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-bold text-slate-800 text-sm">${a.title}</h4>
+                        <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">${a.status}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500">対象範囲: ${a.target} / 報告期日: ${a.deadline}</p>
+                    <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                        <div class="bg-emerald-600 h-2 rounded-full" style="width: ${(a.reported/a.total)*100}%"></div>
+                    </div>
+                    <div class="flex justify-between items-center text-[10px] text-slate-500 pt-1">
+                        <span>進行状況: ${a.reported} / ${a.total} 件報告完了</span>
+                        <button onclick="alert('棚卸し報告画面を開きます');" class="px-3 py-1 bg-brand-navy text-white rounded font-bold">現場棚卸しを報告</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderMaintenance() {
+            const tbody = document.getElementById('maintenance-table-body');
+            tbody.innerHTML = maintenanceLogs.map(m => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-2.5 font-mono font-bold">${m.date}<br><span class="text-[10px] text-slate-400">LOG-${m.id}</span></td>
+                    <td class="p-2.5 font-bold text-slate-800">${m.assetName}<br><span class="font-mono text-[10px] text-slate-400">${m.assetCode}</span></td>
+                    <td class="p-2.5"><span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded font-bold">${m.type}</span></td>
+                    <td class="p-2.5">${m.technician}</td>
+                    <td class="p-2.5 font-bold text-brand-orange">￥${m.cost.toLocaleString()}</td>
+                    <td class="p-2.5 font-bold text-emerald-600">${m.result}</td>
+                    <td class="p-2.5 text-slate-500">${m.note}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderMembers() {
+            const container = document.getElementById('member-grid-container');
+            container.innerHTML = members.map(m => `
+                <div class="p-3.5 border border-slate-200 rounded-xl bg-white shadow-sm flex items-center justify-between">
+                    <div>
+                        <h4 class="font-bold text-slate-800">${m.name}</h4>
+                        <p class="text-[10px] text-slate-400">${m.email}</p>
+                        <p class="text-[11px] text-slate-600 mt-1 font-semibold">${m.dept}</p>
+                    </div>
+                    <span class="px-2 py-1 bg-slate-100 border border-slate-200 rounded font-bold text-slate-700 text-[10px]">${m.role}</span>
+                </div>
+            `).join('');
+        }
+
+        function openAssetizeModal(id) {
+            const po = purchases.find(p => p.id === id);
+            document.getElementById('assetize-po-id').value = id;
+            document.getElementById('assetize-item-name').value = po.item;
+            document.getElementById('modal-assetize').classList.remove('hidden');
+        }
+
+        function confirmAssetize() {
+            const id = parseInt(document.getElementById('assetize-po-id').value);
+            const po = purchases.find(p => p.id === id);
+            po.isAssetized = true;
+
+            const category = document.getElementById('assetize-category').value;
+            const location = document.getElementById('assetize-location').value;
+            const isMdm = document.getElementById('assetize-is-mdm').checked;
+
+            const newAsset = {
+                id: Date.now(),
+                code: category === 'fixed' ? `AST-2026-00${assets.length+1}` : `CSM-2026-00${assets.length+1}`,
+                name: po.item,
+                category: category,
+                isMdm: isMdm,
+                status: "available",
+                location: location,
+                qty: 1,
+                photo: "https://placehold.co/100x80/059669/FFF?text=NEW+ASSET",
+                parentName: "特記事項なし",
+                files: ["受領書.pdf"],
+                history: [{ date: "2026/07/30", user: "伏見 氏", action: "新規資産化", note: `購買No:${po.poNo}より取り込み` }],
+                mdm: isMdm ? { cpu: "未登録", ram: "未登録", storage: "未登録", mac: "00:00:00:00:00:00", os: "未設定", expire: "2027/07/30", user: po.applicant } : null
+            };
+
+            assets.push(newAsset);
+            closeModal('modal-assetize');
+            renderPurchases();
+            renderAssets();
+            renderMdm();
+            alert('購買アイテムを資産データベースへ正常に登録・自動連携しました。');
+        }
+
+        function openPickupModal(id, name) {
+            document.getElementById('pickup-asset-id').value = id;
+            document.getElementById('pickup-asset-name').innerText = name;
+            document.getElementById('modal-pickup').classList.remove('hidden');
+        }
+
+        function confirmPickup() {
+            const id = parseInt(document.getElementById('pickup-asset-id').value);
+            const qty = parseInt(document.getElementById('pickup-qty').value);
+            const asset = assets.find(a => a.id === id);
+            
+            if (asset.qty < qty) {
+                alert('在庫数が不足しています');
+                return;
             }
-            document.getElementById('cart-modal').classList.remove('hidden');
+            asset.qty -= qty;
+            asset.history.unshift({ date: "2026/07/30", user: "現場ユーザー", action: `出庫 (-${qty})`, note: document.getElementById('pickup-note').value });
+
+            closeModal('modal-pickup');
+            renderAssets();
+            alert(`消耗品「${asset.name}」を ${qty} 個 出庫処理しました。`);
         }
 
-        function closeCartModal() {
-            document.getElementById('cart-modal').classList.add('hidden');
+        function openLabelModal(code, name) {
+            document.getElementById('label-code').innerText = code;
+            document.getElementById('label-name').innerText = name;
+            document.getElementById('modal-label').classList.remove('hidden');
         }
 
-        function submitWF() {
-            alert('kintone購買申請を起案し、MonotaRO側で価格・在庫を仮押さえしました。');
-            cart = [];
-            document.getElementById('cart-count').innerText = '0';
-            document.getElementById('cart-btn-count').innerText = '0';
-            closeCartModal();
+        function openQrScanModal() {
+            document.getElementById('modal-qr-scan').classList.remove('hidden');
         }
 
-        function openRecoveryModal() {
-            document.getElementById('recovery-modal').classList.remove('hidden');
+        function demoQrScanSuccess() {
+            closeModal('modal-qr-scan');
+            alert('QRコード「AST-2026-001 (Panasonic タフブック)」を読み取りました。貸出・返却モーダルへ移行します。');
+            switchTab('rentals');
         }
 
-        function closeRecoveryModal() {
-            document.getElementById('recovery-modal').classList.add('hidden');
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
         }
 
-        function executeRecovery() {
-            alert('最新価格・在庫でMonotaROへのOrderRequestを再送信しました。(HTTP 200 OK)');
-            closeRecoveryModal();
-            switchTab('dashboard');
+        function exportAssetsCsv() {
+            alert('資産データベース（固定資産・消耗品・MDM含む）のCSVファイルをダウンロード出力しました。');
         }
 
-        function openRentalModal() {
-            alert('新規の備品貸出予約フォームを開きます');
+        function sendAlertMail(userName) {
+            alert(`${userName} 氏へ返却期限超過の自動催促メールを送信しました。`);
+        }
+
+        function openAssetCreateModal() { alert('新規手動資産登録フォームを開きます'); }
+        function openRentalModal() { alert('新規貸出予約フォームを開きます'); }
+        function openAuditCreateModal() { alert('新規棚卸しプロジェクト起案フォームを開きます'); }
+        function openMaintenanceModal() { alert('点検・校正・修理記録の入力フォームを開きます'); }
+        function openMemberModal() { alert('新規メンバー追加フォームを開きます'); }
+        function returnRental(id) { alert('返却手続きを完了し、固定資産ステータスを「保管中 (貸出可)」へ変更しました。'); }
+        function toggleAssetHistory(id) {
+            const asset = assets.find(a => a.id === id);
+            const logStr = asset.history.map(h => `${h.date} [${h.user}] ${h.action}: ${h.note}`).join('\n');
+            alert(`【資産変更履歴ログ】\n${asset.name} (${asset.code})\n\n${logStr}`);
         }
     </script>
 </body>
