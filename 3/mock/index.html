@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Approval × MonotaRO 統合購買・備品管理システム モックアップ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans JP', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#0B192C',
+                            slate: '#1E293B',
+                            orange: '#E35B3E',
+                            orangeHover: '#d14a2d',
+                            orangeLight: '#FFF7ED',
+                            blue: '#2563EB',
+                            emerald: '#059669',
+                            lightBg: '#F8FAFC'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans JP', sans-serif; background-color: #F8FAFC; color: #334155; }
+        .active-nav { background-color: #1E293B; border-left: 4px solid #E35B3E; color: #FFFFFF !important; }
+        .badge-success { background-color: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
+        .badge-warning { background-color: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
+        .badge-danger { background-color: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+        .badge-info { background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden select-none">
+
+    <!-- サイドバー -->
+    <aside class="w-64 bg-brand-navy text-slate-300 flex flex-col justify-between z-20 shadow-xl shrink-0">
+        <div>
+            <!-- ブランドヘッダー -->
+            <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-brand-orange to-amber-500 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                    1A
+                </div>
+                <div>
+                    <h1 class="text-white font-bold text-base leading-tight">One Approval</h1>
+                    <p class="text-[11px] text-orange-400 font-medium">購買・備品統合ミドルウェア</p>
+                </div>
+            </div>
+
+            <!-- ロール切り替え -->
+            <div class="px-3 py-2 bg-slate-900/70 m-3 rounded-lg border border-slate-800 text-xs">
+                <div class="flex items-center justify-between text-[11px] mb-1">
+                    <span class="text-slate-400">操作権限モード</span>
+                    <span id="role-badge" class="px-2 py-0.5 rounded text-[10px] bg-brand-orange/20 text-brand-orange border border-brand-orange/30 font-semibold">全社管理者</span>
+                </div>
+                <div class="text-xs font-semibold text-white flex items-center justify-between">
+                    <span id="user-name-display">伏見 氏 (本部管理者)</span>
+                    <button onclick="toggleRole()" class="text-[10px] text-brand-orange hover:underline">切替</button>
+                </div>
+            </div>
+
+            <!-- ナビゲーションメニュー -->
+            <nav class="mt-1 space-y-1 px-2 text-xs">
+                <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active-nav flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-chart-pie w-4 text-center"></i>
+                    <span>📊 ダッシュボード</span>
+                </a>
+                <a href="#" onclick="switchTab('catalog')" id="nav-catalog" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-store w-4 text-center"></i>
+                    <span>🛒 備品カタログ (パンチアウト)</span>
+                </a>
+                <a href="#" onclick="switchTab('cxml-recovery')" id="nav-cxml-recovery" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition relative">
+                    <i class="fa-solid fa-shield-halved w-4 text-center"></i>
+                    <span>⚠️ cXML通信＆エラーリカバリー</span>
+                    <span class="ml-auto bg-red-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">1</span>
+                </a>
+                <a href="#" onclick="switchTab('matching')" id="nav-matching" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-receipt w-4 text-center"></i>
+                    <span>📑 3-Way Matching (請求照合)</span>
+                </a>
+                <a href="#" onclick="switchTab('assets')" id="nav-assets" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-boxes-stacked w-4 text-center"></i>
+                    <span>📦 備品・固定資産台帳 (IT/校正)</span>
+                </a>
+                <a href="#" onclick="switchTab('calendar-rental')" id="nav-calendar-rental" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-calendar-days w-4 text-center"></i>
+                    <span>📅 貸出予約カレンダー (現場用)</span>
+                </a>
+                <a href="#" onclick="switchTab('ai-replenish')" id="nav-ai-replenish" class="nav-btn flex items-center space-x-2.5 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-robot w-4 text-center"></i>
+                    <span>🤖 AI自動補充 ＆ システム設定</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- フッター -->
+        <div class="p-3 border-t border-slate-800 text-[11px] text-slate-400">
+            <div class="flex items-center justify-between">
+                <span>cXML Gateway:</span>
+                <span class="text-emerald-400 flex items-center"><i class="fa-solid fa-circle text-[6px] mr-1 animate-pulse"></i> 正常接続</span>
+            </div>
+            <div class="text-[10px] text-slate-500 mt-0.5">kintone Webhook 連動中</div>
+        </div>
+    </aside>
+
+    <!-- メインエリア -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <!-- ヘッダー -->
+        <header class="bg-white border-b border-slate-200 h-14 px-6 flex items-center justify-between shrink-0 shadow-sm z-10">
+            <div class="flex items-center space-x-3">
+                <h2 id="page-title" class="text-base font-bold text-slate-800">📊 ダッシュボード ＆ 支出・アラート統合分析</h2>
+                <span class="bg-slate-100 text-slate-600 text-[11px] px-2 py-0.5 rounded border border-slate-200">
+                    東京第一工場 / 製造統括部
+                </span>
+            </div>
+            <div class="flex items-center space-x-3 text-xs">
+                <button onclick="openCartModal()" class="relative p-2 text-slate-600 hover:text-brand-orange transition">
+                    <i class="fa-solid fa-cart-shopping text-base"></i>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-brand-orange text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">0</span>
+                </button>
+                <div class="h-4 w-[1px] bg-slate-200"></div>
+                <span class="text-slate-500 text-[11px]"><i class="fa-solid fa-clock text-slate-400 mr-1"></i>2026/07/30 (木)</span>
+            </div>
+        </header>
+
+        <!-- メイン画面コンテンツ -->
+        <main class="flex-1 overflow-y-auto p-5 bg-slate-50">
+
+            <!-- TAB 1: ダッシュボード -->
+            <div id="tab-dashboard" class="tab-content space-y-5">
+                <!-- KPIカード -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-xs text-slate-500 mb-1 font-medium">今月度 MonotaRO 発注高</div>
+                        <div class="text-2xl font-bold text-slate-800">￥4,850,000</div>
+                        <p class="text-[11px] text-emerald-600 mt-1"><i class="fa-solid fa-arrow-up mr-0.5"></i> 野良購買の集約により +310%</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-xs text-slate-500 mb-1 font-medium">3-Way Matching 照合完了率</div>
+                        <div class="text-2xl font-bold text-emerald-600">98.2 %</div>
+                        <p class="text-[11px] text-slate-400 mt-1">アンマッチ 2 件（経理確認中）</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-amber-500">
+                        <div class="text-xs text-slate-500 mb-1 font-medium">IT契約・校正期限アラート</div>
+                        <div class="text-2xl font-bold text-amber-600">3 件</div>
+                        <p class="text-[11px] text-amber-600 mt-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i>30日以内に要対応</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-xs text-slate-500 mb-1 font-medium">AI自動補充 実行数 (月間)</div>
+                        <div class="text-2xl font-bold text-brand-blue">14 件</div>
+                        <p class="text-[11px] text-slate-400 mt-1">手動発注工数 約42時間削減</p>
+                    </div>
+                </div>
+
+                <!-- アラート通知エリア -->
+                <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-4 text-xs space-y-2">
+                    <div class="font-bold text-amber-800 flex items-center">
+                        <i class="fa-solid fa-bell text-amber-600 mr-2"></i>要対応アラート通知 (システム自動検知)
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+                        <div class="bg-white p-2.5 rounded-lg border border-amber-200 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-slate-800">FLIR サーモカメラ (TAG-0711)</span>
+                                <p class="text-[10px] text-red-600 font-semibold">校正期限切れ (2026/07/28経過)</p>
+                            </div>
+                            <button onclick="switchTab('assets')" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px] font-bold">確認</button>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-lg border border-amber-200 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-slate-800">Panasonic タフブック (5台)</span>
+                                <p class="text-[10px] text-amber-600 font-semibold">リース満了 28日前</p>
+                            </div>
+                            <button onclick="switchTab('assets')" class="px-2 py-1 bg-amber-600 text-white rounded text-[10px] font-bold">確認</button>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-lg border border-amber-200 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-slate-800">3M 超強力両面テープ</span>
+                                <p class="text-[10px] text-brand-blue font-semibold">在庫残2個 ➔ AI自動起案完了</p>
+                            </div>
+                            <button onclick="switchTab('ai-replenish')" class="px-2 py-1 bg-brand-blue text-white rounded text-[10px] font-bold">ルール</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: モノタロウ 備品カタログ & WF申請 -->
+            <div id="tab-catalog" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2.5 bg-orange-100 text-brand-orange rounded-lg">
+                            <i class="fa-solid fa-cart-flatbed text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">MonotaRO パンチアウト連携 (kintone内埋め込み)</h3>
+                            <p class="text-[11px] text-slate-500">カート確定時に価格ロック・在庫仮押さえが自動実行されます</p>
+                        </div>
+                    </div>
+                    <button onclick="openCartModal()" class="px-4 py-2 bg-brand-orange hover:bg-brand-orangeHover text-white rounded-lg text-xs font-bold transition shadow-md">
+                        <i class="fa-solid fa-cart-shopping mr-1"></i>カートを見る (<span id="cart-btn-count">0</span>)
+                    </button>
+                </div>
+
+                <!-- カタロググリッド -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="catalog-grid">
+                    <!-- JSにて動的生成 -->
+                </div>
+            </div>
+
+            <!-- TAB 3: cXML通信 ＆ エラーリカバリーコンソール -->
+            <div id="tab-cxml-recovery" class="tab-content hidden space-y-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center">
+                                <i class="fa-solid fa-shield-halved text-brand-orange mr-2"></i>
+                                cXML トランザクション・通信エラーリカバリーコンソール
+                            </h3>
+                            <p class="text-[11px] text-slate-500">kintone ⇄ One Approval ⇄ MonotaRO 間の全cXMLログとエラー監視</p>
+                        </div>
+                        <span class="px-2.5 py-1 bg-red-100 text-red-700 rounded-md text-xs font-bold border border-red-200">
+                            未対応エラー: 1 件
+                        </span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-2.5">日時</th>
+                                    <th class="p-2.5">kintone申請No</th>
+                                    <th class="p-2.5">cXML 種別</th>
+                                    <th class="p-2.5">ステータス</th>
+                                    <th class="p-2.5">PayloadID / Cookie</th>
+                                    <th class="p-2.5">HTTP Code</th>
+                                    <th class="p-2.5 text-right">リカバリー操作</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-700">
+                                <tr class="bg-red-50/50">
+                                    <td class="p-2.5 font-mono">10:14:02</td>
+                                    <td class="p-2.5 font-bold">PUR-20260730-002</td>
+                                    <td class="p-2.5 font-semibold">OrderRequest</td>
+                                    <td class="p-2.5"><span class="badge-danger px-2 py-0.5 rounded font-bold">🔴 期限切れエラー</span></td>
+                                    <td class="p-2.5 font-mono text-[10px]">UUID-9920182-EXPIRED</td>
+                                    <td class="p-2.5 font-mono text-red-600 font-bold">409 Conflict</td>
+                                    <td class="p-2.5 text-right">
+                                        <button onclick="openRecoveryModal()" class="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded font-bold transition">
+                                            エラー解析・再送
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-mono">09:40:11</td>
+                                    <td class="p-2.5 font-bold">PUR-20260730-001</td>
+                                    <td class="p-2.5 font-semibold">OrderRequest</td>
+                                    <td class="p-2.5"><span class="badge-success px-2 py-0.5 rounded font-bold">🟢 正常完了</span></td>
+                                    <td class="p-2.5 font-mono text-[10px]">UUID-1530498574483</td>
+                                    <td class="p-2.5 font-mono text-emerald-600 font-bold">200 OK</td>
+                                    <td class="p-2.5 text-right">
+                                        <button class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded font-medium">ログ参照</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-mono">09:30:00</td>
+                                    <td class="p-2.5 font-bold">PUR-20260730-001</td>
+                                    <td class="p-2.5 font-semibold">PunchOutSetupReq</td>
+                                    <td class="p-2.5"><span class="badge-success px-2 py-0.5 rounded font-bold">🟢 正常完了</span></td>
+                                    <td class="p-2.5 font-mono text-[10px]">UUID-1530498574483</td>
+                                    <td class="p-2.5 font-mono text-emerald-600 font-bold">200 OK</td>
+                                    <td class="p-2.5 text-right">
+                                        <button class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded font-medium">ログ参照</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: 3-Way Matching ＆ 会計連動設定 -->
+            <div id="tab-matching" class="tab-content hidden space-y-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">3-Way Matching (PO × 現場検収 × 月次請求 自動照合エンジン)</h3>
+                            <p class="text-[11px] text-slate-500">注文データ・現場受領数・MonotaRO月次請求データをSKU単位で自動突合します</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs">
+                            <span class="text-slate-500 font-medium">仕訳連携タイミング設定:</span>
+                            <select id="accounting-trigger" class="p-1.5 border border-slate-300 rounded font-semibold text-brand-orange bg-amber-50">
+                                <option value="receipt">現場検収完了時点 (発生主義/買掛)</option>
+                                <option value="invoice">月次請求確定時点 (請求照合後)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto text-xs">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                <tr>
+                                    <th class="p-2.5">PO番号 / 申請者</th>
+                                    <th class="p-2.5">SKU / 品名</th>
+                                    <th class="p-2.5">① 注文数 (単価)</th>
+                                    <th class="p-2.5">② 現場検収数</th>
+                                    <th class="p-2.5">③ 請求数 (金額)</th>
+                                    <th class="p-2.5">照合判定</th>
+                                    <th class="p-2.5 text-right">会計連携処理</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-700">
+                                <tr>
+                                    <td class="p-2.5 font-bold">PUR-20260728-001<br><span class="font-normal text-slate-400">佐藤 健太</span></td>
+                                    <td class="p-2.5">MN-44910<br><span class="font-semibold text-slate-800">工事用ヘルメット (白)</span></td>
+                                    <td class="p-2.5">3 個 (￥3,200)</td>
+                                    <td class="p-2.5 text-emerald-600 font-bold">3 個 (受領済)</td>
+                                    <td class="p-2.5">3 個 (￥9,600)</td>
+                                    <td class="p-2.5"><span class="badge-success px-2 py-0.5 rounded font-bold">一致 (OK)</span></td>
+                                    <td class="p-2.5 text-right">
+                                        <span class="text-emerald-600 font-bold"><i class="fa-solid fa-check mr-1"></i>奉行連動済</span>
+                                    </td>
+                                </tr>
+                                <tr class="bg-amber-50/40">
+                                    <td class="p-2.5 font-bold">PUR-20260720-004<br><span class="font-normal text-slate-400">鈴木 一朗</span></td>
+                                    <td class="p-2.5">MN-30012<br><span class="font-semibold text-slate-800">デジタルノギス 150mm</span></td>
+                                    <td class="p-2.5">2 個 (￥5,400)</td>
+                                    <td class="p-2.5 text-amber-600 font-bold">1 個 (一部検収)</td>
+                                    <td class="p-2.5">2 個 (￥10,800)</td>
+                                    <td class="p-2.5"><span class="badge-warning px-2 py-0.5 rounded font-bold">⚠️ 数量アンマッチ</span></td>
+                                    <td class="p-2.5 text-right">
+                                        <button class="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded font-bold">未検収確認</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: 備品・固定資産台帳 (IT資産/点検履歴/添付ファイル) -->
+            <div id="tab-assets" class="tab-content hidden space-y-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-4">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">備品・固定資産 統合データベース</h3>
+                            <p class="text-[11px] text-slate-500">購買データから自動起票された個体・ITスペック・校正・添付ドキュメント管理</p>
+                        </div>
+                        <div class="flex space-x-2 text-xs">
+                            <button class="px-3 py-1 bg-brand-navy text-white rounded font-medium">全資産</button>
+                            <button class="px-3 py-1 bg-slate-100 text-slate-600 rounded hover:bg-slate-200">IT資産 (MDM)</button>
+                            <button class="px-3 py-1 bg-slate-100 text-slate-600 rounded hover:bg-slate-200">校正・点検機器</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <!-- 資産カード 1 (IT資産) -->
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm space-y-2">
+                            <div class="flex justify-between items-start">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-mono font-bold rounded text-[10px]">IT資産 (PC)</span>
+                                <span class="text-slate-400 font-mono">AS-2026-901</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm">Panasonic タフブック FZ-G2</h4>
+                            <div class="p-2 bg-slate-50 rounded border border-slate-100 text-[11px] space-y-1">
+                                <div><span class="text-slate-400">スペック:</span> Core i5 / 16GB / 256GB SSD</div>
+                                <div><span class="text-slate-400">MAC / IMEI:</span> 00:1A:2B:3C:4D:5E</div>
+                                <div class="text-amber-600 font-semibold"><i class="fa-solid fa-clock mr-1"></i>リース満了: 2026/08/28 (残り28日)</div>
+                            </div>
+                            <div class="flex justify-between items-center pt-1 border-t border-slate-100 text-[11px]">
+                                <span class="text-slate-500">取扱説明書.pdf</span>
+                                <button class="text-brand-orange font-bold hover:underline"><i class="fa-solid fa-paperclip mr-1"></i>参照 (1)</button>
+                            </div>
+                        </div>
+
+                        <!-- 資産カード 2 (校正・点検機器) -->
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm space-y-2">
+                            <div class="flex justify-between items-start">
+                                <span class="px-2 py-0.5 bg-amber-100 text-amber-800 font-mono font-bold rounded text-[10px]">要校正機器</span>
+                                <span class="text-slate-400 font-mono">TAG-0711</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm">FLIR サーモグラフィカメラ E8</h4>
+                            <div class="p-2 bg-red-50 rounded border border-red-100 text-[11px] space-y-1">
+                                <div class="text-red-700 font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i>校正切れ (前回: 2025/07/20)</div>
+                                <div><span class="text-slate-500">ステータス:</span> <span class="text-red-600 font-bold">貸出不可 (校正待ち)</span></div>
+                                <div><span class="text-slate-500">点検周期:</span> 12ヶ月毎</div>
+                            </div>
+                            <div class="flex justify-between items-center pt-1 border-t border-slate-100 text-[11px]">
+                                <span class="text-slate-500">校正証明書_2025.pdf</span>
+                                <button class="text-brand-orange font-bold hover:underline"><i class="fa-solid fa-file-pdf mr-1"></i>証明書</button>
+                            </div>
+                        </div>
+
+                        <!-- 資産カード 3 (共有工具) -->
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm space-y-2">
+                            <div class="flex justify-between items-start">
+                                <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-mono font-bold rounded text-[10px]">貸出可能</span>
+                                <span class="text-slate-400 font-mono">TAG-0881</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm">マキタ 充電式インパクトドライバ</h4>
+                            <div class="p-2 bg-slate-50 rounded border border-slate-100 text-[11px] space-y-1">
+                                <div><span class="text-slate-400">保管エリア:</span> 本社工場 / 工具棚 B-1</div>
+                                <div><span class="text-slate-400">最終点検:</span> 2026/06/15 (異常なし)</div>
+                                <div class="text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>稼働状況良好</div>
+                            </div>
+                            <div class="flex justify-between items-center pt-1 border-t border-slate-100 text-[11px]">
+                                <span class="text-slate-500">保証書_マキタ.pdf</span>
+                                <button class="text-brand-orange font-bold hover:underline"><i class="fa-solid fa-paperclip mr-1"></i>参照 (1)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: 貸出予約カレンダー (現場用) -->
+            <div id="tab-calendar-rental" class="tab-content hidden space-y-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">📅 フルカレンダー型 備品貸出予約＆現場利用スケジュール</h3>
+                            <p class="text-[11px] text-slate-500">現場作業員・一般社員が事前予約および即時返却を行えます</p>
+                        </div>
+                        <button onclick="openRentalModal()" class="px-3 py-1.5 bg-brand-orange hover:bg-brand-orangeHover text-white rounded text-xs font-bold transition">
+                            <i class="fa-solid fa-plus mr-1"></i>新規 貸出予約を作成
+                        </button>
+                    </div>
+
+                    <!-- 簡易カレンダーグリッド表現 -->
+                    <div class="border border-slate-200 rounded-lg overflow-hidden text-xs">
+                        <div class="bg-slate-100 p-2.5 font-bold text-center text-slate-700 flex justify-between items-center">
+                            <button class="px-2 py-0.5 bg-white border rounded">◀ 前週</button>
+                            <span>2026年 7月27日 ～ 8月2日 (今週)</span>
+                            <button class="px-2 py-0.5 bg-white border rounded">次週 ▶</button>
+                        </div>
+                        <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50 text-center py-2 font-bold text-slate-600">
+                            <div>月 (7/27)</div><div>火 (7/28)</div><div>水 (7/29)</div><div class="text-brand-orange">木 (7/30 今日)</div><div>金 (7/31)</div><div class="text-blue-600">土 (8/1)</div><div class="text-red-600">日 (8/2)</div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1 p-2 min-h-[220px] bg-white text-[11px]">
+                            <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                            <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                            <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                            <!-- 今日 (木) -->
+                            <div class="p-1 border-2 border-brand-orange rounded bg-orange-50/30 space-y-1">
+                                <div class="bg-brand-orange text-white p-1 rounded font-bold text-[10px] truncate">
+                                    [予約] タフブック (佐藤)
+                                </div>
+                                <div class="bg-blue-600 text-white p-1 rounded font-bold text-[10px] truncate">
+                                    [貸出中] FLIRカメラ (鈴木)
+                                </div>
+                            </div>
+                            <div class="p-1 border border-slate-100 rounded bg-slate-50 space-y-1">
+                                <div class="bg-brand-orange text-white p-1 rounded font-bold text-[10px] truncate">
+                                    [予約] タフブック (佐藤)
+                                </div>
+                            </div>
+                            <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                            <div class="p-1 border border-slate-100 rounded bg-slate-50"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 7: AI自動補充 ＆ システム設定 -->
+            <div id="tab-ai-replenish" class="tab-content hidden space-y-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b border-slate-100 pb-3">
+                        <h3 class="font-bold text-slate-800 text-sm">🤖 AI自動在庫補充エンジン ＆ 条件分岐ルール設定</h3>
+                        <p class="text-[11px] text-slate-500">安全在庫を下回った際、kintoneへ「申請者＝自動AI」として購買起案を完全自動実行します</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <!-- ロジック設定 1 -->
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50 space-y-3">
+                            <h4 class="font-bold text-slate-800 flex items-center">
+                                <i class="fa-solid fa-sliders text-brand-orange mr-2"></i>
+                                在庫閾値 ＆ 自動補充ロジック
+                            </h4>
+                            <div>
+                                <label class="block text-slate-600 mb-1">対象消耗品カテゴリ</label>
+                                <input type="text" value="現場作業用手袋・テープ・コピー用紙" class="w-full p-2 border rounded bg-white">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-slate-600 mb-1">規定発注点 (最小在庫)</label>
+                                    <input type="number" value="5" class="w-full p-2 border rounded bg-white font-bold text-brand-orange">
+                                </div>
+                                <div>
+                                    <label class="block text-slate-600 mb-1">自動発注数量 (安全在庫)</label>
+                                    <input type="number" value="20" class="w-full p-2 border rounded bg-white font-bold">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ロジック設定 2 -->
+                        <div class="p-4 border border-slate-200 rounded-xl bg-orange-50/50 border-orange-200 space-y-3">
+                            <h4 class="font-bold text-brand-orange flex items-center">
+                                <i class="fa-solid fa-bolt mr-2"></i>
+                                金額条件分岐ルール (スキップロジック)
+                            </h4>
+                            <div>
+                                <label class="block text-slate-700 font-bold mb-1">無人自動発注のスキップ閾値 (税込金額)</label>
+                                <input type="text" value="10,000 円 以下" class="w-full p-2 border border-brand-orange/40 rounded bg-white font-bold text-brand-orange text-sm">
+                            </div>
+                            <div class="text-[11px] text-slate-600 space-y-1 bg-white p-2.5 rounded border border-amber-200">
+                                <p><strong>・10,000円以下の発注:</strong> kintone承認スキップ ➔ 即時 MonotaRO へ OrderRequest 送信</p>
+                                <p><strong>・10,000円超の発注:</strong> 人間 (総務課長) の承認フローへ投函</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- モーダル: cXML エラーリカバリー -->
+    <div id="recovery-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl mx-4 overflow-hidden border border-slate-200 text-xs">
+            <div class="bg-red-600 p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i>cXML通信エラー・手動リカバリーコンソール</h3>
+                <button onclick="closeRecoveryModal()" class="text-white hover:opacity-80">✕</button>
+            </div>
+            <div class="p-5 space-y-3">
+                <div class="p-3 bg-red-50 border border-red-200 rounded text-red-800">
+                    <p class="font-bold">エラー内容: 409 Conflict (Expiration Date Over)</p>
+                    <p class="text-[11px] mt-0.5">上司承認の遅延により、MonotaRO側の「単価・在庫仮押さえ有効期限 (72h)」を超過しました。</p>
+                </div>
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">cXML Request Payload (OrderRequest)</label>
+                    <textarea class="w-full h-28 font-mono text-[10px] p-2 bg-slate-900 text-emerald-400 rounded" readonly>&lt;OrderRequest&gt;
+  &lt;OrderRequestHeader orderID="PUR-20260730-002" orderDate="2026-07-30T10:14:02"&gt;
+    &lt;Total&gt;&lt;Money currency="JPY"&gt;18500&lt;/Money&gt;&lt;/Total&gt;
+  &lt;/OrderRequestHeader&gt;
+&lt;/OrderRequest&gt;</textarea>
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
+                    <p class="font-bold text-slate-800">推奨リカバリーアクション:</p>
+                    <p class="text-slate-600 text-[11px]">最新のMonotaRO価格・在庫APIを再照会し、差額がなければ即時再送信を実行します。</p>
+                </div>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end space-x-2">
+                <button onclick="closeRecoveryModal()" class="px-3 py-1.5 border border-slate-300 rounded font-semibold text-slate-600">キャンセル</button>
+                <button onclick="executeRecovery()" class="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded font-bold shadow transition">
+                    最新価格で再送信 (Retry)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- モーダル: カート＆kintone WF申請 -->
+    <div id="cart-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden border border-slate-200 text-xs">
+            <div class="bg-brand-navy p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-sm"><i class="fa-solid fa-cart-shopping text-brand-orange mr-2"></i>MonotaRO カート・kintone申請画面</h3>
+                <button onclick="closeCartModal()" class="text-white hover:opacity-80">✕</button>
+            </div>
+            <div class="p-5 max-h-[50vh] overflow-y-auto space-y-2" id="cart-items">
+                <!-- JS描画 -->
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-slate-500 block">合計金額 (税込)</span>
+                    <span class="text-xl font-bold text-brand-orange" id="cart-total">￥0</span>
+                </div>
+                <button onclick="submitWF()" class="px-4 py-2 bg-brand-orange hover:bg-brand-orangeHover text-white rounded font-bold shadow transition">
+                    kintone 購買申請を提出
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const catalogProducts = [
+            { id: 1, name: "3M 超強力両面テープ 19mm×4m", price: 890, code: "MN-00123" },
+            { id: 2, name: "トラスコ中山 工事用ヘルメット (白)", price: 3200, code: "MN-44910" },
+            { id: 3, name: "ベッセル ドライバーセット 6本組", price: 2150, code: "MN-88219" },
+            { id: 4, name: "デジタルノギス 150mm 高精度測定器", price: 5400, code: "MN-30012" }
+        ];
+
+        let cart = [];
+        let role = 'admin';
+
+        window.onload = function() {
+            renderCatalog();
+        };
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active-nav'));
+            document.getElementById(`nav-${tabName}`).classList.add('active-nav');
+
+            const pageTitles = {
+                'dashboard': '📊 ダッシュボード ＆ 支出・アラート統合分析',
+                'catalog': '🛒 MonotaRO 備品カタログ (パンチアウト連携)',
+                'cxml-recovery': '⚠️ cXML通信 ＆ エラーリカバリーコンソール',
+                'matching': '📑 3-Way Matching (注文・検収・請求自動照合)',
+                'assets': '📦 備品・固定資産台帳 (IT資産/校正/保証期限)',
+                'calendar-rental': '📅 貸出予約カレンダー (現場・一般社員用)',
+                'ai-replenish': '🤖 AI自動補充エンジン ＆ システム設定'
+            };
+            document.getElementById('page-title').innerText = pageTitles[tabName];
+        }
+
+        function toggleRole() {
+            if (role === 'admin') {
+                role = 'user';
+                document.getElementById('role-badge').innerText = '一般社員';
+                document.getElementById('user-name-display').innerText = '佐藤 健太 (現場ユーザー)';
+            } else {
+                role = 'admin';
+                document.getElementById('role-badge').innerText = '全社管理者';
+                document.getElementById('user-name-display').innerText = '伏見 氏 (本部管理者)';
+            }
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalog-grid');
+            grid.innerHTML = catalogProducts.map(p => `
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm p-3.5 flex flex-col justify-between text-xs">
+                    <div>
+                        <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono text-[10px]">${p.code}</span>
+                        <h4 class="font-bold text-slate-800 mt-1 mb-2">${p.name}</h4>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-slate-100 pt-2.5 mt-2">
+                        <span class="font-bold text-brand-orange text-sm">￥${p.price.toLocaleString()}</span>
+                        <button onclick="addToCart(${p.id})" class="px-2.5 py-1 bg-brand-navy hover:bg-slate-800 text-white rounded font-semibold">カート追加</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            const prod = catalogProducts.find(p => p.id === id);
+            cart.push(prod);
+            document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('cart-btn-count').innerText = cart.length;
+        }
+
+        function openCartModal() {
+            const container = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-center text-slate-400 py-6">カートは空です</p>';
+                document.getElementById('cart-total').innerText = '￥0';
+            } else {
+                const total = cart.reduce((s, i) => s + i.price, 0);
+                container.innerHTML = cart.map(i => `
+                    <div class="flex justify-between items-center p-2 bg-slate-50 rounded border border-slate-200">
+                        <div>
+                            <p class="font-bold text-slate-800">${i.name}</p>
+                            <p class="text-[10px] text-slate-400 font-mono">${i.code}</p>
+                        </div>
+                        <span class="font-bold text-brand-orange">￥${i.price.toLocaleString()}</span>
+                    </div>
+                `).join('');
+                document.getElementById('cart-total').innerText = `￥${total.toLocaleString()}`;
+            }
+            document.getElementById('cart-modal').classList.remove('hidden');
+        }
+
+        function closeCartModal() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function submitWF() {
+            alert('kintone購買申請を起案し、MonotaRO側で価格・在庫を仮押さえしました。');
+            cart = [];
+            document.getElementById('cart-count').innerText = '0';
+            document.getElementById('cart-btn-count').innerText = '0';
+            closeCartModal();
+        }
+
+        function openRecoveryModal() {
+            document.getElementById('recovery-modal').classList.remove('hidden');
+        }
+
+        function closeRecoveryModal() {
+            document.getElementById('recovery-modal').classList.add('hidden');
+        }
+
+        function executeRecovery() {
+            alert('最新価格・在庫でMonotaROへのOrderRequestを再送信しました。(HTTP 200 OK)');
+            closeRecoveryModal();
+            switchTab('dashboard');
+        }
+
+        function openRentalModal() {
+            alert('新規の備品貸出予約フォームを開きます');
+        }
+    </script>
+</body>
+</html>
