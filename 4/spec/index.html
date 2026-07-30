@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Approval システム要件定義・基本設計書 (GitHub Pages版)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --sidebar-width: 280px;
+            --primary-color: #2563eb;
+            --dark-bg: #1e293b;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        /* サイドバー */
+        #sidebar {
+            width: var(--sidebar-width);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            background-color: var(--dark-bg);
+            color: #fff;
+            overflow-y: auto;
+            z-index: 1000;
+            padding-top: 1rem;
+        }
+        #sidebar .nav-link {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            padding: 0.5rem 1.25rem;
+            border-left: 3px solid transparent;
+        }
+        #sidebar .nav-link:hover, #sidebar .nav-link.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-left-color: var(--primary-color);
+        }
+        #sidebar .nav-group-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            padding: 1rem 1.25rem 0.25rem;
+            font-weight: 700;
+        }
+        /* メインコンテンツ */
+        #content {
+            margin-left: var(--sidebar-width);
+            padding: 2.5rem 3rem;
+            max-width: 1200px;
+        }
+        .card {
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+        }
+        .card-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 700;
+            padding: 1rem 1.25rem;
+        }
+        .badge-req {
+            font-size: 0.75rem;
+            padding: 0.25em 0.6em;
+        }
+        pre {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+        code {
+            color: #0ea5e9;
+        }
+        .spec-table th {
+            background-color: #f1f5f9;
+            width: 25%;
+        }
+        .section-anchor {
+            scroll-margin-top: 2rem;
+        }
+        @media (max-width: 992px) {
+            #sidebar { width: 100%; height: auto; position: relative; }
+            #content { margin-left: 0; padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="50">
+
+    <!-- サイドバーナビゲーション -->
+    <nav id="sidebar">
+        <div class="px-3 mb-3">
+            <h5 class="fw-bold text-white mb-0"><i class="bi bi-box-seam text-primary me-2"></i>One Approval</h5>
+            <small class="text-secondary">システム要件定義・基本設計書 v2.0</small>
+        </div>
+        <div id="sidebar-nav" class="nav flex-column">
+            <div class="nav-group-title">1. システム概要</div>
+            <a class="nav-link" href="#sec-1-1">1.1 開発目的と対象範囲</a>
+            <a class="nav-link" href="#sec-1-2">1.2 全体アーキテクチャ概要</a>
+
+            <div class="nav-group-title">2. 画面機能詳細仕様</div>
+            <a class="nav-link" href="#sec-2-1">2.1 購買管理（kintone / MonotaRO）</a>
+            <a class="nav-link" href="#sec-2-2">2.2 資産管理（個体・数量・セット品）</a>
+            <a class="nav-link" href="#sec-2-3">2.3 MDM管理（IT資産・モバイル）</a>
+            <a class="nav-link" href="#sec-2-4">2.4 貸出管理（カレンダー・QR・アラート）</a>
+            <a class="nav-link" href="#sec-2-5">2.5 棚卸機能（依頼・実地報告）</a>
+            <a class="nav-link" href="#sec-2-6">2.6 点検修理記録</a>
+            <a class="nav-link" href="#sec-2-7">2.7 メンバー・権限管理</a>
+
+            <div class="nav-group-title">3. データベース・モデル設計</div>
+            <a class="nav-link" href="#sec-3-1">3.1 ER図概要・主要エンティティ</a>
+            <a class="nav-link" href="#sec-3-2">3.2 主要テーブル定義</a>
+
+            <div class="nav-group-title">4. 外部連携・シーケンス</div>
+            <a class="nav-link" href="#sec-4-1">4.1 cXML / MonotaRO PunchOutフロー</a>
+            <a class="nav-link" href="#sec-4-2">4.2 kintone REST API 連携仕様</a>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <main id="content">
+        <!-- ヘッダー -->
+        <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
+            <div>
+                <h1 class="h2 fw-bold text-dark">One Approval システム要件定義・基本設計書</h1>
+                <p class="text-muted mb-0">対象：中堅・大手企業向け 統合購買・現物資産・MDM・貸出・棚卸プラットフォーム</p>
+            </div>
+            <div>
+                <span class="badge bg-primary fs-6">Version 2.0.0</span>
+                <span class="badge bg-secondary fs-6">2026-07-30</span>
+            </div>
+        </div>
+
+        <!-- 1. システム概要 -->
+        <section id="sec-1-1" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-info-circle me-2"></i>1.1 開発目的と対象範囲</div>
+                <div class="card-body">
+                    <p>本システム「<strong>One Approval</strong>」は、年商100億〜1000億円規模の製造業・建設業等を主要ターゲットとし、既存のワークフロー（kintone）とMonotaRO（ECサイト）をシームレスに統合するとともに、<b>購買から資産化・個体/数量管理・MDM管理・貸出予約・棚卸・修繕履歴管理までを一気通貫で自動化・可視化するミドルウェア＆Webアプリケーション</b>です。</p>
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-light">
+                                <h6 class="fw-bold text-primary"><i class="bi bi-cart-check me-2"></i>購買の完全統一</h6>
+                                <small>MonotaRO cXML自動購買とkintone手動購買申請を一元管理し、検収データをワンタップで資産化。</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-light">
+                                <h6 class="fw-bold text-success"><i class="bi bi-boxes me-2"></i>二重管理の解消</h6>
+                                <small>固定資産（個体管理）と消耗品（数量管理）を分離しつつ、セット品紐付けやQR・管理ラベル印刷に対応。</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-light">
+                                <h6 class="fw-bold text-warning"><i class="bi bi-shield-check me-2"></i>現場現場運用の効率化</h6>
+                                <small>カレンダー型貸出予約、スマホQRスキャン、棚卸依頼・状態報告、定期校正・修理記録を網羅。</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-1-2" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-diagram-3 me-2"></i>1.2 全体アーキテクチャ概要</div>
+                <div class="card-body">
+                    <pre><code>[ MonotaRO (EC) ] &lt;--- cXML (PunchOut/Order/ShipNotice) ---&gt; [ One Approval Middleware ]
+                                                                       |
+[ kintone (WF/承認) ] &lt;--- REST API (PO Sync/Status Sync) ---------+
+                                                                       |
+[ 現場ユーザー/管理者 ] &lt;--- Next.js / Vue Web App UI -----------------+ (DB: PostgreSQL)
+   ├── 🛒 購買管理 &amp; 資産化トリガー
+   ├── 📦 資産台帳（個体管理 / 消耗品数量管理 / 履歴追跡）
+   ├── 💻 MDM管理（IT端末・スペック・IMEI）
+   ├── 📅 カレンダー貸出 ＆ QR返却
+   ├── 📋 棚卸し（計画発注・現地状態報告）
+   └── 🔧 点検・校正・修理記録</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 画面機能詳細仕様 -->
+        <h3 class="fw-bold border-bottom pb-2 mb-3 mt-5">2. 画面機能詳細仕様</h3>
+
+        <!-- 2.1 購買管理 -->
+        <section id="sec-2-1" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <span class="badge bg-primary me-2">モジュール 01</span> 2.1 購買管理（kintone / MonotaRO）
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered spec-table">
+                        <tr>
+                            <th>機能概要</th>
+                            <td>MonotaRO連携購買とkintone手動購買申請の統合一覧表示および「資産化（資産管理への引き継ぎ）」フローの実装。</td>
+                        </tr>
+                        <tr>
+                            <th>種別判別</th>
+                            <td>
+                                <ul>
+                                    <li><span class="badge bg-info text-dark">MonotaRO連携</span>: cXML PunchOut経由で注文され、出荷通知（ShipNotice）と連携済みのデータ。</li>
+                                    <li><span class="badge bg-secondary">手動購買</span>: 他社Webサイトや型番指定でkintoneアプリから手動申請・承認された購買データ。</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>資産化アクション</th>
+                            <td>
+                                ステータスが「検収済」の明細に対して「<strong>資産化（資産管理へ登録）</strong>」ボタンを設置。<br>
+                                モーダル画面にて【個体管理（固定資産・備品）】または【数量管理（消耗品）】を選択し、資産台帳レコードを自動生成する。
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>ステータス遷移</th>
+                            <td><code>申請中</code> &rarr; <code>承認済（発注完了）</code> &rarr; <code>出荷済</code> &rarr; <code>検収済</code> &rarr; <code>資産化完了</code></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.2 資産管理 -->
+        <section id="sec-2-2" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <span class="badge bg-primary me-2">モジュール 02</span> 2.2 資産管理（個体・数量・セット品）
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered spec-table">
+                        <tr>
+                            <th>管理形態の分離</th>
+                            <td>
+                                <ul>
+                                    <li><strong>個体管理（固定資産・機器）:</strong> 1点ごとに固有の管理番号（AST-XXXX）、シリアルNo、写真を保持。貸出・点検の対象。</li>
+                                    <li><strong>数量管理（消耗品・パーツ）:</strong> 品目単位で総在庫数を保持。「ピックアップ（出庫）」ボタンで即座に数量減算処理を実行。</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>詳細・附属機能</th>
+                            <td>
+                                <ul>
+                                    <li><strong>セット備品紐付け:</strong> 例「一眼レフカメラ本体」に対し「交換レンズ」「三脚」「専用ケース」を親子の関連備品としてバインド管理。</li>
+                                    <li><strong>管理ラベル / QRコード発行:</strong> 管理番号・QRコード・名称を含むラベル印刷用PDF/SVGのリアルタイム生成機能。</li>
+                                    <li><strong>関連ファイル一体管理:</strong> 取扱説明書(PDF)、保証書(画像)、見積・仕様書などをレコードに添付。</li>
+                                    <li><strong>変更履歴ログ:</strong> 誰が・いつ・どの項目（ステータス・保管場所・数量など）を変更したかを自動記録。</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.3 MDM管理 -->
+        <section id="sec-2-3" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <span class="badge bg-primary me-2">モジュール 03</span> 2.3 MDM管理（IT資産・モバイル）
+                </div>
+                <div class="card-body">
+                    <p>資産管理上の固定資産（PC・スマホ・タブレット等）から「<strong>MDM管理へ回す</strong>」フラグをオンにすることで移行される高機能IT資産画面です。</p>
+                    <ul class="mb-0">
+                        <li><strong>管理項目:</strong> OSバージョン、CPU、RAM、ストレージ容量、MACアドレス、IMEI、携帯キャリア契約情報。</li>
+                        <li><strong>契約・期限管理:</strong> リース/レンタル満了日、メーカー保証期限、ソフトウェアライセンス更新日。</li>
+                        <li><strong>アラート通知機能:</strong> 契約満了の30日前・60日前に管理者および利用担当者へメール/Teams/Slack自動通知。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.4 貸出管理 -->
+        <section id="sec-2-4" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <span class="badge bg-primary me-2">モジュール 04</span> 2.4 貸出管理（カレンダー・QR・アラート）
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-dark">📅 カレンダー予約・検索</h6>
+                            <p class="small text-muted">個体管理されている固定資産の空き状況をカレンダー上でリアルタイム確認し、「誰が・いつから・いつまで」利用するかをドラッグ＆ドロップで事前予約。</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-dark">📱 QRコード貸出・返却 ＆ 返却アラート</h6>
+                            <p class="small text-muted">現場のスマホ/タブレットカメラで管理ラベルのQRコードを読み取り、ワンタップで即時貸出/返却。返却予定日時を過ぎた場合は自動アラートメールを配信。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.5 棚卸機能 -->
+        <section id="sec-2-5" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <span class="badge bg-primary me-2">モジュール 05</span> 2.5 棚卸機能（依頼・実地報告）
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered spec-table">
+                        <tr>
+                            <th>棚卸依頼の起案</th>
+                            <td>管理者が対象範囲（拠点・部署・カテゴリ：消耗品/固定資産/MDM）と期日を指定して「棚卸タスク」を一括発行。</td>
+                        </tr>
+                        <tr>
+                            <th>実地報告UI</th>
+                            <td>
+                                各拠点・現場の担当者はスマホ等で対象備品を確認し、以下の状態を選択して報告：<br>
+                                <span class="badge bg-success">正常</span> <span class="badge bg-warning text-dark">要修理</span> <span class="badge bg-danger">破損・故障</span> <span class="badge bg-dark">紛失</span><br>
+                                消耗品の場合は、実測の「現在実在庫数」を入力して理論在庫との差異を自動計算。
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.6 点検修理記録 -->
+        <section id="sec-2-6" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <span class="badge bg-primary me-2">モジュール 06</span> 2.6 点検修理記録
+                </div>
+                <div class="card-body">
+                    <p class="mb-2">固定資産およびMDM管理物品に対し、法定制期点検・機器校正（キャリブレーション）・故障修理の履歴をログ保持します。</p>
+                    <ul>
+                        <li><strong>点検・校正周期管理:</strong> 次回点検予定日を設定し、期日が近づいた機器の貸出制限または通知を実行。</li>
+                        <li><strong>記録項目:</strong> 実施日、業者名、費用、点検結果、校正証明書PDFの添付。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.7 メンバー・権限管理 -->
+        <section id="sec-2-7" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <span class="badge bg-primary me-2">モジュール 07</span> 2.7 メンバー・権限管理
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">全社ユーザーの所属部署、役職、および本システムでのアクセス権限（ロール）を管理します。</p>
+                    <small class="text-muted">（ロール定義：システム管理者 / 購買・経理担当 / 資産管理者 / 一般現場社員）</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. DB設計 -->
+        <h3 class="fw-bold border-bottom pb-2 mb-3 mt-5">3. データベース・モデル設計</h3>
+        <section id="sec-3-1" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-dark text-white"><i class="bi bi-database me-2"></i>3.1 ER図概要・主要テーブル構造</div>
+                <div class="card-body">
+                    <pre><code>[users] 1 --- N [procurements] 1 --- N [procurement_items]
+   |                     |                        | (資産化)
+   |                     v                        v
+   +-------- N ---> [asset_items (個体・数量)] &lt;--- [parent_asset_id (セット品)]
+                         |
+                         +--- 1:1 ---> [mdm_profiles (ITスペック・契約)]
+                         +--- 1:N ---> [asset_histories (変更ログ)]
+                         +--- 1:N ---> [rentals (貸出予約・実績)]
+                         +--- 1:N ---> [maintenance_logs (点検・修理)]
+                         +--- 1:N ---> [stocktake_details (棚卸明細)]</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. cXML / API -->
+        <h3 class="fw-bold border-bottom pb-2 mb-3 mt-5">4. 外部連携・シーケンス</h3>
+        <section id="sec-4-1" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-dark text-white"><i class="bi bi-arrow-repeat me-2"></i>4.1 MonotaRO PunchOut (cXML) 通信フロー</div>
+                <div class="card-body">
+                    <ol>
+                        <li><strong>PunchOutSetupRequest:</strong> ユーザーが「MonotaROで商品を探す」をクリック時、One ApprovalからMonotaROへワンタイムURLを要求。</li>
+                        <li><strong>PunchOutOrderMessage:</strong> MonotaROのカゴ入れ完了後、カート情報（SKU・単価・数量）がcXMLでOne Approvalに返却。</li>
+                        <li><strong>kintone PO Sync:</strong> 送信されたカート情報を元にkintoneワークフローアプリへ自動申請レコードを生成。</li>
+                        <li><strong>OrderRequest:</strong> kintoneで最終承認されたタイミングで、One ApprovalからMonotaROへ確定注文cXMLを送信。</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- フッター -->
+        <footer class="text-center text-muted py-4 border-top mt-5">
+            <small>&copy; 2026 One Approval System Architecture Group. Built for GitHub Pages.</small>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
