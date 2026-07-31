@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1approval プラットフォームシステム要件定義・基本設計書 (v3.3)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --sidebar-width: 290px;
+            --primary-color: #2563eb;
+            --dark-bg: #0f172a;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        #sidebar {
+            width: var(--sidebar-width);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            background-color: var(--dark-bg);
+            color: #fff;
+            overflow-y: auto;
+            z-index: 1000;
+            padding-top: 1rem;
+        }
+        #sidebar .nav-link {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            padding: 0.45rem 1.25rem;
+            border-left: 3px solid transparent;
+        }
+        #sidebar .nav-link:hover, #sidebar .nav-link.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-left-color: var(--primary-color);
+        }
+        #sidebar .nav-group-title {
+            font-size: 0.725rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            padding: 1rem 1.25rem 0.25rem;
+            font-weight: 700;
+        }
+        #content {
+            margin-left: var(--sidebar-width);
+            padding: 2.5rem 3rem;
+            max-width: 1240px;
+        }
+        .card {
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+        }
+        .card-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 700;
+            padding: 0.85rem 1.25rem;
+        }
+        pre {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+        code { color: #38bdf8; }
+        .spec-table th {
+            background-color: #f8fafc;
+            width: 25%;
+            font-size: 0.9rem;
+        }
+        .spec-table td { font-size: 0.9rem; }
+        .section-anchor { scroll-margin-top: 1.5rem; }
+        .l3-badge { font-weight: 600; font-size: 0.75rem; font-family: monospace; }
+        @media (max-width: 992px) {
+            #sidebar { width: 100%; height: auto; position: relative; }
+            #content { margin-left: 0; padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="50">
+
+    <!-- サイドバー -->
+    <nav id="sidebar">
+        <div class="px-3 mb-3">
+            <h5 class="fw-bold text-white mb-0"><i class="bi bi-cpu text-primary me-2"></i>1approval</h5>
+            <small class="text-secondary">統合ミドルウェア・要件定義 v3.3</small>
+        </div>
+        <div id="sidebar-nav" class="nav flex-column">
+            <div class="nav-group-title">1. システムビジョン</div>
+            <a class="nav-link" href="#sec-1-1">1.1 1approval Core の定義</a>
+            <a class="nav-link" href="#sec-1-2">1.2 全体アーキテクチャ (Control Plane)</a>
+
+            <div class="nav-group-title">2. 中核機能プラットフォーム</div>
+            <a class="nav-link" href="#sec-2-1">2.1 連携セットアップ ＆ サプライヤー契約</a>
+            <a class="nav-link" href="#sec-2-2">2.2 組織・人事・承認権限 Sync</a>
+            <a class="nav-link" href="#sec-2-3">2.3 L3データ蓄積・仕訳ルーティング</a>
+            <a class="nav-link" href="#sec-2-4">2.4 統合支出・購買・予実制御</a>
+            <a class="nav-link" href="#sec-2-5">2.5 ガバナンス・不正・異常検知</a>
+            <a class="nav-link" href="#sec-2-6">2.6 レポーティング ＆ BIアナリティクス</a>
+
+            <div class="nav-group-title">3. 現場・資産運用機能</div>
+            <a class="nav-link" href="#sec-3-1">3.1 資産台帳（個体・数量・親子セット）</a>
+            <a class="nav-link" href="#sec-3-2">3.2 MDM管理（IT資産・契約期限アラート）</a>
+            <a class="nav-link" href="#sec-3-3">3.3 貸出管理 ＆ モバイル実地棚卸</a>
+
+            <div class="nav-group-title">4. データモデル・API仕様</div>
+            <a class="nav-link" href="#sec-4-1">4.1 L3マスター ＆ 資産テーブル構造</a>
+            <a class="nav-link" href="#sec-4-2">4.2 外部システム連携APIフロー</a>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <main id="content">
+        <!-- ヘッダー -->
+        <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
+            <div>
+                <h1 class="h2 fw-bold text-dark">1approval プラットフォームシステム要件定義書</h1>
+                <p class="text-muted mb-0">エンタープライズ統合中継ハブ / L3データ基盤 / サプライヤー自動契約 / 現場現物資産統制</p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-primary fs-6">Version 3.3.0</span><br>
+                <small class="text-muted">2026-07-31 改訂 (全要件統合版)</small>
+            </div>
+        </div>
+
+        <!-- 1. システムビジョン -->
+        <section id="sec-1-1" class="section-anchor">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white"><i class="bi bi-bullseye me-2"></i>1.1 1approval Core のコンセプト</div>
+                <div class="card-body">
+                    <p class="lead fw-bold text-dark mb-2">「あらゆる承認と、それに伴う購買・支出・リソース移動を単一ハブで統合制御する企業の中枢神経系」</p>
+                    <p>1approvalは、企業内に乱立するワークフローシステム（kintone, Garoon, Salesforce, Agileworks等）と各種EC/調達プラットフォーム（MonotaRO, Amazon Business, エイチ, 団タメ等）、さらには現地立替精算をシームレスに中継します。</p>
+                    <p class="mb-0">通過するデータを標準化された<b>L3データ（Who / What / When / Where / Why）</b>として蓄積し、Peppol電子請求・インボイス対応の基盤化、サプライヤー契約のデジタル締結、AIによる不正・異常検知、および法人請求・立替精算の自動会計ルーティングを実現します。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-1-2" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-diagram-3 me-2"></i>1.2 全体アーキテクチャ（Control Plane 構造）</div>
+                <div class="card-body">
+                    <pre><code>[ FRONT WORKFLOW SYSTEM ]
+ kintone / Garoon / サイボウズ / Salesforce / M365 / Agileworks / x-point / コラボフロー
+                                  │ (承認完了イベント / REST API)
+                                  ▼
+ ┌─────────────────────────────────────────────────────────────────────────────────┐
+ │                            【 1approval Core Hub 】                             │
+ │                                                                                 │
+ │  ┌───────────────────────────────────────────────────────────────────────────┐  │
+ │  │ 2.1 連携セットアップ (Flowbuilder) ＆ サプライヤー契約（デジタル締結）      │  │
+ │  └───────────────────────────────────────────────────────────────────────────┘  │
+ │  ┌───────────────────────┐  ┌───────────────────────┐  ┌─────────────────────┐  │
+ │  │ 2.2 人事/組織Sync     │  │ 2.3 L3 Data Warehouse │  │ 2.4 予算制御・予実   │  │
+ │  │ マスタ同期エンジン    │  │ (Who/What/When/etc)   │  │ オーバー自動ブロック │  │
+ │  └───────────────────────┘  └───────────────────────┘  └─────────────────────┘  │
+ │  ┌───────────────────────┐  ┌───────────────────────┐  ┌─────────────────────┐  │
+ │  │ 2.5 ガバナンス・不正   │  │ 2.6 レポーティングBI  │  │ 3.0 現物資産・MDM    │  │
+ │  │ 異常値/重複/規程違反  │  │ 予実/出張/交際費等    │  │ カレンダー貸出/棚卸 │  │
+ │  └───────────────────────┘  └───────────────────────┘  └─────────────────────┘  │
+ └────────────────────────────────┬──────────────────────┬─────────────────────────┘
+                                  │                      │
+           ┌──────────────────────┘                      └──────────────────────┐
+           ▼ (法人請求: 売掛/請求書)                                            ▼ (個人立替: 現金/個クレ)
+【 会計システム (AP統合) 】                                             【 経費精算システム 】
+ 勘定奉行クラウド / freee / マネーフォワード等                          楽楽精算 / Concur / MF経費等</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 中核機能プラットフォーム -->
+        <h3 class="fw-bold border-bottom pb-2 mb-3 mt-5">2. 中核機能プラットフォーム</h3>
+
+        <!-- 2.1 連携セットアップ & サプライヤー自動契約 -->
+        <section id="sec-2-1" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-primary me-2">中核 01</span> 2.1 連携セットアップ (Flowbuilder) ＆ サプライヤー契約オンボーディング</div>
+                <div class="card-body">
+                    <p>接続先システム同士のフロー設計（Flowbuilder）と、新規購買チャネル開設時の<b>サプライヤー自動契約（デジタル締結）</b>を一元化されたUIで処理します。</p>
+
+                    <h6 class="fw-bold text-dark border-bottom pb-1 mb-2"><i class="bi bi-file-earmark-check me-2"></i>サプライヤー管理 ＆ 自動契約締結機能</h6>
+                    <table class="table table-bordered spec-table mb-4">
+                        <tr>
+                            <th>機能概要</th>
+                            <td>顧客企業が新規購買システム（EC・サービス）を利用開始する際、1approval画面上で標準約款・雛形に基づく契約締結をデジタル完結する機能。</td>
+                        </tr>
+                        <tr>
+                            <th>自動オンボーディング</th>
+                            <td>
+                                <ul>
+                                    <li><b>標準契約雛形（規約同意）:</b> 1approvalが用意した基本契約雛形に対し、ワンタップで電子同意・締結処理を完了。</li>
+                                    <li><b>自動ノード解放:</b> 契約締結が成功した瞬間、Flowbuilder上の該当サプライヤー（例: 団タメ、ピカパカ等）の連携ノードがアクティブ化し、フローに組込可能となる。</li>
+                                    <li><b>個別の特約/独自契約対応:</b> 雛形に合意できない例外ケースの場合、個別契約書PDFアップロードおよび承認ステータス管理機能へ自動分岐。</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h6 class="fw-bold text-dark border-bottom pb-1 mb-2"><i class="bi bi-diagram-2 me-2"></i>ビジュアルフロービルダー (Flowbuilder)</h6>
+                    <table class="table table-bordered spec-table">
+                        <tr>
+                            <th>キャンバス機能</th>
+                            <td>「申請元のWF」&rarr;「契約済みサプライヤー」&rarr;「後続の会計/経費システム」をドラッグ＆ドロップで結線。各ノード間で配送先・請求先マスタのデータ自動補完ロジックを適用。</td>
+                        </tr>
+                        <tr>
+                            <th>接続対応ターゲット</th>
+                            <td>
+                                <ul>
+                                    <li><b>承認WF:</b> kintone, Garoon, サイボウズ, Salesforce, M365, Agileworks, x-point, コラボフロー 等</li>
+                                    <li><b>購買・サービス:</b> モノタロウ, Amazon Business, ピカパカ, ビズバンス, NetRICOH, オレンジブック, エイチ(会議室), 団タメ(宴会・会食) 等</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.2 人事・組織Sync -->
+        <section id="sec-2-2" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-primary me-2">中核 02</span> 2.2 組織・人事・承認権限 Sync</div>
+                <div class="card-body">
+                    <p>各外部ツールで分断しがちなマスターデータを1approvalをハブとして双方向同期（Sync）します。</p>
+                    <ul>
+                        <li><b>従業員データ・組織階層:</b> SmartHRやEntra ID(Azure AD)等を元に、部署・役職・上位組織階層を自動取り込み。</li>
+                        <li><b>承認フロー定義の集中同期:</b> 1approval側で設定した承認権限マスタ（例: 50万円以上は事業部長承認）を各接続先WFへ配信。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.3 L3データ & 会計・経費仕訳 -->
+        <section id="sec-2-3" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-primary me-2">中核 03</span> 2.3 L3データ蓄積・仕訳ルーティング</div>
+                <div class="card-body">
+                    <p>将来的なPeppol電子請求・デジタルインボイス・電帳法に対応するため、すべての取引を高度な<b>L3データ</b>へ統一・正規化します。</p>
+                    <div class="table-responsive mb-3">
+                        <table class="table table-sm table-bordered bg-white">
+                            <thead class="table-light">
+                                <tr><th>L3要素</th><th>保持データ項目</th><th>用途</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="badge bg-dark l3-badge">WHO</span></td><td>申請者ID、所属部署、承認者チェーン、予算オーナー</td><td>監査トレース、費用負担部署特定</td></tr>
+                                <tr><td><span class="badge bg-dark l3-badge">WHAT</span></td><td>SKU明細、品目名、単価、数量、税区分(10%/8%/軽減)</td><td>デジタルインボイス(Peppol)、仕訳自動化</td></tr>
+                                <tr><td><span class="badge bg-dark l3-badge">WHEN</span></td><td>申請日、承認完了日、発注日時、検収確認日</td><td>期末決算処理、未払計上コントロール</td></tr>
+                                <tr><td><span class="badge bg-dark l3-badge">WHERE</span></td><td>購買チャネル(Amazon/モノタロウ/現地等)、店舗コード</td><td>チャネル別支出分析、相場比較</td></tr>
+                                <tr><td><span class="badge bg-dark l3-badge">WHY</span></td><td>勘定科目、プロジェクトコード、申請目的理由</td><td>予実管理、ガバナンスルールチェック</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h6 class="fw-bold text-dark mt-3"><i class="bi bi-signpost-split me-2"></i>自動決済ルーティング処理</h6>
+                    <ul>
+                        <li><b>法人請求（売掛・請求書）:</b> 会計システム（勘定奉行等）へ買掛金・自動仕訳データとして送出。</li>
+                        <li><b>個人立替（現金・個クレ）:</b> 経費精算システム（楽楽精算等）へ立替精算申請データとして送出。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.4 統合支出・予実制御 -->
+        <section id="sec-2-4" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-primary me-2">中核 04</span> 2.4 統合支出・購買・予実制御</div>
+                <div class="card-body">
+                    <p>ECサイトでの購買、専門サービスの予約、現場の現地立替経費を同一画面で一元管理・見える化します。</p>
+                    <ul>
+                        <li><b>リアルタイム予実管理:</b> 部署・プロジェクト単位で月次・年次予算を設定。発注・申請時点で消化額をリアルタイム計算。</li>
+                        <li><b>予算オーバー自動制御:</b> 予算超過が発生した場合、<b>承認申請を強制ロック（エラー表示）</b>または特別承認ルート（役員承認）へ自動変更。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.5 ガバナンス・不正検知 -->
+        <section id="sec-2-5" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-danger me-2">中核 05</span> 2.5 ガバナンス・不正・異常検知エンジン</div>
+                <div class="card-body">
+                    <p>支出データに対してAI・ルールベースによる継続的モニタリングを実施し、コスト削減ポテンシャルと規程違反を自動抽出します。</p>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-light">
+                                <h6 class="fw-bold text-danger"><i class="bi bi-graph-up-arrow me-2"></i>相場異常値チェック</h6>
+                                <small>同等品SKUや過去実績・市場相場と比較し、一定倍率以上の割高購入や不正な高額経費を即座にアラート表示。</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-light">
+                                <h6 class="fw-bold text-warning text-dark"><i class="bi bi-copy me-2"></i>重複申請チェック</h6>
+                                <small>同日・同金額・同一領収書画像・類似品目の二重申請（立替経費と法人カードの重複など）を自動検知。</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-light">
+                                <h6 class="fw-bold text-dark"><i class="bi bi-shield-slash me-2"></i>社内規程逸脱チェック</h6>
+                                <small>「新幹線グリーン車利用」「交際費の上限オーバー」「事前申請なしの事後精算」などの規程違反を自動判定。</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.6 レポーティング BI -->
+        <section id="sec-2-6" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-primary me-2">中核 06</span> 2.6 レポーティング ＆ BIアナリティクス</div>
+                <div class="card-body">
+                    <p>経営層および管理部門向けに、以下の標準レポートBIダッシュボードを標準提供します。</p>
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
+                        <div class="col"><div class="p-2 border rounded"><i class="bi bi-pie-chart text-primary me-2"></i><b>経費精算サマリーBI:</b> 月次の支出動向・部署別推移</div></div>
+                        <div class="col"><div class="p-2 border rounded"><i class="bi bi-exclamation-triangle text-danger me-2"></i><b>異常値発見レポート:</b> 相場逸脱・不正疑いの集計</div></div>
+                        <div class="col"><div class="p-2 border rounded"><i class="bi bi-files text-warning me-2"></i><b>重複発見レポート:</b> 二重申請の検出フラグ一覧</div></div>
+                        <div class="col"><div class="p-2 border rounded"><i class="bi bi-cup-hot text-info me-2"></i><b>交際費レポート:</b> 参加者・単価・税法上限チェック</div></div>
+                        <div class="col"><div class="p-2 border rounded"><i class="bi bi-airplane text-success me-2"></i><b>出張者一覧レポート (週次):</b> 出張予定・実績の一覧</div></div>
+                        <div class="col"><div class="p-2 border rounded"><i class="bi bi-send text-secondary me-2"></i><b>駐在員連絡機能:</b> 現地駐在員への出張者情報自動配信</div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 現場・資産運用機能 -->
+        <h3 class="fw-bold border-bottom pb-2 mb-3 mt-5">3. 現場・資産運用機能</h3>
+
+        <!-- 3.1 資産台帳 -->
+        <section id="sec-3-1" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-secondary me-2">現場 01</span> 3.1 統合資産台帳（個体・数量・親子セット備品）</div>
+                <div class="card-body">
+                    <p>検収されたL3購買データからワンタップで資産登録。個体・数量・親子構成管理をサポートします。</p>
+                    <table class="table table-bordered spec-table">
+                        <tr>
+                            <th>個体管理 (Fixed Assets)</th>
+                            <td>PC、車両、機器など管理番号（AST-XXXX）やシリアルNoを個別に付与。写真・取扱説明書(PDF)・保証書画像・仕様書を一体管理。QRラベル（PDF/SVG）の即時印刷に対応。</td>
+                        </tr>
+                        <tr>
+                            <th>数量管理 (Consumables)</th>
+                            <td>オフィス用品、パーツ類など品目ごとの総在庫数を管理。「出庫（ピックアップ）」で即時減算。安全在庫閾値未満で自動補充購入フロー（Flowbuilder）を発火。</td>
+                        </tr>
+                        <tr>
+                            <th>親子セット備品 (Bundle)</th>
+                            <td>「一眼レフカメラ本体（親）」に対し「交換レンズ」「三脚」「専用ケース（子）」を<b>親子関係（parent_asset_id）としてバインド管理</b>。一括貸出・一括棚卸に対応。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3.2 MDM管理 -->
+        <section id="sec-3-2" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-secondary me-2">現場 02</span> 3.2 MDM・IT資産 ＆ 契約期限アラート</div>
+                <div class="card-body">
+                    <p>IT資産（PC、スマホ、タブレット）のスペック情報（OS, CPU, RAM, MACアドレス, IMEI, キャリア契約）をMDM（Intune / Jamf Pro）とAPI連携。</p>
+                    <ul>
+                        <li><b>契約・期限アラート通知:</b> リース/レンタル満了日、メーカー保証期限、ライセンス更新の<b>30日前・60日前に管理者および利用者へメール/Teams/Slack自動通知</b>。</li>
+                        <li><b>退職・移動時の即時ロック:</b> 人事Sync機能と連動し、退職日をもって端末の遠隔ロック・ワイプ（初期化）命令を発行。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3.3 カレンダー貸出 ＆ モバイル棚卸 -->
+        <section id="sec-3-3" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-secondary me-2">現場 03</span> 3.3 カレンダー型貸出予約 ＆ モバイル実地棚卸</div>
+                <div class="card-body">
+                    <h6 class="fw-bold text-dark border-bottom pb-1 mb-2"><i class="bi bi-calendar-event me-2"></i>カレンダー型貸出予約・返却管理</h6>
+                    <p class="small text-muted">共有備品の空き状況をカレンダー上で確認し、ドラッグ＆ドロップで事前予約。スマホQRスキャンで即時貸出/返却処理。返却遅延者へ催促アラートを配信。</p>
+
+                    <h6 class="fw-bold text-dark border-bottom pb-1 mb-2 mt-4"><i class="bi bi-qr-code-scan me-2"></i>スマホカメラによる現場リアルタイム棚卸</h6>
+                    <p class="small text-muted">管理者が発行した棚卸タスクに基づき、現場担当者がPWA/スマホカメラでQRをスキャンして実地報告。</p>
+                    <ul>
+                        <li><b>明確な状態区分報告:</b> スキャン時に状態を<b>【正常】【要修理】【破損・故障】【紛失】</b>の4区分から選択。写真・コメントを添付可能。</li>
+                        <li><b>オフライン同期:</b> 電波の届かない地下倉庫や現場でもローカルストレージに保持し、通信復帰時に一括同期。差異（理論在庫とのズレ）を自動計算。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. データモデル・API仕様 -->
+        <h3 class="fw-bold border-bottom pb-2 mb-3 mt-5">4. データモデル・API仕様</h3>
+
+        <!-- 4.1 L3マスター & 資産テーブル構造 -->
+        <section id="sec-4-1" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-dark me-2">Data 01</span> 4.1 L3 Ledger ＆ 資産管理データベース構造</div>
+                <div class="card-body">
+                    <p>L3購買取引データおよび親子バインド資産構造を持つコアテーブル設計（PostgreSQL）。</p>
+                    <pre><code>-- 1. L3購買・支出取引トランザクション
+CREATE TABLE l3_transaction_ledger (
+    transaction_id       UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    applicant_user_id    VARCHAR(64) NOT NULL,
+    department_code      VARCHAR(32) NOT NULL,
+    approver_chain_json  JSONB NOT NULL,
+    sku_code             VARCHAR(128),
+    item_name            TEXT NOT NULL,
+    unit_price           NUMERIC(12, 2) NOT NULL,
+    quantity             INT NOT NULL DEFAULT 1,
+    tax_rate_type        VARCHAR(16) CHECK (tax_rate_type IN ('STANDARD_10', 'REDUCED_8', 'EXEMPT')),
+    requested_at         TIMESTAMP WITH TIME ZONE NOT NULL,
+    approved_at          TIMESTAMP WITH TIME ZONE,
+    ordered_at           TIMESTAMP WITH TIME ZONE,
+    inspected_at         TIMESTAMP WITH TIME ZONE,
+    channel_code         VARCHAR(64) NOT NULL,
+    supplier_id          VARCHAR(64),
+    account_title_code   VARCHAR(32) NOT NULL,
+    project_code         VARCHAR(64),
+    purpose_statement    TEXT NOT NULL,
+    payment_type         VARCHAR(16) CHECK (payment_type IN ('CORPORATE_INVOICE', 'PERSONAL_REIMBURSEMENT')),
+    anomaly_flag         BOOLEAN DEFAULT FALSE,
+    duplicate_flag       BOOLEAN DEFAULT FALSE,
+    created_at           TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. 統合資産台帳（個体・数量・親子セット品構造）
+CREATE TABLE asset_items (
+    asset_id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    asset_code           VARCHAR(64) UNIQUE NOT NULL, -- AST-XXXX
+    parent_asset_id      UUID REFERENCES asset_items(asset_id), -- 親子セット品バインド
+    transaction_id       UUID REFERENCES l3_transaction_ledger(transaction_id),
+    asset_type           VARCHAR(16) CHECK (asset_type IN ('FIXED_INDIVIDUAL', 'CONSUMABLE_QUANTITY')),
+    asset_name           VARCHAR(255) NOT NULL,
+    serial_number        VARCHAR(128),
+    stock_quantity       INT DEFAULT 1, -- 消耗品用数量
+    min_stock_threshold  INT DEFAULT 0, -- 自動補充閾値
+    status               VARCHAR(32) CHECK (status IN ('NORMAL', 'IN_USE', 'REPAIR_NEEDED', 'BROKEN', 'LOST')),
+    attached_files_json  JSONB, -- 取扱説明書(PDF)、保証書(画像)等
+    created_at           TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4.2 API連携フロー -->
+        <section id="sec-4-2" class="section-anchor">
+            <div class="card">
+                <div class="card-header"><span class="badge bg-dark me-2">Data 02</span> 4.2 外部システム連携シーケンス (cXML / REST API)</div>
+                <div class="card-body">
+                    <p>フロントWFから1approvalを経由し、EC発注および会計/経費システムへL3データが伝播するシーケンス。</p>
+                    <pre><code>[Front WF]               [1approval Core Hub]             [EC/Supplier]            [Accounting/Expense]
+    │                          │                              │                         │
+    │ 1. 承認完了 (Webhook)     │                              │                         │
+    ├─────────────────────────►│                              │                         │
+    │                          │ 2. L3データ正規化 ＆          │                         │
+    │                          │    予算チェック・重複診断    │                         │
+    │                          │                              │                         │
+    │                          │ 3. Punchout / cXML OrderReq  │                         │
+    │                          ├─────────────────────────────►│                         │
+    │                          │◄─────────────────────────────┤                         │
+    │                          │ 4. OrderResponse (注文確定)   │                         │
+    │                          │                              │                         │
+    │                          │ 5. L3 Ledger 保存 ＆          │                         │
+    │                          │    決済タイプ判別             │                         │
+    │                          │  ┌─────────────────────────┐ │                         │
+    │                          │  │ 法人請求 or 個人立替    │ │                         │
+    │                          │  └────────────┬────────────┘ │                         │
+    │                          │               │              │                         │
+    │                          │               └──────────────┼────────────────────────►│
+    │                          │                              │ 6. 自動仕訳/経費明細送信│
+    │                          │                              │    (Peppol/REST API)    │
+    │                          │                              │                         │</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- フッター -->
+        <footer class="text-center text-muted py-4 border-top mt-5">
+            <small>&copy; 2026 One Approval Platform Architecture Group. Built for GitHub Pages.</small>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
