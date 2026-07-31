@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" class="h-full bg-slate-900">
+<html lang="ja" class="h-full bg-slate-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,18 +13,23 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            900: '#1e3a8a',
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316', // メインアクセント（オレンジ）
+                            600: '#ea580c', // 濃いオレンジ
+                            700: '#c2410c',
+                            900: '#7c2d12',
                         },
-                        dark: {
-                            bg: '#0B0F17',
-                            card: '#151C28',
-                            border: '#232D3F',
-                            text: '#94A3B8'
+                        surface: {
+                            bg: '#f8fafc',
+                            card: '#ffffff',
+                            sub: '#f1f5f9',
+                            border: '#e2e8f0',
+                            text: '#475569',
+                            title: '#0f172a'
                         }
                     },
                     fontFamily: {
@@ -44,223 +49,223 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .node-connector {
-            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            background: linear-gradient(90deg, #f97316 0%, #a855f7 100%);
             height: 2px;
         }
         .glow-effect {
-            box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.25);
+            box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.12);
         }
-        .glow-purple {
-            box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.25);
+        .glow-orange {
+            box-shadow: 0 4px 20px -2px rgba(249, 115, 22, 0.2);
         }
     </style>
 </head>
-<body class="h-full bg-dark-bg text-slate-100 flex overflow-hidden select-none">
+<body class="h-full bg-slate-50 text-slate-800 flex overflow-hidden select-none">
 
     <!-- サイドバー -->
-    <aside class="w-64 bg-dark-card border-r border-dark-border flex flex-col justify-between shrink-0 z-20">
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 z-20 shadow-sm">
         <div>
             <!-- ブランドロゴ ＆ サービスステータス -->
-            <div class="p-4 border-b border-dark-border flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-purple-600 flex items-center justify-center text-white font-black shadow-lg shadow-brand-600/30">
+            <div class="p-4 border-b border-slate-100 flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-500 to-amber-500 flex items-center justify-center text-white font-black shadow-md shadow-brand-500/20">
                     <i class="fa-solid fa-cpu text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="text-white font-bold text-base tracking-wide flex items-center space-x-1.5">
+                    <h1 class="text-slate-900 font-bold text-base tracking-wide flex items-center space-x-1.5">
                         <span>1approval</span>
-                        <span class="text-[9px] bg-brand-500/20 text-brand-400 border border-brand-500/30 px-1.5 py-0.2 rounded font-mono">v3.5</span>
+                        <span class="text-[9px] bg-brand-50 text-brand-600 border border-brand-200 px-1.5 py-0.2 rounded font-mono font-bold">v3.5</span>
                     </h1>
                     <p class="text-[10px] text-slate-400 font-medium">Procure-to-Pay & Asset Hub</p>
                 </div>
             </div>
 
             <!-- 操作コンテキスト (テナント ＆ ロール) -->
-            <div class="m-3 p-2.5 rounded-lg bg-slate-900/80 border border-dark-border text-xs">
+            <div class="m-3 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
                 <div class="flex items-center justify-between text-[11px] mb-1">
-                    <span class="text-slate-400">接続先企業</span>
-                    <span class="text-emerald-400 font-mono text-[10px]"><i class="fa-solid fa-circle text-[6px] mr-1 animate-pulse"></i>Active</span>
+                    <span class="text-slate-500">接続先企業</span>
+                    <span class="text-emerald-600 font-mono text-[10px] font-semibold"><i class="fa-solid fa-circle text-[6px] mr-1 animate-pulse"></i>Active</span>
                 </div>
-                <div class="font-bold text-slate-200 truncate">株式会社アクアテック (製造・東京)</div>
-                <div class="text-[10px] text-slate-400 mt-0.5 flex items-center justify-between">
+                <div class="font-bold text-slate-800 truncate">株式会社アクアテック (製造・東京)</div>
+                <div class="text-[10px] text-slate-500 mt-0.5 flex items-center justify-between">
                     <span>アカウント: 伏見 統括CIO</span>
-                    <span class="text-brand-400 font-semibold">全権限</span>
+                    <span class="text-brand-600 font-bold">全権限</span>
                 </div>
             </div>
 
             <!-- メインメニュー (10大機能群切替) -->
             <nav class="px-2 space-y-1 text-xs">
-                <div class="px-3 py-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">層 1: 統制 ＆ 可視化</div>
-                <button onclick="switchScreen('dashboard')" id="nav-dashboard" class="nav-item active w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
+                <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">層 1: 統制 ＆ 可視化</div>
+                <button onclick="switchScreen('dashboard')" id="nav-dashboard" class="nav-item active w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
                     <i class="fa-solid fa-chart-pie w-4 text-brand-500"></i>
                     <span class="font-semibold">5. 支出・予実ダッシュボード</span>
                 </button>
-                <button onclick="switchScreen('governance')" id="nav-governance" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
-                    <i class="fa-solid fa-shield-halved w-4 text-red-400"></i>
+                <button onclick="switchScreen('governance')" id="nav-governance" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-shield-halved w-4 text-rose-500"></i>
                     <span class="font-semibold">7. 不正・異常検知エンジン</span>
                 </button>
-                <button onclick="switchScreen('reports')" id="nav-reports" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
-                    <i class="fa-solid fa-chart-line w-4 text-emerald-400"></i>
+                <button onclick="switchScreen('reports')" id="nav-reports" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-chart-line w-4 text-emerald-600"></i>
                     <span class="font-semibold">8. 経営・出張・交際費BI</span>
                 </button>
 
-                <div class="px-3 py-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-3">層 2: 統合インテグレーション</div>
-                <button onclick="switchScreen('flowbuilder')" id="nav-flowbuilder" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
-                    <i class="fa-solid fa-diagram-project w-4 text-purple-400"></i>
+                <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-3">層 2: 統合インテグレーション</div>
+                <button onclick="switchScreen('flowbuilder')" id="nav-flowbuilder" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-diagram-project w-4 text-purple-500"></i>
                     <span class="font-semibold">1&2. Flowbuilder & 契約</span>
                 </button>
-                <button onclick="switchScreen('l3ledger')" id="nav-l3ledger" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
-                    <i class="fa-solid fa-database w-4 text-amber-400"></i>
+                <button onclick="switchScreen('l3ledger')" id="nav-l3ledger" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-database w-4 text-amber-500"></i>
                     <span class="font-semibold">4. L3 Ledger ＆ 仕訳ルーティング</span>
                 </button>
-                <button onclick="switchScreen('orgsync')" id="nav-orgsync" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
-                    <i class="fa-solid fa-users-gear w-4 text-sky-400"></i>
+                <button onclick="switchScreen('orgsync')" id="nav-orgsync" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-users-gear w-4 text-sky-500"></i>
                     <span class="font-semibold">3&6. 人事Sync ＆ 予算ブロック</span>
                 </button>
 
-                <div class="px-3 py-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-3">層 3: 現場・現物オペレーション</div>
-                <button onclick="switchScreen('assets')" id="nav-assets" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
-                    <i class="fa-solid fa-boxes-stacked w-4 text-indigo-400"></i>
+                <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-3">層 3: 現場・現物オペレーション</div>
+                <button onclick="switchScreen('assets')" id="nav-assets" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-boxes-stacked w-4 text-indigo-500"></i>
                     <span class="font-semibold">9. 資産＋MDM IT台帳</span>
                 </button>
-                <button onclick="switchScreen('fieldops')" id="nav-fieldops" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
-                    <i class="fa-solid fa-qrcode w-4 text-teal-400"></i>
+                <button onclick="switchScreen('fieldops')" id="nav-fieldops" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-qrcode w-4 text-teal-600"></i>
                     <span class="font-semibold">10. カレンダー貸出 ＆ スマホ棚卸</span>
                 </button>
 
-                <div class="px-3 py-1.5 text-[10px] font-bold text-purple-400 uppercase tracking-wider mt-3">層 4: 将来拡張構想 (メモ)</div>
-                <button onclick="switchScreen('rfp')" id="nav-rfp" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
-                    <i class="fa-solid fa-scale-balanced w-4 text-pink-400"></i>
+                <div class="px-3 py-1.5 text-[10px] font-bold text-brand-600 uppercase tracking-wider mt-3">層 4: 将来拡張構想 (メモ)</div>
+                <button onclick="switchScreen('rfp')" id="nav-rfp" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-scale-balanced w-4 text-pink-500"></i>
                     <span class="font-semibold">メモ3. RFP・相見積比較ボード</span>
                 </button>
             </nav>
         </div>
 
         <!-- フッター情報 -->
-        <div class="p-3 border-t border-dark-border text-[11px] text-slate-400 space-y-1">
+        <div class="p-3 border-t border-slate-200 text-[11px] text-slate-500 space-y-1 bg-slate-50">
             <div class="flex justify-between items-center">
                 <span>Peppol Network:</span>
-                <span class="text-emerald-400 font-mono font-bold">READY</span>
+                <span class="text-emerald-600 font-mono font-bold">READY</span>
             </div>
             <div class="flex justify-between items-center">
                 <span>AI Agent Engine:</span>
-                <span class="text-purple-400 font-mono font-bold">ONLINE</span>
+                <span class="text-brand-600 font-mono font-bold">ONLINE</span>
             </div>
         </div>
     </aside>
 
     <!-- メインコンテンツ表示領域 -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-dark-bg">
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
         <!-- ヘッダー -->
-        <header class="bg-dark-card border-b border-dark-border h-14 px-6 flex items-center justify-between shrink-0 z-10">
+        <header class="bg-white border-b border-slate-200 h-14 px-6 flex items-center justify-between shrink-0 z-10 shadow-sm">
             <div class="flex items-center space-x-3">
-                <h2 id="screen-title" class="text-sm font-bold text-white flex items-center space-x-2">
+                <h2 id="screen-title" class="text-sm font-bold text-slate-900 flex items-center space-x-2">
                     <i class="fa-solid fa-chart-pie text-brand-500"></i>
                     <span>5. 統合支出・購買・予実ダッシュボード</span>
                 </h2>
-                <span id="screen-badge" class="bg-brand-500/10 text-brand-400 text-[10px] px-2 py-0.5 rounded border border-brand-500/20 font-medium">
+                <span id="screen-badge" class="bg-brand-50 text-brand-600 text-[10px] px-2 py-0.5 rounded border border-brand-200 font-medium">
                     全チャネル統合集計中
                 </span>
             </div>
 
             <!-- アクションヘッダーバー -->
             <div class="flex items-center space-x-3 text-xs">
-                <button onclick="triggerAiAgent()" class="px-3 py-1.5 bg-gradient-to-r from-purple-600 to-brand-600 hover:from-purple-500 hover:to-brand-500 text-white font-bold rounded-lg flex items-center space-x-1.5 shadow-lg shadow-purple-900/30 transition">
+                <button onclick="triggerAiAgent()" class="px-3.5 py-1.5 bg-gradient-to-r from-brand-500 to-amber-500 hover:from-brand-600 hover:to-amber-600 text-white font-bold rounded-lg flex items-center space-x-1.5 shadow-sm transition glow-orange">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
                     <span>AI Agent コスト削減分析を実行</span>
                 </button>
-                <div class="h-4 w-[1px] bg-dark-border"></div>
-                <div class="font-mono text-slate-400 text-[11px]">
-                    <i class="fa-regular fa-clock mr-1"></i>2026/07/31 (Fri)
+                <div class="h-4 w-[1px] bg-slate-200"></div>
+                <div class="font-mono text-slate-500 text-[11px]">
+                    <i class="fa-regular fa-clock mr-1 text-slate-400"></i>2026/07/31 (Fri)
                 </div>
             </div>
         </header>
 
         <!-- メイン画面動的コンテナ -->
-        <main class="flex-1 overflow-y-auto p-6 space-y-6 text-xs text-slate-300">
+        <main class="flex-1 overflow-y-auto p-6 space-y-6 text-xs text-slate-600">
 
             <!-- SCREEN 1: 5. 統合支出・予実ダッシュボード -->
             <div id="screen-dashboard" class="screen-content space-y-6">
                 <!-- KPIカード群 -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="bg-dark-card p-4 rounded-xl border border-dark-border glow-effect relative overflow-hidden">
-                        <div class="text-slate-400 font-medium mb-1">今月総支出額 (L3集計)</div>
-                        <div class="text-2xl font-bold text-white font-mono">¥ 14,850,200</div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="text-slate-500 font-medium mb-1">今月総支出額 (L3集計)</div>
+                        <div class="text-2xl font-bold text-slate-900 font-mono">¥ 14,850,200</div>
                         <div class="mt-2 flex justify-between items-center text-[10px]">
-                            <span class="text-emerald-400 font-bold"><i class="fa-solid fa-arrow-down mr-1"></i>前月比 -4.2% 削減</span>
-                            <span class="text-slate-500">予算内可動率: 88%</span>
+                            <span class="text-emerald-600 font-bold"><i class="fa-solid fa-arrow-down mr-1"></i>前月比 -4.2% 削減</span>
+                            <span class="text-slate-400">予算内可動率: 88%</span>
                         </div>
                     </div>
-                    <div class="bg-dark-card p-4 rounded-xl border border-dark-border relative overflow-hidden">
-                        <div class="text-slate-400 font-medium mb-1">自動会計処理率 (AP/精算)</div>
-                        <div class="text-2xl font-bold text-brand-400 font-mono">96.4 %</div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="text-slate-500 font-medium mb-1">自動会計処理率 (AP/精算)</div>
+                        <div class="text-2xl font-bold text-brand-600 font-mono">96.4 %</div>
                         <div class="mt-2 flex justify-between items-center text-[10px]">
-                            <span class="text-slate-400">法人請求: 128件 / 立替: 42件</span>
-                            <span class="text-emerald-400 font-bold">完全手入力ゼロ</span>
+                            <span class="text-slate-500">法人請求: 128件 / 立替: 42件</span>
+                            <span class="text-emerald-600 font-bold">完全手入力ゼロ</span>
                         </div>
                     </div>
-                    <div class="bg-dark-card p-4 rounded-xl border border-dark-border relative overflow-hidden">
-                        <div class="text-slate-400 font-medium mb-1">検知された異常・重複疑い</div>
-                        <div class="text-2xl font-bold text-red-400 font-mono">3 <span class="text-xs font-normal text-slate-400">件</span></div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="text-slate-500 font-medium mb-1">検知された異常・重複疑い</div>
+                        <div class="text-2xl font-bold text-rose-600 font-mono">3 <span class="text-xs font-normal text-slate-400">件</span></div>
                         <div class="mt-2 flex justify-between items-center text-[10px]">
-                            <span class="text-red-400 font-bold">推定削減インパクト: ¥450,000</span>
-                            <button onclick="switchScreen('governance')" class="text-brand-400 hover:underline">確認 ▶</button>
+                            <span class="text-rose-600 font-bold">推定削減インパクト: ¥450,000</span>
+                            <button onclick="switchScreen('governance')" class="text-brand-600 font-bold hover:underline">確認 ▶</button>
                         </div>
                     </div>
-                    <div class="bg-dark-card p-4 rounded-xl border border-dark-border relative overflow-hidden">
-                        <div class="text-slate-400 font-medium mb-1">契約・校正アラート</div>
-                        <div class="text-2xl font-bold text-amber-400 font-mono">2 <span class="text-xs font-normal text-slate-400">件</span></div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="text-slate-500 font-medium mb-1">契約・校正アラート</div>
+                        <div class="text-2xl font-bold text-amber-600 font-mono">2 <span class="text-xs font-normal text-slate-400">件</span></div>
                         <div class="mt-2 flex justify-between items-center text-[10px]">
-                            <span class="text-amber-400">PCリース満了 28日前</span>
-                            <button onclick="switchScreen('assets')" class="text-brand-400 hover:underline">管理台帳 ▶</button>
+                            <span class="text-amber-600 font-medium">PCリース満了 28日前</span>
+                            <button onclick="switchScreen('assets')" class="text-brand-600 font-bold hover:underline">管理台帳 ▶</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- チャネル別 購買 ＆ 予実進捗グラフモック -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="md:col-span-2 bg-dark-card p-5 rounded-xl border border-dark-border space-y-4">
-                        <div class="flex justify-between items-center border-b border-dark-border pb-3">
-                            <h3 class="font-bold text-white text-sm flex items-center">
+                    <div class="md:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm flex items-center">
                                 <i class="fa-solid fa-chart-column text-brand-500 mr-2"></i>
                                 チャネル別 購買・支出実績 vs 予算消化率
                             </h3>
                             <span class="text-[11px] text-slate-400">2026年 7月度実績</span>
                         </div>
-                        <div class="space-y-3">
+                        <div class="space-y-3.5">
                             <div>
                                 <div class="flex justify-between text-[11px] mb-1 font-medium">
-                                    <span>モノタロウ (間接資材・工具)</span>
-                                    <span class="font-mono text-slate-300">¥ 4,200,000 / 予算 ¥ 5,000,000 (84%)</span>
+                                    <span class="text-slate-700">モノタロウ (間接資材・工具)</span>
+                                    <span class="font-mono text-slate-600">¥ 4,200,000 / 予算 ¥ 5,000,000 (84%)</span>
                                 </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                                     <div class="bg-brand-500 h-2.5 rounded-full" style="width: 84%"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex justify-between text-[11px] mb-1 font-medium">
-                                    <span>Amazon Business (オフィス・消耗品)</span>
-                                    <span class="font-mono text-slate-300">¥ 1,850,000 / 予算 ¥ 2,000,000 (92.5%)</span>
+                                    <span class="text-slate-700">Amazon Business (オフィス・消耗品)</span>
+                                    <span class="font-mono text-slate-600">¥ 1,850,000 / 予算 ¥ 2,000,000 (92.5%)</span>
                                 </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                                     <div class="bg-amber-500 h-2.5 rounded-full" style="width: 92.5%"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex justify-between text-[11px] mb-1 font-medium">
-                                    <span>団タメ ＆ エイチ (会食・会議室手配)</span>
-                                    <span class="font-mono text-slate-300">¥ 3,100,000 / 予算 ¥ 3,000,000 (103.3%)</span>
+                                    <span class="text-slate-700">団タメ ＆ エイチ (会食・会議室手配)</span>
+                                    <span class="font-mono text-slate-600">¥ 3,100,000 / 予算 ¥ 3,000,000 (103.3%)</span>
                                 </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-red-500 h-2.5 rounded-full" style="width: 100%"></div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-rose-500 h-2.5 rounded-full" style="width: 100%"></div>
                                 </div>
-                                <p class="text-[10px] text-red-400 mt-0.5"><i class="fa-solid fa-triangle-exclamation mr-1"></i>注意: 会食予算オーバー傾向。自動承認ロック発火検討エリア</p>
+                                <p class="text-[10px] text-rose-600 mt-1 font-medium"><i class="fa-solid fa-triangle-exclamation mr-1"></i>注意: 会食予算オーバー傾向。自動承認ロック発火検討エリア</p>
                             </div>
                             <div>
                                 <div class="flex justify-between text-[11px] mb-1 font-medium">
-                                    <span>現地立替経費 (タクシー・出張・小口)</span>
-                                    <span class="font-mono text-slate-300">¥ 5,700,200 / 予算 ¥ 8,000,000 (71.2%)</span>
+                                    <span class="text-slate-700">現地立替経費 (タクシー・出張・小口)</span>
+                                    <span class="font-mono text-slate-600">¥ 5,700,200 / 予算 ¥ 8,000,000 (71.2%)</span>
                                 </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                                     <div class="bg-emerald-500 h-2.5 rounded-full" style="width: 71.2%"></div>
                                 </div>
                             </div>
@@ -268,27 +273,27 @@
                     </div>
 
                     <!-- リアルタイムアクティビティログ -->
-                    <div class="bg-dark-card p-5 rounded-xl border border-dark-border space-y-3">
-                        <h3 class="font-bold text-white text-sm border-b border-dark-border pb-3 flex items-center justify-between">
-                            <span><i class="fa-solid fa-bolt text-amber-400 mr-2"></i>リアルタイム中継ログ</span>
-                            <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">Live</span>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                        <h3 class="font-bold text-slate-900 text-sm border-b border-slate-100 pb-3 flex items-center justify-between">
+                            <span><i class="fa-solid fa-bolt text-brand-500 mr-2"></i>リアルタイム中継ログ</span>
+                            <span class="text-[10px] bg-brand-50 text-brand-600 border border-brand-200 px-2 py-0.5 rounded font-mono font-bold">Live</span>
                         </h3>
                         <div class="space-y-2.5 text-[11px] no-scrollbar overflow-y-auto max-h-[220px]">
-                            <div class="p-2 rounded bg-slate-900/60 border border-dark-border">
+                            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
                                 <div class="flex justify-between text-[10px] text-slate-400 mb-0.5">
-                                    <span class="font-mono">18:32:01</span>
-                                    <span class="text-brand-400 font-bold">MonotaRO cXML</span>
+                                    <span class="font-mono text-slate-500">18:32:01</span>
+                                    <span class="text-brand-600 font-bold">MonotaRO cXML</span>
                                 </div>
-                                <div class="text-slate-200 font-bold">PUR-20260731-088 (タフブック用ケース)</div>
-                                <div class="text-slate-400 text-[10px]">kintone WF承認 ➔ 自動確定発注完了 (¥18,400)</div>
+                                <div class="text-slate-800 font-bold">PUR-20260731-088 (タフブック用ケース)</div>
+                                <div class="text-slate-500 text-[10px]">kintone WF承認 ➔ 自動確定発注完了 (¥18,400)</div>
                             </div>
-                            <div class="p-2 rounded bg-slate-900/60 border border-dark-border">
+                            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
                                 <div class="flex justify-between text-[10px] text-slate-400 mb-0.5">
-                                    <span class="font-mono">17:10:45</span>
-                                    <span class="text-purple-400 font-bold">経費仕訳送出</span>
+                                    <span class="font-mono text-slate-500">17:10:45</span>
+                                    <span class="text-purple-600 font-bold">経費仕訳送出</span>
                                 </div>
-                                <div class="text-slate-200 font-bold">タクシー現地立替 (楽楽精算連携)</div>
-                                <div class="text-slate-400 text-[10px]">L3データより仕訳生成: 旅費交通費 (¥4,200)</div>
+                                <div class="text-slate-800 font-bold">タクシー現地立替 (楽楽精算連携)</div>
+                                <div class="text-slate-500 text-[10px]">L3データより仕訳生成: 旅費交通費 (¥4,200)</div>
                             </div>
                         </div>
                     </div>
@@ -297,49 +302,49 @@
 
             <!-- SCREEN 2: 1&2. ビジュアルフロービルダー (Flowbuilder) ＆ サプライヤー契約 -->
             <div id="screen-flowbuilder" class="screen-content hidden space-y-6">
-                <div class="bg-dark-card p-5 rounded-xl border border-dark-border space-y-4">
-                    <div class="flex justify-between items-center border-b border-dark-border pb-3">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                         <div>
-                            <h3 class="font-bold text-white text-sm">🔀 Flowbuilder (ノーコード統合接続 ＆ ルーティング設計)</h3>
-                            <p class="text-slate-400 text-[11px] mt-0.5">承認ワークフロー ➔ サプライヤーEC/サービス ➔ 会計/経費システムをドラッグ＆ドロップで自在に結線・スキーマ自動補完</p>
+                            <h3 class="font-bold text-slate-900 text-sm">🔀 Flowbuilder (ノーコード統合接続 ＆ ルーティング設計)</h3>
+                            <p class="text-slate-500 text-[11px] mt-0.5">承認ワークフロー ➔ サプライヤーEC/サービス ➔ 会計/経費システムをドラッグ＆ドロップで自在に結線・スキーマ自動補完</p>
                         </div>
-                        <button onclick="openSupplierContractModal()" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-lg transition shadow">
+                        <button onclick="openSupplierContractModal()" class="px-3.5 py-1.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-lg transition shadow-sm flex items-center space-x-1">
                             <i class="fa-solid fa-plus mr-1"></i>新規サプライヤー連携 ＆ 自動契約締結
                         </button>
                     </div>
 
                     <!-- フローキャンバス表現 (Visual Flow Canvas) -->
-                    <div class="bg-dark-bg p-6 rounded-xl border border-dark-border glow-purple relative overflow-hidden min-h-[320px] flex items-center justify-between space-x-4">
+                    <div class="bg-slate-100 p-6 rounded-xl border border-slate-200 relative overflow-hidden min-h-[320px] flex items-center justify-between space-x-4">
                         <!-- Node 1: Front WF -->
-                        <div class="w-64 bg-dark-card border border-brand-500/50 p-4 rounded-xl shadow-xl space-y-3 z-10">
-                            <div class="flex justify-between items-center border-b border-dark-border pb-2">
-                                <span class="text-[10px] font-bold text-brand-400 font-mono">1. 承認ワークフロー (IN)</span>
-                                <i class="fa-solid fa-check-circle text-emerald-400 text-xs"></i>
+                        <div class="w-64 bg-white border-2 border-brand-500 p-4 rounded-xl shadow-md space-y-3 z-10">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                <span class="text-[10px] font-bold text-brand-600 font-mono">1. 承認ワークフロー (IN)</span>
+                                <i class="fa-solid fa-circle-check text-emerald-500 text-xs"></i>
                             </div>
-                            <div class="font-bold text-white text-sm flex items-center space-x-2">
+                            <div class="font-bold text-slate-900 text-sm flex items-center space-x-2">
                                 <i class="fa-solid fa-cubes text-brand-500"></i>
                                 <span>kintone 購買申請</span>
                             </div>
-                            <p class="text-[10px] text-slate-400">Webhook発火: 承認ステータス変更イベント</p>
+                            <p class="text-[10px] text-slate-500">Webhook発火: 承認ステータス変更イベント</p>
                         </div>
 
                         <!-- Connector 1 -->
                         <div class="flex-1 flex flex-col items-center justify-center space-y-1">
-                            <span class="text-[10px] text-slate-400 font-mono">REST API (cXML Payload)</span>
+                            <span class="text-[10px] text-slate-500 font-mono font-medium">REST API (cXML Payload)</span>
                             <div class="w-full node-connector animate-pulse"></div>
                         </div>
 
                         <!-- Node 2: 1approval Engine & Supplier -->
-                        <div class="w-72 bg-dark-card border border-purple-500/50 p-4 rounded-xl shadow-xl space-y-3 z-10 glow-purple">
-                            <div class="flex justify-between items-center border-b border-dark-border pb-2">
-                                <span class="text-[10px] font-bold text-purple-400 font-mono">2. 1approval Core & EC</span>
-                                <span class="bg-purple-500/20 text-purple-300 text-[9px] px-1.5 py-0.2 rounded font-mono">契約締結済</span>
+                        <div class="w-72 bg-white border-2 border-purple-500 p-4 rounded-xl shadow-md space-y-3 z-10 glow-effect">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                <span class="text-[10px] font-bold text-purple-600 font-mono">2. 1approval Core & EC</span>
+                                <span class="bg-purple-50 text-purple-700 border border-purple-200 text-[9px] px-1.5 py-0.2 rounded font-mono font-bold">契約締結済</span>
                             </div>
-                            <div class="font-bold text-white text-sm flex items-center space-x-2">
-                                <i class="fa-solid fa-cart-flatbed text-purple-400"></i>
+                            <div class="font-bold text-slate-900 text-sm flex items-center space-x-2">
+                                <i class="fa-solid fa-cart-flatbed text-purple-600"></i>
                                 <span>モノタロウ / 団タメ 統合</span>
                             </div>
-                            <div class="text-[10px] text-slate-400 space-y-1 bg-slate-900/80 p-2 rounded border border-dark-border">
+                            <div class="text-[10px] text-slate-600 space-y-1 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
                                 <div>• スキーマ補完: 配送先マスタJava補完</div>
                                 <div>• L3データ正規化 (WHO/WHAT/WHEN/...)</div>
                             </div>
@@ -347,22 +352,22 @@
 
                         <!-- Connector 2 -->
                         <div class="flex-1 flex flex-col items-center justify-center space-y-1">
-                            <span class="text-[10px] text-slate-400 font-mono">自動決済判定</span>
+                            <span class="text-[10px] text-slate-500 font-mono font-medium">自動決済判定</span>
                             <div class="w-full node-connector animate-pulse"></div>
                         </div>
 
                         <!-- Node 3: 後続システム -->
-                        <div class="w-64 bg-dark-card border border-emerald-500/50 p-4 rounded-xl shadow-xl space-y-3 z-10">
-                            <div class="flex justify-between items-center border-b border-dark-border pb-2">
-                                <span class="text-[10px] font-bold text-emerald-400 font-mono">3. 会計 ＆ 精算 (OUT)</span>
-                                <i class="fa-solid fa-share-nodes text-emerald-400"></i>
+                        <div class="w-64 bg-white border-2 border-emerald-500 p-4 rounded-xl shadow-md space-y-3 z-10">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                <span class="text-[10px] font-bold text-emerald-600 font-mono">3. 会計 ＆ 精算 (OUT)</span>
+                                <i class="fa-solid fa-share-nodes text-emerald-500"></i>
                             </div>
                             <div class="space-y-1.5 text-[11px]">
-                                <div class="p-2 rounded bg-emerald-950/40 border border-emerald-800/40 text-emerald-200 font-semibold flex justify-between">
+                                <div class="p-2 rounded bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold flex justify-between">
                                     <span>法人請求 ➔ 勘定奉行</span>
                                     <span class="font-mono text-[10px]">AP自動仕訳</span>
                                 </div>
-                                <div class="p-2 rounded bg-amber-950/40 border border-amber-800/40 text-amber-200 font-semibold flex justify-between">
+                                <div class="p-2 rounded bg-amber-50 border border-amber-200 text-amber-800 font-semibold flex justify-between">
                                     <span>個人立替 ➔ 楽楽精算</span>
                                     <span class="font-mono text-[10px]">精算連携</span>
                                 </div>
@@ -372,37 +377,37 @@
 
                     <!-- アクティブ サプライヤー契約一覧 -->
                     <div class="pt-4">
-                        <h4 class="font-bold text-white mb-3">契約済み・接続有効なサプライヤー一覧</h4>
+                        <h4 class="font-bold text-slate-900 mb-3">契約済み・接続有効なサプライヤー一覧</h4>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-dark-bg p-3.5 rounded-xl border border-dark-border flex items-center justify-between">
+                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex items-center justify-between">
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold">Mon</div>
+                                    <div class="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center font-bold">Mon</div>
                                     <div>
-                                        <div class="font-bold text-white">MonotaRO (間接資材)</div>
-                                        <div class="text-[10px] text-slate-400">cXML Direct PunchOut | 契約完了</div>
+                                        <div class="font-bold text-slate-900">MonotaRO (間接資材)</div>
+                                        <div class="text-[10px] text-slate-500">cXML Direct PunchOut | 契約完了</div>
                                     </div>
                                 </div>
-                                <span class="text-emerald-400 font-mono font-bold text-xs">Active</span>
+                                <span class="text-emerald-600 font-mono font-bold text-xs">Active</span>
                             </div>
-                            <div class="bg-dark-bg p-3.5 rounded-xl border border-dark-border flex items-center justify-between">
+                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex items-center justify-between">
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center font-bold">団</div>
+                                    <div class="w-10 h-10 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center font-bold">団</div>
                                     <div>
-                                        <div class="font-bold text-white">団タメ (会食・宴会手配)</div>
-                                        <div class="text-[10px] text-slate-400">REST API | オンボーディング済</div>
+                                        <div class="font-bold text-slate-900">団タメ (会食・宴会手配)</div>
+                                        <div class="text-[10px] text-slate-500">REST API | オンボーディング済</div>
                                     </div>
                                 </div>
-                                <span class="text-emerald-400 font-mono font-bold text-xs">Active</span>
+                                <span class="text-emerald-600 font-mono font-bold text-xs">Active</span>
                             </div>
-                            <div class="bg-dark-bg p-3.5 rounded-xl border border-dark-border flex items-center justify-between">
+                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex items-center justify-between">
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold">H</div>
+                                    <div class="w-10 h-10 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center font-bold">H</div>
                                     <div>
-                                        <div class="font-bold text-white">エイチ (会議室予約)</div>
-                                        <div class="text-[10px] text-slate-400">Webhooks | 1approval標準約款</div>
+                                        <div class="font-bold text-slate-900">エイチ (会議室予約)</div>
+                                        <div class="text-[10px] text-slate-500">Webhooks | 1approval標準約款</div>
                                     </div>
                                 </div>
-                                <span class="text-emerald-400 font-mono font-bold text-xs">Active</span>
+                                <span class="text-emerald-600 font-mono font-bold text-xs">Active</span>
                             </div>
                         </div>
                     </div>
@@ -411,96 +416,96 @@
 
             <!-- SCREEN 3: 4. L3データ蓄積 ＆ 会計仕訳自動ルーティング -->
             <div id="screen-l3ledger" class="screen-content hidden space-y-6">
-                <div class="bg-dark-card p-5 rounded-xl border border-dark-border space-y-4">
-                    <div class="border-b border-dark-border pb-3 flex justify-between items-center">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
                         <div>
-                            <h3 class="font-bold text-white text-sm">📑 L3 Ledger Data Warehouse (デジタルインボイス・Peppol基盤)</h3>
-                            <p class="text-slate-400 text-[11px]">全チャネルの購買取引をWHO/WHAT/WHEN/WHERE/WHY要素に正規化保存し、自動仕訳を生成</p>
+                            <h3 class="font-bold text-slate-900 text-sm">📑 L3 Ledger Data Warehouse (デジタルインボイス・Peppol基盤)</h3>
+                            <p class="text-slate-500 text-[11px]">全チャネルの購買取引をWHO/WHAT/WHEN/WHERE/WHY要素に正規化保存し、自動仕訳を生成</p>
                         </div>
-                        <button onclick="exportL3Csv()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-dark-border font-semibold rounded-lg text-xs">
-                            <i class="fa-solid fa-file-csv mr-1 text-emerald-400"></i>L3 Raw Data CSV出力
+                        <button onclick="exportL3Csv()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-semibold rounded-lg text-xs transition">
+                            <i class="fa-solid fa-file-csv mr-1 text-emerald-600"></i>L3 Raw Data CSV出力
                         </button>
                     </div>
 
                     <!-- 検索・フィルターバー -->
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3 bg-dark-bg p-3 rounded-lg border border-dark-border">
-                        <input type="text" placeholder="WHO (申請者/部署)..." class="bg-dark-card border border-dark-border rounded p-1.5 text-xs text-white">
-                        <input type="text" placeholder="WHAT (SKU/品名)..." class="bg-dark-card border border-dark-border rounded p-1.5 text-xs text-white">
-                        <select class="bg-dark-card border border-dark-border rounded p-1.5 text-xs text-slate-300">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <input type="text" placeholder="WHO (申請者/部署)..." class="bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-800 focus:outline-none focus:border-brand-500">
+                        <input type="text" placeholder="WHAT (SKU/品名)..." class="bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-800 focus:outline-none focus:border-brand-500">
+                        <select class="bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-700 focus:outline-none focus:border-brand-500">
                             <option value="">WHERE (全チャネル)</option>
                             <option value="monotaro">MonotaRO</option>
                             <option value="dantame">団タメ</option>
                             <option value="local">現地立替経費</option>
                         </select>
-                        <select class="bg-dark-card border border-dark-border rounded p-1.5 text-xs text-slate-300">
+                        <select class="bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-700 focus:outline-none focus:border-brand-500">
                             <option value="">決済種別 (すべて)</option>
                             <option value="invoice">法人請求 (AP仕訳)</option>
                             <option value="expense">個人立替 (精算)</option>
                         </select>
-                        <button class="bg-brand-600 hover:bg-brand-500 text-white font-bold rounded p-1.5 transition">検索実行</button>
+                        <button class="bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-lg p-2 transition shadow-sm">検索実行</button>
                     </div>
 
                     <!-- L3テーブル -->
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
                         <table class="w-full text-left border-collapse">
-                            <thead class="bg-slate-900 text-slate-400 border-b border-dark-border text-[11px] font-mono">
+                            <thead class="bg-slate-100 text-slate-600 border-b border-slate-200 text-[11px] font-mono">
                                 <tr>
-                                    <th class="p-2.5">WHO (申請者/部署)</th>
-                                    <th class="p-2.5">WHAT (品名/SKU/金額)</th>
-                                    <th class="p-2.5">WHEN (日時)</th>
-                                    <th class="p-2.5">WHERE (チャネル)</th>
-                                    <th class="p-2.5">WHY (勘定/目的)</th>
-                                    <th class="p-2.5">決済ルーティング</th>
-                                    <th class="p-2.5 text-right">操作</th>
+                                    <th class="p-3">WHO (申請者/部署)</th>
+                                    <th class="p-3">WHAT (品名/SKU/金額)</th>
+                                    <th class="p-3">WHEN (日時)</th>
+                                    <th class="p-3">WHERE (チャネル)</th>
+                                    <th class="p-3">WHY (勘定/目的)</th>
+                                    <th class="p-3">決済ルーティング</th>
+                                    <th class="p-3 text-right">操作</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-dark-border font-sans text-[11px] text-slate-300">
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="p-2.5">
-                                        <div class="font-bold text-white">佐藤 健太</div>
-                                        <div class="text-[10px] text-slate-500">第一工場 / 製造課</div>
+                            <tbody class="divide-y divide-slate-100 font-sans text-[11px] text-slate-700">
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="p-3">
+                                        <div class="font-bold text-slate-900">佐藤 健太</div>
+                                        <div class="text-[10px] text-slate-400">第一工場 / 製造課</div>
                                     </td>
-                                    <td class="p-2.5">
-                                        <div class="font-bold text-slate-200">デジタル粘度計 SK-2</div>
-                                        <div class="font-mono text-[10px] text-brand-400">¥ 185,000 (10%対象)</div>
+                                    <td class="p-3">
+                                        <div class="font-bold text-slate-800">デジタル粘度計 SK-2</div>
+                                        <div class="font-mono text-[10px] text-brand-600 font-bold">¥ 185,000 (10%対象)</div>
                                     </td>
-                                    <td class="p-2.5 font-mono text-[10px] text-slate-400">2026/07/31 10:14</td>
-                                    <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 font-semibold">MonotaRO</span></td>
-                                    <td class="p-2.5">
-                                        <div class="font-bold text-slate-300">工具器具備品</div>
-                                        <div class="text-[10px] text-slate-500">粘度測定検査用</div>
+                                    <td class="p-3 font-mono text-[10px] text-slate-500">2026/07/31 10:14</td>
+                                    <td class="p-3"><span class="px-2 py-0.5 rounded bg-orange-100 text-orange-700 font-semibold border border-orange-200">MonotaRO</span></td>
+                                    <td class="p-3">
+                                        <div class="font-bold text-slate-700">工具器具備品</div>
+                                        <div class="text-[10px] text-slate-400">粘度測定検査用</div>
                                     </td>
-                                    <td class="p-2.5">
-                                        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
+                                    <td class="p-3">
+                                        <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
                                             法人請求 ➔ 勘定奉行
                                         </span>
                                     </td>
-                                    <td class="p-2.5 text-right">
-                                        <button onclick="viewL3Detail('L3-90021')" class="text-brand-400 hover:underline font-semibold">JSON詳細</button>
+                                    <td class="p-3 text-right">
+                                        <button onclick="viewL3Detail('L3-90021')" class="text-brand-600 hover:text-brand-700 font-bold">JSON詳細</button>
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-slate-800/40">
-                                    <td class="p-2.5">
-                                        <div class="font-bold text-white">鈴木 一朗</div>
-                                        <div class="text-[10px] text-slate-500">営業本部 / 第一課</div>
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="p-3">
+                                        <div class="font-bold text-slate-900">鈴木 一朗</div>
+                                        <div class="text-[10px] text-slate-400">営業本部 / 第一課</div>
                                     </td>
-                                    <td class="p-2.5">
-                                        <div class="font-bold text-slate-200">プロジェクト打ち上げ会食</div>
-                                        <div class="font-mono text-[10px] text-brand-400">¥ 48,000 (10%対象)</div>
+                                    <td class="p-3">
+                                        <div class="font-bold text-slate-800">プロジェクト打ち上げ会食</div>
+                                        <div class="font-mono text-[10px] text-brand-600 font-bold">¥ 48,000 (10%対象)</div>
                                     </td>
-                                    <td class="p-2.5 font-mono text-[10px] text-slate-400">2026/07/30 20:30</td>
-                                    <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-pink-500/20 text-pink-400 font-semibold">団タメ</span></td>
-                                    <td class="p-2.5">
-                                        <div class="font-bold text-slate-300">交際費</div>
-                                        <div class="text-[10px] text-slate-500">顧客役員接待</div>
+                                    <td class="p-3 font-mono text-[10px] text-slate-500">2026/07/30 20:30</td>
+                                    <td class="p-3"><span class="px-2 py-0.5 rounded bg-pink-100 text-pink-700 font-semibold border border-pink-200">団タメ</span></td>
+                                    <td class="p-3">
+                                        <div class="font-bold text-slate-700">交際費</div>
+                                        <div class="text-[10px] text-slate-400">顧客役員接待</div>
                                     </td>
-                                    <td class="p-2.5">
-                                        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30">
+                                    <td class="p-3">
+                                        <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-bold border border-amber-200">
                                             個人立替 ➔ 楽楽精算
                                         </span>
                                     </td>
-                                    <td class="p-2.5 text-right">
-                                        <button onclick="viewL3Detail('L3-90022')" class="text-brand-400 hover:underline font-semibold">JSON詳細</button>
+                                    <td class="p-3 text-right">
+                                        <button onclick="viewL3Detail('L3-90022')" class="text-brand-600 hover:text-brand-700 font-bold">JSON詳細</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -511,15 +516,15 @@
 
             <!-- SCREEN 4: 9. 統合資産 ＋ MDM・IT資産台帳 ＆ 契約期限アラート -->
             <div id="screen-assets" class="screen-content hidden space-y-6">
-                <div class="bg-dark-card p-5 rounded-xl border border-dark-border space-y-4">
-                    <div class="flex justify-between items-center border-b border-dark-border pb-3">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                         <div>
-                            <h3 class="font-bold text-white text-sm">📦 統合資産 ＆ MDM IT端末台帳</h3>
-                            <p class="text-slate-400 text-[11px]">L3購買データから自動生成された資産。個体管理・数量管理・親子バインド・Intune MDM同期</p>
+                            <h3 class="font-bold text-slate-900 text-sm">📦 統合資産 ＆ MDM IT端末台帳</h3>
+                            <p class="text-slate-500 text-[11px]">L3購買データから自動生成された資産。個体管理・数量管理・親子バインド・Intune MDM同期</p>
                         </div>
                         <div class="flex space-x-2">
-                            <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 font-bold text-xs">
-                                <i class="fa-solid fa-triangle-exclamation mr-1"></i>リース満了間近: 2件
+                            <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 font-bold text-xs">
+                                <i class="fa-solid fa-triangle-exclamation mr-1 text-amber-500"></i>リース満了間近: 2件
                             </span>
                         </div>
                     </div>
@@ -527,75 +532,75 @@
                     <!-- 資産カード一覧 -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <!-- Card 1: IT Asset + MDM -->
-                        <div class="bg-dark-bg rounded-xl border border-dark-border p-4 space-y-3 glow-purple">
+                        <div class="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-3">
                             <div class="flex justify-between items-start">
-                                <span class="font-mono text-[10px] text-brand-400 font-bold">AST-2026-001</span>
+                                <span class="font-mono text-[10px] text-brand-600 font-bold">AST-2026-001</span>
                                 <div class="space-x-1">
-                                    <span class="px-1.5 py-0.5 bg-blue-500/20 text-blue-400 rounded text-[9px] font-bold">固定資産</span>
-                                    <span class="px-1.5 py-0.5 bg-purple-500/20 text-purple-300 rounded text-[9px] font-bold">MDM同期済</span>
+                                    <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-[9px] font-bold">固定資産</span>
+                                    <span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-[9px] font-bold">MDM同期済</span>
                                 </div>
                             </div>
                             <div class="flex space-x-3 items-center">
-                                <div class="w-14 h-14 bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 text-xl font-bold shrink-0">
-                                    <i class="fa-solid fa-laptop text-brand-400"></i>
+                                <div class="w-12 h-12 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-600 text-xl font-bold shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-laptop text-brand-500"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-white text-xs">Panasonic タフブック FZ-G2</h4>
-                                    <p class="text-[10px] text-slate-400 mt-0.5">使用者: 佐藤 健太 (製造第一課)</p>
+                                    <h4 class="font-bold text-slate-900 text-xs">Panasonic タフブック FZ-G2</h4>
+                                    <p class="text-[10px] text-slate-500 mt-0.5">使用者: 佐藤 健太 (製造第一課)</p>
                                 </div>
                             </div>
-                            <div class="p-2.5 rounded bg-slate-900 border border-dark-border space-y-1 text-[10px]">
+                            <div class="p-2.5 rounded-lg bg-white border border-slate-200 space-y-1 text-[10px]">
                                 <div class="flex justify-between">
-                                    <span class="text-slate-500">スペック:</span>
-                                    <span class="text-slate-300 font-mono">Core i5 / 16GB / 256GB</span>
+                                    <span class="text-slate-400">スペック:</span>
+                                    <span class="text-slate-700 font-mono">Core i5 / 16GB / 256GB</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-slate-500">リース満了日:</span>
-                                    <span class="text-amber-400 font-bold font-mono">2026/08/28 (残28日)</span>
+                                    <span class="text-slate-400">リース満了日:</span>
+                                    <span class="text-amber-600 font-bold font-mono">2026/08/28 (残28日)</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-slate-500">親子バインド:</span>
-                                    <span class="text-purple-300">FZ-G2用防塵ケース (AST-001-B)</span>
+                                    <span class="text-slate-400">親子バインド:</span>
+                                    <span class="text-purple-700 font-medium">FZ-G2用防塵ケース (AST-001-B)</span>
                                 </div>
                             </div>
-                            <div class="pt-2 border-t border-dark-border flex justify-between items-center text-[10px]">
-                                <button onclick="openQrLabelModal('AST-2026-001')" class="text-brand-400 hover:underline font-bold">
+                            <div class="pt-2 border-t border-slate-200 flex justify-between items-center text-[10px]">
+                                <button onclick="openQrLabelModal('AST-2026-001')" class="text-brand-600 hover:text-brand-700 font-bold">
                                     <i class="fa-solid fa-qrcode mr-1"></i>QR印字
                                 </button>
-                                <button onclick="remoteLockMdm('AST-2026-001')" class="text-red-400 hover:underline font-bold">
+                                <button onclick="remoteLockMdm('AST-2026-001')" class="text-rose-600 hover:text-rose-700 font-bold">
                                     遠隔ロック命令
                                 </button>
                             </div>
                         </div>
 
                         <!-- Card 2: Consumable Quantity -->
-                        <div class="bg-dark-bg rounded-xl border border-dark-border p-4 space-y-3">
+                        <div class="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-3">
                             <div class="flex justify-between items-start">
-                                <span class="font-mono text-[10px] text-amber-400 font-bold">CSM-2026-003</span>
-                                <span class="px-1.5 py-0.5 bg-amber-500/20 text-amber-400 rounded text-[9px] font-bold">消耗品 (数量)</span>
+                                <span class="font-mono text-[10px] text-amber-600 font-bold">CSM-2026-003</span>
+                                <span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded text-[9px] font-bold">消耗品 (数量)</span>
                             </div>
                             <div class="flex space-x-3 items-center">
-                                <div class="w-14 h-14 bg-slate-800 rounded-lg flex items-center justify-center text-amber-400 text-xl font-bold shrink-0">
+                                <div class="w-12 h-12 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-amber-500 text-xl font-bold shrink-0 shadow-sm">
                                     <i class="fa-solid fa-tape"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-white text-xs">3M 超強力両面テープ 19mm</h4>
-                                    <p class="text-[10px] text-slate-400 mt-0.5">保管: 本社工場 / 工具棚 B-3</p>
+                                    <h4 class="font-bold text-slate-900 text-xs">3M 超強力両面テープ 19mm</h4>
+                                    <p class="text-[10px] text-slate-500 mt-0.5">保管: 本社工場 / 工具棚 B-3</p>
                                 </div>
                             </div>
-                            <div class="p-2.5 rounded bg-slate-900 border border-dark-border space-y-1 text-[10px]">
+                            <div class="p-2.5 rounded-lg bg-white border border-slate-200 space-y-1 text-[10px]">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-slate-500">現在在庫数:</span>
-                                    <span class="text-red-400 font-bold text-sm font-mono">2 個 (発注点割れ)</span>
+                                    <span class="text-slate-400">現在在庫数:</span>
+                                    <span class="text-rose-600 font-bold text-sm font-mono">2 個 (発注点割れ)</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-slate-500">安全在庫閾値:</span>
-                                    <span class="text-slate-300 font-mono">5 個</span>
+                                    <span class="text-slate-400">安全在庫閾値:</span>
+                                    <span class="text-slate-700 font-mono">5 個</span>
                                 </div>
                             </div>
-                            <div class="pt-2 border-t border-dark-border flex justify-between items-center text-[10px]">
-                                <span class="text-emerald-400">AI自動起案発火済</span>
-                                <button onclick="pickupConsumable(3)" class="px-2.5 py-1 bg-amber-600 text-white rounded font-bold">出庫 (ピックアップ)</button>
+                            <div class="pt-2 border-t border-slate-200 flex justify-between items-center text-[10px]">
+                                <span class="text-emerald-600 font-bold">AI自動起案発火済</span>
+                                <button onclick="pickupConsumable(3)" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold transition shadow-sm">出庫 (ピックアップ)</button>
                             </div>
                         </div>
                     </div>
@@ -606,46 +611,46 @@
             <div id="screen-fieldops" class="screen-content hidden space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- カレンダー型貸出予約 -->
-                    <div class="bg-dark-card p-5 rounded-xl border border-dark-border space-y-4">
-                        <div class="flex justify-between items-center border-b border-dark-border pb-3">
-                            <h3 class="font-bold text-white text-sm"><i class="fa-solid fa-calendar-days text-brand-500 mr-2"></i>共有備品 カレンダー予約</h3>
-                            <button onclick="openRentalModal()" class="px-2.5 py-1 bg-brand-600 text-white font-bold rounded text-xs">+ 新規予約</button>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-calendar-days text-brand-500 mr-2"></i>共有備品 カレンダー予約</h3>
+                            <button onclick="openRentalModal()" class="px-3 py-1 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-lg text-xs shadow-sm">+ 新規予約</button>
                         </div>
-                        <div class="bg-dark-bg p-3 rounded-lg border border-dark-border">
-                            <div class="text-center font-bold text-xs text-slate-200 mb-2">2026年 7月 最終週</div>
-                            <div class="grid grid-cols-7 text-center font-mono text-[10px] text-slate-400 border-b border-dark-border pb-1 mb-2">
-                                <div>月</div><div>火</div><div>水</div><div class="text-brand-400">木(今日)</div><div>金</div><div class="text-blue-400">土</div><div class="text-red-400">日</div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <div class="text-center font-bold text-xs text-slate-800 mb-2">2026年 7月 最終週</div>
+                            <div class="grid grid-cols-7 text-center font-mono text-[10px] text-slate-400 border-b border-slate-200 pb-1 mb-2">
+                                <div>月</div><div>火</div><div>水</div><div class="text-brand-600 font-bold">木(今日)</div><div>金</div><div class="text-blue-500">土</div><div class="text-rose-500">日</div>
                             </div>
                             <div class="grid grid-cols-7 gap-1 h-36">
-                                <div class="bg-slate-900 rounded p-1 text-[9px]"></div>
-                                <div class="bg-slate-900 rounded p-1 text-[9px]"></div>
-                                <div class="bg-slate-900 rounded p-1 text-[9px]"></div>
-                                <div class="bg-brand-900/40 border border-brand-500/50 rounded p-1 text-[9px] text-brand-200 space-y-1">
-                                    <div class="bg-brand-600 px-1 py-0.5 rounded truncate font-bold">[貸出] タフブック</div>
-                                    <div class="bg-purple-600 px-1 py-0.5 rounded truncate font-bold">[予約] カメラ</div>
+                                <div class="bg-white rounded p-1 text-[9px] border border-slate-100"></div>
+                                <div class="bg-white rounded p-1 text-[9px] border border-slate-100"></div>
+                                <div class="bg-white rounded p-1 text-[9px] border border-slate-100"></div>
+                                <div class="bg-orange-50 border border-brand-300 rounded p-1 text-[9px] text-brand-900 space-y-1">
+                                    <div class="bg-brand-500 text-white px-1 py-0.5 rounded truncate font-bold">[貸出] タフブック</div>
+                                    <div class="bg-purple-600 text-white px-1 py-0.5 rounded truncate font-bold">[予約] カメラ</div>
                                 </div>
-                                <div class="bg-slate-900 rounded p-1 text-[9px]"></div>
-                                <div class="bg-slate-900 rounded p-1 text-[9px]"></div>
-                                <div class="bg-slate-900 rounded p-1 text-[9px]"></div>
+                                <div class="bg-white rounded p-1 text-[9px] border border-slate-100"></div>
+                                <div class="bg-white rounded p-1 text-[9px] border border-slate-100"></div>
+                                <div class="bg-white rounded p-1 text-[9px] border border-slate-100"></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- モバイル実地棚卸 PWAモック -->
-                    <div class="bg-dark-card p-5 rounded-xl border border-dark-border space-y-4">
-                        <div class="border-b border-dark-border pb-3">
-                            <h3 class="font-bold text-white text-sm"><i class="fa-solid fa-mobile-screen-button text-emerald-400 mr-2"></i>スマホカメラ PWA実地棚卸</h3>
-                            <p class="text-slate-400 text-[11px]">QRをかざして状態4区分（正常/要修理/破損/紛失）を報告</p>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-mobile-screen-button text-emerald-600 mr-2"></i>スマホカメラ PWA実地棚卸</h3>
+                            <p class="text-slate-500 text-[11px]">QRをかざして状態4区分（正常/要修理/破損/紛失）を報告</p>
                         </div>
-                        <div class="bg-dark-bg p-4 rounded-xl border-2 border-emerald-500/50 text-center space-y-3 glow-effect">
-                            <div class="w-24 h-24 mx-auto bg-slate-900 rounded-lg flex items-center justify-center relative overflow-hidden border border-emerald-500">
-                                <div class="absolute inset-x-0 h-0.5 bg-emerald-400 animate-bounce"></div>
-                                <i class="fa-solid fa-qrcode text-4xl text-slate-600"></i>
+                        <div class="bg-emerald-50/50 p-4 rounded-xl border-2 border-emerald-500/30 text-center space-y-3">
+                            <div class="w-24 h-24 mx-auto bg-white rounded-2xl flex items-center justify-center relative overflow-hidden border-2 border-emerald-500 shadow-sm">
+                                <div class="absolute inset-x-0 h-0.5 bg-emerald-500 animate-bounce"></div>
+                                <i class="fa-solid fa-qrcode text-4xl text-slate-700"></i>
                             </div>
-                            <p class="font-bold text-white text-xs">管理ラベルのQRコードを画面枠内に合わせてください</p>
+                            <p class="font-bold text-slate-800 text-xs">管理ラベルのQRコードを画面枠内に合わせてください</p>
                             <div class="flex justify-center space-x-2 pt-2">
-                                <button onclick="demoScanSuccess('NORMAL')" class="px-3 py-1 bg-emerald-600 text-white rounded font-bold text-[10px]">スキャン: 正常</button>
-                                <button onclick="demoScanSuccess('BROKEN')" class="px-3 py-1 bg-red-600 text-white rounded font-bold text-[10px]">スキャン: 破損報告</button>
+                                <button onclick="demoScanSuccess('NORMAL')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[10px] shadow-sm">スキャン: 正常</button>
+                                <button onclick="demoScanSuccess('BROKEN')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-bold text-[10px] shadow-sm">スキャン: 破損報告</button>
                             </div>
                         </div>
                     </div>
@@ -654,41 +659,41 @@
 
             <!-- SCREEN 6: 7. ガバナンス・不正・異常検知エンジン -->
             <div id="screen-governance" class="screen-content hidden space-y-6">
-                <div class="bg-dark-card p-5 rounded-xl border border-dark-border space-y-4">
-                    <div class="border-b border-dark-border pb-3 flex justify-between items-center">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
                         <div>
-                            <h3 class="font-bold text-white text-sm flex items-center text-red-400">
+                            <h3 class="font-bold text-slate-900 text-sm flex items-center text-rose-600">
                                 <i class="fa-solid fa-shield-cat mr-2"></i>
                                 AI/ルールベース ガバナンス・不正・異常検知コンソール
                             </h3>
-                            <p class="text-slate-400 text-[11px]">相場より著しく割高な購入、同一領収書の重複精算、新幹線グリーン車利用等の規程違反を自動抽出</p>
+                            <p class="text-slate-500 text-[11px]">相場より著しく割高な購入、同一領収書の重複精算、新幹線グリーン車利用等の規程違反を自動抽出</p>
                         </div>
                     </div>
 
                     <!-- 検知ログテーブル -->
                     <div class="space-y-3">
-                        <div class="p-3.5 rounded-xl bg-red-950/30 border border-red-800/40 flex items-center justify-between">
+                        <div class="p-4 rounded-xl bg-rose-50/60 border border-rose-200 flex items-center justify-between">
                             <div class="space-y-1">
                                 <div class="flex items-center space-x-2">
-                                    <span class="px-2 py-0.5 bg-red-600 text-white font-bold rounded text-[9px]">相場異常値</span>
-                                    <span class="font-bold text-white text-xs">特殊精密ねじ M4 (500個)</span>
+                                    <span class="px-2 py-0.5 bg-rose-600 text-white font-bold rounded text-[9px]">相場異常値</span>
+                                    <span class="font-bold text-slate-900 text-xs">特殊精密ねじ M4 (500個)</span>
                                 </div>
-                                <p class="text-[11px] text-slate-300">市場平均単価 ¥12/個 に対し、申請単価 ¥85/個 (約7倍)。不正高額購入の疑い</p>
-                                <div class="text-[10px] text-slate-500 font-mono">申請者: 高橋 直樹 | 購買PO: PUR-20260731-012</div>
+                                <p class="text-[11px] text-slate-700">市場平均単価 ¥12/個 に対し、申請単価 ¥85/個 (約7倍)。不正高額購入の疑い</p>
+                                <div class="text-[10px] text-slate-400 font-mono">申請者: 高橋 直樹 | 購買PO: PUR-20260731-012</div>
                             </div>
-                            <button onclick="alert('申請者へ事実確認アラートを送出しました。')" class="px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white rounded font-bold text-xs">差し戻し・ヒアリング</button>
+                            <button onclick="alert('申請者へ事実確認アラートを送出しました。')" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-bold text-xs shadow-sm transition">差し戻し・ヒアリング</button>
                         </div>
 
-                        <div class="p-3.5 rounded-xl bg-amber-950/30 border border-amber-800/40 flex items-center justify-between">
+                        <div class="p-4 rounded-xl bg-amber-50/60 border border-amber-200 flex items-center justify-between">
                             <div class="space-y-1">
                                 <div class="flex items-center space-x-2">
-                                    <span class="px-2 py-0.5 bg-amber-600 text-white font-bold rounded text-[9px]">重複精算疑い</span>
-                                    <span class="font-bold text-white text-xs">タクシー代 領収書 (¥4,500)</span>
+                                    <span class="px-2 py-0.5 bg-amber-500 text-white font-bold rounded text-[9px]">重複精算疑い</span>
+                                    <span class="font-bold text-slate-900 text-xs">タクシー代 領収書 (¥4,500)</span>
                                 </div>
-                                <p class="text-[11px] text-slate-300">7/28提出の法人カード明細と、7/30提出の現金立替精算で同一画像を再利用</p>
-                                <div class="text-[10px] text-slate-500 font-mono">申請者: 鈴木 一朗 | 添付画像ハッシュ一致</div>
+                                <p class="text-[11px] text-slate-700">7/28提出の法人カード明細と、7/30提出の現金立替精算で同一画像を再利用</p>
+                                <div class="text-[10px] text-slate-400 font-mono">申請者: 鈴木 一朗 | 添付画像ハッシュ一致</div>
                             </div>
-                            <button onclick="alert('重複判定を確定し二重支払いをブロックしました。')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded font-bold text-xs">二重精算をブロック</button>
+                            <button onclick="alert('重複判定を確定し二重支払いをブロックしました。')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold text-xs shadow-sm transition">二重精算をブロック</button>
                         </div>
                     </div>
                 </div>
@@ -696,23 +701,23 @@
 
             <!-- SCREEN 7: 8. レポーティング ＆ BIアナリティクス -->
             <div id="screen-reports" class="screen-content hidden space-y-6">
-                <div class="bg-dark-card p-5 rounded-xl border border-dark-border space-y-4">
-                    <div class="border-b border-dark-border pb-3">
-                        <h3 class="font-bold text-white text-sm">📈 経営層・管理部門向け BIダッシュボード＆レポート</h3>
-                        <p class="text-slate-400 text-[11px]">月次精算サマリー、交際費税法上限チェック、出張者一覧・駐在員連絡機能</p>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b border-slate-100 pb-3">
+                        <h3 class="font-bold text-slate-900 text-sm">📈 経営層・管理部門向け BIダッシュボード＆レポート</h3>
+                        <p class="text-slate-500 text-[11px]">月次精算サマリー、交際費税法上限チェック、出張者一覧・駐在員連絡機能</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-dark-bg p-4 rounded-xl border border-dark-border space-y-2">
-                            <h4 class="font-bold text-white text-xs flex items-center"><i class="fa-solid fa-glass-cheers text-amber-400 mr-2"></i>交際費・接待費レポート (税法上限モニタリング)</h4>
-                            <p class="text-[11px] text-slate-400">5,000円/人 基準および年間資本金に応じた損金算入上限のリアルタイム消化率</p>
-                            <div class="pt-2 text-lg font-bold font-mono text-emerald-400">¥ 1,840,000 <span class="text-xs font-normal text-slate-400">(上限消化率 23%)</span></div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                            <h4 class="font-bold text-slate-900 text-xs flex items-center"><i class="fa-solid fa-glass-cheers text-brand-500 mr-2"></i>交際費・接待費レポート (税法上限モニタリング)</h4>
+                            <p class="text-[11px] text-slate-500">5,000円/人 基準および年間資本金に応じた損金算入上限のリアルタイム消化率</p>
+                            <div class="pt-2 text-lg font-bold font-mono text-emerald-600">¥ 1,840,000 <span class="text-xs font-normal text-slate-500">(上限消化率 23%)</span></div>
                         </div>
 
-                        <div class="bg-dark-bg p-4 rounded-xl border border-dark-border space-y-2">
-                            <h4 class="font-bold text-white text-xs flex items-center"><i class="fa-solid fa-plane-departure text-sky-400 mr-2"></i>今週の出張者一覧 ＆ 駐在員自動連絡</h4>
-                            <p class="text-[11px] text-slate-400">海外・国内出張予定者（3名）。現地駐在員・セキュリティチームへ自動連絡済</p>
-                            <div class="pt-2 text-xs font-bold text-white">佐藤 健太 (タイ工場出張: 8/2〜8/6)</div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                            <h4 class="font-bold text-slate-900 text-xs flex items-center"><i class="fa-solid fa-plane-departure text-sky-500 mr-2"></i>今週の出張者一覧 ＆ 駐在員自動連絡</h4>
+                            <p class="text-[11px] text-slate-500">海外・国内出張予定者（3名）。現地駐在員・セキュリティチームへ自動連絡済</p>
+                            <div class="pt-2 text-xs font-bold text-slate-800">佐藤 健太 (タイ工場出張: 8/2〜8/6)</div>
                         </div>
                     </div>
                 </div>
@@ -720,52 +725,52 @@
 
             <!-- SCREEN 8: メモ3. RFP・非EC相見積比較ボード -->
             <div id="screen-rfp" class="screen-content hidden space-y-6">
-                <div class="bg-dark-card p-5 rounded-xl border border-dark-border space-y-4 glow-purple">
-                    <div class="border-b border-dark-border pb-3 flex justify-between items-center">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
                         <div>
-                            <h3 class="font-bold text-white text-sm flex items-center text-purple-300">
+                            <h3 class="font-bold text-slate-900 text-sm flex items-center text-purple-700">
                                 <i class="fa-solid fa-scale-balanced mr-2"></i>
                                 RFP・特注品・サービス相見積もり選定ボード (TAM拡大モジュール)
                             </h3>
-                            <p class="text-slate-400 text-[11px]">カタログEC外の工事・試作品・コンサルティング等の見積回収・マトリクス比較</p>
+                            <p class="text-slate-500 text-[11px]">カタログEC外の工事・試作品・コンサルティング等の見積回収・マトリクス比較</p>
                         </div>
-                        <button onclick="alert('新規RFP一括発行画面を開きます');" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg text-xs">
+                        <button onclick="alert('新規RFP一括発行画面を開きます');" class="px-3.5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg text-xs shadow-sm transition">
                             + 新規RFP（見積依頼）を発行
                         </button>
                     </div>
 
                     <!-- 見積比較マトリクス表 -->
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
                         <table class="w-full text-left border-collapse text-[11px]">
-                            <thead class="bg-slate-900 text-slate-400 border-b border-dark-border font-mono">
+                            <thead class="bg-slate-100 text-slate-600 border-b border-slate-200 font-mono">
                                 <tr>
-                                    <th class="p-2.5">見積案件名</th>
-                                    <th class="p-2.5">サプライヤーA社</th>
-                                    <th class="p-2.5">サプライヤーB社</th>
-                                    <th class="p-2.5">サプライヤーC社</th>
-                                    <th class="p-2.5 text-right">選定アクション</th>
+                                    <th class="p-3">見積案件名</th>
+                                    <th class="p-3">サプライヤーA社</th>
+                                    <th class="p-3">サプライヤーB社</th>
+                                    <th class="p-3">サプライヤーC社</th>
+                                    <th class="p-3 text-right">選定アクション</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-dark-border text-slate-300">
+                            <tbody class="divide-y divide-slate-100 text-slate-700">
                                 <tr>
-                                    <td class="p-2.5">
-                                        <div class="font-bold text-white">第一工場 外壁定期防水工事</div>
-                                        <div class="text-[10px] text-slate-500">納期希望: 2026/09/15</div>
+                                    <td class="p-3">
+                                        <div class="font-bold text-slate-900">第一工場 外壁定期防水工事</div>
+                                        <div class="text-[10px] text-slate-400">納期希望: 2026/09/15</div>
                                     </td>
-                                    <td class="p-2.5 bg-emerald-950/20 border-l border-r border-emerald-800/40">
-                                        <div class="font-bold text-emerald-400 font-mono">¥ 2,400,000 (最安)</div>
-                                        <div class="text-[10px] text-slate-400">工期: 10日間 | 保証: 5年</div>
+                                    <td class="p-3 bg-emerald-50/50 border-l border-r border-emerald-200">
+                                        <div class="font-bold text-emerald-700 font-mono">¥ 2,400,000 (最安)</div>
+                                        <div class="text-[10px] text-slate-500">工期: 10日間 | 保証: 5年</div>
                                     </td>
-                                    <td class="p-2.5">
-                                        <div class="font-bold text-slate-200 font-mono">¥ 2,850,000</div>
-                                        <div class="text-[10px] text-slate-500">工期: 7日間 | 保証: 3年</div>
+                                    <td class="p-3">
+                                        <div class="font-bold text-slate-800 font-mono">¥ 2,850,000</div>
+                                        <div class="text-[10px] text-slate-400">工期: 7日間 | 保証: 3年</div>
                                     </td>
-                                    <td class="p-2.5">
-                                        <div class="font-bold text-slate-200 font-mono">¥ 3,100,000</div>
-                                        <div class="text-[10px] text-slate-500">工期: 12日間 | 保証: 10年</div>
+                                    <td class="p-3">
+                                        <div class="font-bold text-slate-800 font-mono">¥ 3,100,000</div>
+                                        <div class="text-[10px] text-slate-400">工期: 12日間 | 保証: 10年</div>
                                     </td>
-                                    <td class="p-2.5 text-right">
-                                        <button onclick="alert('A社を選定し、kintone承認ワークフローへシームレス連携しました。');" class="px-3 py-1 bg-emerald-600 text-white font-bold rounded">A社で決定・申請</button>
+                                    <td class="p-3 text-right">
+                                        <button onclick="alert('A社を選定し、kintone承認ワークフローへシームレス連携しました。');" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-sm transition">A社で決定・申請</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -776,20 +781,20 @@
 
             <!-- SCREEN 9: 3&6. 人事・組織Sync ＆ 承認ルール全社同期 -->
             <div id="screen-orgsync" class="screen-content hidden space-y-6">
-                <div class="bg-dark-card p-5 rounded-xl border border-dark-border space-y-4">
-                    <div class="border-b border-dark-border pb-3">
-                        <h3 class="font-bold text-white text-sm">👥 組織・人事・承認権限 Sync ＆ 予算ブロック設定</h3>
-                        <p class="text-slate-400 text-[11px]">SmartHR/Entra IDから組織階層を取り込み、1approval集中ルールを各WFへ配信</p>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b border-slate-100 pb-3">
+                        <h3 class="font-bold text-slate-900 text-sm">👥 組織・人事・承認権限 Sync ＆ 予算ブロック設定</h3>
+                        <p class="text-slate-500 text-[11px]">SmartHR/Entra IDから組織階層を取り込み、1approval集中ルールを各WFへ配信</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-dark-bg p-4 rounded-xl border border-dark-border space-y-2">
-                            <h4 class="font-bold text-white text-xs">同期状態 (SmartHR / Entra ID)</h4>
-                            <div class="text-emerald-400 font-bold text-xs flex items-center"><i class="fa-solid fa-circle-check mr-2"></i>全社 450名 / 12部署 同期完了 (最終: 本日 04:00)</div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                            <h4 class="font-bold text-slate-900 text-xs">同期状態 (SmartHR / Entra ID)</h4>
+                            <div class="text-emerald-600 font-bold text-xs flex items-center"><i class="fa-solid fa-circle-check mr-2"></i>全社 450名 / 12部署 同期完了 (最終: 本日 04:00)</div>
                         </div>
-                        <div class="bg-dark-bg p-4 rounded-xl border border-dark-border space-y-2">
-                            <h4 class="font-bold text-white text-xs">集中承認ルールの強制適用</h4>
-                            <div class="text-brand-400 font-bold text-xs">50万円以上: 事業部長承認 / 予算オーバー時: 強制ロック</div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                            <h4 class="font-bold text-slate-900 text-xs">集中承認ルールの強制適用</h4>
+                            <div class="text-brand-600 font-bold text-xs">50万円以上: 事業部長承認 / 予算オーバー時: 強制ロック</div>
                         </div>
                     </div>
                 </div>
@@ -799,31 +804,31 @@
     </div>
 
     <!-- モーダル: サプライヤー自動契約オンボーディング -->
-    <div id="modal-supplier-contract" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-dark-card border border-dark-border rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl text-xs">
-            <div class="bg-slate-900 p-4 border-b border-dark-border flex justify-between items-center text-white font-bold">
+    <div id="modal-supplier-contract" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl text-xs">
+            <div class="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center text-slate-900 font-bold">
                 <span><i class="fa-solid fa-file-signature text-brand-500 mr-2"></i>新規サプライヤー連携 ＆ 標準約款デジタル締結</span>
-                <button onclick="closeModal('modal-supplier-contract')" class="text-slate-400 hover:text-white">✕</button>
+                <button onclick="closeModal('modal-supplier-contract')" class="text-slate-400 hover:text-slate-700">✕</button>
             </div>
             <div class="p-5 space-y-4">
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">連携対象サプライヤー</label>
-                    <select class="w-full bg-dark-bg border border-dark-border rounded p-2 text-white font-bold">
+                    <label class="block font-bold text-slate-700 mb-1">連携対象サプライヤー</label>
+                    <select class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-slate-800 font-bold focus:outline-none focus:border-brand-500">
                         <option value="dantame">団タメ (会食・宴会手配プロバイダ)</option>
                         <option value="h">エイチ (会議室・スペース予約)</option>
                         <option value="pikapaka">ピカパカ (オフィス備品調達)</option>
                     </select>
                 </div>
-                <div class="p-3 bg-dark-bg border border-dark-border rounded space-y-2">
-                    <span class="font-bold text-slate-200 block">1approval 標準購買契約約款 (電子同意)</span>
-                    <p class="text-[10px] text-slate-400 leading-relaxed max-h-24 overflow-y-auto border border-dark-border p-2 rounded bg-slate-900">
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                    <span class="font-bold text-slate-800 block">1approval 標準購買契約約款 (電子同意)</span>
+                    <p class="text-[10px] text-slate-500 leading-relaxed max-h-24 overflow-y-auto border border-slate-200 p-2 rounded-lg bg-white">
                         本同意により、顧客企業と対象サプライヤー間の法人売買契約およびAPI中継データ保持ルールが有効化されます。電子署名により書面契約の取り交わしは不要となります。
                     </p>
                 </div>
             </div>
-            <div class="p-4 bg-slate-900 border-t border-dark-border flex justify-end space-x-2">
-                <button onclick="closeModal('modal-supplier-contract')" class="px-3 py-1.5 border border-dark-border text-slate-300 rounded font-bold">キャンセル</button>
-                <button onclick="confirmSupplierContract()" class="px-4 py-1.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded shadow transition">
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end space-x-2">
+                <button onclick="closeModal('modal-supplier-contract')" class="px-3.5 py-1.5 border border-slate-200 text-slate-600 rounded-lg font-bold hover:bg-slate-100 transition">キャンセル</button>
+                <button onclick="confirmSupplierContract()" class="px-4 py-1.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-lg shadow-sm transition">
                     電子同意して連携をアクティブ化
                 </button>
             </div>
@@ -838,11 +843,13 @@
             document.getElementById(`screen-${screenId}`).classList.remove('hidden');
 
             document.querySelectorAll('.nav-item').forEach(el => {
-                el.classList.remove('bg-slate-800/80', 'text-white', 'border-l-4', 'border-brand-500');
+                el.classList.remove('bg-orange-50', 'text-brand-600', 'border-l-4', 'border-brand-500', 'font-bold');
+                el.classList.add('text-slate-600');
             });
             const activeNav = document.getElementById(`nav-${screenId}`);
             if (activeNav) {
-                activeNav.classList.add('bg-slate-800/80', 'text-white', 'border-l-4', 'border-brand-500');
+                activeNav.classList.remove('text-slate-600');
+                activeNav.classList.add('bg-orange-50', 'text-brand-600', 'border-l-4', 'border-brand-500', 'font-bold');
             }
 
             const titles = {
