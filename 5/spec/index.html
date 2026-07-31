@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1approval プラットフォームシステム要件定義・基本設計書 (v3.5)</title>
+    <title>1approval プラットフォームシステム要件定義・基本設計書 (v3.6)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
@@ -72,8 +72,9 @@
             border-radius: 0.5rem;
             font-size: 0.85rem;
             overflow-x: auto;
-        } code { color: #38bdf8; }
-        .spec-table th { background-color: #f8fafc; width: 25%; font-size: 0.9rem; }
+        }
+        code { color: #38bdf8; }
+        .spec-table th { background-color: #f8fafc; font-size: 0.9rem; }
         .spec-table td { font-size: 0.9rem; }
         .section-anchor { scroll-margin-top: 1.5rem; }
         .l3-badge { font-weight: 600; font-size: 0.75rem; font-family: monospace; }
@@ -82,6 +83,11 @@
             border: 2px solid #0d6efd;
             background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%);
         }
+        .pricing-card {
+            border: 2px solid #10b981;
+            background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+        }
+        .font-mono { font-family: monospace; }
         @media (max-width: 992px) {
             #sidebar { width: 100%; height: auto; position: relative; }
             #content { margin-left: 0; padding: 1.5rem; }
@@ -94,7 +100,7 @@
     <nav id="sidebar">
         <div class="px-3 mb-3">
             <h5 class="fw-bold text-white mb-0"><i class="bi bi-cpu text-primary me-2"></i>1approval</h5>
-            <small class="text-secondary">統合ミドルウェア・要件定義 v3.5</small>
+            <small class="text-secondary">統合ミドルウェア・要件定義 v3.6</small>
         </div>
         <div id="sidebar-nav" class="nav flex-column">
             <div class="nav-group-title">1. システムビジョン</div>
@@ -125,6 +131,11 @@
 
             <div class="nav-group-title text-primary">6. 開発戦略</div>
             <a class="nav-link" href="#sec-6-1">6.1 開発優先順位 ＆ ロードマップ</a>
+
+            <div class="nav-group-title text-success">7. 収益化・マネタイズ</div>
+            <a class="nav-link" href="#sec-7-1">7.1 料金体系（3層ハイブリッド）</a>
+            <a class="nav-link" href="#sec-7-2">7.2 ベース ＆ Add-on 価格表</a>
+            <a class="nav-link" href="#sec-7-3">7.3 ARPU成長 ＆ LTVシナリオ</a>
         </div>
     </nav>
 
@@ -137,8 +148,8 @@
                 <p class="text-muted mb-0">エンタープライズ統合中継ハブ / L3データ基盤 / サプライヤー自動契約 / 現場現物資産統制</p>
             </div>
             <div class="text-end">
-                <span class="badge bg-primary fs-6">Version 3.5.0</span><br>
-                <small class="text-muted">2026-07-31 改訂 (顧客価値起点ロードマップ版)</small>
+                <span class="badge bg-primary fs-6">Version 3.6.0</span><br>
+                <small class="text-muted">2026-08-01 改訂 (収益化 ✕ 定着統合版)</small>
             </div>
         </div>
 
@@ -158,8 +169,7 @@
             <div class="card">
                 <div class="card-header"><i class="bi bi-diagram-3 me-2"></i>1.2 全体アーキテクチャ（Control Plane 構造）</div>
                 <div class="card-body">
-                    <pre><code>[ FRONT WORKFLOW SYSTEM ]
- kintone / Garoon / サイボウズ / Salesforce / M365 / Agileworks / x-point / コラボフロー
+                    <pre><code>[ FRONT WORKFLOW SYSTEM ] kintone / Garoon / サイボウズ / Salesforce / M365 / Agileworks / x-point / コラボフロー
                                   │ (承認完了イベント / REST API)
                                   ▼
  ┌─────────────────────────────────────────────────────────────────────────────────┐
@@ -195,11 +205,10 @@
                 <div class="card-header"><span class="badge bg-primary me-2">中核 01</span> 2.1 連携セットアップ (Flowbuilder) ＆ サプライヤー契約オンボーディング</div>
                 <div class="card-body">
                     <p>接続先システム同士のフロー設計（Flowbuilder）と、新規購買チャネル開設時の<b>サプライヤー自動契約（デジタル締結）</b>を一元化されたUIで処理します。</p>
-
                     <h6 class="fw-bold text-dark border-bottom pb-1 mb-2"><i class="bi bi-file-earmark-check me-2"></i>サプライヤー管理 ＆ 自動契約締結機能</h6>
                     <table class="table table-bordered spec-table mb-4">
                         <tr>
-                            <th>機能概要</th>
+                            <th style="width:25%;">機能概要</th>
                             <td>顧客企業が新規購買システム（EC・サービス）を利用開始する際、1approval画面上で標準約款・雛形に基づく契約締結をデジタル完結する機能。</td>
                         </tr>
                         <tr>
@@ -213,12 +222,11 @@
                             </td>
                         </tr>
                     </table>
-
                     <h6 class="fw-bold text-dark border-bottom pb-1 mb-2"><i class="bi bi-diagram-2 me-2"></i>ビジュアルフロービルダー (Flowbuilder)</h6>
-                    <img src="https://masafushimi.github.io/1approval/5/spec/1.png" width="80%" / >
+                    <img src="https://masafushimi.github.io/1approval/5/spec/1.png" width="80%" class="mb-3 border rounded">
                     <table class="table table-bordered spec-table">
                         <tr>
-                            <th>キャンバス機能</th>
+                            <th style="width:25%;">キャンバス機能</th>
                             <td>「申請元のWF」&rarr;「契約済みサプライヤー」&rarr;「後続の会計/経費システム」をドラッグ＆ドロップで結線。各ノード間で配送先・請求先マスタのデータ自動補完ロジックを適用。</td>
                         </tr>
                         <tr>
@@ -255,7 +263,7 @@
                 <div class="card-header"><span class="badge bg-primary me-2">中核 03</span> 2.3 L3データ蓄積・仕訳ルーティング</div>
                 <div class="card-body">
                     <p>将来的なPeppol電子請求・デジタルインボイス・電帳法に対応するため、すべての取引を高度な<b>L3データ</b>へ統一・正規化します。</p>
-                     <img src="https://masafushimi.github.io/1approval/5/spec/22.png" width="80%" / >
+                    <img src="https://masafushimi.github.io/1approval/5/spec/22.png" width="80%" class="mb-3 border rounded">
                     <div class="table-responsive mb-3">
                         <table class="table table-sm table-bordered bg-white">
                             <thead class="table-light">
@@ -352,7 +360,7 @@
                     <p>検収されたL3購買データからワンタップで資産登録。個体・数量・親子構成管理をサポートします。</p>
                     <table class="table table-bordered spec-table">
                         <tr>
-                            <th>個体管理 (Fixed Assets)</th>
+                            <th style="width:25%;">個体管理 (Fixed Assets)</th>
                             <td>PC、車両、機器など管理番号（AST-XXXX）やシリアルNoを個別に付与。写真・取扱説明書(PDF)・保証書画像・仕様書を一体管理。QRラベル（PDF/SVG）の即時印刷に対応。</td>
                         </tr>
                         <tr>
@@ -389,7 +397,6 @@
                 <div class="card-body">
                     <h6 class="fw-bold text-dark border-bottom pb-1 mb-2"><i class="bi bi-calendar-event me-2"></i>カレンダー型貸出予約・返却管理</h6>
                     <p class="small text-muted">共有備品の空き状況をカレンダー上で確認し、ドラッグ＆ドロップで事前予約。スマホQRスキャンで即時貸出/返却処理。返却遅延者へ催促アラートを配信。</p>
-
                     <h6 class="fw-bold text-dark border-bottom pb-1 mb-2 mt-4"><i class="bi bi-qr-code-scan me-2"></i>スマホカメラによる現場リアルタイム棚卸</h6>
                     <p class="small text-muted">管理者が発行した棚卸タスクに基づき、現場担当者がPWA/スマホカメラでQRをスキャンして実地報告。</p>
                     <ul>
@@ -538,57 +545,257 @@ CREATE TABLE asset_items (
         <section id="sec-6-1" class="section-anchor">
             <div class="card ai-priority-card">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <span class="fs-6 fw-bold"><i class="bi bi-cpu-fill me-2"></i>開発優先順位 ＆ 実装ロードマップ（顧客価値・現場定着起点）</span>
-                    <span class="badge bg-light text-primary">Strategic Roadmap v3.5</span>
+                    <span class="fs-6 fw-bold"><i class="bi bi-cpu-fill me-2"></i>開発優先順位 ＆ 実装ロードマップ（収益化 ✕ 現場定着ハイブリッド）</span>
+                    <span class="badge bg-light text-primary">Strategic Roadmap v3.6</span>
                 </div>
                 <div class="card-body">
                     <p class="text-muted small mb-4">
-                        「まず見せる（可視化） ➔ 買ったデータを現場の現物管理に即繋げる（定着） ➔ 業務が乗った後に自動化・高度統制を被せる」という、<b>導入摩擦を最小化し現場のUXを最速で高めるプロダクト思考（PLG）の順序</b>で開発を進めます。
+                        「最速の初期MRR創出（可視化＋資産Add-on） ➔ 接続拡張による従量課金積み上げ ➔ エンタープライズ昇格＆高額AI Add-onによるLTV最大化」という、<b>顧客価値（PLG）と収益化（マネタイズ）を完全合致させた最先端ロードマップ</b>です。
                     </p>
 
                     <div class="timeline">
                         <!-- Phase 1 -->
                         <div class="p-3 mb-3 bg-white border border-primary rounded border-2">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="fw-bold text-primary mb-0"><span class="badge bg-primary me-2">Phase 1</span>【可視化 ＆ 現場定着】(機能 5 → 4 → 9 → 10)</h6>
-                                <span class="badge bg-light text-primary border border-primary">最優先 / MVP</span>
+                                <h6 class="fw-bold text-primary mb-0"><span class="badge bg-primary me-2">Phase 1</span>【可視化・現物定着 ＆ 最速MRR回収】(機能 5 → 4 → 6 → 9 → 10)</h6>
+                                <span class="badge bg-light text-primary border border-primary">目標ARPU: ¥230,000 /月</span>
                             </div>
-                            <p class="small text-secondary mb-2"><b>狙い:</b> 手動CSV取り込みや簡易入力からでも即座に支出を可視化し、そのまま現場の「資産台帳・棚卸・貸出」へ繋げて社内の日常ツールとして定着させる。</p>
+                            <p class="small text-secondary mb-2"><b>狙い:</b> 手動入力/CSVからでも即座に支出を見せ（5）、予算ブロック（6）でCFO決済を獲得。そのまま資産台帳（9）・スマホ棚卸（10）をセットで提供し、基本料10万＋資産Add-on(8万)＋棚卸Add-on(5万)の<b>月額23万円/社を初月から最速回収</b>する。</p>
                             <ul class="small mb-0">
                                 <li><span class="badge bg-primary me-1">5</span> <b>統合支出・購買ダッシュボード:</b> 支出の全体像・部署別費用を即座に見せるUI</li>
                                 <li><span class="badge bg-primary me-1">4</span> <b>L3データ蓄積・仕訳ルーティング:</b> データ正規化DB ＆ 会計(AP) / 経費自動判定</li>
-                                <li><span class="badge bg-primary me-1">9</span> <b>統合資産＋MDM・IT資産台帳 ＆ 契約期限アラート:</b> 購買データからの台帳自動連携・期限アラート</li>
-                                <li><span class="badge bg-primary me-1">10</span> <b>カレンダー型貸出予約 ＆ モバイル実地棚卸:</b> QRスキャン棚卸（状態4区分）＆ 貸出予約UI</li>
+                                <li><span class="badge bg-primary me-1">6</span> <b>予実制御管理 (簡易版):</b> リアルタイム予算消化計算 ＆ 超過アラート（CFO訴求）</li>
+                                <li><span class="badge bg-primary me-1">9</span> <b>統合資産＋MDM・IT資産台帳 ＆ 契約期限アラート:</b> 購買データからの台帳自動連携【Add-on: +8万】</li>
+                                <li><span class="badge bg-primary me-1">10</span> <b>カレンダー型貸出予約 ＆ モバイル実地棚卸:</b> QRスキャン棚卸＆貸出予約UI【Add-on: +5万】</li>
                             </ul>
                         </div>
 
                         <!-- Phase 2 -->
                         <div class="p-3 mb-3 bg-white border rounded">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="fw-bold text-dark mb-0"><span class="badge bg-secondary me-2">Phase 2</span>【分析 ＆ 自動中継ハブ化】(機能 8 → 1, 2)</h6>
-                                <span class="badge bg-light text-dark border">次点 / 連携拡張</span>
+                                <h6 class="fw-bold text-dark mb-0"><span class="badge bg-secondary me-2">Phase 2</span>【自動中継ハブ化 ＆ 従量課金拡張】(機能 8 → 1, 2)</h6>
+                                <span class="badge bg-light text-dark border">目標ARPU: ¥350,000+ /月</span>
                             </div>
-                            <p class="small text-secondary mb-2"><b>狙い:</b> 蓄積されたデータの高度分析を提供しつつ、各社の承認WFやECサイトとのAPI自動中継（Flowbuilder）を構築して運用の自動化を完了させる。</p>
+                            <p class="small text-secondary mb-2"><b>狙い:</b> 経営BI Add-on(+7万)で高利益率を確保しつつ、Flowbuilder（1）と自動契約（2）を投入。他ECサイト（Amazon等）への接続拡張を促し、<b>「EC接続追加(+2万円/社)」の積み上げ型従量収入</b>を伸ばす。</p>
                             <ul class="small mb-0">
-                                <li><span class="badge bg-secondary me-1">8</span> <b>レポーティング ＆ BIアナリティクス:</b> 役員・管理職向け経営分析・出張/交際費サマリー</li>
-                                <li><span class="badge bg-secondary me-1">1</span> <b>ビジュアルフロービルダー (Flowbuilder):</b> WF・EC・会計をつなぐドラッグ＆ドロップノード連携</li>
-                                <li><span class="badge bg-secondary me-1">2</span> <b>サプライヤー管理 ＆ 自動契約締結:</b> 1approval画面上でのEC約款・電子契約自動オンボーディング</li>
+                                <li><span class="badge bg-secondary me-1">8</span> <b>レポーティング ＆ BIアナリティクス:</b> 役員・管理職向け交際費/出張費経営BI【Add-on: +7万】</li>
+                                <li><span class="badge bg-secondary me-1">1</span> <b>ビジュアルフロービルダー (Flowbuilder):</b> Drag&DropによるマルチEC/WF自動中継ノード</li>
+                                <li><span class="badge bg-secondary me-1">2</span> <b>サプライヤー管理 ＆ 自動契約締結:</b> 画面上での約款同意・デジタル契約オンボーディング【従量:+2万/社】</li>
                             </ul>
                         </div>
 
                         <!-- Phase 3 -->
                         <div class="p-3 bg-white border border-purple rounded" style="border-color: #8b5cf6 !important;">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="fw-bold text-purple mb-0" style="color: #6b21a8;"><span class="badge bg-dark me-2">Phase 3</span>【高度統制 ＆ AI・調達拡張】(機能 3, 6, 7 ＋ 将来メモ)</h6>
-                                <span class="badge bg-light text-dark border">高付加価値 / エンタープライズ</span>
+                                <h6 class="fw-bold text-purple mb-0" style="color: #6b21a8;"><span class="badge bg-dark me-2">Phase 3</span>【全社エンタープライズ昇格 ＆ LTV最大化】(機能 3, 7 ＋ 将来メモ)</h6>
+                                <span class="badge bg-light text-dark border">目標ARPU: ¥600,000〜¥1,000,000+ /月</span>
                             </div>
-                            <p class="small text-secondary mb-2"><b>狙い:</b> プラットフォームに業務が完全に載った後、強固な権限統制・予算ブロック・AIによるコスト削減（レコメンド）を被せてROIを跳ね上げる。</p>
+                            <p class="small text-secondary mb-2"><b>狙い:</b> 全社人事同期（3）で「Enterpriseプラン(月額30万円)」へプランアップさせ、ガバナンスAI(+10万)やAI Agentic(+12万)・RFP(+15万)の超高単価Add-onで<b>年間LTV 1,000万円超のモンスターアカウント化</b>を完了させる。</p>
                             <ul class="small mb-0">
-                                <li><span class="badge bg-dark me-1">3</span> <b>組織・人事・承認権限 Sync:</b> SmartHR/Azure AD連携 ＆ 承認ルールの全社同期</li>
-                                <li><span class="badge bg-dark me-1">6</span> <b>予実制御管理:</b> リアルタイム予算消化計算 ＆ 予算オーバー時の申請自動ロック</li>
-                                <li><span class="badge bg-dark me-1">7</span> <b>ガバナンス・不正・異常検知エンジン:</b> 相場逸脱・二重申請・規程違反のAI自動検知</li>
-                                <li><span class="badge bg-purple text-white me-1">メモ1-3</span> <b>AI-OCR経費 / AI Agentic購買レコメンド / RFP相見積もりモジュール</b></li>
+                                <li><span class="badge bg-dark me-1">3</span> <b>組織・人事・承認権限 Sync:</b> SmartHR/Azure AD連携（Enterpriseプラン30万円への昇格フック）</li>
+                                <li><span class="badge bg-dark me-1">7</span> <b>ガバナンス・不正・異常検知エンジン:</b> 相場逸脱・二重申請・規程違反のAI検知【Add-on: +10万】</li>
+                                <li><span class="badge bg-purple text-white me-1">メモ1-3</span> <b>AI-OCR経費 / AI Agentic購買レコメンド / RFP相見積もりモジュール【Add-on: +12〜15万】</b></li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. 収益化・マネタイズ戦略 -->
+        <h3 class="fw-bold border-bottom pb-2 mb-3 mt-5 text-success"><i class="bi bi-currency-yen me-2"></i>7. 収益化・マネタイズ戦略</h3>
+
+        <!-- 7.1 プライシングモデル -->
+        <section id="sec-7-1" class="section-anchor">
+            <div class="card pricing-card">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <span class="fs-6 fw-bold"><i class="bi bi-layers-fill me-2"></i>7.1 料金体系の全体構造 (3層ハイブリッドモデル)</span>
+                    <span class="badge bg-light text-success">ARPU & LTV Maximization</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small mb-3">導入ハードルを極限まで下げて案件を獲得しつつ、接続拡張・利用量増加・高機能追加に伴って自動的に顧客単価が向上する3層構造を定義。</p>
+                    
+                    <div class="p-3 bg-white border border-success rounded mb-3 text-center">
+                        <h6 class="fw-bold text-dark mb-1">【 毎月の請求額 (MRR) 】</h6>
+                        <p class="fs-5 text-success fw-bold font-mono mb-0">
+                            ＝ ① 基本エディション料金 ＋ ② 接続・ボリューム従量料金 ＋ ③ 機能モジュール Add-on 料金
+                        </p>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="p-3 bg-white border rounded h-100">
+                                <span class="badge bg-success mb-2">層 1</span>
+                                <h6 class="fw-bold text-dark">① 基本エディション料</h6>
+                                <p class="small text-muted mb-0">企業の規模感（従業員数・拠点数）や初期求める管理レベルに応じたベース月額基本料。</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-white border rounded h-100">
+                                <span class="badge bg-success mb-2">層 2</span>
+                                <h6 class="fw-bold text-dark">② 接続・ボリューム従量料</h6>
+                                <p class="small text-muted mb-0">接続する承認WF数、EC/サプライヤー数、および月間L3処理件数/人事Sync人数に応じた従量課金。</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-white border rounded h-100">
+                                <span class="badge bg-success mb-2">層 3</span>
+                                <h6 class="fw-bold text-dark">③ 機能モジュール Add-on</h6>
+                                <p class="small text-muted mb-0">資産MDM、ガバナンスAI、経営BI、RFP比較など、求める高度機能ごとの月額追加ライセンス。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7.2 パッケージ & アドオン価格表 -->
+        <section id="sec-7-2" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-white"><i class="bi bi-table me-2"></i>7.2 ベースエディション ＆ 機能モジュール Add-on 価格表</div>
+                <div class="card-body">
+                    <h6 class="fw-bold text-dark border-bottom pb-1 mb-2"><i class="bi bi-box-seam me-2"></i>ベースエディション（基本パッケージ）</h6>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered spec-table text-center align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>項目</th>
+                                    <th>トライアル (POC)</th>
+                                    <th class="table-primary border-primary text-primary">スタンダード (Standard)</th>
+                                    <th class="table-dark text-white">エンタープライズ (Enterprise)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th class="text-start">月額基本料金</th>
+                                    <td class="fw-bold text-success">¥0 <small class="text-muted">(1ヶ月限定)</small></td>
+                                    <td class="fw-bold text-primary font-mono fs-5">¥100,000 /月</td>
+                                    <td class="fw-bold text-dark font-mono fs-5">¥300,000 /月</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-start">想定ターゲット</th>
+                                    <td>検証・PoC検討企業</td>
+                                    <td>中堅企業 (従業員100〜500名)</td>
+                                    <td>準大手・大手 (従業員500名〜)</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-start">基本パッケージ内容</th>
+                                    <td>・WF: 1 / EC: 1<br>・L3処理: 50件/月</td>
+                                    <td>・WF: 1 / EC: 2 / 会計: 1<br>・L3処理: 500件/月<br>・ダッシュボード ＆ 予算管理</td>
+                                    <td>・WF: 無制限 / EC: 5 / 会計: 2<br>・L3処理: 3,000件/月<br>・全基本機能 ＋ 専任SRE保守</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-start">従量従加単価</th>
+                                    <td>不可</td>
+                                    <td>・EC接続追加: +¥20,000/社<br>・L3処理: +¥50/件</td>
+                                    <td>・EC接続追加: +¥15,000/社<br>・L3処理: +¥30/件</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h6 class="fw-bold text-dark border-bottom pb-1 mb-2 mt-4"><i class="bi bi-puzzle me-2"></i>機能モジュール Add-on（切り売りオプション）</h6>
+                    <p class="small text-muted mb-2">社内ステークホルダー（IT部門、総務、経理・CFO、内部監査）の個別の課題に合わせて追加購入できる選択式ライセンス。</p>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover spec-table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>モジュール名</th>
+                                    <th>月額Add-on価格</th>
+                                    <th>ターゲット部門</th>
+                                    <th>提供バリュー ＆ 主な機能</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold text-dark"><i class="bi bi-laptop text-primary me-2"></i>統合資産 ＋ MDM IT台帳</td>
+                                    <td class="fw-bold font-mono text-success">+ ¥80,000 /月</td>
+                                    <td>ITインフラ部 / 総務課</td>
+                                    <td>Intune/Jamf API連携、PC・スマホスペック取得、リース満了前アラート、遠隔ロック命令。</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark"><i class="bi bi-qr-code-scan text-primary me-2"></i>現場スマホ棚卸 ＆ 貸出予約</td>
+                                    <td class="fw-bold font-mono text-success">+ ¥50,000 /月</td>
+                                    <td>工場・現場総務 / 管理部</td>
+                                    <td>カレンダー型共有備品予約、PWAスマホQR棚卸し（状態4区分報告）、オフライン同期。</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark"><i class="bi bi-graph-up text-primary me-2"></i>経営・出張・交際費 BI</td>
+                                    <td class="fw-bold font-mono text-success">+ ¥70,000 /月</td>
+                                    <td>CFO / 経営企画 / 経理部</td>
+                                    <td>税法交際費損金枠モニタリング、出張動向・安否確認一斉Ping、部門別費用ランキング分析。</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark"><i class="bi bi-shield-check text-danger me-2"></i>ガバナンス・不正・異常検知AI</td>
+                                    <td class="fw-bold font-mono text-success">+ ¥100,000 /月</td>
+                                    <td>内部監査室 / 経理統制部</td>
+                                    <td>相場異常値（高額購入）チェック、領収書/カード二重申請重複検知、規程逸脱アラート。</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark"><i class="bi bi-magic text-purple me-2"></i>AI Agentic コスト削減レコメンド</td>
+                                    <td class="fw-bold font-mono text-success">+ ¥120,000 /月</td>
+                                    <td>購買部 / 調達部門</td>
+                                    <td>カートチェックイン時のPB安値品・短納期品リアルタイム割り込み推薦、コスト削減レポート。</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark"><i class="bi bi-scale-balanced text-purple me-2"></i>RFP ＆ 相見積比較ボード</td>
+                                    <td class="fw-bold font-mono text-success">+ ¥150,000 /月</td>
+                                    <td>購買部 / 特注品手配課</td>
+                                    <td>非EC特注品・工事の相見積もり一括送付、比較マトリクス、ワンクリック承認ワークフロー接続。</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark"><i class="bi bi-file-earmark-text text-primary me-2"></i>AI-OCR 領収書読取 ＆ 外貨計算</td>
+                                    <td class="fw-bold font-mono text-success">+ ¥60,000 /月</td>
+                                    <td>経費精算担当 / 経理部</td>
+                                    <td>紙領収書/請求書のAI-OCR自動データ化、申請自動作成、取引日TTS外貨換算計算。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7.3 LTV最大化アップセルシナリオ -->
+        <section id="sec-7-3" class="section-anchor">
+            <div class="card">
+                <div class="card-header bg-white"><i class="bi bi-arrow-up-right-circle me-2"></i>7.3 顧客単価（ARPU）成長 ＆ LTV最大化アップセルシナリオ</div>
+                <div class="card-body">
+                    <p class="small text-muted mb-3">契約初期は低価格で入り込み、社内利用の浸透・他部門への横展開に合わせて段階的に課金単価を引き上げるロードマップ。</p>
+
+                    <div class="row g-3 text-center">
+                        <div class="col-md-3">
+                            <div class="p-3 border rounded bg-light">
+                                <span class="badge bg-secondary mb-1">Step 1: 導入期</span>
+                                <h6 class="fw-bold text-dark">スタンダード開始</h6>
+                                <p class="fs-5 fw-bold text-primary font-mono mb-1">¥ 100,000 <small class="text-muted fs-6">/月</small></p>
+                                <small class="text-muted d-block text-start">・kintone + MonotaRO接続<br>・L3データ蓄積<br>・購買ダッシュボード可視化</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 border rounded bg-light">
+                                <span class="badge bg-info text-dark mb-1">Step 2: 現場展開</span>
+                                <h6 class="fw-bold text-dark">資産 ＋ 貸出Add-on</h6>
+                                <p class="fs-5 fw-bold text-primary font-mono mb-1">¥ 230,000 <small class="text-muted fs-6">/月</small></p>
+                                <small class="text-muted d-block text-start">・基本料 ¥10万<br>・資産MDM (+8万)<br>・スマホ棚卸/貸出 (+5万)</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 border rounded bg-light">
+                                <span class="badge bg-primary mb-1">Step 3: 全社統制</span>
+                                <h6 class="fw-bold text-dark">エンタープライズ昇格</h6>
+                                <p class="fs-5 fw-bold text-primary font-mono mb-1">¥ 570,000 <small class="text-muted fs-6">/月</small></p>
+                                <small class="text-muted d-block text-start">・基本料 ¥30万<br>・EC接続拡張 (Amazon等)<br>・ガバナンスAI (+10万)<br>・経営BI (+7万)</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 border border-success rounded bg-white">
+                                <span class="badge bg-success mb-1">Step 4: AI & RFP高度化</span>
+                                <h6 class="fw-bold text-success">全モジュールフル活用</h6>
+                                <p class="fs-4 fw-bold text-success font-mono mb-1">¥ 960,000+ <small class="text-muted fs-6">/月</small></p>
+                                <small class="text-muted d-block text-start">・AI Agent (+12万)<br>・RFP比較 (+15万)<br>・L3従量オーバー分<br><b>👉 年間 LTV 1,000万円超/社</b></small>
+                            </div>
                         </div>
                     </div>
                 </div>
