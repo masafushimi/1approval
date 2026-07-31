@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1approval プラットフォームシステム要件定義・基本設計書 (v3.3)</title>
+    <title>1approval プラットフォームシステム要件定義・基本設計書 (v3.5)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
@@ -72,16 +72,16 @@
             border-radius: 0.5rem;
             font-size: 0.85rem;
             overflow-x: auto;
-        }
-        code { color: #38bdf8; }
-        .spec-table th {
-            background-color: #f8fafc;
-            width: 25%;
-            font-size: 0.9rem;
-        }
+        } code { color: #38bdf8; }
+        .spec-table th { background-color: #f8fafc; width: 25%; font-size: 0.9rem; }
         .spec-table td { font-size: 0.9rem; }
         .section-anchor { scroll-margin-top: 1.5rem; }
         .l3-badge { font-weight: 600; font-size: 0.75rem; font-family: monospace; }
+        .memo-card { border-left: 4px solid #8b5cf6; background-color: #faf5ff; }
+        .ai-priority-card {
+            border: 2px solid #0d6efd;
+            background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%);
+        }
         @media (max-width: 992px) {
             #sidebar { width: 100%; height: auto; position: relative; }
             #content { margin-left: 0; padding: 1.5rem; }
@@ -94,7 +94,7 @@
     <nav id="sidebar">
         <div class="px-3 mb-3">
             <h5 class="fw-bold text-white mb-0"><i class="bi bi-cpu text-primary me-2"></i>1approval</h5>
-            <small class="text-secondary">統合ミドルウェア・要件定義 v3.3</small>
+            <small class="text-secondary">統合ミドルウェア・要件定義 v3.5</small>
         </div>
         <div id="sidebar-nav" class="nav flex-column">
             <div class="nav-group-title">1. システムビジョン</div>
@@ -117,6 +117,14 @@
             <div class="nav-group-title">4. データモデル・API仕様</div>
             <a class="nav-link" href="#sec-4-1">4.1 L3マスター ＆ 資産テーブル構造</a>
             <a class="nav-link" href="#sec-4-2">4.2 外部システム連携APIフロー</a>
+
+            <div class="nav-group-title text-purple">5. 将来拡張構想 (メモ)</div>
+            <a class="nav-link" href="#sec-5-1">5.1 メモ1: AI-OCR経費精算拡張構想</a>
+            <a class="nav-link" href="#sec-5-2">5.2 メモ2: AI Agentic 購買レコメンド</a>
+            <a class="nav-link" href="#sec-5-3">5.3 メモ3: RFP・見積比較・TAM拡大</a>
+
+            <div class="nav-group-title text-primary">6. 開発戦略</div>
+            <a class="nav-link" href="#sec-6-1">6.1 開発優先順位 ＆ ロードマップ</a>
         </div>
     </nav>
 
@@ -129,8 +137,8 @@
                 <p class="text-muted mb-0">エンタープライズ統合中継ハブ / L3データ基盤 / サプライヤー自動契約 / 現場現物資産統制</p>
             </div>
             <div class="text-end">
-                <span class="badge bg-primary fs-6">Version 3.3.0</span><br>
-                <small class="text-muted">2026-07-31 改訂 (全要件統合版)</small>
+                <span class="badge bg-primary fs-6">Version 3.5.0</span><br>
+                <small class="text-muted">2026-07-31 改訂 (顧客価値起点ロードマップ版)</small>
             </div>
         </div>
 
@@ -207,6 +215,7 @@
                     </table>
 
                     <h6 class="fw-bold text-dark border-bottom pb-1 mb-2"><i class="bi bi-diagram-2 me-2"></i>ビジュアルフロービルダー (Flowbuilder)</h6>
+                    <img src="/1.png" width="80%" / >
                     <table class="table table-bordered spec-table">
                         <tr>
                             <th>キャンバス機能</th>
@@ -246,6 +255,7 @@
                 <div class="card-header"><span class="badge bg-primary me-2">中核 03</span> 2.3 L3データ蓄積・仕訳ルーティング</div>
                 <div class="card-body">
                     <p>将来的なPeppol電子請求・デジタルインボイス・電帳法に対応するため、すべての取引を高度な<b>L3データ</b>へ統一・正規化します。</p>
+                     <img src="/22.png" width="80%" / >
                     <div class="table-responsive mb-3">
                         <table class="table table-sm table-bordered bg-white">
                             <thead class="table-light">
@@ -472,6 +482,115 @@ CREATE TABLE asset_items (
     │                          │                              │ 6. 自動仕訳/経費明細送信│
     │                          │                              │    (Peppol/REST API)    │
     │                          │                              │                         │</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 将来拡張構想 (メモ枠) -->
+        <h3 class="fw-bold border-bottom pb-2 mb-3 mt-5 text-purple"><i class="bi bi-lightbulb me-2"></i>5. 将来拡張ロードマップ（構想・機能メモ）</h3>
+
+        <!-- 5.1 メモ1 -->
+        <section id="sec-5-1" class="section-anchor">
+            <div class="card memo-card">
+                <div class="card-header bg-transparent"><span class="badge bg-purple text-white bg-dark me-2">メモ 01</span> 経費精算機能・AI-OCR拡張構想</div>
+                <div class="card-body">
+                    <p class="mb-2">既存の経費精算SaaSの前段（上位ハブ）として1approvalを位置づける高機能化ロードマップ。</p>
+                    <ul>
+                        <li><b>(a) 証票一元紐付け ＆ 経費精算SaaS送出:</b> 各種ワークフローから連携されたデータに領収書・証票を紐付けて一元管理し、接続先の経費精算システム（楽楽精算、Concur等）へ自動送出。</li>
+                        <li><b>(b) 1approval外購入のAI-OCR自動WF構築:</b> 他チャネルで取得した見積書・請求書・領収書データを1approvalサーバーに送信すると、<b>AI-OCRで即座にデータ化</b>。自動的に回覧ワークフローを起案し承認を獲得するロジック。</li>
+                        <li><b>外貨レート自動計算:</b> 海外出張や外貨建て請求書に対し、取引日時点のTTS為替レートを自動取得・換算計上。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5.2 メモ2 -->
+        <section id="sec-5-2" class="section-anchor">
+            <div class="card memo-card">
+                <div class="card-header bg-transparent"><span class="badge bg-purple text-white bg-dark me-2">メモ 02</span> AI Agentic リアルタイム購買レコメンド</div>
+                <div class="card-body">
+                    <p class="mb-2">ユーザーが購買アクションを起こした瞬間に、AI Agentが介入して最適な購入条件を助言する機能。</p>
+                    <ul>
+                        <li><b>チェックイン時リアルタイムレコメンド:</b> 各フロントワークフローの買い物かご（カート）をチェックイン（チェックアウト）したタイミングで、1approvalのAI Agentがバックグラウンド起動。</li>
+                        <li><b>代替案提示:</b> 同等性能のコスト削減アイテム（プライベートブランド、他ECの安値品）や、より納期の早いアイテム、統合購買割引が適用できるSKUをリアルタイムに画面上へポップアップ推薦。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5.3 メモ3 -->
+        <section id="sec-5-3" class="section-anchor">
+            <div class="card memo-card">
+                <div class="card-header bg-transparent"><span class="badge bg-purple text-white bg-dark me-2">メモ 03</span> RFP・見積選定（非EC領域TAM拡大）</div>
+                <div class="card-body">
+                    <p class="mb-2">カタログ型ECサイトでカバーできない「非標準品・工事・受託サービス等」へ購買管理領域（TAM）を拡大するモジュール。</p>
+                    <ul>
+                        <li><b>サプライヤー群管理 ＆ 相見積もり発行 (RFP):</b> 1approval上に登録された取引先サプライヤー群を選択し、提案依頼書（RFP）や見積依頼を一括送付。</li>
+                        <li><b>見積回収・比較選定ボード:</b> 各社から返信された見積結果を同一画面でマトリクス比較。最安値・最適条件のサプライヤーをワンクリックで選定し、後続の承認ワークフローへシームレスにデータ接続。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. 開発戦略：顧客価値・現場定着起点ロードマップ -->
+        <h3 class="fw-bold border-bottom pb-2 mb-3 mt-5 text-primary"><i class="bi bi-rocket-takeoff me-2"></i>6. 開発戦略</h3>
+
+        <section id="sec-6-1" class="section-anchor">
+            <div class="card ai-priority-card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <span class="fs-6 fw-bold"><i class="bi bi-cpu-fill me-2"></i>開発優先順位 ＆ 実装ロードマップ（顧客価値・現場定着起点）</span>
+                    <span class="badge bg-light text-primary">Strategic Roadmap v3.5</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small mb-4">
+                        「まず見せる（可視化） ➔ 買ったデータを現場の現物管理に即繋げる（定着） ➔ 業務が乗った後に自動化・高度統制を被せる」という、<b>導入摩擦を最小化し現場のUXを最速で高めるプロダクト思考（PLG）の順序</b>で開発を進めます。
+                    </p>
+
+                    <div class="timeline">
+                        <!-- Phase 1 -->
+                        <div class="p-3 mb-3 bg-white border border-primary rounded border-2">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold text-primary mb-0"><span class="badge bg-primary me-2">Phase 1</span>【可視化 ＆ 現場定着】(機能 5 → 4 → 9 → 10)</h6>
+                                <span class="badge bg-light text-primary border border-primary">最優先 / MVP</span>
+                            </div>
+                            <p class="small text-secondary mb-2"><b>狙い:</b> 手動CSV取り込みや簡易入力からでも即座に支出を可視化し、そのまま現場の「資産台帳・棚卸・貸出」へ繋げて社内の日常ツールとして定着させる。</p>
+                            <ul class="small mb-0">
+                                <li><span class="badge bg-primary me-1">5</span> <b>統合支出・購買ダッシュボード:</b> 支出の全体像・部署別費用を即座に見せるUI</li>
+                                <li><span class="badge bg-primary me-1">4</span> <b>L3データ蓄積・仕訳ルーティング:</b> データ正規化DB ＆ 会計(AP) / 経費自動判定</li>
+                                <li><span class="badge bg-primary me-1">9</span> <b>統合資産＋MDM・IT資産台帳 ＆ 契約期限アラート:</b> 購買データからの台帳自動連携・期限アラート</li>
+                                <li><span class="badge bg-primary me-1">10</span> <b>カレンダー型貸出予約 ＆ モバイル実地棚卸:</b> QRスキャン棚卸（状態4区分）＆ 貸出予約UI</li>
+                            </ul>
+                        </div>
+
+                        <!-- Phase 2 -->
+                        <div class="p-3 mb-3 bg-white border rounded">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold text-dark mb-0"><span class="badge bg-secondary me-2">Phase 2</span>【分析 ＆ 自動中継ハブ化】(機能 8 → 1, 2)</h6>
+                                <span class="badge bg-light text-dark border">次点 / 連携拡張</span>
+                            </div>
+                            <p class="small text-secondary mb-2"><b>狙い:</b> 蓄積されたデータの高度分析を提供しつつ、各社の承認WFやECサイトとのAPI自動中継（Flowbuilder）を構築して運用の自動化を完了させる。</p>
+                            <ul class="small mb-0">
+                                <li><span class="badge bg-secondary me-1">8</span> <b>レポーティング ＆ BIアナリティクス:</b> 役員・管理職向け経営分析・出張/交際費サマリー</li>
+                                <li><span class="badge bg-secondary me-1">1</span> <b>ビジュアルフロービルダー (Flowbuilder):</b> WF・EC・会計をつなぐドラッグ＆ドロップノード連携</li>
+                                <li><span class="badge bg-secondary me-1">2</span> <b>サプライヤー管理 ＆ 自動契約締結:</b> 1approval画面上でのEC約款・電子契約自動オンボーディング</li>
+                            </ul>
+                        </div>
+
+                        <!-- Phase 3 -->
+                        <div class="p-3 bg-white border border-purple rounded" style="border-color: #8b5cf6 !important;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold text-purple mb-0" style="color: #6b21a8;"><span class="badge bg-dark me-2">Phase 3</span>【高度統制 ＆ AI・調達拡張】(機能 3, 6, 7 ＋ 将来メモ)</h6>
+                                <span class="badge bg-light text-dark border">高付加価値 / エンタープライズ</span>
+                            </div>
+                            <p class="small text-secondary mb-2"><b>狙い:</b> プラットフォームに業務が完全に載った後、強固な権限統制・予算ブロック・AIによるコスト削減（レコメンド）を被せてROIを跳ね上げる。</p>
+                            <ul class="small mb-0">
+                                <li><span class="badge bg-dark me-1">3</span> <b>組織・人事・承認権限 Sync:</b> SmartHR/Azure AD連携 ＆ 承認ルールの全社同期</li>
+                                <li><span class="badge bg-dark me-1">6</span> <b>予実制御管理:</b> リアルタイム予算消化計算 ＆ 予算オーバー時の申請自動ロック</li>
+                                <li><span class="badge bg-dark me-1">7</span> <b>ガバナンス・不正・異常検知エンジン:</b> 相場逸脱・二重申請・規程違反のAI自動検知</li>
+                                <li><span class="badge bg-purple text-white me-1">メモ1-3</span> <b>AI-OCR経費 / AI Agentic購買レコメンド / RFP相見積もりモジュール</b></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
