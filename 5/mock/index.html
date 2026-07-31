@@ -44,6 +44,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js CDN for Visual BI Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Inter', 'Noto Sans JP', sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -119,7 +121,11 @@
                 </button>
                 <button onclick="switchScreen('orgsync')" id="nav-orgsync" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
                     <i class="fa-solid fa-users-gear w-4 text-sky-500"></i>
-                    <span class="font-semibold">3&6. 人事Sync ＆ 予算ブロック</span>
+                    <span class="font-semibold">3. 人事Sync ＆ API一括連携</span>
+                </button>
+                <button onclick="switchScreen('budget')" id="nav-budget" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
+                    <i class="fa-solid fa-wallet w-4 text-emerald-500"></i>
+                    <span class="font-semibold">6. 予算管理 ＆ 月次分配</span>
                 </button>
 
                 <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-3">層 3: 現場・現物オペレーション</div>
@@ -701,23 +707,249 @@
 
             <!-- SCREEN 7: 8. レポーティング ＆ BIアナリティクス -->
             <div id="screen-reports" class="screen-content hidden space-y-6">
+                <!-- 画面ヘッダー ＆ クイックフィルター -->
                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
-                    <div class="border-b border-slate-100 pb-3">
-                        <h3 class="font-bold text-slate-900 text-sm">📈 経営層・管理部門向け BIダッシュボード＆レポート</h3>
-                        <p class="text-slate-500 text-[11px]">月次精算サマリー、交際費税法上限チェック、出張者一覧・駐在員連絡機能</p>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-emerald-50 text-emerald-600 border border-emerald-200 text-[10px] px-2 py-0.5 rounded font-mono font-bold">Executive BI v3.5</span>
+                                <h3 class="font-bold text-slate-900 text-base flex items-center">
+                                    <i class="fa-solid fa-chart-line text-brand-500 mr-2"></i>
+                                    経営・出張・交際費 統合分析インテリジェンス
+                                </h3>
+                            </div>
+                            <p class="text-slate-500 text-[11px] mt-1">L3購買・精算データに基づく税法損金枠モニタリング、出張動向、及びAI予実分析</p>
+                        </div>
+                        <!-- BIコントロールフィルター -->
+                        <div class="flex items-center space-x-2 text-xs">
+                            <select id="bi-period-select" onchange="updateBiCharts()" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-medium text-slate-700 focus:outline-none focus:border-brand-500">
+                                <option value="2026-Q2">2026年度 Q2 (4月〜9月)</option>
+                                <option value="2026-07" selected>2026年 7月 (当月)</option>
+                                <option value="2026-YTD">2026年度 通期YTD</option>
+                            </select>
+                            <button onclick="exportBiReport()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-semibold rounded-lg text-xs transition flex items-center space-x-1">
+                                <i class="fa-solid fa-download text-brand-500 mr-1"></i>
+                                <span>経営レポートPDF出力</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                            <h4 class="font-bold text-slate-900 text-xs flex items-center"><i class="fa-solid fa-glass-cheers text-brand-500 mr-2"></i>交際費・接待費レポート (税法上限モニタリング)</h4>
-                            <p class="text-[11px] text-slate-500">5,000円/人 基準および年間資本金に応じた損金算入上限のリアルタイム消化率</p>
-                            <div class="pt-2 text-lg font-bold font-mono text-emerald-600">¥ 1,840,000 <span class="text-xs font-normal text-slate-500">(上限消化率 23%)</span></div>
+                    <!-- エグゼクティブ 4大KPIカード -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+                        <!-- KPI 1: 交際費損金上限消化率 -->
+                        <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-4 rounded-xl shadow-md relative overflow-hidden">
+                            <div class="absolute -right-3 -bottom-3 text-slate-700/30 text-6xl font-black select-none">
+                                <i class="fa-solid fa-glass-cheers"></i>
+                            </div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-slate-400 text-[11px] font-medium">交際費 損金算入上限枠 (800万)</span>
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[9px] font-bold">健全</span>
+                            </div>
+                            <div class="text-2xl font-bold font-mono text-white mb-1">¥ 1,840,000</div>
+                            <div class="w-full bg-slate-700/60 rounded-full h-2 mb-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-emerald-400 to-brand-400 h-2 rounded-full" style="width: 23%"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-slate-300 font-mono">
+                                <span>消化率: 23.0%</span>
+                                <span>残枠: ¥ 6,160,000</span>
+                            </div>
                         </div>
 
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                            <h4 class="font-bold text-slate-900 text-xs flex items-center"><i class="fa-solid fa-plane-departure text-sky-500 mr-2"></i>今週の出張者一覧 ＆ 駐在員自動連絡</h4>
-                            <p class="text-[11px] text-slate-500">海外・国内出張予定者（3名）。現地駐在員・セキュリティチームへ自動連絡済</p>
-                            <div class="pt-2 text-xs font-bold text-slate-800">佐藤 健太 (タイ工場出張: 8/2〜8/6)</div>
+                        <!-- KPI 2: 出張旅費累計 -->
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-slate-500 text-[11px] font-medium">今月出張旅費 (国内・海外)</span>
+                                <span class="text-brand-600 font-bold text-[10px]"><i class="fa-solid fa-arrow-down mr-1"></i>前月比 -8.5%</span>
+                            </div>
+                            <div class="text-2xl font-bold font-mono text-slate-900 mb-1">¥ 3,420,500</div>
+                            <div class="text-[10px] text-slate-500 flex justify-between items-center mt-2">
+                                <span>国内: ¥1.2M / 海外: ¥2.22M</span>
+                                <span class="text-slate-400">平均単価: ¥114K/回</span>
+                            </div>
+                        </div>
+
+                        <!-- KPI 3: 5,000円/10,000円超基準クリア率 -->
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-slate-500 text-[11px] font-medium">会議費/交際費 税法区分率</span>
+                                <span class="px-2 py-0.5 rounded bg-brand-50 text-brand-600 border border-brand-200 text-[9px] font-bold font-mono">10,000円基準適応</span>
+                            </div>
+                            <div class="text-2xl font-bold font-mono text-brand-600 mb-1">94.2 %</div>
+                            <div class="text-[10px] text-slate-500 flex justify-between items-center mt-2">
+                                <span>1万円以下(損金全額): 88件</span>
+                                <span class="text-emerald-600 font-bold">要件不備 0件</span>
+                            </div>
+                        </div>
+
+                        <!-- KPI 4: アクティブ出張者・駐在員同期 -->
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-slate-500 text-[11px] font-medium">現在渡航中出張者 / 駐在員</span>
+                                <span class="flex items-center text-emerald-600 font-bold text-[10px]">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-ping"></span>
+                                    安否確認完了
+                                </span>
+                            </div>
+                            <div class="text-2xl font-bold font-mono text-slate-900 mb-1">3 <span class="text-xs font-normal text-slate-500">名渡航中</span></div>
+                            <div class="text-[10px] text-slate-500 flex justify-between items-center mt-2">
+                                <span>バンコク(2) / サンノゼ(1)</span>
+                                <span class="text-sky-600 font-bold">駐在員自動連絡済</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- インタラクティブ BI ビジュアルグラフエリア -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- グラフ 1: 月次交際費 vs 出張旅費 トレンド ＆ 予算消化 -->
+                    <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-xs flex items-center">
+                                    <i class="fa-solid fa-chart-column text-brand-500 mr-2"></i>
+                                    交際費 ＆ 出張旅費 月次推移 vs 予算バウンダリ (L3集計)
+                                </h4>
+                                <p class="text-[10px] text-slate-400 mt-0.5">直近6ヶ月間の支出トレンドと着地予測</p>
+                            </div>
+                            <div class="flex items-center space-x-3 text-[10px]">
+                                <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-brand-500 mr-1"></span>交際費</span>
+                                <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-sky-500 mr-1"></span>出張旅費</span>
+                                <span class="flex items-center"><span class="w-2.5 h-0.5 bg-rose-500 mr-1"></span>月次予算上限</span>
+                            </div>
+                        </div>
+                        <div class="h-64 w-full relative">
+                            <canvas id="chart-monthly-trend"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- グラフ 2: 交際費の税法単価区分 ＆ 支出割合ドーナツ -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="border-b border-slate-100 pb-3">
+                            <h4 class="font-bold text-slate-900 text-xs flex items-center">
+                                <i class="fa-solid fa-chart-pie text-purple-500 mr-2"></i>
+                                交際費・会食 税法単価区分ブレイクダウン
+                            </h4>
+                            <p class="text-[10px] text-slate-400 mt-0.5">一人当たり単価ルール（5,000円/10,000円超）適合率</p>
+                        </div>
+                        <div class="h-48 w-full relative flex items-center justify-center">
+                            <canvas id="chart-tax-breakdown"></canvas>
+                        </div>
+                        <div class="space-y-1.5 text-[10px] pt-2 border-t border-slate-100">
+                            <div class="flex justify-between items-center text-slate-600">
+                                <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>10,000円以下 (損金算入):</span>
+                                <span class="font-mono font-bold text-slate-800">¥ 1,220,000 (66.3%)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-slate-600">
+                                <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-amber-500 mr-1.5"></span>10,000円超 (社外役員接待):</span>
+                                <span class="font-mono font-bold text-slate-800">¥ 480,000 (26.1%)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-slate-600">
+                                <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-rose-500 mr-1.5"></span>社内会食・社内交際費:</span>
+                                <span class="font-mono font-bold text-slate-800">¥ 140,000 (7.6%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2段目: 部署別交際費・出張費比較 ＆ 今週の渡航出張者スマートトラッカー -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- 部門別 支出比較ランキング (横棒グラフ) -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
+                            <h4 class="font-bold text-slate-900 text-xs flex items-center">
+                                <i class="fa-solid fa-ranking-star text-amber-500 mr-2"></i>
+                                部門別 交際費・出張費 支出ランキング
+                            </h4>
+                            <span class="text-[10px] text-slate-400">当月実績</span>
+                        </div>
+                        <div class="h-56 w-full relative">
+                            <canvas id="chart-department-spend"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 今週の渡航出張者 ＆ 現地駐在員自動連携トラッカー -->
+                    <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-xs flex items-center">
+                                    <i class="fa-solid fa-plane-departure text-sky-500 mr-2"></i>
+                                    アクティブ出張者リアルタイムトラッカー ＆ 現地駐在員エスコート連携
+                                </h4>
+                                <p class="text-[10px] text-slate-400 mt-0.5">kintone出張申請・楽楽精算フライトL3データより自動追跡</p>
+                            </div>
+                            <button onclick="alert('全出張者の安全確認一斉Slackメッセージを即時送信しました。')" class="px-3 py-1.5 bg-sky-500 hover:bg-sky-600 text-white rounded-lg font-bold text-[10px] transition shadow-sm flex items-center space-x-1">
+                                <i class="fa-solid fa-shield-heart mr-1"></i>
+                                <span>安否確認一斉Ping発火</span>
+                            </button>
+                        </div>
+
+                        <!-- 出張者カードリスト -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <!-- 出張者 1: タイ・バンコク -->
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-12 h-12 bg-sky-500/10 rounded-bl-full flex items-start justify-end p-1.5">
+                                    <span class="text-xs">🇹🇭</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-xs">佐藤</div>
+                                    <div>
+                                        <div class="font-bold text-slate-900 text-xs">佐藤 健太</div>
+                                        <div class="text-[9px] text-slate-400">第一工場 / 製造課</div>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-2 rounded-lg border border-slate-200 text-[10px] space-y-1">
+                                    <div class="flex justify-between"><span class="text-slate-400">渡航先:</span><span class="font-bold text-slate-800">タイ (バンコク工場)</span></div>
+                                    <div class="flex justify-between"><span class="text-slate-400">期間:</span><span class="font-mono text-slate-700">8/2 〜 8/6 (5日間)</span></div>
+                                    <div class="flex justify-between"><span class="text-slate-400">目的:</span><span class="text-slate-700">新ライン校正・技術指導</span></div>
+                                </div>
+                                <div class="flex justify-between items-center text-[9px] pt-1">
+                                    <span class="text-emerald-600 font-bold"><i class="fa-solid fa-circle-check mr-1"></i>現地駐在(アピチャット)連絡済</span>
+                                </div>
+                            </div>
+
+                            <!-- 出張者 2: アメリカ・サンノゼ -->
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-12 h-12 bg-purple-500/10 rounded-bl-full flex items-start justify-end p-1.5">
+                                    <span class="text-xs">🇺🇸</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">高橋</div>
+                                    <div>
+                                        <div class="font-bold text-slate-900 text-xs">高橋 直樹</div>
+                                        <div class="text-[9px] text-slate-400">技術開発部 / R&D</div>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-2 rounded-lg border border-slate-200 text-[10px] space-y-1">
+                                    <div class="flex justify-between"><span class="text-slate-400">渡航先:</span><span class="font-bold text-slate-800">米国 (サンノゼ)</span></div>
+                                    <div class="flex justify-between"><span class="text-slate-400">期間:</span><span class="font-mono text-slate-700">7/28 〜 8/4 (8日間)</span></div>
+                                    <div class="flex justify-between"><span class="text-slate-400">目的:</span><span class="text-slate-700">AIセンサー技術EXPO参画</span></div>
+                                </div>
+                                <div class="flex justify-between items-center text-[9px] pt-1">
+                                    <span class="text-emerald-600 font-bold"><i class="fa-solid fa-circle-check mr-1"></i>US支社安全チーム受領</span>
+                                </div>
+                            </div>
+
+                            <!-- 出張者 3: 国内出張・大阪支社 -->
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-12 h-12 bg-amber-500/10 rounded-bl-full flex items-start justify-end p-1.5">
+                                    <span class="text-xs">🇯🇵</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs">鈴木</div>
+                                    <div>
+                                        <div class="font-bold text-slate-900 text-xs">鈴木 一朗</div>
+                                        <div class="text-[9px] text-slate-400">営業本部 / 第一課</div>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-2 rounded-lg border border-slate-200 text-[10px] space-y-1">
+                                    <div class="flex justify-between"><span class="text-slate-400">渡航先:</span><span class="font-bold text-slate-800">国内 (大阪支社)</span></div>
+                                    <div class="flex justify-between"><span class="text-slate-400">期間:</span><span class="font-mono text-slate-700">7/31 〜 8/1 (2日間)</span></div>
+                                    <div class="flex justify-between"><span class="text-slate-400">目的:</span><span class="text-slate-700">関西主要顧客役員挨拶</span></div>
+                                </div>
+                                <div class="flex justify-between items-center text-[9px] pt-1">
+                                    <span class="text-brand-600 font-bold"><i class="fa-solid fa-hotel mr-1"></i>EX予約/東横イン連携完了</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -739,38 +971,190 @@
                         </button>
                     </div>
 
-                    <!-- 見積比較マトリクス表 -->
-                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                    <!-- RFP案件一覧 ＆ マトリクス選定 -->
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="px-2 py-0.5 bg-purple-100 text-purple-700 font-bold rounded text-[10px]">RFP-2026-009</span>
+                                <h4 class="font-bold text-slate-900 text-xs inline mr-2 ml-2">第一工場 自動検査ロボット特注アーム架台製作</h4>
+                                <span class="text-emerald-600 font-bold text-[10px]"><i class="fa-solid fa-circle-check mr-1"></i>3社見積回収完了</span>
+                            </div>
+                            <span class="text-slate-400 font-mono text-[10px]">回答期限: 2026/08/05</span>
+                        </div>
+
+                        <!-- 3社比較マトリクス -->
+                        <div class="overflow-x-auto border border-slate-200 rounded-lg bg-white">
+                            <table class="w-full text-left border-collapse text-[11px]">
+                                <thead class="bg-slate-100 text-slate-700 border-b border-slate-200 font-mono">
+                                    <tr>
+                                        <th class="p-2.5">見積提出サプライヤー</th>
+                                        <th class="p-2.5">提示金額 (税抜)</th>
+                                        <th class="p-2.5">納期 / 工期</th>
+                                        <th class="p-2.5">仕様適合度・AI評価</th>
+                                        <th class="p-2.5 text-right">選定操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-purple-50/50 transition bg-emerald-50/30">
+                                        <td class="p-2.5 font-bold text-slate-900">
+                                            テックエンジニアリング株式会社
+                                            <span class="ml-1 px-1.5 py-0.2 bg-emerald-100 text-emerald-700 text-[9px] rounded font-bold">推奨 (最安値)</span>
+                                        </td>
+                                        <td class="p-2.5 font-mono font-bold text-emerald-700">¥ 1,450,000</td>
+                                        <td class="p-2.5 font-mono">3週間 (8/20納品)</td>
+                                        <td class="p-2.5"><span class="text-emerald-600 font-bold">適合度 98% (JIS規格適合)</span></td>
+                                        <td class="p-2.5 text-right">
+                                            <button onclick="alert('テックエンジニアリング社を最優秀サプライヤーとして採択し、kintone購買承認WFを発火しました。')" class="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded shadow-sm">この条件で発注承認へ</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="p-2.5 font-bold text-slate-900">日本精密ワークス株式会社</td>
+                                        <td class="p-2.5 font-mono text-slate-800">¥ 1,680,000</td>
+                                        <td class="p-2.5 font-mono">2週間 (8/12即納)</td>
+                                        <td class="p-2.5"><span class="text-slate-600">適合度 95%</span></td>
+                                        <td class="p-2.5 text-right">
+                                            <button onclick="alert('条件比較詳細を表示します。')" class="text-purple-600 hover:underline font-bold">詳細比較</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="p-2.5 font-bold text-slate-900">グローバルマシナリー合同会社</td>
+                                        <td class="p-2.5 font-mono text-slate-800">¥ 1,820,000</td>
+                                        <td class="p-2.5 font-mono">4週間 (8/28納品)</td>
+                                        <td class="p-2.5"><span class="text-slate-600">適合度 88%</span></td>
+                                        <td class="p-2.5 text-right">
+                                            <button onclick="alert('条件比較詳細を表示します。')" class="text-purple-600 hover:underline font-bold">詳細比較</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN 9: 3. 人事・組織Sync ＆ 各種システムAPIプロビジョニング -->
+            <div id="screen-orgsync" class="screen-content hidden space-y-6">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="border-b border-slate-100 pb-3 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-sm flex items-center">
+                                <i class="fa-solid fa-users-gear text-sky-500 mr-2"></i>
+                                人事・組織Sync ＆ システム一括API連携（プロビジョニング）
+                            </h3>
+                            <p class="text-slate-500 text-[11px] mt-0.5">全従業員マスターを一元管理。SmartHR・jinjer、各種WF、ECサイト、会計システムへAPIで一気に同期</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="alert('従業員CSVテンプレートを出力しました。')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold rounded-lg text-xs transition flex items-center space-x-1">
+                                <i class="fa-solid fa-download text-slate-500 mr-1"></i>
+                                <span>CSVエクスポート</span>
+                            </button>
+                            <button onclick="alert('全従業員CSVインポートモーダルを開きます。')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-lg text-xs transition flex items-center space-x-1 shadow-sm">
+                                <i class="fa-solid fa-file-import text-brand-400 mr-1"></i>
+                                <span>従業員CSVインポート</span>
+                            </button>
+                            <button onclick="triggerGlobalMasterSync()" class="px-3.5 py-1.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-lg text-xs transition shadow-sm flex items-center space-x-1.5">
+                                <i class="fa-solid fa-rotate mr-1 animate-spin"></i>
+                                <span>全サービス一括API同期実行</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 接続APIターゲットステータス -->
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1">
+                            <div class="flex justify-between items-center text-[10px] text-slate-500">
+                                <span class="font-bold text-slate-700"><i class="fa-solid fa-user-check text-sky-500 mr-1"></i>SmartHR</span>
+                                <span class="text-emerald-600 font-mono font-bold">ONLINE</span>
+                            </div>
+                            <div class="text-[11px] font-bold text-slate-800">人事労務マスターSync</div>
+                            <div class="text-[9px] text-slate-400">最終同期: 本日 04:00 (450名)</div>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1">
+                            <div class="flex justify-between items-center text-[10px] text-slate-500">
+                                <span class="font-bold text-slate-700"><i class="fa-solid fa-clock text-amber-500 mr-1"></i>jinjer</span>
+                                <span class="text-emerald-600 font-mono font-bold">ONLINE</span>
+                            </div>
+                            <div class="text-[11px] font-bold text-slate-800">勤怠・組織変更Sync</div>
+                            <div class="text-[9px] text-slate-400">最終同期: 本日 04:02 (12部署)</div>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1">
+                            <div class="flex justify-between items-center text-[10px] text-slate-500">
+                                <span class="font-bold text-slate-700"><i class="fa-solid fa-diagram-project text-purple-500 mr-1"></i>kintone / WF</span>
+                                <span class="text-emerald-600 font-mono font-bold">ONLINE</span>
+                            </div>
+                            <div class="text-[11px] font-bold text-slate-800">承認組織・権限反映</div>
+                            <div class="text-[9px] text-slate-400">承認ルートマスタ同期完了</div>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1">
+                            <div class="flex justify-between items-center text-[10px] text-slate-500">
+                                <span class="font-bold text-slate-700"><i class="fa-solid fa-cart-shopping text-brand-500 mr-1"></i>購買EC群</span>
+                                <span class="text-emerald-600 font-mono font-bold">READY</span>
+                            </div>
+                            <div class="text-[11px] font-bold text-slate-800">モノタロウ / Amazon等</div>
+                            <div class="text-[9px] text-slate-400">購買アカウント自動生成</div>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1">
+                            <div class="flex justify-between items-center text-[10px] text-slate-500">
+                                <span class="font-bold text-slate-700"><i class="fa-solid fa-file-invoice-dollar text-emerald-600 mr-1"></i>会計・経費SaaS</span>
+                                <span class="text-emerald-600 font-mono font-bold">READY</span>
+                            </div>
+                            <div class="text-[11px] font-bold text-slate-800">勘定奉行 / 楽楽精算</div>
+                            <div class="text-[9px] text-slate-400">社員コード・負担部署紐付</div>
+                        </div>
+                    </div>
+
+                    <!-- 全社従業員マスター一覧 -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <div class="bg-slate-100 px-4 py-2.5 border-b border-slate-200 flex justify-between items-center text-xs">
+                            <span class="font-bold text-slate-800">全社従業員マスターデータ (450名中 5名表示)</span>
+                            <div class="flex items-center space-x-2">
+                                <input type="text" placeholder="名前・部署・社員番号で検索..." class="px-2.5 py-1 text-[11px] bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-sky-500 w-56">
+                            </div>
+                        </div>
                         <table class="w-full text-left border-collapse text-[11px]">
-                            <thead class="bg-slate-100 text-slate-600 border-b border-slate-200 font-mono">
+                            <thead class="bg-slate-50 text-slate-600 border-b border-slate-200 font-mono">
                                 <tr>
-                                    <th class="p-3">見積案件名</th>
-                                    <th class="p-3">サプライヤーA社</th>
-                                    <th class="p-3">サプライヤーB社</th>
-                                    <th class="p-3">サプライヤーC社</th>
-                                    <th class="p-3 text-right">選定アクション</th>
+                                    <th class="p-3">社員番号 / 氏名</th>
+                                    <th class="p-3">所属部署 / 役職</th>
+                                    <th class="p-3">メールアドレス</th>
+                                    <th class="p-3">1approval 権限</th>
+                                    <th class="p-3">API連動ステータス</th>
+                                    <th class="p-3 text-right">操作</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-slate-700">
-                                <tr>
+                                <tr class="hover:bg-slate-50 transition">
                                     <td class="p-3">
-                                        <div class="font-bold text-slate-900">第一工場 外壁定期防水工事</div>
-                                        <div class="text-[10px] text-slate-400">納期希望: 2026/09/15</div>
+                                        <div class="font-bold text-slate-900">EMP-00101 伏見 統括</div>
+                                        <div class="text-[10px] text-slate-400">役員 / IT統括部</div>
                                     </td>
-                                    <td class="p-3 bg-emerald-50/50 border-l border-r border-emerald-200">
-                                        <div class="font-bold text-emerald-700 font-mono">¥ 2,400,000 (最安)</div>
-                                        <div class="text-[10px] text-slate-500">工期: 10日間 | 保証: 5年</div>
-                                    </td>
+                                    <td class="p-3">経営企画本部 / 統括CIO</td>
+                                    <td class="p-3 font-mono text-slate-500">fushimi@aquatech.co.jp</td>
+                                    <td class="p-3"><span class="px-2 py-0.5 rounded bg-brand-100 text-brand-700 font-bold border border-brand-200">全社管理者</span></td>
                                     <td class="p-3">
-                                        <div class="font-bold text-slate-800 font-mono">¥ 2,850,000</div>
-                                        <div class="text-[10px] text-slate-400">工期: 7日間 | 保証: 3年</div>
-                                    </td>
-                                    <td class="p-3">
-                                        <div class="font-bold text-slate-800 font-mono">¥ 3,100,000</div>
-                                        <div class="text-[10px] text-slate-400">工期: 12日間 | 保証: 10年</div>
+                                        <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                                            <i class="fa-solid fa-circle-check mr-1"></i>全5サービス完全同期
+                                        </span>
                                     </td>
                                     <td class="p-3 text-right">
-                                        <button onclick="alert('A社を選定し、kintone承認ワークフローへシームレス連携しました。');" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-sm transition">A社で決定・申請</button>
+                                        <button onclick="alert('従業員 EMP-00101 の編集画面を開きます。')" class="text-sky-600 hover:underline font-bold">編集</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="p-3">
+                                        <div class="font-bold text-slate-900">EMP-00242 佐藤 健太</div>
+                                        <div class="text-[10px] text-slate-400">一般社員</div>
+                                    </td>
+                                    <td class="p-3">第一工場 / 製造課</td>
+                                    <td class="p-3 font-mono text-slate-500">k.sato@aquatech.co.jp</td>
+                                    <td class="p-3"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium border border-slate-200">一般ユーザー</span></td>
+                                    <td class="p-3">
+                                        <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                                            <i class="fa-solid fa-circle-check mr-1"></i>全5サービス完全同期
+                                        </span>
+                                    </td>
+                                    <td class="p-3 text-right">
+                                        <button onclick="alert('従業員 EMP-00242 の編集画面を開きます。')" class="text-sky-600 hover:underline font-bold">編集</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -779,23 +1163,125 @@
                 </div>
             </div>
 
-            <!-- SCREEN 9: 3&6. 人事・組織Sync ＆ 承認ルール全社同期 -->
-            <div id="screen-orgsync" class="screen-content hidden space-y-6">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
-                    <div class="border-b border-slate-100 pb-3">
-                        <h3 class="font-bold text-slate-900 text-sm">👥 組織・人事・承認権限 Sync ＆ 予算ブロック設定</h3>
-                        <p class="text-slate-500 text-[11px]">SmartHR/Entra IDから組織階層を取り込み、1approval集中ルールを各WFへ配信</p>
+            <!-- SCREEN 10: 6. 部署別・科目別 予算管理 ＆ 月次分配カレンダー -->
+            <div id="screen-budget" class="screen-content hidden space-y-6">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="border-b border-slate-100 pb-3 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-sm flex items-center">
+                                <i class="fa-solid fa-wallet text-emerald-600 mr-2"></i>
+                                部署別 ＆ 予算項目別 月次予算分配カレンダーマトリクス
+                            </h3>
+                            <p class="text-slate-500 text-[11px] mt-0.5">年度・月ごとに各部署へ「間接資材費」「交際費」「出張旅費」等の上限額を配分・コントロール</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs">
+                            <select class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 focus:outline-none focus:border-brand-500">
+                                <option value="2026">2026年度 (令和8年度)</option>
+                                <option value="2025">2025年度</option>
+                            </select>
+                            <button onclick="alert('月次予算分配設定を保存しました。')" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-sm transition">
+                                <i class="fa-solid fa-floppy-disk mr-1"></i>予算分配案を保存
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                            <h4 class="font-bold text-slate-900 text-xs">同期状態 (SmartHR / Entra ID)</h4>
-                            <div class="text-emerald-600 font-bold text-xs flex items-center"><i class="fa-solid fa-circle-check mr-2"></i>全社 450名 / 12部署 同期完了 (最終: 本日 04:00)</div>
+                    <!-- 部署切替タブ & 全体サマリー -->
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-emerald-50/50 p-4 rounded-xl border border-emerald-200/60">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xs font-bold text-emerald-900">対象部署選択:</span>
+                            <div class="flex space-x-1.5 text-xs">
+                                <button class="px-3 py-1 bg-emerald-600 text-white font-bold rounded-lg shadow-sm">第一工場 / 製造課</button>
+                                <button class="px-3 py-1 bg-white text-slate-700 font-semibold rounded-lg hover:bg-slate-100 border border-slate-200">営業本部 / 第一課</button>
+                                <button class="px-3 py-1 bg-white text-slate-700 font-semibold rounded-lg hover:bg-slate-100 border border-slate-200">技術開発部 / R&D</button>
+                            </div>
                         </div>
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                            <h4 class="font-bold text-slate-900 text-xs">集中承認ルールの強制適用</h4>
-                            <div class="text-brand-600 font-bold text-xs">50万円以上: 事業部長承認 / 予算オーバー時: 強制ロック</div>
+                        <div class="flex space-x-6 text-xs font-mono">
+                            <div><span class="text-slate-500">2026年度 総配分枠:</span> <span class="font-bold text-slate-900">¥ 60,000,000</span></div>
+                            <div><span class="text-slate-500">設定済み消化予想:</span> <span class="font-bold text-emerald-700">¥ 48,200,000</span></div>
                         </div>
+                    </div>
+
+                    <!-- 月次予算分配マトリクスグリッド -->
+                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                        <table class="w-full text-center border-collapse text-[11px]">
+                            <thead class="bg-slate-100 text-slate-700 border-b border-slate-200 font-mono font-bold">
+                                <tr>
+                                    <th class="p-3 text-left w-36">予算項目 (科目)</th>
+                                    <th class="p-2">4月</th>
+                                    <th class="p-2">5月</th>
+                                    <th class="p-2">6月</th>
+                                    <th class="p-2 bg-emerald-100/60 text-emerald-900">7月 (当月)</th>
+                                    <th class="p-2">8月</th>
+                                    <th class="p-2">9月</th>
+                                    <th class="p-2">10月</th>
+                                    <th class="p-2">11月</th>
+                                    <th class="p-2">12月</th>
+                                    <th class="p-2">1月</th>
+                                    <th class="p-2">2月</th>
+                                    <th class="p-2">3月</th>
+                                    <th class="p-3 text-right">年間計</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 font-mono text-slate-800">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 text-left font-sans font-bold text-slate-900 bg-slate-50">
+                                        間接資材・消耗品<br>
+                                        <span class="text-[9px] text-slate-400 font-normal">MonotaRO / Amazon</span>
+                                    </td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-2 bg-emerald-50 font-bold text-emerald-800 border-x border-emerald-200">¥5.0M</td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-2">¥5.0M</td>
+                                    <td class="p-3 text-right font-bold text-slate-900 bg-slate-50">¥ 60.0M</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 text-left font-sans font-bold text-slate-900 bg-slate-50">
+                                        出張旅費・交通費<br>
+                                        <span class="text-[9px] text-slate-400 font-normal">国内・海外出張</span>
+                                    </td>
+                                    <td class="p-2">¥2.0M</td>
+                                    <td class="p-2">¥2.5M</td>
+                                    <td class="p-2">¥2.0M</td>
+                                    <td class="p-2 bg-emerald-50 font-bold text-emerald-800 border-x border-emerald-200">¥3.0M</td>
+                                    <td class="p-2">¥4.0M</td>
+                                    <td class="p-2">¥2.0M</td>
+                                    <td class="p-2">¥2.0M</td>
+                                    <td class="p-2">¥2.0M</td>
+                                    <td class="p-2">¥2.5M</td>
+                                    <td class="p-2">¥2.0M</td>
+                                    <td class="p-2">¥2.0M</td>
+                                    <td class="p-2">¥2.0M</td>
+                                    <td class="p-3 text-right font-bold text-slate-900 bg-slate-50">¥ 30.0M</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 text-left font-sans font-bold text-slate-900 bg-slate-50">
+                                        交際費・会食費<br>
+                                        <span class="text-[9px] text-slate-400 font-normal">団タメ / 接待</span>
+                                    </td>
+                                    <td class="p-2">¥0.5M</td>
+                                    <td class="p-2">¥0.5M</td>
+                                    <td class="p-2">¥0.8M</td>
+                                    <td class="p-2 bg-emerald-50 font-bold text-emerald-800 border-x border-emerald-200">¥1.0M</td>
+                                    <td class="p-2">¥0.8M</td>
+                                    <td class="p-2">¥0.5M</td>
+                                    <td class="p-2">¥0.5M</td>
+                                    <td class="p-2">¥0.8M</td>
+                                    <td class="p-2">¥1.2M</td>
+                                    <td class="p-2">¥0.5M</td>
+                                    <td class="p-2">¥0.5M</td>
+                                    <td class="p-2">¥0.8M</td>
+                                    <td class="p-3 text-right font-bold text-slate-900 bg-slate-50">¥ 8.4M</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -837,6 +1323,11 @@
 
     <!-- JavaScript アプリケーション制御ロジック -->
     <script>
+        // Chart.js インスタンス保持オブジェクト
+        let biChartTrend = null;
+        let biChartTax = null;
+        let biChartDept = null;
+
         // 画面切り替え制御
         function switchScreen(screenId) {
             document.querySelectorAll('.screen-content').forEach(el => el.classList.add('hidden'));
@@ -861,9 +1352,172 @@
                 'governance': '7. ガバナンス・不正・異常検知エンジン',
                 'reports': '8. 経営・出張・交際費BIアナリティクス',
                 'rfp': 'メモ3. RFP・特注品相見積もり比較ボード',
-                'orgsync': '3&6. 組織・人事Sync ＆ 集中承認ルール設定'
+                'orgsync': '3. 人事・組織Sync ＆ API一括連携（プロビジョニング）',
+                'budget': '6. 部署別・科目別 予算分配カレンダーマトリクス'
             };
             document.getElementById('screen-title').innerText = titles[screenId];
+
+            // レポーティング画面が開かれた場合にChart.jsを初期化
+            if (screenId === 'reports') {
+                setTimeout(initBiCharts, 100);
+            }
+        }
+
+        function triggerGlobalMasterSync() {
+            alert('【全サービス一括API同期】\nSmartHR/jinjerより最新の全社450名の従業員・組織マスターを取得し、kintone、MonotaRO、Amazon Business、勘定奉行へ即時反映しました。');
+        }
+
+        // BIダッシュボード Chart.js 描画ロジック
+        function initBiCharts() {
+            // 既存のチャートを破棄して再描画
+            if (biChartTrend) biChartTrend.destroy();
+            if (biChartTax) biChartTax.destroy();
+            if (biChartDept) biChartDept.destroy();
+
+            // 1. 月次交際費 vs 出張費 推移チャート
+            const ctxTrend = document.getElementById('chart-monthly-trend');
+            if (ctxTrend) {
+                biChartTrend = new Chart(ctxTrend, {
+                    type: 'bar',
+                    data: {
+                        labels: ['2月', '3月', '4月', '5月', '6月', '7月 (当月)'],
+                        datasets: [
+                            {
+                                label: '交際費 (¥)',
+                                data: [1420000, 1680000, 1350000, 1900000, 1550000, 1840000],
+                                backgroundColor: '#f97316',
+                                borderRadius: 4,
+                                barPercentage: 0.5
+                            },
+                            {
+                                label: '出張旅費 (¥)',
+                                data: [2800000, 3100000, 2600000, 3800000, 3200000, 3420500],
+                                backgroundColor: '#0284c7',
+                                borderRadius: 4,
+                                barPercentage: 0.5
+                            },
+                            {
+                                label: '月次総合予算上限',
+                                data: [6000000, 6000000, 6000000, 6000000, 6000000, 6000000],
+                                type: 'line',
+                                borderColor: '#f43f5e',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                pointStyle: false,
+                                fill: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ¥' + context.raw.toLocaleString();
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+                            y: {
+                                grid: { color: '#f1f5f9' },
+                                ticks: {
+                                    font: { size: 10 },
+                                    callback: function(value) { return '¥' + (value / 10000) + '万'; }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 2. 交際費 税法区分ドーナツチャート
+            const ctxTax = document.getElementById('chart-tax-breakdown');
+            if (ctxTax) {
+                biChartTax = new Chart(ctxTax, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['10,000円以下 (損金全額算入)', '10,000円超 (社外役員接待)', '社内会食・社内交際費'],
+                        datasets: [{
+                            data: [1220000, 480000, 140000],
+                            backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ¥' + context.raw.toLocaleString();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 3. 部門別 支出比較ランキング (横棒グラフ)
+            const ctxDept = document.getElementById('chart-department-spend');
+            if (ctxDept) {
+                biChartDept = new Chart(ctxDept, {
+                    type: 'bar',
+                    data: {
+                        labels: ['営業本部', '製造第一課', '技術開発部', '経営企画部', '総務課'],
+                        datasets: [{
+                            label: '当月支出計 (¥)',
+                            data: [2850000, 1120000, 780000, 320000, 190000],
+                            backgroundColor: ['#ea580c', '#f97316', '#fb923c', '#fed7aa', '#cbd5e1'],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return '支出合計: ¥' + context.raw.toLocaleString();
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: '#f1f5f9' },
+                                ticks: {
+                                    font: { size: 9 },
+                                    callback: function(value) { return '¥' + (value / 10000) + '万'; }
+                                }
+                            },
+                            y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateBiCharts() {
+            const period = document.getElementById('bi-period-select').value;
+            alert(`【BIデータ切替】期間「${period}」のL3データ集計・税法上限シミュレーションを更新しました。`);
+            initBiCharts();
+        }
+
+        function exportBiReport() {
+            alert('【経営報告書自動生成】\n交際費損金上限消化率、部門別出張旅費分析、および海外出張者安全ログを含むPDFをダウンロードしました。');
         }
 
         function openSupplierContractModal() {
