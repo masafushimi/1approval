@@ -1941,6 +1941,49 @@
                 setTimeout(initBiCharts, 100);
             }
         }
+       // カタログテーブル描画
+        function renderCatalogueTable() {
+            const tbody = document.getElementById('catalogue-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            catalogueData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/80 transition';
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 font-bold text-slate-700">${item.category}</td>
+                    <td class="py-3.5 px-4">
+                        <div class="font-bold text-slate-900">${item.title}</div>
+                        <div class="text-[10px] text-slate-400 font-mono">SKU: ${item.sku}</div>
+                    </td>
+                    <td class="py-3.5 px-4">
+                        <a href="${item.url}" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1 font-mono text-[11px] truncate max-w-[200px]">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> ${item.url}
+                        </a>
+                    </td>
+                    <td class="py-3.5 px-4 text-right font-extrabold text-slate-900">¥${item.price.toLocaleString()}</td>
+                    <td class="py-3.5 px-4 text-center">
+                        <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-200">
+                            ${item.logic}
+                        </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center">
+                        <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">
+                            <i class="fa-solid fa-check"></i> ${item.status}
+                        </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center">
+                        <button onclick="deleteCatalogueItem(${item.id})" class="text-slate-400 hover:text-rose-600 p-1.5 transition">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('registered-count-badge').innerText = `${catalogueData.length} 件`;
+            document.getElementById('catalogue-badge-count').innerText = catalogueData.length;
+        }
 
         function initBiCharts() {
             if (biChartTrend) biChartTrend.destroy();
