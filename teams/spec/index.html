@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1approval for Teams オプション 基本仕様書 | 株式会社エイチ</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+    body { font-family: 'Noto Sans JP', sans-serif; }
+    html { scroll-behavior: smooth; }
+    .teams-purple { background-color: #464EB8; }
+    .teams-purple-dark { background-color: #373CA0; }
+    .teams-border { border-color: #E1DFDD; }
+    .code-bg { background-color: #1E1E1E; color: #D4D4D4; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Navigation Header -->
+  <header class="teams-purple text-white sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="bg-white/10 p-2 rounded-lg flex items-center justify-center">
+          <i class="fa-solid fa-cube text-2xl text-yellow-300"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight flex items-center gap-2">
+            1approval for Teams オプション
+            <span class="text-xs bg-yellow-400 text-gray-900 font-extrabold px-2 py-0.5 rounded-full">基本仕様書 Ver 1.0.0</span>
+          </h1>
+          <p class="text-xs text-indigo-100">株式会社エイチ 1approvalプロダクト開発チーム</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3 text-xs">
+        <button onclick="window.print()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-md transition flex items-center gap-1.5 font-medium">
+          <i class="fa-solid fa-print"></i> 印刷 / PDF出力
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 flex flex-col lg:flex-row gap-8">
+    
+    <!-- Table of Contents Sidebar -->
+    <aside class="w-full lg:w-64 shrink-0">
+      <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm sticky top-20">
+        <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-list-ul"></i> 目次
+        </h2>
+        <nav class="space-y-1 text-sm font-medium">
+          <a href="#overview" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition">1. システム概要・目的</a>
+          <a href="#architecture" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition">2. 全体アーキテクチャ</a>
+          <a href="#roadmap" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition">3. 連携ロードマップ ＆ API仕様</a>
+          <a href="#scenarios" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition">4. チャットボット対話仕様</a>
+          <a href="#governance" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition">5. ガバナンス・機能要件</a>
+          <a href="#non-functional" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition">6. セキュリティ・非機能</a>
+        </nav>
+        <div class="mt-6 pt-4 border-t border-gray-100 text-[11px] text-gray-400 space-y-1">
+          <p>作成日: 2026年8月8日</p>
+          <p>発効元: 株式会社エイチ</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Specification Document -->
+    <main class="flex-1 bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-10 space-y-12">
+
+      <!-- Doc Header -->
+      <div class="border-b border-gray-200 pb-6">
+        <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm mb-2">
+          <i class="fa-solid fa-file-contract"></i> BASIC SPECIFICATION DOCUMENT
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black text-gray-900 leading-tight">1approval for Teams オプション 基本仕様書</h1>
+        <p class="mt-2 text-sm text-gray-500">Microsoft Teamsをフロントエンド対話インターフェースとして既存承認ワークフローに寄生統合するシステム拡張仕様</p>
+      </div>
+
+      <!-- Section 1 -->
+      <section id="overview" class="space-y-4">
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2 border-l-4 border-indigo-600 pl-3">
+          1. システム概要・目的
+        </h2>
+        
+        <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
+          <h3 class="font-bold text-base text-gray-800">1.1 システム概要</h3>
+          <p>
+            本システム「1approval for Teams オプション」は、企業で広く利用されているコミュニケーションツール「Microsoft Teams」上で、対話（チャットボット）形式により出張手配申請および承認・購買手続きを完結させるフロントエンド統合拡張機能である。
+          </p>
+          <p>
+            既存のワークフローシステム（Microsoft 365 SharePoint、kintone、x-point / AgileWorks等）をリプレイスすることなくその上にかぶせて接続（寄生）し、中間統合OS「1approval Hub」を介して購買ポータル（ピカパカ出張DX等）と双方向連携させる。
+          </p>
+        </div>
+
+        <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-5 mt-4 space-y-3">
+          <h3 class="font-bold text-sm text-indigo-900 flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-indigo-600"></i> 1.2 主な解決課題と提供価値
+          </h3>
+          <div class="grid sm:grid-cols-3 gap-4 text-xs">
+            <div class="bg-white p-3.5 rounded-lg border border-indigo-100 shadow-sm space-y-1">
+              <span class="font-bold text-indigo-700 block">① 二重入力・二重承認の排除</span>
+              <p class="text-gray-600">チャットボットとの対話で基本情報を入力し、購買サイトからパンチアウト連携することで手配・手動転記の手間を消去。</p>
+            </div>
+            <div class="bg-white p-3.5 rounded-lg border border-indigo-100 shadow-sm space-y-1">
+              <span class="font-bold text-indigo-700 block">② 申請手戻り・再承認の防止</span>
+              <p class="text-gray-600">承認タイムラグによる宿泊・交通の価格変動を「ダイナミック・ポリシー」で自動吸収し手戻りを防止。</p>
+            </div>
+            <div class="bg-white p-3.5 rounded-lg border border-indigo-100 shadow-sm space-y-1">
+              <span class="font-bold text-indigo-700 block">③ 個人立替・領収書管理ゼロ</span>
+              <p class="text-gray-600">上長承認と同時に全自動予約が完結。会社への月1回・1枚の法人一括請求に集約し経費精算を不要化。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section id="architecture" class="space-y-4">
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2 border-l-4 border-indigo-600 pl-3">
+          2. 全体アーキテクチャ・連携モデル
+        </h2>
+
+        <!-- Visual Architecture Diagram -->
+        <div class="code-bg p-6 rounded-xl overflow-x-auto font-mono text-xs leading-relaxed space-y-2 border border-gray-800 shadow-inner">
+          <div class="text-emerald-400 font-bold">// 1approval for Teams 統合システム連携アーキテクチャ</div>
+          <pre class="text-gray-300">
+[ Front-end Interface ]
+      Microsoft Teams (Bot / Adaptive Cards)
+                        │
+                        ▼ (REST / Webhook)
+[ Middleware / Integration Engine ]
+      1approval 統合Hub
+        ├── cXML / Logic Service (セッション管理・URLパース)
+        ├── Dynamic Policy Engine (許容価格変動制御)
+        └── Level 3 Data Store (cXML / Peppol準拠)
+               │                             │
+    (Punchin/Punchout)                (Draft / Sync API)
+               ▼                             ▼
+[ BTM / Commerce ]               [ Backend Workflow ]
+  ピカパカ出張DX                   ・Phase 1: M365 SharePoint
+  (ホテル/新幹線/航空券)            ・Phase 2: kintone
+                                   ・Phase 3: x-point / AgileWorks等
+          </pre>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4 text-xs pt-2">
+          <div class="border rounded-lg p-3.5 space-y-1">
+            <span class="font-bold text-gray-800">● Microsoft Teams Front-end</span>
+            <p class="text-gray-600">ユーザー対話UI。Adaptive Cardsを用いた直感的なカード表示とアクションボタンを提供。</p>
+          </div>
+          <div class="border rounded-lg p-3.5 space-y-1">
+            <span class="font-bold text-gray-800">● 1approval 統合Hub</span>
+            <p class="text-gray-600">セッション管理、cXML生成/パース、パンチイン/パンチアウト制御、URL自動パース（Fallback）処理。</p>
+          </div>
+          <div class="border rounded-lg p-3.5 space-y-1">
+            <span class="font-bold text-gray-800">● Backend Workflow (SharePoint/kintone)</span>
+            <p class="text-gray-600">企業側の正式な申請・承認データを保管・管理する既存データベース基盤。</p>
+          </div>
+          <div class="border rounded-lg p-3.5 space-y-1">
+            <span class="font-bold text-gray-800">● BTM Service (ピカパカ出張DX等)</span>
+            <p class="text-gray-600">最安値横断検索、在庫確定、発券・予約実行および法人一括請求処理。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3 -->
+      <section id="roadmap" class="space-y-4">
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2 border-l-4 border-indigo-600 pl-3">
+          3. バックエンド連携対応ロードマップ ＆ API仕様定義
+        </h2>
+        
+        <div class="overflow-hidden rounded-xl border border-gray-200">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead class="bg-gray-100 text-gray-700 font-bold border-b border-gray-200">
+              <tr>
+                <th class="p-3">Phase</th>
+                <th class="p-3">対応バックエンドワークフロー</th>
+                <th class="p-3">連携方式・API仕様概要</th>
+                <th class="p-3">目的・市場カバレッジ</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 text-gray-600">
+              <tr class="hover:bg-indigo-50/50 transition">
+                <td class="p-3 font-bold text-indigo-600">Phase 1</td>
+                <td class="p-3 font-bold text-gray-800">1approval for M365 SharePoint</td>
+                <td class="p-3">Graph API / Power Automate / REST API</td>
+                <td class="p-3">ターゲット市場シェアNo.1（約34%）を獲得。Teamsとの親和性が極めて高い。</td>
+              </tr>
+              <tr class="hover:bg-indigo-50/50 transition">
+                <td class="p-3 font-bold text-amber-600">Phase 2</td>
+                <td class="p-3 font-bold text-gray-800">1approval for kintone</td>
+                <td class="p-3">kintone REST API / JavaScript API / Plugin</td>
+                <td class="p-3">シェア約20%をカバー。リコージャパン等リセラーチャネルとのシナジー最大化。</td>
+              </tr>
+              <tr class="hover:bg-indigo-50/50 transition">
+                <td class="p-3 font-bold text-emerald-600">Phase 3</td>
+                <td class="p-3 font-bold text-gray-800">1approval for x-point / AgileWorks</td>
+                <td class="p-3">REST API (書類起票, AddComment, 承認操作等) / Webhook</td>
+                <td class="p-3">API/Webhook拡張により専任ワークフロー導入層（大企業・建設・製造等）をカバー。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- API Reference Specifications Box -->
+        <div class="bg-slate-50 border border-gray-200 rounded-xl p-5 space-y-4">
+          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-2">
+            <i class="fa-solid fa-code text-indigo-600"></i> 3.1 x-point / AgileWorks API連携基本仕様 ＆ 公式リファレンス
+          </h3>
+          
+          <p class="text-xs text-gray-600 leading-relaxed">
+            1approval Hubは、フロントエンドのTeams対話（Block 1〜4）およびパンチイン/パンチアウト、URLパース（Fallback）で取得した手配データを、x-pointおよびAgileWorksの公式REST APIを介してシームレスに同期・起票・更新します。パンチアウト非対応サイトの場合でも、ピカパカ出張DX等へ移動し商品URLをチャットへ書き戻すことで、API経由で申請書へ自動反転追記されます。
+          </p>
+
+          <div class="grid sm:grid-cols-2 gap-4 text-xs">
+            <!-- x-point API Card -->
+            <div class="bg-white border rounded-lg p-3.5 space-y-2 shadow-sm">
+              <div class="flex items-center justify-between border-b pb-1.5">
+                <span class="font-bold text-gray-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-file-invoice text-emerald-600"></i> x-point REST API 仕様
+                </span>
+                <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">v1 API</span>
+              </div>
+              <ul class="space-y-1 text-gray-600 list-disc list-inside text-[11px]">
+                <li><strong>下書き保存 / 書類作成API:</strong> Teams Block 2-2完了時に新規下書き書類を起票</li>
+                <li><strong>AddComment API:</strong> 書類に対するコメント追加・承認メモの書き込み</li>
+                <li><strong>書類編集・承認操作API:</strong> 手配確定データ（cXML/URLパース結果）のフィールド更新および承認ステータス変更</li>
+              </ul>
+              <div class="pt-2 border-t text-[11px] space-y-1">
+                <div><a href="https://atled-workflow.github.io/X-point-doc/api/#/%E6%9B%B8%E9%A1%9E%E7%B7%A8%E9%9B%86%E3%83%BB%E6%89%BF%E8%AA%8D%E6%93%8D%E4%BD%9CAPI/AddComment" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline font-bold flex items-center gap-1"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> x-point 書類編集・承認操作API (AddComment)</a></div>
+                <div><a href="https://atled-workflow.github.io/X-point-doc/api/doc/manual.html" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline font-bold flex items-center gap-1"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> x-point APIマニュアル</a></div>
+              </div>
+            </div>
+
+            <!-- AgileWorks API Card -->
+            <div class="bg-white border rounded-lg p-3.5 space-y-2 shadow-sm">
+              <div class="flex items-center justify-between border-b pb-1.5">
+                <span class="font-bold text-gray-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-network-wired text-indigo-600"></i> AgileWorks Web API 仕様
+                </span>
+                <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">Web API</span>
+              </div>
+              <ul class="space-y-1 text-gray-600 list-disc list-inside text-[11px]">
+                <li><strong>起票・ルート設定API:</strong> 申請フォーム（出張手配申請）の初期起票と承認ルート自動セット</li>
+                <li><strong>フォームフィールド更新API:</strong> パンチアウト（cXML）およびURLパースで取り込んだホテル・交通機関明細の書き込み</li>
+                <li><strong>承認・回覧ステータス連携:</strong> TeamsおよびWeb画面上の「承認依頼をする」アクションとの双方向同期</li>
+              </ul>
+              <div class="pt-2 border-t text-[11px]">
+                <a href="https://www.atled.jp/agileworks/functions/aw-manual/" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline font-bold flex items-center gap-1"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> AgileWorks Webマニュアル・API仕様書</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Section 4 -->
+      <section id="scenarios" class="space-y-6">
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2 border-l-4 border-indigo-600 pl-3">
+          4. Teamsチャットボット対話シナリオ仕様
+        </h2>
+
+        <!-- Block 1 -->
+        <div class="space-y-2">
+          <h3 class="font-bold text-sm text-gray-800 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">1</span>
+            Block 1: 基本情報入力（出張概要）
+          </h3>
+          <div class="overflow-hidden rounded-xl border border-gray-200">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
+                <tr>
+                  <th class="p-2.5 w-12">No.</th>
+                  <th class="p-2.5">ボットの質問メッセージ</th>
+                  <th class="p-2.5">UI / 入力形式</th>
+                  <th class="p-2.5">処理・動作仕様</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 text-gray-600">
+                <tr>
+                  <td class="p-2.5 font-bold">1-1</td>
+                  <td class="p-2.5 font-medium text-gray-800">出張者はどなたですか？</td>
+                  <td class="p-2.5">[自分] ボタン / [他のユーザーを検索]</td>
+                  <td class="p-2.5">デフォルトは送信アカウント。検索時はMentions/ユーザーピッカー表示</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold">1-2</td>
+                  <td class="p-2.5 font-medium text-gray-800">承認者（上長）を選択してください。</td>
+                  <td class="p-2.5">ユーザー検索 / 自動補完</td>
+                  <td class="p-2.5">組織マスタより直属上長をプライマリ表示</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold">1-3</td>
+                  <td class="p-2.5 font-medium text-gray-800">出張先（都道府県や都市名）を入力してください。</td>
+                  <td class="p-2.5">フリーテキスト</td>
+                  <td class="p-2.5">例: 「福岡」</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold">1-4</td>
+                  <td class="p-2.5 font-medium text-gray-800">出張目的を入力してください。</td>
+                  <td class="p-2.5">フリーテキスト（長文可）</td>
+                  <td class="p-2.5">例: 「福岡のクライアントに会って現地商談を行うため」</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold">1-5</td>
+                  <td class="p-2.5 font-medium text-gray-800">出張期間を入力してください。</td>
+                  <td class="p-2.5">カレンダー（日付範囲選択）</td>
+                  <td class="p-2.5">出発日・帰着日を同時に選択</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Block 2 -->
+        <div class="space-y-2">
+          <h3 class="font-bold text-sm text-gray-800 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">2</span>
+            Block 2: スケジュール ＆ 一時下書き自動起票
+          </h3>
+          <div class="overflow-hidden rounded-xl border border-gray-200">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
+                <tr>
+                  <th class="p-2.5 w-12">No.</th>
+                  <th class="p-2.5">ボットの質問メッセージ</th>
+                  <th class="p-2.5">UI / 入力形式</th>
+                  <th class="p-2.5">処理・動作仕様</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 text-gray-600">
+                <tr>
+                  <td class="p-2.5 font-bold">2-1</td>
+                  <td class="p-2.5 font-medium text-gray-800">【1日目】訪問先を入力してください。</td>
+                  <td class="p-2.5">フリーテキスト</td>
+                  <td class="p-2.5">例: 「株式会社岩田屋三越」</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold">2-2</td>
+                  <td class="p-2.5 font-medium text-gray-800">その日の目的・用件を入力してください。</td>
+                  <td class="p-2.5">フリーテキスト</td>
+                  <td class="p-2.5">例: 「出張支援SaaSの訪問提案」</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-lg text-xs text-amber-900 flex items-start gap-2.5">
+            <i class="fa-solid fa-bolt text-amber-600 text-sm mt-0.5"></i>
+            <div>
+              <span class="font-bold block mb-0.5">【重要仕様：自動下書き起票 trigger】</span>
+              ユーザーが <strong>Block 2-2</strong> の入力を完了して送信したタイミングで、1approval HubはバックエンドWF（SharePoint / kintone）に対し、入力済みの「基本情報＋スケジュール」レコードを<strong>「下書き（未申請）」として自動送信・即時保存</strong>する。
+            </div>
+          </div>
+        </div>
+
+        <!-- Block 3 -->
+        <div class="space-y-3">
+          <h3 class="font-bold text-sm text-gray-800 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">3</span>
+            Block 3: 手配選択・パンチイン / パンチアウト・手配確定ループ
+          </h3>
+          
+          <div class="grid sm:grid-cols-2 gap-4 text-xs">
+            <!-- Punchin Step -->
+            <div class="bg-gray-50 border p-4 rounded-xl space-y-2">
+              <span class="font-bold text-indigo-700 block">Step 3-A/B: パンチイン移動 ＆ 商品選択</span>
+              <p class="text-gray-600">手配ボタン（例: [🏨 ホテル]）を押すとSSOトークン付きURLを発行し、パンチインで「ピカパカ出張DX」の手配画面を開く。</p>
+            </div>
+            <!-- Punchout Step -->
+            <div class="bg-gray-50 border p-4 rounded-xl space-y-2">
+              <span class="font-bold text-indigo-700 block">Step 3-C/D: パンチアウト戻り ＆ 確定</span>
+              <p class="text-gray-600">ピカパカの「申請ワークフローに戻す」を押すと、カート情報（cXML）が引き渡されTeams上で確認カードを表示。確定ボタンで申請書へ自動追記。</p>
+            </div>
+          </div>
+
+          <!-- Fallback box -->
+          <div class="bg-gray-100 border border-gray-300 p-3.5 rounded-lg text-xs text-gray-700">
+            <span class="font-bold text-gray-800 block mb-1"><i class="fa-solid fa-link text-indigo-600 mr-1"></i>URL自動パース（Fallback機構）＆ API連携の補意</span>
+            パンチアウト未対応のサイトや手配方式の場合でも、ピカパカ出張DX等から取得した該当商品URLをTeamsチャットにペーストすると、1approval Hubのパースエンジンが自動で施設名・価格・利用日を取り込みます。取り込まれたデータはx-point（`AddComment` / 書類編集API）やAgileWorks (フォーム更新API)経由で自動申請登録されます。
+          </div>
+        </div>
+
+        <!-- Block 4 -->
+        <div class="space-y-2">
+          <h3 class="font-bold text-sm text-gray-800 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">4</span>
+            Block 4: 手配終了 ＆ 申請書確認・承認依頼
+          </h3>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            [手配を終了して申請書を見る] を選択すると、ボットがSharePoint/kintone上の申請書へのダイレクトリンクを出力。ユーザーはリンク先で最終確認を行い、ステータスを「承認依頼をする」に変更。上長承認が完了した瞬間、裏側で即時予約・発注APIが実行されます。
+          </p>
+        </div>
+
+      </section>
+
+      <!-- Section 5 -->
+      <section id="governance" class="space-y-4">
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2 border-l-4 border-indigo-600 pl-3">
+          5. ガバナンス・機能要件
+        </h2>
+
+        <div class="grid sm:grid-cols-2 gap-4 text-xs">
+          <div class="border border-indigo-100 bg-indigo-50/50 p-4 rounded-xl space-y-2">
+            <h3 class="font-bold text-sm text-indigo-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-sliders text-indigo-600"></i> 5.1 ダイナミック・ポリシー機能
+            </h3>
+            <p class="text-gray-600 leading-relaxed">
+              申請から上長承認までのタイムラグ間に発生する宿泊・航空券の価格変動（ダイナミックプライシング）を自動吸収。企業ごとに設定した許容変動割合（例: 20%）の範囲内であれば再承認なしで即時自動予約。超えた場合は自動差戻し。
+            </p>
+          </div>
+
+          <div class="border border-indigo-100 bg-indigo-50/50 p-4 rounded-xl space-y-2">
+            <h3 class="font-bold text-sm text-indigo-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-file-invoice-dollar text-indigo-600"></i> 5.2 Level 3 Data ＆ Peppol対応
+            </h3>
+            <p class="text-gray-600 leading-relaxed">
+              「誰が・いつ・どの施設/区間を・いくらで（品目・数量・単価）」という完全な購買明細（Level 3データ）をcXML/Peppol（JP PINT）形式で保持。月末に月1回の電子請求書として勘定奉行・楽楽精算・Concur等へ自動仕訳連携。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6 -->
+      <section id="non-functional" class="space-y-4">
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2 border-l-4 border-indigo-600 pl-3">
+          6. 非機能要件・セキュリティ
+        </h2>
+
+        <div class="space-y-2 text-xs text-gray-600">
+          <div class="flex items-start gap-2 p-2.5 bg-gray-50 rounded-lg">
+            <i class="fa-solid fa-shield-halved text-indigo-600 mt-0.5"></i>
+            <div><strong class="text-gray-800">認証・認可:</strong> Microsoft Entra ID (旧 Azure AD) / OAuth 2.0 に基づくシングルサインオン（SSO）。</div>
+          </div>
+          <div class="flex items-start gap-2 p-2.5 bg-gray-50 rounded-lg">
+            <i class="fa-solid fa-database text-indigo-600 mt-0.5"></i>
+            <div><strong class="text-gray-800">監査ログ:</strong> チャット対話履歴、パンチイン/パンチアウトセッション、バックエンドAPI連携ログを全件暗号化保存。</div>
+          </div>
+          <div class="flex items-start gap-2 p-2.5 bg-gray-50 rounded-lg">
+            <i class="fa-solid fa-server text-indigo-600 mt-0.5"></i>
+            <div><strong class="text-gray-800">可用性・SLA:</strong> クラウドマルチリージョン構成により SLA 99.9% 以上を担保。</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-gray-400 py-6 text-xs text-center border-t border-gray-700">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>© 2026 Eichiii Inc. All rights reserved. | 1approvalプロダクト開発チーム</p>
+    </div>
+  </footer>
+
+</body>
+</html>
