@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1approval Teams チャットボット体験デモ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+    body { font-family: 'Noto Sans JP', sans-serif; }
+    .teams-purple { background-color: #464EB8; }
+    .teams-purple-light { background-color: #5B5FC7; }
+    .teams-bg { background-color: #F5F5F5; }
+    .chat-bubble-bot { background-color: #FFFFFF; border: 1px solid #E1DFDD; }
+    .chat-bubble-user { background-color: #E8EBFA; color: #242424; }
+    .adaptive-card { background: #FFFFFF; border-radius: 6px; border: 1px solid #E1DFDD; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
+  </style>
+</head>
+<body class="bg-gray-100 h-screen flex flex-col overflow-hidden text-gray-800">
+
+  <!-- Header Header -->
+  <header class="teams-purple text-white px-4 py-2.5 flex items-center justify-between shadow-md shrink-0">
+    <div class="flex items-center space-x-3">
+      <div class="bg-white/10 p-1.5 rounded-lg flex items-center justify-center">
+        <i class="fa-solid fa-cube text-xl text-yellow-300"></i>
+      </div>
+      <div>
+        <h1 class="font-bold text-base leading-tight">1approval for Teams <span class="text-xs bg-yellow-400 text-gray-900 font-bold px-2 py-0.5 rounded-full ml-2">対話イメージデモ</span></h1>
+        <p class="text-xs text-indigo-100">kintone / SharePoint / ピカパカ出張DX 統合連携モデル</p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3 text-xs">
+      <span class="bg-emerald-500 text-white px-2.5 py-1 rounded-full flex items-center gap-1 font-medium">
+        <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span> BOT稼働中
+      </span>
+      <button onclick="resetDemo()" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded transition">
+        <i class="fa-solid fa-rotate-right mr-1"></i>最初からやり直す
+      </button>
+    </div>
+  </header>
+
+  <!-- Main App Content Container -->
+  <div class="flex-1 flex overflow-hidden">
+
+    <!-- Left Navigation Bar (Teams Style) -->
+    <div class="w-16 bg-[#2F2F2F] text-gray-400 flex flex-col items-center py-4 space-y-6 shrink-0 text-xs">
+      <div class="flex flex-col items-center text-white cursor-pointer border-l-2 border-indigo-400 pl-1 w-full py-1">
+        <i class="fa-solid fa-comment-dots text-lg mb-1"></i>
+        <span>チャット</span>
+      </div>
+      <div class="flex flex-col items-center hover:text-white cursor-pointer w-full py-1">
+        <i class="fa-solid fa-users text-lg mb-1"></i>
+        <span>チーム</span>
+      </div>
+      <div class="flex flex-col items-center hover:text-white cursor-pointer w-full py-1">
+        <i class="fa-solid fa-calendar-days text-lg mb-1"></i>
+        <span>予定表</span>
+      </div>
+      <div class="flex flex-col items-center hover:text-white cursor-pointer w-full py-1">
+        <i class="fa-solid fa-file-lines text-lg mb-1"></i>
+        <span>ファイル</span>
+      </div>
+    </div>
+
+    <!-- Chat Sidebar / Recent Chats -->
+    <div class="w-64 bg-white border-r border-gray-200 flex flex-col shrink-0 hidden md:flex">
+      <div class="p-3 border-b border-gray-200 font-bold text-gray-700 flex justify-between items-center">
+        <span>チャット</span>
+        <i class="fa-solid fa-pen-to-square text-gray-500 cursor-pointer"></i>
+      </div>
+      <div class="p-2">
+        <div class="flex items-center p-2 rounded-lg bg-indigo-50 border-l-4 border-indigo-600 cursor-pointer">
+          <div class="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold mr-3 shrink-0 relative">
+            <i class="fa-solid fa-robot"></i>
+            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+          </div>
+          <div class="overflow-hidden">
+            <div class="text-sm font-bold text-gray-800 truncate">1approval Bot</div>
+            <div class="text-xs text-indigo-600 font-medium truncate">出張手配申請アシスタント</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center: Chat Conversation View (Main Screen) -->
+    <div class="flex-1 flex flex-col bg-[#F5F5F5] relative overflow-hidden">
+      
+      <!-- Chat Header -->
+      <div class="bg-white px-4 py-3 border-b border-gray-200 flex justify-between items-center shadow-sm">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
+            <i class="fa-solid fa-robot text-sm"></i>
+          </div>
+          <div>
+            <h2 class="font-bold text-sm text-gray-800 flex items-center gap-2">
+              1approval 出張手配申請ボット
+              <span class="text-xs font-normal text-gray-500 bg-gray-100 px-2 py-0.5 rounded">アプリ</span>
+            </h2>
+            <p class="text-xs text-gray-500">チャットで会話するだけで稟議・ホテル・新幹線手配を完了します</p>
+          </div>
+        </div>
+        <div class="text-xs text-gray-500 bg-indigo-50 px-2.5 py-1 rounded text-indigo-700 font-medium">
+          <i class="fa-solid fa-link mr-1"></i>SharePoint / ピカパカ連動中
+        </div>
+      </div>
+
+      <!-- Messages History Scroll Container -->
+      <div id="chatHistory" class="flex-1 overflow-y-auto p-4 space-y-4">
+        
+        <!-- Welcome Message -->
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0 mt-1">
+            <i class="fa-solid fa-robot text-sm"></i>
+          </div>
+          <div class="max-w-xl">
+            <div class="text-xs text-gray-500 mb-1 font-medium">1approval Bot <span class="text-gray-400 font-normal">09:30</span></div>
+            <div class="chat-bubble-bot p-3.5 rounded-2xl rounded-tl-none shadow-sm text-sm">
+              <p class="font-bold text-indigo-900 mb-1">こんにちは！出張手配申請をサポートします ✈️</p>
+              <p class="text-gray-600 mb-3">質問に順番に答えるだけで、SharePointへの出張申請書作成と「ピカパカ出張DX」での手配が完了します。</p>
+              <button onclick="startBlock1()" id="btnStart" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold text-xs shadow transition flex items-center gap-2">
+                <i class="fa-solid fa-play"></i> 出張申請を始める
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Chat Status / Input Hint -->
+      <div id="chatInputArea" class="bg-white border-t border-gray-200 p-3 flex items-center gap-2">
+        <input type="text" id="userInputText" placeholder="対話が進むとメッセージを入力できます..." disabled class="flex-1 bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
+        <button id="sendBtn" onclick="handleSendText()" disabled class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold opacity-50 cursor-not-allowed">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Right Side Panel: Live Data Preview (SharePoint / kintone Status) -->
+    <div id="sidePreview" class="w-80 lg:w-96 bg-white border-l border-gray-200 flex flex-col shrink-0 shadow-lg z-10 transition-all">
+      <div class="p-3 bg-gray-800 text-white font-bold text-xs flex justify-between items-center">
+        <span><i class="fa-solid fa-table-cells mr-1.5 text-yellow-400"></i>データ連携リアルタイム表示</span>
+        <span id="syncStatusBadge" class="bg-gray-600 text-gray-200 text-[10px] px-2 py-0.5 rounded">未起票</span>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-4 text-xs space-y-4 bg-gray-50">
+        <!-- Live Form Card -->
+        <div class="bg-white p-3.5 rounded-lg border border-gray-200 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b pb-2">
+            <h3 class="font-bold text-gray-800 flex items-center text-xs">
+              <i class="fa-solid fa-file-signature text-indigo-600 mr-1.5"></i>SharePoint 出張手配申請書
+            </h3>
+            <span id="docStatus" class="bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded text-[10px] font-bold">下書き未作成</span>
+          </div>
+
+          <!-- Fields -->
+          <div class="space-y-1.5 text-gray-600">
+            <div class="flex justify-between"><span class="text-gray-400">出張者:</span><span id="prevUser" class="font-bold text-gray-800">-</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">承認者:</span><span id="prevApprover" class="font-bold text-gray-800">-</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">出張先:</span><span id="prevDestination" class="font-bold text-gray-800">-</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">出張期間:</span><span id="prevPeriod" class="font-bold text-gray-800">-</span></div>
+            <div>
+              <span class="text-gray-400">出張目的:</span>
+              <p id="prevPurpose" class="text-gray-800 font-medium mt-0.5 bg-gray-50 p-1.5 rounded border border-gray-100">-</p>
+            </div>
+          </div>
+
+          <!-- Schedule Table -->
+          <div class="pt-2 border-t">
+            <span class="font-bold text-gray-700 block mb-1 text-[11px]">■ スケジュール (2-1/2-2)</span>
+            <div id="prevSchedule" class="text-gray-500 italic text-[11px] bg-gray-50 p-2 rounded border border-dashed">
+              未入力
+            </div>
+          </div>
+
+          <!-- Handled Orders Table -->
+          <div class="pt-2 border-t">
+            <span class="font-bold text-gray-700 block mb-1 text-[11px]">■ 手配明細（ピカパカ連動分）</span>
+            <div id="prevOrders" class="text-gray-500 italic text-[11px] bg-gray-50 p-2 rounded border border-dashed">
+              手配未確定
+            </div>
+          </div>
+
+          <div class="pt-2 border-t flex justify-between items-center font-bold text-sm">
+            <span>合計概算費用:</span>
+            <span id="prevTotalAmount" class="text-indigo-600">0 円</span>
+          </div>
+        </div>
+
+        <!-- Flow Description Box -->
+        <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-lg text-indigo-900 text-[11px] leading-relaxed">
+          <p class="font-bold mb-1 flex items-center gap-1">
+            <i class="fa-solid fa-circle-info text-indigo-600"></i> システム動作の流れ
+          </p>
+          <ol class="list-decimal list-inside space-y-1 text-gray-700">
+            <li>Block 1〜2で基本情報とスケジュールを入力</li>
+            <li><strong>2-2完了時</strong>にSharePointへ下書き保存</li>
+            <li>ボタン選択でピカパカ出張DXへパンチイン移動</li>
+            <li>選んだ手配がTeamsに戻り（パンチアウト）確定</li>
+            <li>申請書を開いて承認依頼を送信！</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal: Simulated External BTM (ピカパカ出張DX) Punch-in Screen -->
+  <div id="btmModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hidden animate-fade-in">
+    <div class="bg-white rounded-xl shadow-2xl w-11/12 max-w-3xl overflow-hidden flex flex-col max-h-[85vh]">
+      
+      <!-- Top Modal Bar -->
+      <div class="bg-emerald-600 text-white px-4 py-3 flex justify-between items-center shrink-0">
+        <div class="flex items-center space-x-2">
+          <span class="bg-white text-emerald-700 text-xs font-black px-2 py-0.5 rounded">1approval 提携ポータル</span>
+          <h3 class="font-bold text-base">ピカパカ出張DX （ホテル・交通手配）</h3>
+        </div>
+        <div class="text-xs bg-emerald-700 px-2 py-1 rounded">
+          <i class="fa-solid fa-user-check mr-1"></i>デモ太郎 様（シングルサインオン連携中）
+        </div>
+      </div>
+
+      <!-- Modal Content Body -->
+      <div class="p-5 flex-1 overflow-y-auto space-y-4">
+        
+        <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-lg flex items-center justify-between text-xs text-emerald-900">
+          <div>
+            <span class="font-bold text-emerald-800 block mb-0.5"><i class="fa-solid fa-plane-departure mr-1"></i>検索条件自動引き継ぎ済み</span>
+            <span>目的地: <strong>福岡（博多・天神エリア）</strong> / 日程: <strong>2026/09/10 (1泊)</strong></span>
+          </div>
+          <span class="bg-emerald-600 text-white text-[10px] px-2 py-1 rounded font-bold">12社最安値比較中</span>
+        </div>
+
+        <h4 class="font-bold text-sm text-gray-800 border-b pb-2">【福岡天神エリア】おすすめホテル・プラン一覧</h4>
+
+        <!-- Option Item 1 -->
+        <div class="border rounded-lg p-3.5 flex justify-between items-center hover:border-emerald-500 transition bg-white shadow-sm">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded">国内ホテル</span>
+              <h5 class="font-bold text-sm text-gray-900">リッチモンドホテル福岡天神</h5>
+            </div>
+            <p class="text-xs text-gray-500">西鉄福岡（天神）駅より徒歩1分 / 朝食付き / 禁煙シングル</p>
+            <div class="text-xs text-emerald-600 font-medium">法人一括請求（立替精算不要）</div>
+          </div>
+          <div class="text-right shrink-0 ml-4">
+            <div class="text-xs text-gray-400">会社規定内上限設定</div>
+            <div class="text-lg font-black text-emerald-600">10,000 <span class="text-xs font-normal">円/泊</span></div>
+            <button onclick="selectBtmItem('リッチモンドホテル福岡天神', '国内ホテル', 10000, '2026/09/10 (1泊)')" class="mt-1 bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow">
+              <i class="fa-solid fa-cart-plus"></i> カートに入れてワークフローに戻す
+            </button>
+          </div>
+        </div>
+
+        <!-- Option Item 2 -->
+        <div class="border rounded-lg p-3.5 flex justify-between items-center hover:border-emerald-500 transition bg-white shadow-sm">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded">新幹線</span>
+              <h5 class="font-bold text-sm text-gray-900">山陽・九州新幹線（東京 ⇔ 博多）指定席</h5>
+            </div>
+            <p class="text-xs text-gray-500">往復チケット / のぞみ・みずほ利用可 /EX予約連動</p>
+            <div class="text-xs text-emerald-600 font-medium">法人一括請求（立替精算不要）</div>
+          </div>
+          <div class="text-right shrink-0 ml-4">
+            <div class="text-xs text-gray-400">法人割引適用</div>
+            <div class="text-lg font-black text-emerald-600">23,000 <span class="text-xs font-normal">円/往復</span></div>
+            <button onclick="selectBtmItem('山陽・九州新幹線 (東京-博多往復)', '新幹線', 23000, '2026/09/10 - 09/11')" class="mt-1 bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow">
+              <i class="fa-solid fa-cart-plus"></i> カートに入れてワークフローに戻す
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="bg-gray-100 px-4 py-3 text-right shrink-0 border-t">
+        <button onclick="closeBtmModal()" class="px-4 py-1.5 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg text-xs font-bold">キャンセルして閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Logic for Interactive Simulator -->
+  <script>
+    // State Variables
+    let currentStep = 0;
+    let formData = {
+      user: 'デモ太郎',
+      approver: '山田 部長',
+      destination: '',
+      purpose: '',
+      period: '',
+      scheduleLoc: '',
+      schedulePurpose: '',
+      orders: [],
+      totalAmount: 0
+    };
+
+    let pendingItem = null; // Store item from BTM before confirmation
+
+    // Utility: Append Bot Message
+    function addBotMessage(contentHtml) {
+      const history = document.getElementById('chatHistory');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = "flex items-start gap-3 animate-fade-in";
+      msgDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0 mt-1">
+          <i class="fa-solid fa-robot text-sm"></i>
+        </div>
+        <div class="max-w-xl">
+          <div class="text-xs text-gray-500 mb-1 font-medium">1approval Bot <span class="text-gray-400 font-normal">${getTime()}</span></div>
+          <div class="chat-bubble-bot p-3.5 rounded-2xl rounded-tl-none shadow-sm text-sm">
+            ${contentHtml}
+          </div>
+        </div>
+      `;
+      history.appendChild(msgDiv);
+      history.scrollTop = history.scrollHeight;
+    }
+
+    // Utility: Append User Message
+    function addUserMessage(text) {
+      const history = document.getElementById('chatHistory');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = "flex items-start gap-3 justify-end animate-fade-in";
+      msgDiv.innerHTML = `
+        <div class="max-w-xl text-right">
+          <div class="text-xs text-gray-500 mb-1 font-medium">あなた <span class="text-gray-400 font-normal">${getTime()}</span></div>
+          <div class="chat-bubble-user p-3 rounded-2xl rounded-tr-none shadow-sm text-sm inline-block text-left font-medium">
+            ${text}
+          </div>
+        </div>
+        <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center shrink-0 mt-1 text-xs border border-indigo-200">
+          デモ
+        </div>
+      `;
+      history.appendChild(msgDiv);
+      history.scrollTop = history.scrollHeight;
+    }
+
+    function getTime() {
+      const now = new Date();
+      return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+    }
+
+    // Step 1: Start
+    function startBlock1() {
+      document.getElementById('btnStart').style.display = 'none';
+      addUserMessage('出張申請を始める');
+
+      setTimeout(() => {
+        addBotMessage(`
+          <p class="font-bold text-gray-800 mb-2">Block 1: 基本情報（出張の概要）</p>
+          <p class="mb-3">【1-1】出張者はどなたですか？</p>
+          <div class="flex gap-2">
+            <button onclick="selectUser('自分（デモ太郎）')" class="bg-indigo-50 border border-indigo-300 text-indigo-700 hover:bg-indigo-100 px-3 py-1.5 rounded-lg text-xs font-bold">
+              🙋‍♂️ 自分（デモ太郎）
+            </button>
+            <button onclick="selectUser('他のユーザー検索')" class="bg-gray-50 border border-gray-300 text-gray-700 hover:bg-gray-100 px-3 py-1.5 rounded-lg text-xs">
+              🔍 他のユーザーを検索
+            </button>
+          </div>
+        `);
+      }, 400);
+    }
+
+    function selectUser(userName) {
+      addUserMessage(userName);
+      formData.user = 'デモ太郎';
+      document.getElementById('prevUser').innerText = formData.user;
+
+      setTimeout(() => {
+        addBotMessage(`
+          <p class="mb-2">【1-2】承認者を選択してください。</p>
+          <div class="flex gap-2">
+            <button onclick="selectApprover('山田 部長 (直属上長)')" class="bg-indigo-50 border border-indigo-300 text-indigo-700 hover:bg-indigo-100 px-3 py-1.5 rounded-lg text-xs font-bold">
+              👤 山田 部長（部署上長・自動補完）
+            </button>
+          </div>
+        `);
+      }, 400);
+    }
+
+    function selectApprover(app) {
+      addUserMessage(app);
+      formData.approver = '山田 部長';
+      document.getElementById('prevApprover').innerText = formData.approver;
+
+      setTimeout(() => {
+        addBotMessage(`
+          <p class="mb-2">【1-3】出張先（都道府県や都市名）を入力してください。</p>
+          <p class="text-xs text-gray-500 mb-2">※下のクイックボタンを押すかテキスト入力してください</p>
+          <div class="flex gap-2">
+            <button onclick="inputDestination('福岡')" class="bg-white border border-gray-300 text-gray-700 hover:bg-indigo-50 px-3 py-1 rounded text-xs">福岡</button>
+            <button onclick="inputDestination('大阪')" class="bg-white border border-gray-300 text-gray-700 hover:bg-indigo-50 px-3 py-1 rounded text-xs">大阪</button>
+            <button onclick="inputDestination('名古屋')" class="bg-white border border-gray-300 text-gray-700 hover:bg-indigo-50 px-3 py-1 rounded text-xs">名古屋</button>
+          </div>
+        `);
+      }, 400);
+    }
+
+    function inputDestination(dest) {
+      addUserMessage(dest);
+      formData.destination = dest;
+      document.getElementById('prevDestination').innerText = dest;
+
+      setTimeout(() => {
+        addBotMessage(`
+          <p class="mb-2">【1-4】出張目的を入力してください。</p>
+          <div class="flex gap-2">
+            <button onclick="inputPurpose('福岡のクライアントに会って現地商談を行い親睦を深めるため。')" class="bg-white border border-gray-300 text-gray-700 hover:bg-indigo-50 px-3 py-1.5 rounded text-xs font-medium text-left">
+              💬 「福岡のクライアントに会って現地商談を行い親睦を深めるため。」
+            </button>
+          </div>
+        `);
+      }, 400);
+    }
+
+    function inputPurpose(purp) {
+      addUserMessage(purp);
+      formData.purpose = purp;
+      document.getElementById('prevPurpose').innerText = purp;
+
+      setTimeout(() => {
+        addBotMessage(`
+          <p class="mb-2">【1-5】出張期間を選択してください。</p>
+          <div class="flex gap-2">
+            <button onclick="inputPeriod('2026/09/10 〜 2026/09/11 (1泊2日)')" class="bg-indigo-50 border border-indigo-300 text-indigo-700 hover:bg-indigo-100 px-3 py-1.5 rounded-lg text-xs font-bold">
+              📅 2026/09/10 ～ 2026/09/11 (1泊2日)
+            </button>
+          </div>
+        `);
+      }, 400);
+    }
+
+    function inputPeriod(per) {
+      addUserMessage(per);
+      formData.period = per;
+      document.getElementById('prevPeriod').innerText = per;
+
+      setTimeout(() => {
+        addBotMessage(`
+          <p class="font-bold text-gray-800 mb-1">Block 2: 日程ごとのスケジュール</p>
+          <p class="mb-2">【2-1】1日目の訪問先（企業名・拠点名）を入力してください。</p>
+          <div class="flex gap-2">
+            <button onclick="inputSchedLoc('株式会社岩田屋三越')" class="bg-white border border-gray-300 text-gray-700 hover:bg-indigo-50 px-3 py-1.5 rounded text-xs font-medium">
+              🏢 株式会社岩田屋三越
+            </button>
+          </div>
+        `);
+      }, 400);
+    }
+
+    function inputSchedLoc(loc) {
+      addUserMessage(loc);
+      formData.scheduleLoc = loc;
+
+      setTimeout(() => {
+        addBotMessage(`
+          <p class="mb-2">【2-2】その日の目的・要件を入力してください。</p>
+          <div class="flex gap-2">
+            <button onclick="inputSchedPurpose('出張支援SaaSの訪問提案')" class="bg-white border border-gray-300 text-gray-700 hover:bg-indigo-50 px-3 py-1.5 rounded text-xs font-medium">
+              💼 出張支援SaaSの訪問提案
+            </button>
+          </div>
+        `);
+      }, 400);
+    }
+
+    function inputSchedPurpose(purp) {
+      addUserMessage(purp);
+      formData.schedulePurpose = purp;
+
+      // Update Schedule Preview
+      document.getElementById('prevSchedule').innerHTML = `
+        <div class="text-gray-800 font-medium">1日目: ${formData.scheduleLoc}</div>
+        <div class="text-gray-500">要件: ${formData.schedulePurpose}</div>
+      `;
+
+      // Update Doc Status (Auto draft)
+      document.getElementById('syncStatusBadge').className = "bg-emerald-500 text-white text-[10px] px-2 py-0.5 rounded font-bold animate-pulse";
+      document.getElementById('syncStatusBadge').innerText = "SharePoint下書き保存済";
+      document.getElementById('docStatus').className = "bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded text-[10px] font-bold";
+      document.getElementById('docStatus').innerText = "下書き保存済み (未申請)";
+
+      setTimeout(() => {
+        addBotMessage(`
+          <div class="space-y-2">
+            <div class="p-2 bg-emerald-50 border border-emerald-200 rounded text-xs text-emerald-800 font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-cloud-arrow-up"></i> 基本情報とスケジュールをSharePointへ一時送信・保存しました！
+            </div>
+            <p class="text-sm font-bold text-gray-800">Block 3: 必要な手配を選択してください</p>
+            <p class="text-xs text-gray-600">下のボタンを押すと「ピカパカ出張DX」へ移動（パンチイン）します。</p>
+            
+            <div class="grid grid-cols-2 gap-2 pt-2" id="actionButtonsStep3">
+              <button onclick="openBtm('飛行機')" class="bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-800 p-2 rounded-lg text-xs font-bold text-left shadow-sm flex items-center gap-2">
+                <span class="text-base">✈️</span> 飛行機を予約
+              </button>
+              <button onclick="openBtm('新幹線')" class="bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-800 p-2 rounded-lg text-xs font-bold text-left shadow-sm flex items-center gap-2">
+                <span class="text-base">🚅</span> 新幹線を予約
+              </button>
+              <button onclick="openBtm('ホテル')" class="bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-800 p-2 rounded-lg text-xs font-bold text-left shadow-sm flex items-center gap-2">
+                <span class="text-base">🏨</span> ホテルを予約
+              </button>
+              <button onclick="openBtm('パッケージ')" class="bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-800 p-2 rounded-lg text-xs font-bold text-left shadow-sm flex items-center gap-2">
+                <span class="text-base">🧳</span> パッケージツアー
+              </button>
+            </div>
+
+            <div class="pt-2 border-t mt-2">
+              <button onclick="finishHandledStep()" class="w-full bg-gray-800 hover:bg-gray-900 text-white p-2 rounded-lg text-xs font-bold shadow flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-lines"></i> 手配を終了して申請書を見る
+              </button>
+            </div>
+          </div>
+        `);
+      }, 600);
+    }
+
+    // Modal / Punch-in Functions
+    function openBtm(type) {
+      document.getElementById('btmModal').classList.remove('hidden');
+    }
+
+    function closeBtmModal() {
+      document.getElementById('btmModal').classList.add('hidden');
+    }
+
+    // Punch-out Callback
+    function selectBtmItem(name, category, price, detail) {
+      closeBtmModal();
+      pendingItem = { name, category, price, detail };
+
+      // Ask confirmation in Teams
+      addBotMessage(`
+        <div class="adaptive-card p-3.5 space-y-3">
+          <div class="flex items-center gap-2 text-indigo-800 font-bold border-b pb-1.5 text-xs">
+            <i class="fa-solid fa-cart-shopping"></i> カートから手配情報が連携されました
+          </div>
+          <div class="text-xs space-y-1 text-gray-700 bg-gray-50 p-2.5 rounded border">
+            <div><span class="text-gray-400">種別：</span><strong>${category}</strong></div>
+            <div><span class="text-gray-400">詳細：</span><strong>${name}</strong></div>
+            <div><span class="text-gray-400">利用日：</span>${detail}</div>
+            <div><span class="text-gray-400">金額：</span><strong class="text-emerald-600 font-bold">${price.toLocaleString()} 円</strong> (法人一括請求)</div>
+          </div>
+          <p class="text-xs font-bold text-gray-800">こちらの手配内容で確定してよろしいですか？</p>
+          <div class="flex gap-2">
+            <button onclick="confirmPendingItem()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-1.5 rounded-lg text-xs font-bold shadow">
+              ✅ この手配で確定する
+            </button>
+            <button onclick="cancelPendingItem()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold">
+              選択し直す
+            </button>
+          </div>
+        </div>
+      `);
+    }
+
+    function confirmPendingItem() {
+      if (!pendingItem) return;
+      
+      formData.orders.push(pendingItem);
+      formData.totalAmount += pendingItem.price;
+
+      addUserMessage(`✅ 「${pendingItem.name} (${pendingItem.price.toLocaleString()}円)」で確定する`);
+
+      // Update Right Side Orders List
+      let ordersHtml = "";
+      formData.orders.forEach((ord, i) => {
+        ordersHtml += `
+          <div class="p-1.5 bg-white rounded border mb-1 flex justify-between items-center text-[11px]">
+            <div>
+              <span class="bg-indigo-100 text-indigo-800 text-[9px] px-1 rounded font-bold mr-1">${ord.category}</span>
+              <span class="font-bold text-gray-800">${ord.name}</span>
+            </div>
+            <span class="font-bold text-emerald-600">${ord.price.toLocaleString()}円</span>
+          </div>
+        `;
+      });
+      document.getElementById('prevOrders').innerHTML = ordersHtml;
+      document.getElementById('prevTotalAmount').innerText = formData.totalAmount.toLocaleString() + " 円";
+
+      pendingItem = null;
+
+      // Repeat Menu
+      setTimeout(() => {
+        addBotMessage(`
+          <p class="font-bold text-emerald-700 mb-1">🎉 手配を申請書に追加・固定しました！</p>
+          <p class="text-xs text-gray-600 mb-3">他に追加で手配したい商材がありますか？</p>
+          
+          <div class="grid grid-cols-2 gap-2" id="actionButtonsStep3Loop">
+            <button onclick="openBtm('飛行機')" class="bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-800 p-2 rounded-lg text-xs font-bold text-left shadow-sm flex items-center gap-1.5">
+              <span>✈️</span> 飛行機を追加
+            </button>
+            <button onclick="openBtm('新幹線')" class="bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-800 p-2 rounded-lg text-xs font-bold text-left shadow-sm flex items-center gap-1.5">
+              <span>🚅</span> 新幹線を追加
+            </button>
+            <button onclick="openBtm('ホテル')" class="bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-800 p-2 rounded-lg text-xs font-bold text-left shadow-sm flex items-center gap-1.5">
+              <span>🏨</span> ホテルを追加
+            </button>
+            <button onclick="openBtm('パッケージ')" class="bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-800 p-2 rounded-lg text-xs font-bold text-left shadow-sm flex items-center gap-1.5">
+              <span>🧳</span> パッケージツアー
+            </button>
+          </div>
+
+          <div class="pt-2 border-t mt-3">
+            <button onclick="finishHandledStep()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white p-2.5 rounded-lg text-xs font-bold shadow flex items-center justify-center gap-2">
+              <i class="fa-solid fa-file-circle-check"></i> 手配を終了して申請書を見る
+            </button>
+          </div>
+        `);
+      }, 500);
+    }
+
+    function cancelPendingItem() {
+      addUserMessage("選択し直す");
+      pendingItem = null;
+      setTimeout(() => {
+        openBtm('ホテル');
+      }, 300);
+    }
+
+    // Step 4: Finish & View SharePoint Request Form
+    function finishHandledStep() {
+      addUserMessage("📄 手配を終了して申請書を見る");
+
+      setTimeout(() => {
+        addBotMessage(`
+          <div class="adaptive-card p-4 space-y-3 border-indigo-200">
+            <div class="flex items-center gap-2 text-indigo-900 font-bold text-sm">
+              <i class="fa-solid fa-circle-check text-emerald-500 text-base"></i> 出張申請データの作成が完了しました！
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              1approval経由で手配内容が反映された申請書がSharePoint上に準備できました。<br>
+              最終確認・編集を行い、<strong>「承認依頼をする」</strong>ボタンを押して提出を完了してください。
+            </p>
+            
+            <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100 space-y-1 text-xs">
+              <div class="font-bold text-indigo-900">📄 SharePoint 出張手配申請書 #20260910-FUK</div>
+              <div class="text-gray-600">申請者: デモ太郎 / 合計概算: <strong class="text-emerald-700">${formData.totalAmount.toLocaleString()}円</strong></div>
+            </div>
+
+            <button onclick="showFinalApprovalModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-lg text-xs font-bold shadow flex items-center justify-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> SharePoint申請書を開いて承認依頼を送信する
+            </button>
+          </div>
+        `);
+      }, 500);
+    }
+
+    function showFinalApprovalModal() {
+      // Highlight Status
+      document.getElementById('docStatus').className = "bg-emerald-600 text-white px-2 py-0.5 rounded text-[10px] font-bold";
+      document.getElementById('docStatus').innerText = "承認依頼送信済み（承認待ち）";
+
+      document.getElementById('syncStatusBadge').className = "bg-indigo-600 text-white text-[10px] px-2 py-0.5 rounded font-bold";
+      document.getElementById('syncStatusBadge').innerText = "上長承認待ち";
+
+      addBotMessage(`
+        <div class="p-3 bg-emerald-50 border border-emerald-300 rounded-lg text-xs text-emerald-900 font-bold flex items-center gap-2">
+          <i class="fa-solid fa-paper-plane text-emerald-600 text-base"></i>
+          上長（山田 部長）へTeams承認通知を送信しました！上長承認が完了すると即時予約・発券が自動完了します。
+        </div>
+      `);
+    }
+
+    function resetDemo() {
+      location.reload();
+    }
+  </script>
+</body>
+</html>
