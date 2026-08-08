@@ -4,10 +4,35 @@
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N7T5VQVM');</script>
     <!-- End Google Tag Manager -->
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18345602070"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-18345602070');
+    </script>
+    <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-18345602070/ztVkCITlzdUcEJbY7qtE',
+          'value': 1.0,
+          'currency': 'JPY',
+          'event_callback': callback
+      });
+      return false;
+    }
+    </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1Approval for Teams | Microsoft Teamsチャット上でワンクリック承認・仕訳メモ入力・自動購買が完結</title>
+    <title>1Approval for Teams | Microsoft Teamsチャット上でワンクリック承認・仕訳メモ入力・自動購買完結</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,11 +49,14 @@
                             sharepointDark: '#004D44',
                             sharepointCyan: '#00A3A6',
                             yellow: '#FFB800',
+                            yellowlight: '#FFFDF0',
                             dark: '#0F172A',
                             primary: '#2563EB',
                             teams: '#6264A7',
                             teamsLight: '#EEEEF8',
                             teamsDark: '#464775',
+                            kintone: '#E8A300',
+                            kintoneLight: '#FFF8E6',
                             success: '#10B981',
                             danger: '#EF4444',
                             slatebg: '#F8FAFC',
@@ -42,16 +70,19 @@
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfHVEwtAAAAAP4cdyQWh9SroNu-LO_jOAWUkY4Z"></script>
     <style>
         .card-shadow { box-shadow: 0 10px 30px -10px rgba(98, 100, 167, 0.12); }
-        .hero-shadow { box-shadow: 0 20px 40px -15px rgba(98, 100, 167, 0.25); }
-        .text-glow { text-shadow: 0 2px 10px rgba(0, 163, 166, 0.4); }
-
+        .hero-shadow { box-shadow: 0 20px 40px -15px rgba(98, 100, 167, 0.22); }
+        .text-glow { text-shadow: 0 2px 10px rgba(0, 163, 166, 0.35); }
+        
         :root {
             --teams: #6264A7;
             --sharepoint: #008272;
-            --ink: #0F172A;
-            --surface: #F8FAFC;
+            --ink: #111118;
+            --muted: #6E6E80;
+            --line: #E4E4EC;
+            --surface: #F7F7F9;
             --white: #FFFFFF;
         }
 
@@ -62,39 +93,88 @@
             line-height: 1.7;
         }
 
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--line);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 3.5rem;
+        }
+
+        .problem-card {
+            background: var(--white);
+            padding: 2.25rem 2rem;
+            transition: background 0.25s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .problem-card:hover { background: var(--surface); }
+
+        .prob-num {
+            font-size: .68rem;
+            color: var(--teams);
+            margin-bottom: 0.85rem;
+            display: block;
+            font-weight: 700;
+        }
+
+        .prob-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--ink);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .prob-body { font-size: .82rem; color: var(--muted); line-height: 1.75; }
+
+        @media (max-width: 1024px) { .problem-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px) {
+            .problem-grid { grid-template-columns: 1fr; }
+            .problem-card { padding: 1.75rem 1.5rem; }
+        }
+
         .fade-in-box { transition: all 0.4s ease-out; max-height: 0; opacity: 0; overflow: hidden; }
         .fade-in-box.show { max-height: 1200px; opacity: 1; margin-top: 1.5rem; }
     </style>
 </head>
 <body class="bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
+<!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N7T5VQVM" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- ヘッダー -->
     <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-1.5 sm:gap-4">
             <div class="flex items-center gap-3 min-w-0 shrink">
                 <a href="/">
-                    <img src="https://masafushimi.github.io/1approval/teams/logo_teams.png" alt="1Approval for Teams" class="h-10 sm:h-11 w-auto max-w-[180px] sm:max-w-none object-contain shrink">
+                    <img src="https://masafushimi.github.io/1approval/m365/logo_teams.png" alt="1Approval" class="h-10 sm:h-11 w-auto max-w-[160px] sm:max-w-none object-contain shrink">
                 </a>
             </div>
             
             <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-xs xl:text-sm font-semibold text-slate-600 shrink-0">
                 <a href="#problem" class="hover:text-brand-teams transition-colors">課題</a>
-                <a href="#features" class="hover:text-brand-teams transition-colors">Teams連携の特徴</a>
-                <a href="#demo-ui" class="hover:text-brand-teams transition-colors">画面イメージ</a>
+                <a href="#features" class="hover:text-brand-teams transition-colors">Teams連携の特長</a>
+                <a href="#compatibility" class="hover:text-brand-teams transition-colors">対応プラットフォーム</a>
+                <a href="#mock-demo" class="hover:text-brand-teams transition-colors">画面デモ</a>
                 <a href="#pricing" class="hover:text-brand-teams transition-colors">料金</a>
                 <a href="#roadmap" class="hover:text-brand-teams transition-colors">ロードマップ</a>
             </nav>
 
-            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+            <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
                 <a href="#contact" class="hidden sm:inline-flex items-center justify-center border border-slate-300 text-slate-700 hover:border-brand-teams hover:text-brand-teams transition-all duration-300 font-bold px-4 py-2 rounded-full text-xs">
                     資料請求
                 </a>
-                <a href="#contact" class="inline-flex items-center justify-center bg-brand-teams text-white hover:bg-brand-teamsDark transition-all duration-300 font-extrabold px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-full text-xs shadow-md shadow-brand-teams/20 whitespace-nowrap shrink-0">
-                    デモ・無料相談
+                <a href="#contact" class="inline-flex items-center justify-center bg-brand-teams text-white hover:bg-brand-teamsDark transition-all duration-300 font-extrabold px-3 py-2 sm:px-5 sm:py-2.5 rounded-full text-[10px] sm:text-xs shadow-md shadow-brand-teams/20 whitespace-nowrap shrink-0">
+                    デモ・無料相談・POC
                 </a>
-                <button id="menu-open-btn" class="lg:hidden w-9 h-9 flex items-center justify-center text-slate-700 hover:text-brand-teams transition-colors focus:outline-none" aria-label="メニューを開く">
-                    <i class="fa-solid fa-bars text-xl"></i>
+                <button id="menu-open-btn" class="lg:hidden w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-slate-700 hover:text-brand-teams transition-colors focus:outline-none shrink-0" aria-label="メニューを開く">
+                    <i class="fa-solid fa-bars text-lg sm:text-xl"></i>
                 </button>
             </div>
         </div>
@@ -106,16 +186,17 @@
             <div class="space-y-6">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                     <span class="text-sm font-black text-slate-800">メニュー一覧</span>
-                    <button id="menu-close-btn" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-brand-teams transition-colors" aria-label="メニューを閉じる">
+                    <button id="menu-close-btn" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-brand-teams transition-colors focus:outline-none" aria-label="メニューを閉じる">
                         <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
                 </div>
                 <nav class="flex flex-col gap-4 text-sm font-bold text-slate-700">
-                    <a href="#problem" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams">課題</a>
-                    <a href="#features" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams">Teams連携の特徴</a>
-                    <a href="#demo-ui" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams">画面イメージ</a>
-                    <a href="#pricing" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams">料金</a>
-                    <a href="#roadmap" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams">ロードマップ</a>
+                    <a href="#problem" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">課題</a>
+                    <a href="#features" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">Teams連携の特長</a>
+                    <a href="#compatibility" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">対応プラットフォーム</a>
+                    <a href="#mock-demo" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">画面デモ</a>
+                    <a href="#pricing" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">料金</a>
+                    <a href="#roadmap" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">ロードマップ</a>
                 </nav>
             </div>
             <div class="pt-6 border-t border-slate-100 space-y-3">
@@ -132,34 +213,32 @@
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
-                
-                <!-- Left: Catch & Value -->
                 <div class="md:col-span-7 space-y-6 text-left">
                     <div class="inline-flex items-center gap-2 bg-brand-teamsLight border border-brand-teams/30 rounded-full py-1.5 px-4 text-xs font-bold text-brand-teamsDark">
-                        <i class="fa-brands fa-microsoft text-brand-teams"></i> Microsoft Teams アドオン（オプション）
+                        <i class="fa-brands fa-microsoft text-brand-teams"></i> 1Approval for Teams（アドオン連携）
                     </div>
                     
                     <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.2] text-slate-900 tracking-tight">
-                        Teamsチャットから<br>
-                        <span class="text-brand-teams">ワンクリック承認＆即予約。</span>
+                        Teamsチャット上で<br>
+                        <span class="text-brand-teams">承認・仕訳入力・購買が完了。</span>
                     </h1>
                     
                     <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
-                        承認のためだけにブラウザを開き直す手間をなくし「ブラックボックス承認」を終わらせます。Teams上に届くAdaptive Cardから、ワンクリックで出張予約を承認。その場で会計仕訳メモの追記や差し戻しも完結し、予約手配・一括請求まで全自動でつながります。
+                        申請作成も過去データからAIが自動レコメンドするため、記入時間が10分から2分へ大幅縮小。承認側も別サイトへ訪問・確認する3分間のロスをなくし、Teams画面で手軽に確認して1分でそのままワンクリック承認完了。ブラックボックス承認や二度手間を社内から根絶します。
                     </p>
 
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
                         <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                            <span class="text-[11px] text-slate-500 font-bold block mb-1">承認レスポンス速度</span>
-                            <span class="text-2xl font-black text-brand-teams">90%短縮</span>
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">申請作成時間</span>
+                            <span class="text-2xl font-black text-brand-teams">10分 → 2分</span>
                         </div>
                         <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                            <span class="text-[11px] text-slate-500 font-bold block mb-1">社内ログインのストレス</span>
-                            <span class="text-2xl font-black text-slate-800">ゼロへ</span>
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">上長承認時間</span>
+                            <span class="text-2xl font-black text-slate-800">3分 → 1分</span>
                         </div>
                         <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm col-span-2 sm:col-span-1">
-                            <span class="text-[11px] text-slate-500 font-bold block mb-1">仕訳メモ・勘定科目</span>
-                            <span class="text-2xl font-black text-brand-sharepointCyan">チャット直入力</span>
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">決済・仕訳メモ</span>
+                            <span class="text-2xl font-black text-brand-sharepointCyan">Teamsで直入力</span>
                         </div>
                     </div>
 
@@ -167,21 +246,20 @@
                         <a href="#contact" class="bg-brand-teams text-white font-black text-center px-8 py-4 rounded-xl text-base hover:bg-brand-teamsDark transition-all duration-300 shadow-lg shadow-brand-teams/20 flex items-center justify-center gap-2 group">
                             資料請求・オンラインデモを依頼 <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                         </a>
-                        <a href="#demo-ui" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-center px-8 py-4 rounded-xl text-base transition-all duration-300 flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-mobile-screen text-brand-teams"></i> UIイメージを見る
+                        <a href="https://masafushimi.github.io/1approval/teams/mock/" target="_blank" rel="noopener noreferrer" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-center px-8 py-4 rounded-xl text-base transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-laptop text-brand-teams"></i> 実際の画面デモを見る
                         </a>
                     </div>
                 </div>
 
-                <!-- Right: Adaptive Card Mockup -->
+                <!-- ヒーロー右側：Adaptive Cards UIモック -->
                 <div class="md:col-span-5 relative mt-6 md:mt-0">
-                    <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-teams to-brand-sharepointCyan rounded-3xl blur opacity-30"></div>
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-teams to-brand-sharepointCyan rounded-3xl blur opacity-25"></div>
                     <div class="bg-slate-900 border border-white/20 p-6 rounded-3xl shadow-2xl relative space-y-4 text-white">
                         
-                        <!-- Header -->
                         <div class="flex items-center justify-between border-b border-white/10 pb-3">
                             <div class="flex items-center gap-2.5">
-                                <div class="w-8 h-8 bg-brand-teams rounded-lg flex items-center justify-center text-white text-sm font-bold">
+                                <div class="w-8 h-8 bg-brand-teams rounded-lg flex items-center justify-center text-white text-xs font-bold">
                                     <i class="fa-brands fa-microsoft"></i>
                                 </div>
                                 <div>
@@ -194,15 +272,14 @@
                             </span>
                         </div>
 
-                        <!-- Card Body -->
-                        <div class="bg-slate-800/90 p-4 rounded-2xl border border-white/10 space-y-3">
+                        <div class="bg-slate-800/90 p-4 rounded-2xl border border-white/10 space-y-3 text-xs">
                             <div class="flex items-center justify-between">
-                                <span class="bg-brand-sharepointCyan/20 text-brand-sharepointCyan border border-brand-sharepointCyan/30 text-[10px] font-extrabold px-2 py-0.5 rounded">出張承認依頼 #TR-8842</span>
+                                <span class="bg-brand-sharepointCyan/20 text-brand-sharepointCyan border border-brand-sharepointCyan/30 text-[10px] font-extrabold px-2 py-0.5 rounded">出張申請 #TR-8842</span>
                                 <span class="text-[10px] text-slate-400">たった今</span>
                             </div>
 
                             <div class="font-bold text-sm text-white leading-snug">
-                                【出張承認】東京 ⇆ 大阪（新幹線＋ホテル1泊）
+                                【出張承認依頼】東京 ⇆ 大阪（新幹線＋ホテル1泊）
                             </div>
 
                             <div class="bg-slate-900/80 p-3 rounded-xl space-y-1.5 text-[11px] border border-white/5">
@@ -211,8 +288,8 @@
                                     <span class="text-slate-200 font-medium">営業部 山田 太郎</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-slate-400">日程:</span>
-                                    <span class="text-slate-200 font-medium">2026/09/15 - 16 (1泊2日)</span>
+                                    <span class="text-slate-400">AI入力時間:</span>
+                                    <span class="text-brand-teams font-bold">約2分 (過去パターンよりAI自動レコメンド)</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-slate-400">申請合計金額:</span>
@@ -220,20 +297,16 @@
                                 </div>
                             </div>
 
-                            <!-- Memo Input Image -->
                             <div class="space-y-1">
                                 <label class="text-[10px] text-slate-300 font-bold flex items-center gap-1">
                                     <i class="fa-solid fa-pen text-[9px] text-brand-sharepointCyan"></i> 決済/仕訳メモ入力 (任意)
                                 </label>
-                                <div class="w-full bg-slate-900 border border-white/20 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-300">
-                                    【プロジェクトA】関西商談旅費 / 交通費
-                                </div>
+                                <input type="text" readonly value="【プロジェクトA】関西商談旅費 / 交通費" class="w-full bg-slate-900 border border-white/20 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-300 focus:outline-none">
                             </div>
 
-                            <!-- Actions -->
                             <div class="pt-1 flex gap-2">
                                 <button class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-lg shadow-emerald-900/40 flex items-center justify-center gap-1">
-                                    <i class="fa-solid fa-check text-xs"></i> Teamsで承認＆即予約
+                                    <i class="fa-solid fa-check text-xs"></i> 1分で承認＆即自動発券
                                 </button>
                                 <button class="px-3 bg-white/10 text-slate-200 font-bold py-2.5 rounded-xl text-xs border border-white/10">
                                     差戻し
@@ -242,70 +315,115 @@
                         </div>
 
                         <p class="text-[10px] text-slate-400 text-center">
-                            ※ 承認ボタンを押した瞬間にBTM手配が自動完結します。
+                            ※ 承認された瞬間にBTM連携を通じてチケット手配が即自動完了します。
                         </p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- 既存基盤（kintone / Microsoft 365）連携対応ブロック -->
+    <section id="compatibility" class="py-12 bg-slate-900 text-white border-y border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="space-y-2 text-center md:text-left">
+                    <span class="bg-brand-teams/30 text-brand-teamsLight border border-brand-teams/40 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider inline-block">
+                        FLEXIBLE INTEGRATION
+                    </span>
+                    <h3 class="text-xl sm:text-2xl font-black">
+                        お使いのワークフロー基盤に合わせてそのまま導入可能
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        1Approval for Teams オプションは、kintone基盤・Microsoft 365基盤のどちらのワークフローをご利用中の環境でも簡単に追加接続できます。
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full md:w-auto shrink-0">
+                    <!-- for kintone -->
+                    <div class="bg-slate-800/90 border border-brand-kintone/40 p-4 rounded-2xl flex items-center gap-3 shadow-lg">
+                        <div class="w-10 h-10 rounded-xl bg-brand-kintoneLight/10 text-brand-kintone flex items-center justify-center font-black text-lg shrink-0 border border-brand-kintone/30">
+                            <i class="fa-solid fa-cube"></i>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">1Approval for</div>
+                            <div class="text-sm font-black text-white">kintone</div>
+                            <div class="text-[10px] text-emerald-400 font-bold mt-0.5"><i class="fa-solid fa-circle-check"></i> Teams連携オプション対応</div>
+                        </div>
+                    </div>
+
+                    <!-- for Microsoft 365 -->
+                    <div class="bg-slate-800/90 border border-brand-sharepoint/40 p-4 rounded-2xl flex items-center gap-3 shadow-lg">
+                        <div class="w-10 h-10 rounded-xl bg-brand-sharepointLight/10 text-brand-sharepoint flex items-center justify-center font-black text-lg shrink-0 border border-brand-sharepoint/30">
+                            <i class="fa-brands fa-microsoft"></i>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">1Approval for</div>
+                            <div class="text-sm font-black text-white">Microsoft 365</div>
+                            <div class="text-[10px] text-emerald-400 font-bold mt-0.5"><i class="fa-solid fa-circle-check"></i> Teams連携オプション対応</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- 課題セクション -->
-    <section id="problem" class="py-24 bg-white border-y border-slate-200/80">
+    <section id="problem" class="py-24 bg-white border-b border-slate-200/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
-                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3.5 py-1 rounded-full uppercase">THE APPROVAL BOTTLE NECK</span>
+                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3.5 py-1 rounded-full uppercase">APPROVAL FRICTION</span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-snug">
-                    「承認するためだけに別システムにログインする」<br class="hidden sm:block">非効率が社内の意思決定を遅らせています
+                    別システムへログインし直す「ブラックボックス承認」と<br class="hidden sm:block">手入力の手間がビジネスの速度を下げています
                 </h2>
                 <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
-                    PCでもスマホでも日々使い続けているTeams。それなのに、申請承認や経費チェックのときだけ外部システムに別ログインが必要なため、承認の停滞・価格変動による再承認が発生しています。
+                    申請作成にかかる10分間、承認のために外部サイトを訪問して内容確認する3分間、価格変動による再申請……ツギハギのシステム連携が大量の潜在的雑務を発生させています。
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-brand-slatebg p-6 rounded-2xl border border-slate-200 space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg">
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                    </div>
-                    <h3 class="font-extrabold text-slate-900 text-base">ID/パスワード再入力のストレス</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        Teamsで連絡を受けても、承認を行うためにBTMや社内システムへ別途ログインが必要。「後でやろう」と後回しにされ、承認が何日も滞留。
-                    </p>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <span class="prob-num">── 01</span>
+                    <div class="prob-title">申請フォームのイチからの手入力 (10分)</div>
+                    <p class="prob-body">フライトやホテル、新幹線の時間・金額を1項目ずつ申請書へ転記。作成だけに10分以上の時間が費やされます。</p>
                 </div>
-
-                <div class="bg-brand-slatebg p-6 rounded-2xl border border-slate-200 space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg">
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-                    </div>
-                    <h3 class="font-extrabold text-slate-900 text-base">タイムラグによる「再承認地獄」</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        承認が遅れる間にホテルや航空券の価格が変動・満席化。「1,000円値上がりしたため再申請」という不毛なやり直しが発生。
-                    </p>
+                <div class="problem-card">
+                    <span class="prob-num">── 02</span>
+                    <div class="prob-title">別サイト訪問＆ログインの確認ロス (3分)</div>
+                    <p class="prob-body">承認依頼が届くたびに業務の手を止め、外部BTMやワークフローへログインし直して中身を確認。確認・承認に3分以上のロスが発生。</p>
                 </div>
-
-                <div class="bg-brand-slatebg p-6 rounded-2xl border border-slate-200 space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg">
-                        <i class="fa-solid fa-eye-slash"></i>
-                    </div>
-                    <h3 class="font-extrabold text-slate-900 text-base">中身を見ない「ブラックボックス承認」の横行</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        詳細確認のため別画面を開くのが面倒で、内容やプロジェクトコード・仕訳の妥当性を確認せずに承認。事後経理の手間が増大。
-                    </p>
+                <div class="problem-card">
+                    <span class="prob-num">── 03</span>
+                    <div class="prob-title">内容を見ない「ブラックボックス承認」の発生</div>
+                    <p class="prob-body">ログインや別画面参照が面倒なため、金額の妥当性やプロジェクトコード、仕訳情報を確認せず形だけで承認。</p>
+                </div>
+                <div class="problem-card">
+                    <span class="prob-num">── 04</span>
+                    <div class="prob-title">価格変動・在庫消滅による再承認</div>
+                    <p class="prob-body">承認が遅れる間にチケット価格が変更。「数百円上がったため再申請」という不毛な後戻りルールが横行。</p>
+                </div>
+                <div class="problem-card">
+                    <span class="prob-num">── 05</span>
+                    <div class="prob-title">承認後の買い忘れ・手配ミス</div>
+                    <p class="prob-body">承認は降りたものの、実際のチケット購買を忘れていた事故や、個人立替精算のチェック作業が発生。</p>
+                </div>
+                <div class="problem-card bg-rose-50/40 border-l-2 border-rose-300">
+                    <span class="prob-num text-rose-500 font-bold">── 1Approvalの解決策</span>
+                    <div class="prob-title text-rose-950 font-black">AIとTeams連携で圧倒的短縮</div>
+                    <p class="prob-body text-slate-700">AIレコメンドで申請記入を10分→2分、承認もTeams上で3分→1分へ劇的短縮。そのまま全自動で手配・請求まで繋ぎます。</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 機能・ソリューション（Teams連携の特徴） -->
+    <!-- ソリューション・コア機能 -->
     <section id="features" class="py-20 bg-brand-slatebg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
-                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3 py-1 rounded-full uppercase">TEAMS ADAPTIVE CARDS</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">チャット画面を離れずにすべてが完結する理由</h2>
+                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3 py-1 rounded-full uppercase">TEAMS ADAPTIVE CARDS HUB</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Teamsのチャット上で完結させる独自機能</h2>
                 <p class="text-slate-500 text-sm">
-                    Microsoft TeamsのAdaptive Cards技術を活用し、インタラクティブな承認UIをチャット画面上に直接描画します。
+                    Microsoft TeamsのAdaptive Cards（インタラクティブカード）技術を活用し、チャット画面を離れずに操作を完結させます。
                 </p>
             </div>
 
@@ -317,9 +435,9 @@
                             1
                         </div>
                         <div class="space-y-1">
-                            <h3 class="text-base font-bold text-slate-900">リアルタイムチャット通知 ＆ インタラクティブカード</h3>
+                            <h3 class="text-base font-bold text-slate-900">AIレコメンド申請（記入時間 10分 → 2分）</h3>
                             <p class="text-xs text-slate-500 leading-relaxed">
-                                申請が届くと、Teamsの1Approval Botから上長宛に即時通知。カード内に申請者・日程・金額・最安値情報が要約表示されます。
+                                過去の出張・購買履歴や傾向から、AIが申請内容を自動判別してレコメンド。申請者はイチから手入力することなく、わずか2分で申請を作成・送信できます。
                             </p>
                         </div>
                     </div>
@@ -329,9 +447,9 @@
                             2
                         </div>
                         <div class="space-y-1">
-                            <h3 class="text-base font-bold text-slate-900">チャット上での「決済・仕訳メモ」直接入力</h3>
+                            <h3 class="text-base font-bold text-slate-900">Teams上での1分クイック承認 ＆ 仕訳メモ直接編集</h3>
                             <p class="text-xs text-slate-500 leading-relaxed">
-                                承認ボタンを押す際、勘定科目やプロジェクトコード、メモをTeams画面上でそのまま入力可能。手配データと同時に会計システムへ自動送信されます。
+                                外部サイトへログインし直して確認する3分間の手間を削減。Teams画面上で内容を確認しながら、勘定科目やプロジェクトコードをその場で直入力し、1分でワンクリック承認できます。
                             </p>
                         </div>
                     </div>
@@ -341,9 +459,9 @@
                             3
                         </div>
                         <div class="space-y-1">
-                            <h3 class="text-base font-bold text-slate-900">ダイナミック・ポリシー連携で価格変動を自動吸収</h3>
+                            <h3 class="text-base font-bold text-slate-900">ダイナミック・ポリシー連携で再承認をゼロ化</h3>
                             <p class="text-xs text-slate-500 leading-relaxed">
-                                承認時の価格変動（例：20%の許容閾値）を自動判定。許容範囲内であれば、Teams画面の「承認」ボタン1つで即時発券まで完了します。
+                                申請時から承認時までに発生した軽微な価格変動（例：20%の許容閾値設定）を独自アルゴリズムで自動吸収。後戻りや二度手間の再申請を完全に防ぎます。
                             </p>
                         </div>
                     </div>
@@ -353,44 +471,36 @@
                             4
                         </div>
                         <div class="space-y-1">
-                            <h3 class="text-base font-bold text-slate-900">SharePoint / Power Automateと双方向同期</h3>
+                            <h3 class="text-base font-bold text-slate-900">L3（明細詳細）データの保持とPEPPOL連携</h3>
                             <p class="text-xs text-slate-500 leading-relaxed">
-                                Teams上の操作結果は、SharePointリストやPower Automateの承認ワークフローへリアルタイムにステータス同期されます。
+                                決済金額だけでなく、品目・単価・数量情報（L3レベル）をcXML保持。電子インボイス（PEPPOL）形式で自動会計連携し、個別領収書突合の雑務をゼロ化します。
                             </p>
                         </div>
                     </div>
 
                 </div>
 
-                <!-- Right Column: Visual Mock Concept -->
-                <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-brand-dark p-8 rounded-3xl text-white space-y-6 shadow-xl border border-slate-700">
+                <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-brand-teamsDark p-8 rounded-3xl text-white space-y-6 shadow-xl border border-slate-700">
                     <div class="space-y-2">
-                        <span class="text-xs font-bold text-brand-sharepointCyan uppercase tracking-wider block"><i class="fa-solid fa-mobile-screen mr-1"></i> モバイル＆PC両対応</span>
-                        <h3 class="text-xl font-extrabold">移動中でも、スマホのTeamsアプリから3秒承認</h3>
+                        <span class="text-xs font-bold text-brand-sharepointCyan uppercase tracking-wider block"><i class="fa-solid fa-mobile-screen mr-1"></i> スマホアプリ対応</span>
+                        <h3 class="text-xl font-extrabold">移動中でもスマホのTeamsから1分承認＆即自動発券</h3>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            出張中や外出先でも、スマホのTeamsアプリを開くだけ。プッシュ通知からタップ1つで手配が完了するため、業務の滞留がゼロになります。
+                            外出先や出張中でも、スマホのTeamsアプリに届くプッシュ通知から直接確認。1タップで承認ボタンを押すだけで、チケットの購入・発券・会社一括請求処理まで全自動で完了します。
                         </p>
                     </div>
 
-                    <div class="bg-white/10 p-4 rounded-2xl border border-white/10 space-y-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold">
-                                <i class="fa-solid fa-bolt"></i>
-                            </div>
-                            <div>
-                                <div class="text-xs font-bold">承認完了までの時間</div>
-                                <div class="text-sm font-black text-emerald-400">平均 15分以内に短縮</div>
-                            </div>
+                    <div class="bg-white/10 p-4 rounded-2xl border border-white/10 space-y-3 text-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">申請作成の短縮:</span>
+                            <span class="font-extrabold text-brand-sharepointCyan">10分 → 2分 (80%削減)</span>
                         </div>
-                        <div class="h-px bg-white/10"></div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full bg-brand-teamsLight/20 text-brand-teamsLight flex items-center justify-center font-bold">
-                                <i class="fa-solid fa-user-check"></i>
-                            </div>
-                            <div>
-                                <div class="text-xs font-bold">社員アクティベーション率</div>
-                                <div class="text-sm font-black text-white">100% (追加ログイン不要)</div>
-                            </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">上長承認の短縮:</span>
+                            <span class="font-extrabold text-emerald-400">3分 → 1分 (66%削減)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">社員ログイン・教育:</span>
+                            <span class="font-bold text-white">ID追加・運用レクチャー0円</span>
                         </div>
                     </div>
                 </div>
@@ -398,82 +508,51 @@
         </div>
     </section>
 
-    <!-- 画面イメージ / デモUIモック (参照リンク: https://masafushimi.github.io/1approval/teams/mock/ ) -->
-    <section id="demo-ui" class="py-20 bg-white">
+    <!-- モックデモ展示 -->
+    <section id="mock-demo" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
-                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3 py-1 rounded-full uppercase">UI MOCKUP &amp; FLOW</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">実際の操作イメージ・画面フロー</h2>
+                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3 py-1 rounded-full uppercase">DEMO &amp; INTERACTIVE UI</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">インタラクティブ画面モックで体験</h2>
                 <p class="text-slate-500 text-sm">
-                    申請からTeamsチャット通知、ワンクリック承認、自動発券、SharePoint同期までの流れをご覧ください。
+                    Teamsチャット上での通知、仕訳メモ直接編集、ワンクリック承認・自動発券の画面デモをお試しいただけます。
                 </p>
             </div>
 
-            <!-- Demo Container -->
-            <div class="mt-12 bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-10 shadow-2xl space-y-8">
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-white">
-                    
-                    <!-- Step 1 -->
-                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-white/10 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="bg-brand-teams text-white font-extrabold text-[10px] px-2.5 py-1 rounded">STEP 01</span>
-                            <span class="text-[10px] text-slate-400">SharePoint / 1Approval</span>
+            <div class="mt-12 bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-6 text-white">
+                        <div class="inline-flex items-center gap-2 bg-brand-teams text-white font-extrabold text-xs px-3.5 py-1.5 rounded-full">
+                            <i class="fa-solid fa-desktop"></i> オンライン画面デモ
                         </div>
-                        <h3 class="font-bold text-sm text-white">1. カートから出張申請</h3>
-                        <p class="text-[11px] text-slate-300 leading-relaxed">
-                            出張者がホテルや新幹線を横断検索し、カート内容をSharePoint申請リストへ連携。
+                        <h3 class="text-2xl font-bold leading-tight">
+                            実際のTeamsチャット体験を<br>ブラウザ上で今すぐチェック
+                        </h3>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                            『1Approval for Teams』がどのように通知を送り、上司がどう直感的にメモを入力し1分で承認完了できるのか、実機に近いモックアップ画面で体験可能です。
                         </p>
-                        <div class="bg-slate-900 p-3 rounded-xl border border-white/10 text-[10px] text-slate-400 space-y-1">
-                            <div>・新幹線：東京 ⇄ 大阪 (往復)</div>
-                            <div>・ホテル：大阪市内 1泊 ¥11,000</div>
+                        <div class="pt-2">
+                            <a href="https://masafushimi.github.io/1approval/teams/mock/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 bg-brand-teams hover:bg-brand-teamsDark text-white font-extrabold text-sm px-8 py-4 rounded-xl transition duration-200 shadow-xl shadow-brand-teams/30 group">
+                                <span>Teams承認のデモ画面を開く</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs group-hover:translate-x-1 transition-transform"></i>
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Step 2 -->
-                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-brand-teams/50 space-y-3 relative shadow-lg shadow-brand-teams/10">
-                        <div class="flex items-center justify-between">
-                            <span class="bg-brand-teams text-white font-extrabold text-[10px] px-2.5 py-1 rounded">STEP 02</span>
-                            <span class="text-[10px] text-brand-sharepointCyan font-bold">Teams Adaptive Card</span>
-                        </div>
-                        <h3 class="font-bold text-sm text-white">2. Teamsチャットに即時届く</h3>
-                        <p class="text-[11px] text-slate-300 leading-relaxed">
-                            上司のTeamsにBotからインタラクティブ通知。画面上で仕訳メモを入力し「承認」をタップ。
-                        </p>
-                        <div class="bg-slate-900 p-3 rounded-xl border border-brand-teams/30 text-[10px] space-y-1.5">
-                            <div class="text-brand-sharepointCyan font-bold">【仕訳メモ入力済み】</div>
-                            <div class="text-slate-300">「関西顧客訪問 / 営業旅費」</div>
-                            <div class="pt-1 flex gap-1">
-                                <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-[9px]">承認＆即予約</span>
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-white/10 shadow-lg">
+                        <div class="bg-slate-900 p-3 rounded-xl border border-white/10 space-y-2 text-xs text-slate-300">
+                            <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                                <span class="font-bold text-white flex items-center gap-1.5">
+                                    <i class="fa-brands fa-microsoft text-brand-teams"></i> 1Approval Adaptive Cards
+                                </span>
+                                <span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">デモ動作品</span>
                             </div>
+                            <p class="text-[11px] text-slate-300">
+                                モック画面内では「出張承認依頼」のカード上でメモの書き換えや「Teamsで承認」アクションの挙動を確認できます。
+                            </p>
                         </div>
                     </div>
-
-                    <!-- Step 3 -->
-                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-white/10 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="bg-brand-teams text-white font-extrabold text-[10px] px-2.5 py-1 rounded">STEP 03</span>
-                            <span class="text-[10px] text-emerald-400 font-bold">全自動完結</span>
-                        </div>
-                        <h3 class="font-bold text-sm text-white">3. 自動発券 ＆ 法人一括請求</h3>
-                        <p class="text-[11px] text-slate-300 leading-relaxed">
-                            承認と同時にBTM予約が確定。個人の自腹立替精算・領収書チェックは一切発生しません。
-                        </p>
-                        <div class="bg-slate-900 p-3 rounded-xl border border-white/10 text-[10px] text-emerald-400 font-bold">
-                            <i class="fa-solid fa-circle-check mr-1"></i> チケット発券完了 / 一括請求データ作成
-                        </div>
-                    </div>
-
                 </div>
-
-                <!-- Interactive Mock Preview Link Button -->
-                <div class="text-center pt-2">
-                    <a href="https://masafushimi.github.io/1approval/teams/mock/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3 rounded-xl text-xs border border-white/20 transition-all">
-                        <i class="fa-solid fa-arrow-up-right-from-square text-brand-sharepointCyan"></i>
-                        <span>Teams承認モックアップ画面（デモ体験）を開く</span>
-                    </a>
-                </div>
-
             </div>
         </div>
     </section>
@@ -483,106 +562,117 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
                 <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3.5 py-1.5 rounded-full uppercase inline-block">
-                    PRICING
+                    PRICING &amp; OPTIONS
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
                     Teams連携オプションの料金体系
                 </h2>
                 <p class="text-slate-500 text-sm">
-                    1Approval Standardプラグイン（月額98,000円）のアドオンとしてご利用いただけます。
+                    既存の1Approvalワークフロー基盤に追加アドオンとしてご提供いたします。
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl mx-auto items-stretch">
-                
-                <!-- 基本ライセンス -->
-                <div class="bg-white rounded-3xl border border-slate-200 p-8 space-y-6 flex flex-col justify-between shadow-sm">
-                    <div class="space-y-4">
-                        <span class="text-brand-sharepoint font-bold text-xs uppercase tracking-widest block">① 基本プラグイン</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 max-w-4xl mx-auto items-stretch">
+                <!-- ① プラグイン基盤 (kintone / M365) -->
+                <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-6 flex flex-col justify-between relative overflow-hidden card-shadow">
+                    <div class="space-y-4 pt-2">
+                        <span class="text-brand-sharepoint font-bold text-xs uppercase tracking-widest block">① プラグイン基盤ライセンス</span>
                         <h3 class="text-xl font-extrabold text-slate-900">Standard プラグイン</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed">Microsoft 365 (SharePoint / Power Automate) の標準ワークフローに接続。</p>
-                        
-                        <div class="pt-4 border-t border-slate-100 space-y-3 text-xs">
-                            <div class="flex justify-between items-center">
-                                <span class="text-slate-600 font-bold">月額利用料</span>
-                                <span class="font-black text-slate-900 text-xl">¥98,000 <span class="text-[10px] text-slate-500 font-normal">(税抜) / 月</span></span>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            kintone または Microsoft 365 (SharePoint / Power Automate) の承認ワークフローに接続。
+                        </p>
+                        <div class="pt-4 border-t border-slate-200/80 space-y-3 text-xs">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-600 font-bold">月額費用</span>
+                                <span class="font-black text-brand-sharepoint text-xl">¥98,000 <span class="text-[10px] text-slate-500 font-normal">(税抜)/月・社</span></span>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-slate-600 font-bold">初期設置</span>
-                                <span class="font-extrabold text-slate-800">¥50,000 <span class="text-[10px] text-slate-500 font-normal">(税抜)</span></span>
+                            <div class="flex justify-between items-center py-1 border-t border-slate-100">
+                                <span class="text-slate-600 font-bold">初期設置オプション</span>
+                                <span class="font-extrabold text-slate-800 text-xs">¥50,000 <span class="text-[10px] text-slate-500 font-normal">(税抜)</span></span>
                             </div>
                         </div>
                     </div>
-                    <div class="text-[10px] text-slate-400">※年間契約。初月無償サポート付き。</div>
+                    <div class="pt-4 border-t border-slate-100 text-[10px] text-slate-400">※年間契約。初月無償・オンラインサポート付き。</div>
                 </div>
 
-                <!-- Teamsオプション -->
-                <div class="bg-gradient-to-b from-brand-teamsLight/60 to-white rounded-3xl border-2 border-brand-teams p-8 space-y-6 flex flex-col justify-between shadow-xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-brand-teams text-white text-[10px] font-black px-3.5 py-1 rounded-bl-xl uppercase tracking-wider">
-                        RECOMMENDED
+                <!-- ② Teams 承認通知オプション -->
+                <div class="bg-gradient-to-b from-brand-teamsLight/50 to-white rounded-3xl border-2 border-brand-teams p-6 sm:p-8 space-y-6 flex flex-col justify-between relative overflow-hidden shadow-lg">
+                    <div class="absolute top-0 right-0 bg-brand-teams text-white text-[10px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+                        TEAMS OPTION
                     </div>
-                    <div class="space-y-4">
-                        <span class="text-brand-teams font-extrabold text-xs uppercase tracking-widest block"><i class="fa-brands fa-microsoft mr-1"></i> ② Teams承認アドオン</span>
+                    <div class="space-y-4 pt-2">
+                        <span class="text-brand-teams font-extrabold text-xs uppercase tracking-widest block"><i class="fa-brands fa-microsoft"></i> for Teams 承認オプション</span>
                         <h3 class="text-xl font-extrabold text-slate-900">1Approval for Teams</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed">Teamsチャット上でのAdaptive Card受信・ワンクリック承認・仕訳メモ直接編集を有効化。</p>
-                        
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            kintone / M365 の申請に対し、Teamsチャット上でのAdaptive Cards受信・ワンクリック承認・仕訳メモ直接編集・AI入力サポートを追加。
+                        </p>
                         <div class="pt-4 border-t border-brand-teams/20 space-y-3 text-xs">
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center py-1">
                                 <span class="text-slate-600 font-bold">オプション月額</span>
-                                <span class="font-black text-brand-teams text-2xl">+ ¥30,000 <span class="text-[10px] text-slate-500 font-normal">(税抜) / 月</span></span>
+                                <span class="font-black text-brand-teams text-xl">+ ¥30,000 <span class="text-[10px] text-slate-500 font-normal">(税抜) / 月</span></span>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-slate-600 font-bold">機能</span>
-                                <span class="font-extrabold text-slate-800">Teamsチャット承認・仕訳メモ入力</span>
+                            <div class="flex justify-between items-center py-1 border-t border-slate-100">
+                                <span class="text-slate-600 font-bold">対象環境</span>
+                                <span class="font-extrabold text-slate-800 text-xs">kintone / M365 共通対応</span>
                             </div>
                         </div>
                     </div>
-                    <div class="text-[10px] text-slate-500 font-medium">※上長・管理部門の業務工数を劇的に短縮させます。</div>
+                    <div class="pt-4 border-t border-slate-100 text-[10px] text-slate-400">※上司の承認レスポンスを1分へ高速化させます。</div>
                 </div>
-
             </div>
         </div>
     </section>
 
     <!-- ロードマップ -->
-    <section id="roadmap" class="py-20 bg-white">
+    <section id="roadmap" class="py-20 bg-white border-b border-slate-200/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4">
                 <h2 class="text-3xl font-extrabold text-slate-900">すべての購買管理を、Teamsの1つの「承認」へ。</h2>
-                <p class="text-slate-500 text-sm leading-relaxed">
-                    1Approvalシリーズは今後、出張手配に留まらず、オフィス消耗品からイベント会場、IT SaaS契約、ツール手配にいたるまで、全購買をTeamsチャットフローへ統合します。
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                    1Approvalシリーズは今後、出張手配に留まらず、オフィス消耗品からイベント会場、IT SaaS契約、工具資材にいたるまで、社内のあらゆる購買をTeams承認フローへ統合します。
                 </p>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-16 max-w-5xl mx-auto">
-                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
-                    <i class="fa-solid fa-plane-departure text-brand-teams text-lg"></i>
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-brand-teams"></span>
+                    <i class="fa-solid fa-plane-departure text-brand-teams text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">出張宿泊手配</h4>
                     <span class="text-[9px] bg-brand-teamsLight text-brand-teams px-2 py-0.5 rounded font-extrabold block">1Approval 4 Trip</span>
                 </div>
-                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
-                    <i class="fa-solid fa-cubes text-brand-success text-lg"></i>
+
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-brand-success"></span>
+                    <i class="fa-solid fa-cubes text-brand-success text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">消耗品・備品</h4>
                     <span class="text-[9px] bg-brand-success/10 text-brand-success px-2 py-0.5 rounded font-extrabold block">1Approval 4 Goods</span>
                 </div>
-                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
-                    <i class="fa-solid fa-users text-brand-primary text-lg"></i>
+
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-brand-primary"></span>
+                    <i class="fa-solid fa-users text-brand-primary text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">会議室・MICE</h4>
                     <span class="text-[9px] bg-brand-primary/10 text-brand-primary px-2 py-0.5 rounded font-extrabold block">1Approval 4 MICE</span>
                 </div>
-                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
-                    <i class="fa-solid fa-square-parking text-pink-500 text-lg"></i>
+
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-pink-500"></span>
+                    <i class="fa-solid fa-square-parking text-pink-500 text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">駐車場手配</h4>
                     <span class="text-[9px] bg-pink-100 text-pink-600 px-2 py-0.5 rounded font-extrabold block">1Approval 4 Parking</span>
                 </div>
-                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
-                    <i class="fa-solid fa-laptop-code text-slate-400 text-lg"></i>
+
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-slate-400"></span>
+                    <i class="fa-solid fa-laptop-code text-slate-400 text-xl"></i>
                     <h4 class="text-xs font-bold text-slate-800">IT SaaS契約</h4>
                     <span class="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-extrabold block">1Approval 4 SaaS</span>
                 </div>
-                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
-                    <i class="fa-solid fa-screwdriver-wrench text-slate-400 text-lg"></i>
-                    <h4 class="text-xs font-bold text-slate-800">工具・現場資材</h4>
+
+                <div class="bg-brand-slatebg p-5 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm relative overflow-hidden">
+                    <span class="absolute top-0 left-0 right-0 h-1 bg-slate-400"></span>
+                    <i class="fa-solid fa-screwdriver-wrench text-slate-400 text-xl"></i>
+                    <h4 class="text-xs font-bold text-slate-800">工具・資材</h4>
                     <span class="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-extrabold block">1Approval 4 Tools</span>
                 </div>
             </div>
@@ -629,12 +719,12 @@
                         <div id="material-inner-section" class="hidden text-center bg-brand-slatebg border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4">
                             <h4 class="text-sm font-bold text-slate-900">ご案内資料『3分でわかる！1Approval for Teams』</h4>
                             <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
-                                <img src="/material.png" alt="資料サムネイル" class="w-full h-auto max-h-[300px] object-contain mx-auto">
+                                <img src="material.png" alt="資料サムネイル" class="w-full h-auto max-h-[400px] object-contain mx-auto">
                             </div>
                         </div>
                         <div id="calendar-inner-section" class="hidden bg-brand-slatebg border border-slate-200 rounded-2xl p-4 sm:p-6">
                             <h4 class="text-sm font-bold text-slate-900 mb-2">オンライン日程の事前予約</h4>
-                            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden h-[450px]">
+                            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden h-[500px]">
                                 <iframe src="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1epnVB3j8YTuPK0e0KdOFEIsoHTP31XRjMwKigZKn7CYRp45fGWQ6rB5LaKD6okZqeZ-DtHIOZ?gv=true" style="border:0" width="100%" height="100%" frameborder="0"></iframe>
                             </div>
                         </div>
@@ -671,13 +761,13 @@
                         </div>
                         <div>
                             <label class="block font-bold text-slate-700 text-xs mb-1">ご質問・ご要望（任意）</label>
-                            <textarea name="message" rows="3" placeholder="Teamsの利用状況や、承認連携に関するご要望等をご記入ください。" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-teams"></textarea>
+                            <textarea name="message" rows="3" placeholder="Teamsの利用状況や、承認連携に関するご要望があればご記入ください。" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-teams"></textarea>
                         </div>
                     </div>
 
                     <div class="text-center pt-2">
                         <button type="submit" id="lead-form-submit" class="w-full sm:w-auto bg-brand-teams text-white font-black text-center px-12 py-4 rounded-xl text-base hover:bg-brand-teamsDark transition-all duration-300 shadow-lg shadow-brand-teams/20 inline-flex items-center justify-center gap-2">
-                            <span>資料・デモをリクエストする (無料)</span>
+                            <span>資料・デモ動画をリクエストする (無料)</span>
                             <i class="fa-solid fa-paper-plane text-sm"></i>
                         </button>
                     </div>
@@ -690,7 +780,7 @@
     <footer class="bg-white py-12 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
             <div class="flex flex-col items-center md:items-start gap-4">
-                <img src="https://masafushimi.github.io/1approval/teams/logo_teams.png" alt="1Approval" class="h-8 sm:h-10 w-auto object-contain">
+                <img src="https://masafushimi.github.io/1approval/m365/logo_teams.png" alt="1Approval" class="h-8 sm:h-11 w-auto object-contain">
                 <div class="flex items-center gap-6 text-xs text-slate-500 font-medium">
                     <a href="https://eichiii.co.jp/" target="_blank" rel="noopener noreferrer" class="hover:text-brand-teams">会社概要</a>
                     <span class="text-slate-300">|</span>
