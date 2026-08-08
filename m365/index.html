@@ -1,1 +1,852 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N7T5VQVM');</script>
+    <!-- End Google Tag Manager -->
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18345602070"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-18345602070');
+    </script>
+    <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-18345602070/ztVkCITlzdUcEJbY7qtE',
+          'value': 1.0,
+          'currency': 'JPY',
+          'event_callback': callback
+      });
+      return false;
+    }
+    </script>
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1Approval for Microsoft 365 | SharePoint・Teams承認からそのまま自動購買・一括請求完結</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            sharepoint: '#008272',      /* SharePoint抽出メインカラー */
+                            sharepointLight: '#E6F4F2', /* SharePoint抽出ライト背景 */
+                            sharepointDark: '#004D44',  /* SharePoint抽出ダークアクセント */
+                            sharepointCyan: '#00A3A6',  /* SharePoint抽出シアン */
+                            yellow: '#FFB800',          /* ブランド共通イエロー */
+                            yellowlight: '#FFFDF0',
+                            dark: '#0F172A',
+                            primary: '#2563EB',
+                            teams: '#6264A7',
+                            success: '#10B981',
+                            danger: '#EF4444',
+                            slatebg: '#F8FAFC',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfHVEwtAAAAAP4cdyQWh9SroNu-LO_jOAWUkY4Z"></script>
+    <style>
+        .card-shadow { box-shadow: 0 10px 30px -10px rgba(0, 130, 114, 0.08); }
+        .hero-shadow { box-shadow: 0 20px 40px -15px rgba(0, 130, 114, 0.15); }
+        .text-glow { text-shadow: 0 2px 10px rgba(255, 184, 0, 0.25); }
+        
+        :root {
+            --sharepoint: #008272;
+            --amber: #FFB800;
+            --void: #0A0A0F;
+            --ink: #111118;
+            --slate: #3B3B4A;
+            --muted: #6E6E80;
+            --line: #E4E4EC;
+            --surface: #F7F7F9;
+            --white: #FFFFFF;
+            --mono: 'DM Mono', monospace;
+            --display: 'Syne', 'Noto Sans JP', sans-serif;
+            --body: 'Noto Sans JP', sans-serif;
+        }
+
+        body {
+            background: var(--white);
+            color: var(--ink);
+            font-family: var(--body);
+            line-height: 1.7;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--line);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 3.5rem;
+        }
+
+        .problem-card {
+            background: var(--white);
+            padding: 2.25rem 2rem;
+            transition: background 0.25s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .problem-card:hover { background: var(--surface); }
+
+        .prob-num {
+            font-family: var(--mono);
+            font-size: .68rem;
+            color: var(--sharepoint);
+            margin-bottom: 0.85rem;
+            display: block;
+            font-weight: 600;
+        }
+
+        .prob-title {
+            font-family: var(--display);
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--ink);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .prob-body { font-size: .82rem; color: var(--muted); line-height: 1.75; }
+
+        @media (max-width: 1024px) { .problem-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px) {
+            .problem-grid { grid-template-columns: 1fr; }
+            .problem-card { padding: 1.75rem 1.5rem; }
+        }
+
+        .fade-in-box { transition: all 0.4s ease-out; max-height: 0; opacity: 0; overflow: hidden; }
+        .fade-in-box.show { max-height: 1200px; opacity: 1; margin-top: 1.5rem; }
+    </style>
+</head>
+<body class="bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N7T5VQVM" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <!-- ヘッダー -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-1.5 sm:gap-4">
+            <div class="flex items-center gap-3 min-w-0 shrink">
+                <img src="/logo11.png" alt="1Approval" class="h-10 sm:h-11 w-auto max-w-[160px] sm:max-w-none object-contain shrink">
+                <span class="hidden sm:inline-flex items-center gap-1.5 bg-brand-sharepointLight text-brand-sharepoint font-bold text-xs px-3 py-1 rounded-md border border-brand-sharepoint/20">
+                    <i class="fa-brands fa-microsoft"></i> for Microsoft 365
+                </span>
+            </div>
+            
+            <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-xs xl:text-sm font-semibold text-slate-600 shrink-0">
+                <a href="#problem" class="hover:text-brand-sharepoint transition-colors">課題</a>
+                <a href="#features" class="hover:text-brand-sharepoint transition-colors">解決策・機能</a>
+                <a href="#teams-option" class="hover:text-brand-sharepoint transition-colors">Teams連携</a>
+                <a href="#simulator" class="hover:text-brand-sharepoint transition-colors">削減効果ROI</a>
+                <a href="#roadmap" class="hover:text-brand-sharepoint transition-colors">ロードマップ</a>
+                <a href="#pricing" class="hover:text-brand-sharepoint transition-colors">料金</a>
+            </nav>
+
+            <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+                <a href="#contact" class="hidden sm:inline-flex items-center justify-center border border-slate-300 text-slate-700 hover:border-brand-sharepoint hover:text-brand-sharepoint transition-all duration-300 font-bold px-4 py-2 rounded-full text-xs">
+                    資料請求
+                </a>
+                <a href="#contact" class="inline-flex items-center justify-center bg-brand-sharepoint text-white hover:bg-brand-sharepointDark transition-all duration-300 font-extrabold px-3 py-2 sm:px-5 sm:py-2.5 rounded-full text-[10px] sm:text-xs shadow-md shadow-brand-sharepoint/20 whitespace-nowrap shrink-0">
+                    デモ・無料相談・POC
+                </a>
+                <button id="menu-open-btn" class="lg:hidden w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-slate-700 hover:text-brand-sharepoint transition-colors focus:outline-none shrink-0" aria-label="メニューを開く">
+                    <i class="fa-solid fa-bars text-lg sm:text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- モバイルドロワー -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden">
+        <div class="absolute right-0 top-0 h-full w-72 max-w-[80vw] bg-white shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out" id="mobile-menu-content">
+            <div class="space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <span class="text-sm font-black text-slate-800">メニュー一覧</span>
+                    <button id="menu-close-btn" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-brand-sharepoint transition-colors focus:outline-none" aria-label="メニューを閉じる">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+                <nav class="flex flex-col gap-4 text-sm font-bold text-slate-700">
+                    <a href="#problem" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-sharepoint transition-colors">課題</a>
+                    <a href="#features" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-sharepoint transition-colors">解決策・機能</a>
+                    <a href="#teams-option" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-sharepoint transition-colors">Teams連携</a>
+                    <a href="#simulator" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-sharepoint transition-colors">削減効果ROI</a>
+                    <a href="#roadmap" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-sharepoint transition-colors">ロードマップ</a>
+                    <a href="#pricing" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-sharepoint transition-colors">料金</a>
+                </nav>
+            </div>
+            <div class="pt-6 border-t border-slate-100 space-y-3">
+                <a href="#contact" class="mobile-menu-link flex items-center justify-center w-full border border-slate-300 text-slate-700 font-bold py-2.5 rounded-full text-xs">資料請求</a>
+                <a href="#contact" class="mobile-menu-link flex items-center justify-center w-full bg-brand-sharepoint text-white font-extrabold py-2.5 rounded-full text-xs shadow-md">デモ・無料相談</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ヒーローセクション -->
+    <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-brand-sharepointLight/60 via-white to-white">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-sharepoint/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-sharepointCyan/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+                <div class="md:col-span-7 space-y-6 text-left">
+                    <div class="inline-flex items-center gap-2 bg-brand-sharepointLight border border-brand-sharepoint/30 rounded-full py-1.5 px-4 text-xs font-bold text-brand-sharepointDark">
+                        <span class="flex h-2 w-2 rounded-full bg-brand-sharepoint"></span>
+                        Microsoft 365 (SharePoint / Power Automate / Teams) 接続対応！
+                    </div>
+                    
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.2] text-slate-900 tracking-tight">
+                        承認したら購買、<br class="hidden sm:block">
+                        <span class="text-brand-sharepoint">そのまま完了。</span>
+                    </h1>
+                    
+                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+                        新しい出張SaaSを別途契約する必要はありません。SharePointリストやPower Automate、Teams上の既存「承認」ボタンを押すだけ。システムがカート情報を自動取得し、即時手配・発券を完了。立替精算・領収書チェック等の潜在的雑務をゼロにします。
+                    </p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">出張手配・間接工数</span>
+                            <span class="text-2xl font-black text-brand-sharepoint">85%削減</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">手配手続き時間</span>
+                            <span class="text-2xl font-black text-slate-800">最短15分に</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm col-span-2 sm:col-span-1">
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">社員の自腹立替</span>
+                            <span class="text-2xl font-black text-brand-success">法人一括請求</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <a href="#contact" class="bg-brand-sharepoint text-white font-black text-center px-8 py-4 rounded-xl text-base hover:bg-brand-sharepointDark transition-all duration-300 shadow-lg shadow-brand-sharepoint/20 flex items-center justify-center gap-2 group">
+                            資料請求・オンラインデモを依頼 <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#simulator" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-center px-8 py-4 rounded-xl text-base transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator text-brand-sharepoint"></i> 削減効果をシミュレーション
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ヒーロー右側モック表示 -->
+                <div class="md:col-span-5 relative mt-6 md:mt-0">
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-sharepoint to-brand-sharepointCyan rounded-3xl blur opacity-20"></div>
+                    <div class="bg-white border border-slate-200/80 p-6 sm:p-8 rounded-3xl shadow-xl relative space-y-6">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                            <span class="text-xs font-black text-slate-800 flex items-center gap-2">
+                                <i class="fa-brands fa-microsoft text-brand-sharepoint text-base"></i> 1Approval <span class="text-brand-sharepoint">for M365</span>
+                            </span>
+                            <span class="text-[10px] bg-brand-sharepointLight text-brand-sharepoint font-bold px-2.5 py-1 rounded border border-brand-sharepoint/20">SharePoint / Power Automate 連携</span>
+                        </div>
+
+                        <div class="bg-brand-slatebg rounded-xl p-4 border border-slate-200/60 space-y-3">
+                            <div class="flex items-center justify-between text-xs font-bold">
+                                <span class="text-slate-800"><i class="fa-solid fa-list-check mr-1 text-brand-sharepoint"></i> SharePoint 出張手配申請リスト</span>
+                                <span class="text-brand-success"><i class="fa-solid fa-circle-check"></i> カートデータ連携済み</span>
+                            </div>
+                            <div class="h-px bg-slate-200"></div>
+                            <div class="space-y-2 text-xs text-slate-600">
+                                <div class="flex justify-between items-center bg-white px-3 py-2 rounded border border-slate-100">
+                                    <span>JAL 福岡-羽田 (普通席)</span>
+                                    <span class="font-bold text-slate-800">¥16,800</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-white px-3 py-2 rounded border border-slate-100">
+                                    <span>品川エキチカホテル 1泊</span>
+                                    <span class="font-bold text-slate-800">¥12,500</span>
+                                </div>
+                                <div class="h-px bg-slate-200 my-1"></div>
+                                <div class="flex justify-between items-center font-bold text-brand-sharepoint text-sm px-1">
+                                    <span class="text-slate-800">申請合計 (法人一括請求)</span>
+                                    <span class="text-lg">¥29,300</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-brand-sharepointLight border border-brand-sharepoint/30 rounded-xl p-4 text-center space-y-3">
+                            <p class="text-xs text-slate-600 font-medium">上司がM365 / Teams等で標準の「承認」を押すと</p>
+                            <div class="inline-flex items-center gap-2 bg-brand-sharepoint text-white font-black text-sm px-6 py-2.5 rounded-lg shadow-md">
+                                <i class="fa-solid fa-stamp"></i> 承認 (自動で手配・発券完了)
+                            </div>
+                            <p class="text-[10px] text-slate-500">
+                                各提携ECで予約発券が即時自動完了。領収書回収や個人立替の手間はゼロへ
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 課題セクション -->
+    <section id="problem" class="py-24 bg-white border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <span class="text-xs font-bold tracking-widest text-brand-sharepoint bg-brand-sharepointLight px-3.5 py-1 rounded-full uppercase">THE HIDDEN WASTE</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-snug">
+                    出張・購買承認のツギハギ連携が<br class="hidden sm:block">「潜在的雑務」を大量発生させています
+                </h2>
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                    承認・購買・経費精算・会計システムがそれぞれ分断されているため、手動再入力や再承認、領収書管理などの雑務が多発。1approvalはこの分断をMicrosoft 365上でワンストップにつなぎます。
+                </p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <span class="prob-num">── 01</span>
+                    <div class="prob-title">承認待ちの間に価格・在庫が変動</div>
+                    <p class="prob-body">最安値で申請しても承認まで数時間。その間に空室消滅や価格高騰が発生し、最初からやり直す「再承認ループ」が常態化。</p>
+                </div>
+                <div class="problem-card">
+                    <span class="prob-num">── 02</span>
+                    <div class="prob-title">二重入力・手動コピペの無駄</div>
+                    <p class="prob-body">EC・BTMサイトで確認した金額や便名を、SharePointの申請フォームへ手動転記。入力ミスと手作業工数が発生。</p>
+                </div>
+                <div class="problem-card">
+                    <span class="prob-num">── 03</span>
+                    <div class="prob-title">承認後の買い忘れ・手配漏れ</div>
+                    <p class="prob-body">承認は降りたものの、忙しくて実際の購買予約を忘れていた等の事故が発生。システム間断絶による現場リスク。</p>
+                </div>
+                <div class="problem-card">
+                    <span class="prob-num">── 04</span>
+                    <div class="prob-title">ガバナンスのブラックボックス化</div>
+                    <p class="prob-body">各自がバラバラなサイトで手配するため、旅費上限規定の遵守やグレード違反を管理側が把握できずコンプラリスクが潜在化。</p>
+                </div>
+                <div class="problem-card">
+                    <span class="prob-num">── 05</span>
+                    <div class="prob-title">経理の領収書突合・振込雑務の爆発</div>
+                    <p class="prob-body">月末に大量の小口領収書を回収し、目視チェック・手動入力・振込処理。経理担当者の生産性を著しく損なう繰り返し業務。</p>
+                </div>
+                <div class="problem-card bg-rose-50/45 hover:bg-rose-50/70 border-l-2 border-rose-300">
+                    <span class="prob-num text-rose-500 font-bold">── REALITY</span>
+                    <div class="prob-title text-rose-950 font-black">1件あたり180分以上の間接コスト</div>
+                    <div class="my-3.5 bg-white p-3.5 rounded-xl border border-rose-100/90 space-y-2.5 shadow-sm text-xs">
+                        <div class="flex justify-between items-center text-slate-500">
+                            <span>出張費用実費（宿泊・新幹線等）：</span>
+                            <span class="font-extrabold text-slate-800">約35,000円</span>
+                        </div>
+                        <div class="h-px bg-slate-100"></div>
+                        <div class="flex justify-between items-start">
+                            <span class="text-rose-950 font-bold leading-tight">
+                                間接手続き工数<span class="text-[9px] font-normal text-slate-400 block mt-0.5">(人件費換算)</span>：
+                            </span>
+                            <span class="font-black text-rose-600 text-right leading-none shrink-0">
+                                <span class="block text-sm font-extrabold">180分削減</span>
+                                <span class="text-[9px] text-slate-500 font-bold block mt-1">＝ 約9,000円分相当</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ソリューション（機能・MOAT） -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-sharepoint bg-brand-sharepointLight px-3 py-1 rounded-full uppercase">THE INTEGRATION HUB</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">既存ワークフローを置き換えず、「寄生・接続」する統合Hub</h2>
+                <p class="text-slate-500 text-sm">
+                    1approvalは独立した承認システムではありません。すでにお使いのSharePointやPower Automateなどの承認基盤に接続する設計思想を持っています。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-16 items-center">
+                <div class="lg:col-span-7 space-y-5">
+                    <h3 class="text-lg font-bold text-slate-900 border-l-4 border-brand-sharepoint pl-3">ワンストップ化を可能にするコア機能</h3>
+                    <div class="space-y-4">
+                        <div class="flex gap-4 p-4 rounded-xl border border-slate-200 bg-brand-slatebg hover:bg-white transition-colors duration-200">
+                            <span class="w-7 h-7 rounded-full bg-brand-sharepoint text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">Microsoft 365 既存環境に簡単接続</h4>
+                                <p class="text-xs text-slate-500 mt-1">SharePoint出張申請サイトやPower Automateに接続設定を行うだけ。社員への新規ログインID発行や別システム運用教育は一切不要です。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 p-4 rounded-xl border border-slate-200 bg-brand-slatebg hover:bg-white transition-colors duration-200">
+                            <span class="w-7 h-7 rounded-full bg-brand-sharepoint text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">カート内容の自動転記・マッピング</h4>
+                                <p class="text-xs text-slate-500 mt-1">ピカパカ出張DX等の手配サイトで選んだ宿泊・フライト・新幹線カート情報がSharePoint項目に直接自動連携され、コピペの手間が消滅します。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 p-4 rounded-xl border border-slate-200 bg-brand-slatebg hover:bg-white transition-colors duration-200">
+                            <span class="w-7 h-7 rounded-full bg-brand-sharepoint text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">ダイナミック・ポリシー機能（特許級制御）</h4>
+                                <p class="text-xs text-slate-500 mt-1">申請時から承認時までに生じた軽微な価格変動（例：20%の許容閾値設定）を自動許容。価格変動による不毛な再承認ループを完全に防ぎます。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 p-4 rounded-xl border border-slate-200 bg-brand-slatebg hover:bg-white transition-colors duration-200">
+                            <span class="w-7 h-7 rounded-full bg-brand-sharepoint text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5">4</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">L3（明細詳細）データの保持とPEPPOL連携</h4>
+                                <p class="text-xs text-slate-500 mt-1">金額だけでなく品目・数量・単価（L3レベル）をcXML形式で保持。電子インボイス（PEPPOL）形式でそのまま会計連携し、個別領収書突合をゼロ化します。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-brand-sharepointLight/40 border border-brand-sharepoint/30 p-6 sm:p-8 rounded-3xl space-y-6 shadow-sm">
+                    <h3 class="text-base font-extrabold text-brand-sharepointDark border-b border-brand-sharepoint/20 pb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-brand-sharepoint"></i> 1approvalが勝てる理由（MOAT）
+                    </h3>
+                    <div class="space-y-4 text-xs text-slate-600">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+                            <span class="font-extrabold text-brand-sharepoint block">1. 独立した中立性（3rd Party Hub）</span>
+                            <p class="text-slate-500 leading-relaxed">他社SaaSのように自社カードや自社精算システムの導入を強制せず、お客様の既存Microsoft 365環境に「寄生・接続」できます。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+                            <span class="font-extrabold text-brand-sharepoint block">2. L3（SKUレベル）データの占有</span>
+                            <p class="text-slate-500 leading-relaxed">単なるカード決済データ（L2:金額のみ）ではなく、購買明細詳細（L3）を保持するため、PEPPOL連携で証票突合の完全自動化が可能です。</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+                            <span class="font-extrabold text-brand-sharepoint block">3. 日本特有の商慣習への適合</span>
+                            <p class="text-slate-500 leading-relaxed">海外システムが弱い「承認後の変更・ダイナミック・ポリシー」を独自アルゴリズムで吸収し、現場の離脱を防ぎます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teams連携オプションセクション -->
+    <section id="teams-option" class="py-16 bg-gradient-to-r from-brand-sharepointDark to-slate-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-7 space-y-4">
+                    <span class="inline-flex items-center gap-2 bg-brand-teams text-white font-extrabold text-xs px-3.5 py-1.5 rounded-full uppercase tracking-wider">
+                        <i class="fa-brands fa-microsoft"></i> 1Approval for Teams（オプション）
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+                        Microsoft Teams チャット上で<br />承認＆決済メモ編集がスピード完結
+                    </h2>
+                    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                        TeamsチャットへAdaptive Cardとして承認リクエストが通知。上司はブラウザを開くことなく、Teams画面上でそのままワンクリック承認や差戻し、決済メモの追記が可能です。
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 pt-2 text-xs">
+                        <div class="bg-white/10 p-3.5 rounded-xl border border-white/10">
+                            <span class="font-bold text-brand-yellow block"><i class="fa-solid fa-bolt mr-1"></i> チャット即時承認</span>
+                            <span class="text-[11px] text-slate-300">通知から数秒で承認完了</span>
+                        </div>
+                        <div class="bg-white/10 p-3.5 rounded-xl border border-white/10">
+                            <span class="font-bold text-brand-yellow block"><i class="fa-solid fa-pen-to-square mr-1"></i> メモ直接編集</span>
+                            <span class="text-[11px] text-slate-300">Teams上で仕訳メモ入力</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-3xl space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3 text-xs">
+                        <span class="font-bold text-white flex items-center gap-2">
+                            <i class="fa-brands fa-microsoft text-brand-teams"></i> Teams Adaptive Card
+                        </span>
+                        <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-[10px] px-2 py-0.5 rounded">リアルタイム通知</span>
+                    </div>
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-white/10 space-y-2.5 text-xs text-slate-200">
+                        <div class="font-bold text-white">【出張承認依頼】東京 ⇆ 大阪（新幹線＋ホテル1泊）</div>
+                        <div class="text-[11px] text-slate-400">申請者: 営業部 山田 太郎 | 金額: ¥32,500</div>
+                        <div class="pt-2 flex gap-2">
+                            <button class="flex-1 bg-brand-sharepoint text-white font-extrabold py-2 rounded text-[11px]">Teamsで承認</button>
+                            <button class="flex-1 bg-white/20 text-white font-bold py-2 rounded text-[11px]">差戻し / メモ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- シミュレーター -->
+    <section id="simulator" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-sharepoint bg-brand-sharepointLight px-3 py-1 rounded-full uppercase">ROI CALCULATOR</span>
+                <h2 class="text-3xl font-extrabold text-slate-900">削減効果シミュレーター</h2>
+                <p class="text-slate-500 text-sm">手配・承認・精算・チェックにかかる1件あたり180分（3時間）の削減効果に基づき算出します。</p>
+            </div>
+            <div class="mt-12 bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-lg grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-700 tracking-wider">月間の出張手配件数（全社）</label>
+                            <span class="text-brand-sharepoint font-black text-sm" id="trips-val">100件</span>
+                        </div>
+                        <input type="range" id="trips-input" min="10" max="500" step="10" value="100" class="w-full accent-brand-sharepoint bg-slate-200 h-2 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-700 tracking-wider">平均人件費時間単価</label>
+                            <span class="text-brand-sharepoint font-black text-sm" id="wage-val">3,000円 / 時間</span>
+                        </div>
+                        <input type="range" id="wage-input" min="1500" max="6000" step="500" value="3000" class="w-full accent-brand-sharepoint bg-slate-200 h-2 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                </div>
+                <div class="bg-brand-sharepointLight/30 p-6 sm:p-8 rounded-2xl border border-brand-sharepoint/20 text-center space-y-5">
+                    <div>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">年間で削減できる間接労働時間</p>
+                        <p class="text-3.5xl sm:text-4xl font-black text-slate-800 mt-1" id="saved-hours">3,600時間</p>
+                    </div>
+                    <div class="h-px bg-slate-200 w-2/3 mx-auto"></div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">削減できる年間人的コスト</p>
+                        <p class="text-4xl sm:text-5xl font-black text-brand-sharepoint text-glow mt-1" id="saved-cost">¥10,800,000</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ロードマップセクション -->
+    <section id="roadmap" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-sharepoint bg-brand-sharepointLight px-3 py-1 rounded-full uppercase">PRODUCT ROADMAP</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">すべての購買管理を、1つの「承認」へ</h2>
+                <p class="text-slate-500 text-sm">出張（Trip）から開始し、企業のあらゆる間接購買・データ統合へと拡張します。</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-16 max-w-5xl mx-auto">
+                <div class="bg-brand-slatebg p-6 rounded-2xl border-t-4 border-t-brand-sharepoint border-slate-200 space-y-2">
+                    <span class="text-[10px] bg-brand-sharepoint text-white font-extrabold px-2 py-0.5 rounded">Phase 1</span>
+                    <h3 class="font-bold text-slate-900 text-sm">承認基盤拡大</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Microsoft 365, kintone, Garoon, サイボウズOfficeへの接続で市場の過半数をカバー。</p>
+                </div>
+                <div class="bg-brand-slatebg p-6 rounded-2xl border-t-4 border-t-brand-sharepointCyan border-slate-200 space-y-2">
+                    <span class="text-[10px] bg-brand-sharepointCyan text-white font-extrabold px-2 py-0.5 rounded">Phase 2</span>
+                    <h3 class="font-bold text-slate-900 text-sm">購買領域拡大</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">モノタロウ、Amazon Business、トラスコ中山、貸し会議室、団体飲食予約へ拡張。</p>
+                </div>
+                <div class="bg-brand-slatebg p-6 rounded-2xl border-t-4 border-t-brand-primary border-slate-200 space-y-2">
+                    <span class="text-[10px] bg-brand-primary text-white font-extrabold px-2 py-0.5 rounded">Phase 3</span>
+                    <h3 class="font-bold text-slate-900 text-sm">業務システム統合</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">勘定奉行、PCA、マネーフォワード、Salesforce、Slack/Teams連携でデータ統合。</p>
+                </div>
+                <div class="bg-brand-slatebg p-6 rounded-2xl border-t-4 border-t-brand-yellow border-slate-200 space-y-2">
+                    <span class="text-[10px] bg-brand-yellow text-brand-dark font-extrabold px-2 py-0.5 rounded">Phase 4</span>
+                    <h3 class="font-bold text-slate-900 text-sm">AI自律化・Audit</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">AI自動承認、AI-OCR、Audit AI不正検知、BI・BPO連携による全自動化。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 料金プランセクション -->
+    <section id="pricing" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-sharepoint bg-brand-sharepointLight px-3.5 py-1.5 rounded-full uppercase inline-block">
+                    PRICING & PLANS
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                    要件に合わせた明確なプラン体系
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto items-stretch">
+                <!-- ① Standard プラグイン -->
+                <div class="bg-white rounded-3xl border border-slate-200 p-8 space-y-6 flex flex-col justify-between relative overflow-hidden card-shadow">
+                    <div class="absolute top-0 right-0 bg-brand-sharepoint text-white text-[10px] font-extrabold px-4 py-1.5 rounded-bl-xl uppercase tracking-wider">
+                        Standard (M365)
+                    </div>
+                    <div class="space-y-4 pt-2">
+                        <span class="text-brand-sharepoint font-bold text-xs uppercase tracking-widest block">① プラグインライセンス</span>
+                        <h3 class="text-xl font-extrabold text-slate-900">Standard プラグイン</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Microsoft 365 (SharePoint / Power Automate) の標準ワークフローに接続。</p>
+                        <div class="pt-4 border-t border-slate-200/80 space-y-3 text-xs">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-600 font-bold">月額費用</span>
+                                <span class="font-black text-brand-sharepoint text-2xl">¥98,000 <span class="text-[10px] text-slate-500 font-normal">(税抜) / 月・社</span></span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-t border-slate-100">
+                                <span class="text-slate-600 font-bold">初期設置・設定オプション</span>
+                                <span class="font-extrabold text-slate-800 text-sm">¥50,000 <span class="text-[10px] text-slate-500 font-normal">(税抜)</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 text-[10px] text-slate-400">※年間契約（¥1,176,000/年）。初月無償・オンライン伴走サポート付き。</div>
+                </div>
+
+                <!-- ② Teams 承認通知オプション -->
+                <div class="bg-gradient-to-b from-brand-sharepointLight/50 to-white rounded-3xl border-2 border-brand-sharepoint p-8 space-y-6 flex flex-col justify-between relative overflow-hidden shadow-lg">
+                    <div class="absolute top-0 right-0 bg-brand-teams text-white text-[10px] font-black px-4 py-1.5 rounded-bl-xl uppercase tracking-wider">
+                        Teams Option
+                    </div>
+                    <div class="space-y-4 pt-2">
+                        <span class="text-brand-teams font-extrabold text-xs uppercase tracking-widest block"><i class="fa-brands fa-microsoft"></i> for Teams 承認オプション</span>
+                        <h3 class="text-xl font-extrabold text-slate-900">Teams チャット承認連動</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Teamsチャット上で承認カード受信・ワンクリック承認・仕訳メモ直接編集が可能。</p>
+                        <div class="pt-4 border-t border-brand-sharepoint/20 space-y-3 text-xs">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-600 font-bold">オプション月額</span>
+                                <span class="font-black text-brand-teams text-2xl">+ ¥30,000 <span class="text-[10px] text-slate-500 font-normal">(税抜) / 月</span></span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-t border-slate-100">
+                                <span class="text-slate-600 font-bold">機能</span>
+                                <span class="font-extrabold text-slate-800 text-xs">Teams承認・チャットメモ追加</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 text-[10px] text-slate-400">※上司の承認レスポンスを劇的に高速化させます。</div>
+                </div>
+
+                <!-- ③ 購買手配DX利用料 -->
+                <div class="bg-brand-yellowlight rounded-3xl border-2 border-brand-yellow p-8 space-y-6 flex flex-col justify-between relative overflow-hidden card-shadow">
+                    <div class="absolute top-0 right-0 bg-brand-yellow text-brand-dark text-[10px] font-black px-4 py-1.5 rounded-bl-xl uppercase tracking-wider">
+                        手配額に応じたスライド
+                    </div>
+                    <div class="space-y-4 pt-2">
+                        <span class="text-brand-yellow font-extrabold text-xs uppercase tracking-widest block">② 購買手配DX利用料</span>
+                        <h3 class="text-xl font-extrabold text-slate-900">ピカパカ出張DX 手配システム</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">ホテルキープ、新幹線/航空券手配、法人一括請求管理。</p>
+                        <div class="pt-4 border-t border-brand-yellow/30 space-y-2 text-xs">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-600 font-bold">導入初期費用</span>
+                                <span class="font-black text-brand-success text-base">¥0</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-t border-brand-yellow/20">
+                                <span class="text-slate-600 font-bold">システム利用料</span>
+                                <span class="font-black text-brand-yellow text-sm">当月手配総額の 5% 〜 0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-2 text-[10px] text-slate-400">※月額手配500万円以上で利用料0円（最低料金 11,000円/月・税込）。</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- お問い合わせフォーム -->
+    <section id="contact" class="py-20 bg-white relative overflow-hidden">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center space-y-4 mb-12">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">資料請求・デモ・無料相談</h2>
+                <p class="text-slate-500 text-xs sm:text-sm">Microsoft 365環境への導入やTeams承認連携に関する資料ご請求・オンラインデモをお申し込みください。</p>
+            </div>
+
+            <div class="bg-brand-slatebg rounded-3xl border border-slate-200 shadow-xl overflow-hidden p-6 sm:p-10">
+                <form id="lead-form" class="space-y-8">
+                    <div class="space-y-3">
+                        <label class="block font-bold text-slate-900 text-sm sm:text-base">
+                            お問い合わせの目的 <span class="text-xs bg-brand-danger text-white px-2 py-0.5 rounded ml-1.5 font-medium">必須</span>
+                        </label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-white hover:border-brand-sharepoint transition-all group has-[:checked]:border-brand-sharepoint has-[:checked]:bg-brand-sharepointLight/40">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" name="purpose" value="document_request" id="purpose-doc" class="w-4 h-4 text-brand-sharepoint border-slate-300 rounded focus:ring-brand-sharepoint" checked>
+                                    <span class="text-sm font-bold text-slate-700">資料請求/問合せ</span>
+                                </div>
+                            </label>
+                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-white hover:border-brand-sharepoint transition-all group has-[:checked]:border-brand-sharepoint has-[:checked]:bg-brand-sharepointLight/40">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" name="purpose" value="demo_request" id="purpose-demo" class="w-4 h-4 text-brand-sharepoint border-slate-300 rounded focus:ring-brand-sharepoint">
+                                    <span class="text-sm font-bold text-slate-700">画面デモ依頼</span>
+                                </div>
+                            </label>
+                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-white hover:border-brand-sharepoint transition-all group has-[:checked]:border-brand-sharepoint has-[:checked]:bg-brand-sharepointLight/40">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" name="purpose" value="consultation" id="purpose-consult" class="w-4 h-4 text-brand-sharepoint border-slate-300 rounded focus:ring-brand-sharepoint">
+                                    <span class="text-sm font-bold text-slate-700">個別無料相談</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="dynamic-display-section" class="fade-in-box">
+                        <div id="material-inner-section" class="hidden text-center bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4">
+                            <h4 class="text-sm font-bold text-slate-900">ご案内資料『3分でわかる！1Approval for Microsoft 365』</h4>
+                            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+                                <img src="/material.png" alt="資料サムネイル" class="w-full h-auto max-h-[400px] object-contain mx-auto">
+                            </div>
+                        </div>
+                        <div id="calendar-inner-section" class="hidden bg-white border border-slate-200 rounded-2xl p-4 sm:p-6">
+                            <h4 class="text-sm font-bold text-slate-900 mb-2">オンライン日程の事前予約</h4>
+                            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden h-[500px]">
+                                <iframe src="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1epnVB3j8YTuPK0e0KdOFEIsoHTP31XRjMwKigZKn7CYRp45fGWQ6rB5LaKD6okZqeZ-DtHIOZ?gv=true" style="border:0" width="100%" height="100%" frameborder="0"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-700 text-xs mb-1">会社名 <span class="text-rose-500">必須</span></label>
+                                <input type="text" name="company" required placeholder="例）株式会社〇〇〇〇" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-sharepoint">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 text-xs mb-1">部署名 <span class="text-rose-500">必須</span></label>
+                                <input type="text" name="department" required placeholder="例）情報システム部 / 総務部" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-sharepoint">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-700 text-xs mb-1">お名前 <span class="text-rose-500">必須</span></label>
+                                <input type="text" name="name" required placeholder="例）山田太郎" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-sharepoint">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 text-xs mb-1">お名前（フリガナ） <span class="text-rose-500">必須</span></label>
+                                <input type="text" name="nameKana" required placeholder="例）ヤマダタロウ" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-sharepoint">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 text-xs mb-1">ビジネスメールアドレス <span class="text-rose-500">必須</span></label>
+                            <input type="email" name="email" required placeholder="name@company.com" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-sharepoint">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 text-xs mb-1">電話番号 <span class="text-rose-500">必須</span></label>
+                            <input type="tel" name="phone" required placeholder="090-0000-0000" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-sharepoint">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 text-xs mb-1">ご質問・ご要望（任意）</label>
+                            <textarea name="message" rows="3" placeholder="Microsoft 365の利用状況（SharePoint/Power Automate等）や、Teams承認連携のご要望があればご記入ください。" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-sharepoint"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-center pt-2">
+                        <button type="submit" id="lead-form-submit" class="w-full sm:w-auto bg-brand-sharepoint text-white font-black text-center px-12 py-4 rounded-xl text-base hover:bg-brand-sharepointDark transition-all duration-300 shadow-lg shadow-brand-sharepoint/20 inline-flex items-center justify-center gap-2">
+                            <span>資料・デモ動画をリクエストする (無料)</span>
+                            <i class="fa-solid fa-paper-plane text-sm"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="bg-white py-12 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="flex flex-col items-center md:items-start gap-4">
+                <img src="/logo11.png" alt="1Approval" class="h-8 sm:h-11 w-auto object-contain">
+                <div class="flex items-center gap-6 text-xs text-slate-500 font-medium">
+                    <a href="https://eichiii.co.jp/" target="_blank" rel="noopener noreferrer" class="hover:text-brand-sharepoint">会社概要</a>
+                    <span class="text-slate-300">|</span>
+                    <a href="https://eichiii.notion.site/2e08bd7be1f4403aaca65b9b3d46cf26" target="_blank" rel="noopener noreferrer" class="hover:text-brand-sharepoint">利用規約</a>
+                    <span class="text-slate-300">|</span>
+                    <a href="https://eichiii.notion.site/ff4b77597e97434790d8016a8fee9616" target="_blank" rel="noopener noreferrer" class="hover:text-brand-sharepoint">プライバシーポリシー</a>
+                </div>
+            </div>
+            <div class="text-center md:text-right space-y-2">
+                <p class="text-xs text-slate-500">叡知を統合して、つながりをなめらかに。</p>
+                <p class="text-[11px] text-slate-600 font-bold">株式会社エイチ</p>
+                <p class="text-[10px] text-slate-400">© 2026 eichiii Inc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS制御 -->
+    <script>
+        // ドロワーメニュー制御
+        const menuOpenBtn = document.getElementById('menu-open-btn');
+        const menuCloseBtn = document.getElementById('menu-close-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuContent = document.getElementById('mobile-menu-content');
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+
+        function openMenu() {
+            mobileMenu.classList.remove('hidden', 'pointer-events-none');
+            requestAnimationFrame(() => {
+                mobileMenu.classList.remove('opacity-0');
+                mobileMenu.classList.add('opacity-100');
+                mobileMenuContent.classList.remove('translate-x-full');
+                mobileMenuContent.classList.add('translate-x-0');
+            });
+        }
+        function closeMenu() {
+            mobileMenu.classList.remove('opacity-100');
+            mobileMenu.classList.add('opacity-0');
+            mobileMenuContent.classList.remove('translate-x-0');
+            mobileMenuContent.classList.add('translate-x-full');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden', 'pointer-events-none');
+            }, 300);
+        }
+
+        if (menuOpenBtn && menuCloseBtn) {
+            menuOpenBtn.addEventListener('click', openMenu);
+            menuCloseBtn.addEventListener('click', closeMenu);
+            mobileMenu.addEventListener('click', (e) => { if (e.target === mobileMenu) closeMenu(); });
+            mobileMenuLinks.forEach(link => link.addEventListener('click', closeMenu));
+        }
+
+        // ROIシミュレーター計算（1件あたり180分削減ベース）
+        const tripsInput = document.getElementById('trips-input');
+        const wageInput = document.getElementById('wage-input');
+        const tripsVal = document.getElementById('trips-val');
+        const wageVal = document.getElementById('wage-val');
+        const savedHoursEl = document.getElementById('saved-hours');
+        const savedCostEl = document.getElementById('saved-cost');
+
+        function updateROI() {
+            const trips = parseInt(tripsInput.value);
+            const wage = parseInt(wageInput.value);
+            tripsVal.textContent = `${trips}件 / 月`;
+            wageVal.textContent = `${wage.toLocaleString()}円 / 時間`;
+            const annualSavedHours = trips * 3.0 * 12;
+            const annualSavedCost = annualSavedHours * wage;
+            savedHoursEl.textContent = `${annualSavedHours.toLocaleString()} 時間`;
+            savedCostEl.textContent = `¥${annualSavedCost.toLocaleString()}`;
+        }
+        if (tripsInput && wageInput) {
+            tripsInput.addEventListener('input', updateROI);
+            wageInput.addEventListener('input', updateROI);
+            updateROI();
+        }
+
+        // フォーム動的セクション切り替え
+        const checkboxDoc = document.getElementById('purpose-doc');
+        const checkboxDemo = document.getElementById('purpose-demo');
+        const checkboxConsult = document.getElementById('purpose-consult');
+        const dynamicSection = document.getElementById('dynamic-display-section');
+        const materialInner = document.getElementById('material-inner-section');
+        const calendarInner = document.getElementById('calendar-inner-section');
+
+        function handleDisplaySection() {
+            if (checkboxDemo.checked || checkboxConsult.checked) {
+                dynamicSection.classList.add('show');
+                calendarInner.classList.remove('hidden');
+                materialInner.classList.add('hidden');
+            } else if (checkboxDoc.checked) {
+                dynamicSection.classList.add('show');
+                materialInner.classList.remove('hidden');
+                calendarInner.classList.add('hidden');
+            } else {
+                dynamicSection.classList.remove('show');
+            }
+        }
+        if (checkboxDoc) {
+            checkboxDoc.addEventListener('change', handleDisplaySection);
+            checkboxDemo.addEventListener('change', handleDisplaySection);
+            checkboxConsult.addEventListener('change', handleDisplaySection);
+            handleDisplaySection();
+        }
+    </script>
+</body>
+</html>
