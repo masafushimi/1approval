@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N7T5VQVM');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1Approval for Teams | Microsoft Teamsチャット上でワンクリック承認・仕訳メモ入力・自動購買が完結</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            sharepoint: '#008272',
+                            sharepointLight: '#E6F4F2',
+                            sharepointDark: '#004D44',
+                            sharepointCyan: '#00A3A6',
+                            yellow: '#FFB800',
+                            dark: '#0F172A',
+                            primary: '#2563EB',
+                            teams: '#6264A7',
+                            teamsLight: '#EEEEF8',
+                            teamsDark: '#464775',
+                            success: '#10B981',
+                            danger: '#EF4444',
+                            slatebg: '#F8FAFC',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .card-shadow { box-shadow: 0 10px 30px -10px rgba(98, 100, 167, 0.12); }
+        .hero-shadow { box-shadow: 0 20px 40px -15px rgba(98, 100, 167, 0.25); }
+        .text-glow { text-shadow: 0 2px 10px rgba(0, 163, 166, 0.4); }
+
+        :root {
+            --teams: #6264A7;
+            --sharepoint: #008272;
+            --ink: #0F172A;
+            --surface: #F8FAFC;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background: var(--white);
+            color: var(--ink);
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.7;
+        }
+
+        .fade-in-box { transition: all 0.4s ease-out; max-height: 0; opacity: 0; overflow: hidden; }
+        .fade-in-box.show { max-height: 1200px; opacity: 1; margin-top: 1.5rem; }
+    </style>
+</head>
+<body class="bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N7T5VQVM" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <!-- ヘッダー -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3 min-w-0 shrink">
+                <a href="/">
+                    <img src="https://masafushimi.github.io/1approval/teams/logo_teams.png" alt="1Approval for Teams" class="h-10 sm:h-11 w-auto max-w-[180px] sm:max-w-none object-contain shrink">
+                </a>
+            </div>
+            
+            <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-xs xl:text-sm font-semibold text-slate-600 shrink-0">
+                <a href="#problem" class="hover:text-brand-teams transition-colors">課題</a>
+                <a href="#features" class="hover:text-brand-teams transition-colors">Teams連携の特徴</a>
+                <a href="#demo-ui" class="hover:text-brand-teams transition-colors">画面イメージ</a>
+                <a href="#pricing" class="hover:text-brand-teams transition-colors">料金</a>
+                <a href="#roadmap" class="hover:text-brand-teams transition-colors">ロードマップ</a>
+            </nav>
+
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <a href="#contact" class="hidden sm:inline-flex items-center justify-center border border-slate-300 text-slate-700 hover:border-brand-teams hover:text-brand-teams transition-all duration-300 font-bold px-4 py-2 rounded-full text-xs">
+                    資料請求
+                </a>
+                <a href="#contact" class="inline-flex items-center justify-center bg-brand-teams text-white hover:bg-brand-teamsDark transition-all duration-300 font-extrabold px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-full text-xs shadow-md shadow-brand-teams/20 whitespace-nowrap shrink-0">
+                    デモ・無料相談
+                </a>
+                <button id="menu-open-btn" class="lg:hidden w-9 h-9 flex items-center justify-center text-slate-700 hover:text-brand-teams transition-colors focus:outline-none" aria-label="メニューを開く">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- モバイルドロワー -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden">
+        <div class="absolute right-0 top-0 h-full w-72 max-w-[80vw] bg-white shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out" id="mobile-menu-content">
+            <div class="space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <span class="text-sm font-black text-slate-800">メニュー一覧</span>
+                    <button id="menu-close-btn" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-brand-teams transition-colors" aria-label="メニューを閉じる">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+                <nav class="flex flex-col gap-4 text-sm font-bold text-slate-700">
+                    <a href="#problem" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams">課題</a>
+                    <a href="#features" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams">Teams連携の特徴</a>
+                    <a href="#demo-ui" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams">画面イメージ</a>
+                    <a href="#pricing" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams">料金</a>
+                    <a href="#roadmap" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams">ロードマップ</a>
+                </nav>
+            </div>
+            <div class="pt-6 border-t border-slate-100 space-y-3">
+                <a href="#contact" class="mobile-menu-link flex items-center justify-center w-full border border-slate-300 text-slate-700 font-bold py-2.5 rounded-full text-xs">資料請求</a>
+                <a href="#contact" class="mobile-menu-link flex items-center justify-center w-full bg-brand-teams text-white font-extrabold py-2.5 rounded-full text-xs shadow-md">デモ・無料相談</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ヒーローセクション -->
+    <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-brand-teamsLight/70 via-white to-white">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-teams/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-sharepointCyan/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+                
+                <!-- Left: Catch & Value -->
+                <div class="md:col-span-7 space-y-6 text-left">
+                    <div class="inline-flex items-center gap-2 bg-brand-teamsLight border border-brand-teams/30 rounded-full py-1.5 px-4 text-xs font-bold text-brand-teamsDark">
+                        <i class="fa-brands fa-microsoft text-brand-teams"></i> Microsoft Teams アドオン（オプション）
+                    </div>
+                    
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.2] text-slate-900 tracking-tight">
+                        Teamsチャットから<br>
+                        <span class="text-brand-teams">ワンクリック承認＆即予約。</span>
+                    </h1>
+                    
+                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+                        承認のためだけにブラウザを開き直す「メクラ承認」を終わらせます。Teams上に届くAdaptive Cardから、ワンクリックで出張予約を承認。その場で会計仕訳メモの追記や差し戻しも完結し、予約手配・一括請求まで全自動でつながります。
+                    </p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">承認レスポンス速度</span>
+                            <span class="text-2xl font-black text-brand-teams">90%短縮</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">社内ログインのストレス</span>
+                            <span class="text-2xl font-black text-slate-800">ゼロへ</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm col-span-2 sm:col-span-1">
+                            <span class="text-[11px] text-slate-500 font-bold block mb-1">仕訳メモ・勘定科目</span>
+                            <span class="text-2xl font-black text-brand-sharepointCyan">チャット直入力</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <a href="#contact" class="bg-brand-teams text-white font-black text-center px-8 py-4 rounded-xl text-base hover:bg-brand-teamsDark transition-all duration-300 shadow-lg shadow-brand-teams/20 flex items-center justify-center gap-2 group">
+                            資料請求・オンラインデモを依頼 <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#demo-ui" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-center px-8 py-4 rounded-xl text-base transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-mobile-screen text-brand-teams"></i> UIイメージを見る
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Adaptive Card Mockup -->
+                <div class="md:col-span-5 relative mt-6 md:mt-0">
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-teams to-brand-sharepointCyan rounded-3xl blur opacity-30"></div>
+                    <div class="bg-slate-900 border border-white/20 p-6 rounded-3xl shadow-2xl relative space-y-4 text-white">
+                        
+                        <!-- Header -->
+                        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 bg-brand-teams rounded-lg flex items-center justify-center text-white text-sm font-bold">
+                                    <i class="fa-brands fa-microsoft"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold">Teams Adaptive Card</div>
+                                    <div class="text-[10px] text-slate-400">1Approval Bot</div>
+                                </div>
+                            </div>
+                            <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> リアルタイム通知
+                            </span>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="bg-slate-800/90 p-4 rounded-2xl border border-white/10 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="bg-brand-sharepointCyan/20 text-brand-sharepointCyan border border-brand-sharepointCyan/30 text-[10px] font-extrabold px-2 py-0.5 rounded">出張承認依頼 #TR-8842</span>
+                                <span class="text-[10px] text-slate-400">たった今</span>
+                            </div>
+
+                            <div class="font-bold text-sm text-white leading-snug">
+                                【出張承認】東京 ⇆ 大阪（新幹線＋ホテル1泊）
+                            </div>
+
+                            <div class="bg-slate-900/80 p-3 rounded-xl space-y-1.5 text-[11px] border border-white/5">
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">申請者:</span>
+                                    <span class="text-slate-200 font-medium">営業部 山田 太郎</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">日程:</span>
+                                    <span class="text-slate-200 font-medium">2026/09/15 - 16 (1泊2日)</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">申請合計金額:</span>
+                                    <span class="text-emerald-400 font-extrabold text-xs">¥32,500 <span class="text-[9px] font-normal text-slate-400">(規定内最安値)</span></span>
+                                </div>
+                            </div>
+
+                            <!-- Memo Input Image -->
+                            <div class="space-y-1">
+                                <label class="text-[10px] text-slate-300 font-bold flex items-center gap-1">
+                                    <i class="fa-solid fa-pen text-[9px] text-brand-sharepointCyan"></i> 決済/仕訳メモ入力 (任意)
+                                </label>
+                                <div class="w-full bg-slate-900 border border-white/20 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-300">
+                                    【プロジェクトA】関西商談旅費 / 交通費
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="pt-1 flex gap-2">
+                                <button class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold py-2.5 rounded-xl text-xs shadow-lg shadow-emerald-900/40 flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-check text-xs"></i> Teamsで承認＆即予約
+                                </button>
+                                <button class="px-3 bg-white/10 text-slate-200 font-bold py-2.5 rounded-xl text-xs border border-white/10">
+                                    差戻し
+                                </button>
+                            </div>
+                        </div>
+
+                        <p class="text-[10px] text-slate-400 text-center">
+                            ※ 承認ボタンを押した瞬間にBTM手配が自動完結します。
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 課題セクション -->
+    <section id="problem" class="py-24 bg-white border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3.5 py-1 rounded-full uppercase">THE APPROVAL BOTTLE NECK</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-snug">
+                    「承認するためだけに別システムにログインする」<br class="hidden sm:block">非効率が社内の意思決定を遅らせています
+                </h2>
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                    PCでもスマホでも日々使い続けているTeams。それなのに、申請承認や経費チェックのときだけ外部システムに別ログインが必要なため、承認の停滞・価格変動による再承認が発生しています。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-brand-slatebg p-6 rounded-2xl border border-slate-200 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-900 text-base">ID/パスワード再入力のストレス</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Teamsで連絡を受けても、承認を行うためにBTMや社内システムへ別途ログインが必要。「後でやろう」と後回しにされ、承認が何日も滞留。
+                    </p>
+                </div>
+
+                <div class="bg-brand-slatebg p-6 rounded-2xl border border-slate-200 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-900 text-base">タイムラグによる「再承認地獄」</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        承認が遅れる間にホテルや航空券の価格が変動・満席化。「1,000円値上がりしたため再申請」という不毛なやり直しが発生。
+                    </p>
+                </div>
+
+                <div class="bg-brand-slatebg p-6 rounded-2xl border border-slate-200 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-eye-slash"></i>
+                    </div>
+                    <h3 class="font-extrabold text-slate-900 text-base">中身を見ない「メクラ承認」の横行</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        詳細確認のため別画面を開くのが面倒で、内容やプロジェクトコード・仕訳の妥当性を確認せずに承認。事後経理の手間が増大。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 機能・ソリューション（Teams連携の特徴） -->
+    <section id="features" class="py-20 bg-brand-slatebg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3 py-1 rounded-full uppercase">TEAMS ADAPTIVE CARDS</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">チャット画面を離れずにすべてが完結する理由</h2>
+                <p class="text-slate-500 text-sm">
+                    Microsoft TeamsのAdaptive Cards技術を活用し、インタラクティブな承認UIをチャット画面上に直接描画します。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-16 items-center">
+                <div class="lg:col-span-7 space-y-4">
+                    
+                    <div class="flex gap-4 p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-brand-teamsLight text-brand-teams font-black flex items-center justify-center shrink-0 text-base">
+                            1
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-bold text-slate-900">リアルタイムチャット通知 ＆ インタラクティブカード</h3>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                申請が届くと、Teamsの1Approval Botから上長宛に即時通知。カード内に申請者・日程・金額・最安値情報が要約表示されます。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-brand-teamsLight text-brand-teams font-black flex items-center justify-center shrink-0 text-base">
+                            2
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-bold text-slate-900">チャット上での「決済・仕訳メモ」直接入力</h3>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                承認ボタンを押す際、勘定科目やプロジェクトコード、メモをTeams画面上でそのまま入力可能。手配データと同時に会計システムへ自動送信されます。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-brand-teamsLight text-brand-teams font-black flex items-center justify-center shrink-0 text-base">
+                            3
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-bold text-slate-900">ダイナミック・ポリシー連携で価格変動を自動吸収</h3>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                承認時の価格変動（例：20%の許容閾値）を自動判定。許容範囲内であれば、Teams画面の「承認」ボタン1つで即時発券まで完了します。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-brand-teamsLight text-brand-teams font-black flex items-center justify-center shrink-0 text-base">
+                            4
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-base font-bold text-slate-900">SharePoint / Power Automateと双方向同期</h3>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                Teams上の操作結果は、SharePointリストやPower Automateの承認ワークフローへリアルタイムにステータス同期されます。
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Visual Mock Concept -->
+                <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-brand-dark p-8 rounded-3xl text-white space-y-6 shadow-xl border border-slate-700">
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold text-brand-sharepointCyan uppercase tracking-wider block"><i class="fa-solid fa-mobile-screen mr-1"></i> モバイル＆PC両対応</span>
+                        <h3 class="text-xl font-extrabold">移動中でも、スマホのTeamsアプリから3秒承認</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            出張中や外出先でも、スマホのTeamsアプリを開くだけ。プッシュ通知からタップ1つで手配が完了するため、業務の滞留がゼロになります。
+                        </p>
+                    </div>
+
+                    <div class="bg-white/10 p-4 rounded-2xl border border-white/10 space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold">承認完了までの時間</div>
+                                <div class="text-sm font-black text-emerald-400">平均 15分以内に短縮</div>
+                            </div>
+                        </div>
+                        <div class="h-px bg-white/10"></div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-brand-teamsLight/20 text-brand-teamsLight flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-user-check"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold">社員アクティベーション率</div>
+                                <div class="text-sm font-black text-white">100% (追加ログイン不要)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 画面イメージ / デモUIモック (参照リンク: https://masafushimi.github.io/1approval/teams/mock/ ) -->
+    <section id="demo-ui" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3 py-1 rounded-full uppercase">UI MOCKUP &amp; FLOW</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">実際の操作イメージ・画面フロー</h2>
+                <p class="text-slate-500 text-sm">
+                    申請からTeamsチャット通知、ワンクリック承認、自動発券、SharePoint同期までの流れをご覧ください。
+                </p>
+            </div>
+
+            <!-- Demo Container -->
+            <div class="mt-12 bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-10 shadow-2xl space-y-8">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-white">
+                    
+                    <!-- Step 1 -->
+                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-white/10 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-brand-teams text-white font-extrabold text-[10px] px-2.5 py-1 rounded">STEP 01</span>
+                            <span class="text-[10px] text-slate-400">SharePoint / 1Approval</span>
+                        </div>
+                        <h3 class="font-bold text-sm text-white">1. カートから出張申請</h3>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">
+                            出張者がホテルや新幹線を横断検索し、カート内容をSharePoint申請リストへ連携。
+                        </p>
+                        <div class="bg-slate-900 p-3 rounded-xl border border-white/10 text-[10px] text-slate-400 space-y-1">
+                            <div>・新幹線：東京 ⇄ 大阪 (往復)</div>
+                            <div>・ホテル：大阪市内 1泊 ¥11,000</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-brand-teams/50 space-y-3 relative shadow-lg shadow-brand-teams/10">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-brand-teams text-white font-extrabold text-[10px] px-2.5 py-1 rounded">STEP 02</span>
+                            <span class="text-[10px] text-brand-sharepointCyan font-bold">Teams Adaptive Card</span>
+                        </div>
+                        <h3 class="font-bold text-sm text-white">2. Teamsチャットに即時届く</h3>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">
+                            上司のTeamsにBotからインタラクティブ通知。画面上で仕訳メモを入力し「承認」をタップ。
+                        </p>
+                        <div class="bg-slate-900 p-3 rounded-xl border border-brand-teams/30 text-[10px] space-y-1.5">
+                            <div class="text-brand-sharepointCyan font-bold">【仕訳メモ入力済み】</div>
+                            <div class="text-slate-300">「関西顧客訪問 / 営業旅費」</div>
+                            <div class="pt-1 flex gap-1">
+                                <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-[9px]">承認＆即予約</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-white/10 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-brand-teams text-white font-extrabold text-[10px] px-2.5 py-1 rounded">STEP 03</span>
+                            <span class="text-[10px] text-emerald-400 font-bold">全自動完結</span>
+                        </div>
+                        <h3 class="font-bold text-sm text-white">3. 自動発券 ＆ 法人一括請求</h3>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">
+                            承認と同時にBTM予約が確定。個人の自腹立替精算・領収書チェックは一切発生しません。
+                        </p>
+                        <div class="bg-slate-900 p-3 rounded-xl border border-white/10 text-[10px] text-emerald-400 font-bold">
+                            <i class="fa-solid fa-circle-check mr-1"></i> チケット発券完了 / 一括請求データ作成
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Interactive Mock Preview Link Button -->
+                <div class="text-center pt-2">
+                    <a href="https://masafushimi.github.io/1approval/teams/mock/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3 rounded-xl text-xs border border-white/20 transition-all">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-brand-sharepointCyan"></i>
+                        <span>Teams承認モックアップ画面（デモ体験）を開く</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 料金プランセクション -->
+    <section id="pricing" class="py-20 bg-brand-slatebg border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3.5 py-1.5 rounded-full uppercase inline-block">
+                    PRICING
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                    Teams連携オプションの料金体系
+                </h2>
+                <p class="text-slate-500 text-sm">
+                    1Approval Standardプラグイン（月額98,000円）のアドオンとしてご利用いただけます。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl mx-auto items-stretch">
+                
+                <!-- 基本ライセンス -->
+                <div class="bg-white rounded-3xl border border-slate-200 p-8 space-y-6 flex flex-col justify-between shadow-sm">
+                    <div class="space-y-4">
+                        <span class="text-brand-sharepoint font-bold text-xs uppercase tracking-widest block">① 基本プラグイン</span>
+                        <h3 class="text-xl font-extrabold text-slate-900">Standard プラグイン</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Microsoft 365 (SharePoint / Power Automate) の標準ワークフローに接続。</p>
+                        
+                        <div class="pt-4 border-t border-slate-100 space-y-3 text-xs">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600 font-bold">月額利用料</span>
+                                <span class="font-black text-slate-900 text-xl">¥98,000 <span class="text-[10px] text-slate-500 font-normal">(税抜) / 月</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600 font-bold">初期設置</span>
+                                <span class="font-extrabold text-slate-800">¥50,000 <span class="text-[10px] text-slate-500 font-normal">(税抜)</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-[10px] text-slate-400">※年間契約。初月無償サポート付き。</div>
+                </div>
+
+                <!-- Teamsオプション -->
+                <div class="bg-gradient-to-b from-brand-teamsLight/60 to-white rounded-3xl border-2 border-brand-teams p-8 space-y-6 flex flex-col justify-between shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-brand-teams text-white text-[10px] font-black px-3.5 py-1 rounded-bl-xl uppercase tracking-wider">
+                        RECOMMENDED
+                    </div>
+                    <div class="space-y-4">
+                        <span class="text-brand-teams font-extrabold text-xs uppercase tracking-widest block"><i class="fa-brands fa-microsoft mr-1"></i> ② Teams承認アドオン</span>
+                        <h3 class="text-xl font-extrabold text-slate-900">1Approval for Teams</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Teamsチャット上でのAdaptive Card受信・ワンクリック承認・仕訳メモ直接編集を有効化。</p>
+                        
+                        <div class="pt-4 border-t border-brand-teams/20 space-y-3 text-xs">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600 font-bold">オプション月額</span>
+                                <span class="font-black text-brand-teams text-2xl">+ ¥30,000 <span class="text-[10px] text-slate-500 font-normal">(税抜) / 月</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-600 font-bold">機能</span>
+                                <span class="font-extrabold text-slate-800">Teamsチャット承認・仕訳メモ入力</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-[10px] text-slate-500 font-medium">※上長・管理部門の業務工数を劇的に短縮させます。</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ロードマップ -->
+    <section id="roadmap" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <h2 class="text-3xl font-extrabold text-slate-900">すべての購買管理を、Teamsの1つの「承認」へ。</h2>
+                <p class="text-slate-500 text-sm leading-relaxed">
+                    1Approvalシリーズは今後、出張手配に留まらず、オフィス消耗品からイベント会場、IT SaaS契約、ツール手配にいたるまで、全購買をTeamsチャットフローへ統合します。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-16 max-w-5xl mx-auto">
+                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
+                    <i class="fa-solid fa-plane-departure text-brand-teams text-lg"></i>
+                    <h4 class="text-xs font-bold text-slate-800">出張宿泊手配</h4>
+                    <span class="text-[9px] bg-brand-teamsLight text-brand-teams px-2 py-0.5 rounded font-extrabold block">1Approval 4 Trip</span>
+                </div>
+                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
+                    <i class="fa-solid fa-cubes text-brand-success text-lg"></i>
+                    <h4 class="text-xs font-bold text-slate-800">消耗品・備品</h4>
+                    <span class="text-[9px] bg-brand-success/10 text-brand-success px-2 py-0.5 rounded font-extrabold block">1Approval 4 Goods</span>
+                </div>
+                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
+                    <i class="fa-solid fa-users text-brand-primary text-lg"></i>
+                    <h4 class="text-xs font-bold text-slate-800">会議室・MICE</h4>
+                    <span class="text-[9px] bg-brand-primary/10 text-brand-primary px-2 py-0.5 rounded font-extrabold block">1Approval 4 MICE</span>
+                </div>
+                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
+                    <i class="fa-solid fa-square-parking text-pink-500 text-lg"></i>
+                    <h4 class="text-xs font-bold text-slate-800">駐車場手配</h4>
+                    <span class="text-[9px] bg-pink-100 text-pink-600 px-2 py-0.5 rounded font-extrabold block">1Approval 4 Parking</span>
+                </div>
+                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
+                    <i class="fa-solid fa-laptop-code text-slate-400 text-lg"></i>
+                    <h4 class="text-xs font-bold text-slate-800">IT SaaS契約</h4>
+                    <span class="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-extrabold block">1Approval 4 SaaS</span>
+                </div>
+                <div class="bg-brand-slatebg p-4 rounded-2xl border border-slate-200 text-center space-y-2 shadow-sm">
+                    <i class="fa-solid fa-screwdriver-wrench text-slate-400 text-lg"></i>
+                    <h4 class="text-xs font-bold text-slate-800">工具・現場資材</h4>
+                    <span class="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-extrabold block">1Approval 4 Tools</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- お問い合わせフォーム -->
+    <section id="contact" class="py-20 bg-brand-slatebg relative overflow-hidden">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center space-y-4 mb-12">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">資料請求・デモ・無料相談</h2>
+                <p class="text-slate-500 text-xs sm:text-sm">Microsoft Teams連携に関する資料ご請求・オンラインデモをお申し込みください。</p>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden p-6 sm:p-10">
+                <form id="lead-form" class="space-y-8">
+                    <div class="space-y-3">
+                        <label class="block font-bold text-slate-900 text-sm sm:text-base">
+                            お問い合わせの目的 <span class="text-xs bg-brand-danger text-white px-2 py-0.5 rounded ml-1.5 font-medium">必須</span>
+                        </label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-white hover:border-brand-teams transition-all group has-[:checked]:border-brand-teams has-[:checked]:bg-brand-teamsLight/40">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" name="purpose" value="document_request" id="purpose-doc" class="w-4 h-4 text-brand-teams border-slate-300 rounded focus:ring-brand-teams" checked>
+                                    <span class="text-sm font-bold text-slate-700">資料請求/問合せ</span>
+                                </div>
+                            </label>
+                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-white hover:border-brand-teams transition-all group has-[:checked]:border-brand-teams has-[:checked]:bg-brand-teamsLight/40">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" name="purpose" value="demo_request" id="purpose-demo" class="w-4 h-4 text-brand-teams border-slate-300 rounded focus:ring-brand-teams">
+                                    <span class="text-sm font-bold text-slate-700">画面デモ依頼</span>
+                                </div>
+                            </label>
+                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-white hover:border-brand-teams transition-all group has-[:checked]:border-brand-teams has-[:checked]:bg-brand-teamsLight/40">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" name="purpose" value="consultation" id="purpose-consult" class="w-4 h-4 text-brand-teams border-slate-300 rounded focus:ring-brand-teams">
+                                    <span class="text-sm font-bold text-slate-700">個別無料相談</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="dynamic-display-section" class="fade-in-box">
+                        <div id="material-inner-section" class="hidden text-center bg-brand-slatebg border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4">
+                            <h4 class="text-sm font-bold text-slate-900">ご案内資料『3分でわかる！1Approval for Teams』</h4>
+                            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+                                <img src="/material.png" alt="資料サムネイル" class="w-full h-auto max-h-[300px] object-contain mx-auto">
+                            </div>
+                        </div>
+                        <div id="calendar-inner-section" class="hidden bg-brand-slatebg border border-slate-200 rounded-2xl p-4 sm:p-6">
+                            <h4 class="text-sm font-bold text-slate-900 mb-2">オンライン日程の事前予約</h4>
+                            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden h-[450px]">
+                                <iframe src="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1epnVB3j8YTuPK0e0KdOFEIsoHTP31XRjMwKigZKn7CYRp45fGWQ6rB5LaKD6okZqeZ-DtHIOZ?gv=true" style="border:0" width="100%" height="100%" frameborder="0"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-700 text-xs mb-1">会社名 <span class="text-rose-500">必須</span></label>
+                                <input type="text" name="company" required placeholder="例）株式会社〇〇〇〇" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-teams">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 text-xs mb-1">部署名 <span class="text-rose-500">必須</span></label>
+                                <input type="text" name="department" required placeholder="例）情報システム部 / 総務部" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-teams">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-700 text-xs mb-1">お名前 <span class="text-rose-500">必須</span></label>
+                                <input type="text" name="name" required placeholder="例）山田太郎" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-teams">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 text-xs mb-1">お名前（フリガナ） <span class="text-rose-500">必須</span></label>
+                                <input type="text" name="nameKana" required placeholder="例）ヤマダタロウ" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-teams">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 text-xs mb-1">ビジネスメールアドレス <span class="text-rose-500">必須</span></label>
+                            <input type="email" name="email" required placeholder="name@company.com" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-teams">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 text-xs mb-1">電話番号 <span class="text-rose-500">必須</span></label>
+                            <input type="tel" name="phone" required placeholder="090-0000-0000" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-teams">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 text-xs mb-1">ご質問・ご要望（任意）</label>
+                            <textarea name="message" rows="3" placeholder="Teamsの利用状況や、承認連携に関するご要望等をご記入ください。" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-teams"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-center pt-2">
+                        <button type="submit" id="lead-form-submit" class="w-full sm:w-auto bg-brand-teams text-white font-black text-center px-12 py-4 rounded-xl text-base hover:bg-brand-teamsDark transition-all duration-300 shadow-lg shadow-brand-teams/20 inline-flex items-center justify-center gap-2">
+                            <span>資料・デモをリクエストする (無料)</span>
+                            <i class="fa-solid fa-paper-plane text-sm"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="bg-white py-12 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="flex flex-col items-center md:items-start gap-4">
+                <img src="https://masafushimi.github.io/1approval/teams/logo_teams.png" alt="1Approval" class="h-8 sm:h-10 w-auto object-contain">
+                <div class="flex items-center gap-6 text-xs text-slate-500 font-medium">
+                    <a href="https://eichiii.co.jp/" target="_blank" rel="noopener noreferrer" class="hover:text-brand-teams">会社概要</a>
+                    <span class="text-slate-300">|</span>
+                    <a href="https://eichiii.notion.site/2e08bd7be1f4403aaca65b9b3d46cf26" target="_blank" rel="noopener noreferrer" class="hover:text-brand-teams">利用規約</a>
+                    <span class="text-slate-300">|</span>
+                    <a href="https://eichiii.notion.site/ff4b77597e97434790d8016a8fee9616" target="_blank" rel="noopener noreferrer" class="hover:text-brand-teams">プライバシーポリシー</a>
+                </div>
+            </div>
+            <div class="text-center md:text-right space-y-2">
+                <p class="text-xs text-slate-500">叡知を統合して、つながりをなめらかに。</p>
+                <p class="text-[11px] text-slate-600 font-bold">株式会社エイチ</p>
+                <p class="text-[10px] text-slate-400">© 2026 eichiii Inc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS制御 -->
+    <script>
+        // ドロワーメニュー制御
+        const menuOpenBtn = document.getElementById('menu-open-btn');
+        const menuCloseBtn = document.getElementById('menu-close-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuContent = document.getElementById('mobile-menu-content');
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+
+        function openMenu() {
+            mobileMenu.classList.remove('hidden', 'pointer-events-none');
+            requestAnimationFrame(() => {
+                mobileMenu.classList.remove('opacity-0');
+                mobileMenu.classList.add('opacity-100');
+                mobileMenuContent.classList.remove('translate-x-full');
+                mobileMenuContent.classList.add('translate-x-0');
+            });
+        }
+        function closeMenu() {
+            mobileMenu.classList.remove('opacity-100');
+            mobileMenu.classList.add('opacity-0');
+            mobileMenuContent.classList.remove('translate-x-0');
+            mobileMenuContent.classList.add('translate-x-full');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden', 'pointer-events-none');
+            }, 300);
+        }
+
+        if (menuOpenBtn && menuCloseBtn) {
+            menuOpenBtn.addEventListener('click', openMenu);
+            menuCloseBtn.addEventListener('click', closeMenu);
+            mobileMenu.addEventListener('click', (e) => { if (e.target === mobileMenu) closeMenu(); });
+            mobileMenuLinks.forEach(link => link.addEventListener('click', closeMenu));
+        }
+
+        // フォーム動的セクション切り替え
+        const checkboxDoc = document.getElementById('purpose-doc');
+        const checkboxDemo = document.getElementById('purpose-demo');
+        const checkboxConsult = document.getElementById('purpose-consult');
+        const dynamicSection = document.getElementById('dynamic-display-section');
+        const materialInner = document.getElementById('material-inner-section');
+        const calendarInner = document.getElementById('calendar-inner-section');
+
+        function handleDisplaySection() {
+            if (checkboxDemo.checked || checkboxConsult.checked) {
+                dynamicSection.classList.add('show');
+                calendarInner.classList.remove('hidden');
+                materialInner.classList.add('hidden');
+            } else if (checkboxDoc.checked) {
+                dynamicSection.classList.add('show');
+                materialInner.classList.remove('hidden');
+                calendarInner.classList.add('hidden');
+            } else {
+                dynamicSection.classList.remove('show');
+            }
+        }
+        if (checkboxDoc) {
+            checkboxDoc.addEventListener('change', handleDisplaySection);
+            checkboxDemo.addEventListener('change', handleDisplaySection);
+            checkboxConsult.addEventListener('change', handleDisplaySection);
+            handleDisplaySection();
+        }
+    </script>
+</body>
+</html>
