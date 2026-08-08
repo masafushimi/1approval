@@ -153,14 +153,14 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-1.5 sm:gap-4">
             <div class="flex items-center gap-3 min-w-0 shrink">
                 <a href="/">
-                    <img src="https://masafushimi.github.io/1approval/m365/logo_teams.png" alt="1Approval" class="h-10 sm:h-11 w-auto max-w-[160px] sm:max-w-none object-contain shrink">
+                    <img src="https://masafushimi.github.io/1approval/teams/logo_teams.png" alt="1Approval for Teams" class="h-10 sm:h-11 w-auto max-w-[160px] sm:max-w-none object-contain shrink">
                 </a>
             </div>
             
             <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-xs xl:text-sm font-semibold text-slate-600 shrink-0">
                 <a href="#problem" class="hover:text-brand-teams transition-colors">課題</a>
-                <a href="#features" class="hover:text-brand-teams transition-colors">Teams連携の特長</a>
                 <a href="#compatibility" class="hover:text-brand-teams transition-colors">対応プラットフォーム</a>
+                <a href="#features" class="hover:text-brand-teams transition-colors">Teams連携の特長</a>
                 <a href="#mock-demo" class="hover:text-brand-teams transition-colors">画面デモ</a>
                 <a href="#pricing" class="hover:text-brand-teams transition-colors">料金</a>
                 <a href="#roadmap" class="hover:text-brand-teams transition-colors">ロードマップ</a>
@@ -192,8 +192,8 @@
                 </div>
                 <nav class="flex flex-col gap-4 text-sm font-bold text-slate-700">
                     <a href="#problem" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">課題</a>
-                    <a href="#features" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">Teams連携の特長</a>
                     <a href="#compatibility" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">対応プラットフォーム</a>
+                    <a href="#features" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">Teams連携の特長</a>
                     <a href="#mock-demo" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">画面デモ</a>
                     <a href="#pricing" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">料金</a>
                     <a href="#roadmap" class="mobile-menu-link py-2 border-b border-slate-50 hover:text-brand-teams transition-colors">ロードマップ</a>
@@ -323,19 +323,107 @@
         </div>
     </section>
 
-    <!-- 既存基盤（kintone / Microsoft 365）連携対応ブロック -->
+    <!-- 課題セクション (THE APPROVAL BOTTLE NECK) -->
+    <section id="problem" class="py-24 bg-white border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3.5 py-1.5 rounded-full uppercase">
+                    THE APPROVAL BOTTLE NECK
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-snug">
+                    「毎回の申請作業、承認作業の雑務が面倒」<br class="hidden sm:block">
+                    システム分断が生む無駄な時間がビジネスを停滞させています
+                </h2>
+                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                    1回の購買・出張手配ごとに発生する手入力と確認作業。毎回のログインの手間やブラックボックス承認が、組織全体の生産性を大きく削り取っています。
+                </p>
+            </div>
+
+            <!-- 1件あたりの無駄時間ハイライト -->
+            <div class="bg-gradient-to-r from-slate-900 via-brand-dark to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-2xl mb-12 border border-slate-800">
+                <div class="text-center max-w-xl mx-auto mb-8">
+                    <span class="text-xs font-bold text-brand-sharepointCyan uppercase tracking-widest block mb-1">手配1件あたりに失われている時間</span>
+                    <h3 class="text-xl sm:text-2xl font-black">13分間以上の「潜在的雑務」が発生中</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
+                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2.5 py-1 rounded">申請者側の負担</span>
+                            <span class="text-2xl font-black text-rose-400">10分 / 件</span>
+                        </div>
+                        <h4 class="font-bold text-base text-white">購買申請記入：10分</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            フライト・ホテル・備品の金額や型番を1項目ずつ社内申請書へコピペ手入力。過去と同じ出張・購買であっても毎回手動作成が発生。
+                        </p>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/15 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2.5 py-1 rounded">承認者（上長）側の負担</span>
+                            <span class="text-2xl font-black text-rose-400">3分 / 件</span>
+                        </div>
+                        <h4 class="font-bold text-base text-white">各サイトにログインして承認：3分</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            通知が届くたびに業務の手を止め、外部BTMや購買システムへ別ログイン。別画面を開いて内容を確認・承認するまでに数分間の集中力断絶が発生。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 課題グリッド -->
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <span class="prob-num">── 01</span>
+                    <div class="prob-title">毎回手入力の手間 (10分)</div>
+                    <p class="prob-body">予約サイトと社内申請フォームの間を往復し、時間・便名・金額を手動転記する繰り返し作業。</p>
+                </div>
+                <div class="problem-card">
+                    <span class="prob-num">── 02</span>
+                    <div class="prob-title">別サイト確認のロス (3分)</div>
+                    <p class="prob-body">承認のためだけに外部SaaSへログインし直し、内容を確認・参照するための無駄なアクション。</p>
+                </div>
+                <div class="problem-card">
+                    <span class="prob-num">── 03</span>
+                    <div class="prob-title">ブラックボックス承認の常態化</div>
+                    <p class="prob-body">画面移動やログインが面倒なため、金額や仕訳メモ・プロジェクトコードの妥当性を確かめずに形式承認。</p>
+                </div>
+                <div class="problem-card">
+                    <span class="prob-num">── 04</span>
+                    <div class="prob-title">価格変動による再承認地獄</div>
+                    <p class="prob-body">承認滞留中にチケットやホテルの価格が上昇。「数文字や数百度の価格差」で最初からやり直す後戻り。</p>
+                </div>
+                <div class="problem-card">
+                    <span class="prob-num">── 05</span>
+                    <div class="prob-title">手配漏れ ＆ 立替精算・領収書回収</div>
+                    <p class="prob-body">承認後の本手配忘れ事故や、月末に小口領収書を集めて手入力・振込確認を行う経理側の莫大な負荷。</p>
+                </div>
+                <div class="problem-card bg-brand-teamsLight/30 border-l-2 border-brand-teams">
+                    <span class="prob-num text-brand-teams font-bold">── 1APPROVAL SOLUTION</span>
+                    <div class="prob-title text-slate-900 font-black">AI ＆ Teams連携で劇的圧縮</div>
+                    <p class="prob-body text-slate-700">
+                        AIレコメンドで申請記入を<strong>10分→2分</strong>へ短縮。Teams画面上での1クリック確認・仕訳入力で承認も<strong>3分→1分</strong>へ短縮し、自動購買まで完了させます。
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 既存基盤（kintone / Microsoft 365）両対応ブロック -->
     <section id="compatibility" class="py-12 bg-slate-900 text-white border-y border-white/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="space-y-2 text-center md:text-left">
                     <span class="bg-brand-teams/30 text-brand-teamsLight border border-brand-teams/40 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider inline-block">
-                        FLEXIBLE INTEGRATION
+                        MULTI-PLATFORM COMPATIBILITY
                     </span>
                     <h3 class="text-xl sm:text-2xl font-black">
-                        お使いのワークフロー基盤に合わせてそのまま導入可能
+                        1Approval for kintone / Microsoft 365 のどちらでも利用可能
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        1Approval for Teams オプションは、kintone基盤・Microsoft 365基盤のどちらのワークフローをご利用中の環境でも簡単に追加接続できます。
+                        1Approval for Teams オプションは、kintone基盤・Microsoft 365基盤のどちらの承認ワークフローをご利用中の環境でもそのまま追加接続できます。
                     </p>
                 </div>
                 
@@ -348,7 +436,7 @@
                         <div>
                             <div class="text-[10px] text-slate-400 font-bold uppercase">1Approval for</div>
                             <div class="text-sm font-black text-white">kintone</div>
-                            <div class="text-[10px] text-emerald-400 font-bold mt-0.5"><i class="fa-solid fa-circle-check"></i> Teams連携オプション対応</div>
+                            <div class="text-[10px] text-emerald-400 font-bold mt-0.5"><i class="fa-solid fa-circle-check"></i> Teams承認オプション対応</div>
                         </div>
                     </div>
 
@@ -360,57 +448,9 @@
                         <div>
                             <div class="text-[10px] text-slate-400 font-bold uppercase">1Approval for</div>
                             <div class="text-sm font-black text-white">Microsoft 365</div>
-                            <div class="text-[10px] text-emerald-400 font-bold mt-0.5"><i class="fa-solid fa-circle-check"></i> Teams連携オプション対応</div>
+                            <div class="text-[10px] text-emerald-400 font-bold mt-0.5"><i class="fa-solid fa-circle-check"></i> Teams承認オプション対応</div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 課題セクション -->
-    <section id="problem" class="py-24 bg-white border-b border-slate-200/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
-                <span class="text-xs font-bold tracking-widest text-brand-teams bg-brand-teamsLight px-3.5 py-1 rounded-full uppercase">APPROVAL FRICTION</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-snug">
-                    別システムへログインし直す「ブラックボックス承認」と<br class="hidden sm:block">手入力の手間がビジネスの速度を下げています
-                </h2>
-                <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
-                    申請作成にかかる10分間、承認のために外部サイトを訪問して内容確認する3分間、価格変動による再申請……ツギハギのシステム連携が大量の潜在的雑務を発生させています。
-                </p>
-            </div>
-
-            <div class="problem-grid">
-                <div class="problem-card">
-                    <span class="prob-num">── 01</span>
-                    <div class="prob-title">申請フォームのイチからの手入力 (10分)</div>
-                    <p class="prob-body">フライトやホテル、新幹線の時間・金額を1項目ずつ申請書へ転記。作成だけに10分以上の時間が費やされます。</p>
-                </div>
-                <div class="problem-card">
-                    <span class="prob-num">── 02</span>
-                    <div class="prob-title">別サイト訪問＆ログインの確認ロス (3分)</div>
-                    <p class="prob-body">承認依頼が届くたびに業務の手を止め、外部BTMやワークフローへログインし直して中身を確認。確認・承認に3分以上のロスが発生。</p>
-                </div>
-                <div class="problem-card">
-                    <span class="prob-num">── 03</span>
-                    <div class="prob-title">内容を見ない「ブラックボックス承認」の発生</div>
-                    <p class="prob-body">ログインや別画面参照が面倒なため、金額の妥当性やプロジェクトコード、仕訳情報を確認せず形だけで承認。</p>
-                </div>
-                <div class="problem-card">
-                    <span class="prob-num">── 04</span>
-                    <div class="prob-title">価格変動・在庫消滅による再承認</div>
-                    <p class="prob-body">承認が遅れる間にチケット価格が変更。「数百円上がったため再申請」という不毛な後戻りルールが横行。</p>
-                </div>
-                <div class="problem-card">
-                    <span class="prob-num">── 05</span>
-                    <div class="prob-title">承認後の買い忘れ・手配ミス</div>
-                    <p class="prob-body">承認は降りたものの、実際のチケット購買を忘れていた事故や、個人立替精算のチェック作業が発生。</p>
-                </div>
-                <div class="problem-card bg-rose-50/40 border-l-2 border-rose-300">
-                    <span class="prob-num text-rose-500 font-bold">── 1Approvalの解決策</span>
-                    <div class="prob-title text-rose-950 font-black">AIとTeams連携で圧倒的短縮</div>
-                    <p class="prob-body text-slate-700">AIレコメンドで申請記入を10分→2分、承認もTeams上で3分→1分へ劇的短縮。そのまま全自動で手配・請求まで繋ぎます。</p>
                 </div>
             </div>
         </div>
@@ -568,7 +608,7 @@
                     Teams連携オプションの料金体系
                 </h2>
                 <p class="text-slate-500 text-sm">
-                    既存の1Approvalワークフロー基盤に追加アドオンとしてご提供いたします。
+                    既存の1Approvalワークフロー基盤（kintone / Microsoft 365）に追加アドオンとしてご提供いたします。
                 </p>
             </div>
 
@@ -780,7 +820,7 @@
     <footer class="bg-white py-12 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
             <div class="flex flex-col items-center md:items-start gap-4">
-                <img src="https://masafushimi.github.io/1approval/m365/logo_teams.png" alt="1Approval" class="h-8 sm:h-11 w-auto object-contain">
+                <img src="https://masafushimi.github.io/1approval/teams/logo_teams.png" alt="1Approval" class="h-8 sm:h-11 w-auto object-contain">
                 <div class="flex items-center gap-6 text-xs text-slate-500 font-medium">
                     <a href="https://eichiii.co.jp/" target="_blank" rel="noopener noreferrer" class="hover:text-brand-teams">会社概要</a>
                     <span class="text-slate-300">|</span>
