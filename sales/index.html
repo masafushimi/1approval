@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1approval for kintone/365 アウトバウンドコール完全マニュアル</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .tab-active {
+            border-bottom: 3px solid #2563eb;
+            color: #2563eb;
+            font-weight: 700;
+        }
+        .badge-tag {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+        /* Highlight script lines */
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -10px;
+            border-style: solid;
+            border-width: 8px 10px 8px 0;
+            border-color: transparent #e2e8f0 transparent transparent;
+        }
+        .speech-bubble-operator {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+        }
+        .speech-bubble-operator::before {
+            border-color: transparent #bfdbfe transparent transparent;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-2 rounded-lg font-bold text-lg tracking-wider">
+                    1approval
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold">アウトバウンドコール・実戦マニュアル</h1>
+                    <p class="text-xs text-slate-400">1approval for kintone/365 ハウスリード500社後追い架電用</p>
+                </div>
+            </div>
+
+            <!-- KPI Banner -->
+            <div class="flex items-center space-x-4 text-xs bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 mt-2 sm:mt-0">
+                <div>
+                    <span class="text-slate-400">1日目標架電:</span>
+                    <span class="font-bold text-amber-400 text-sm ml-1">150コール</span>
+                </div>
+                <div class="h-4 w-px bg-slate-700"></div>
+                <div>
+                    <span class="text-slate-400">アポ/コンシェルジュ獲得率:</span>
+                    <span class="font-bold text-emerald-400 text-sm ml-1">3〜5% (5件/日)</span>
+                </div>
+                <div class="h-4 w-px bg-slate-700"></div>
+                <div>
+                    <span class="text-slate-400">資料送付承諾率:</span>
+                    <span class="font-bold text-blue-400 text-sm ml-1">80%以上</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 sticky top-[61px] z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 flex space-x-1 sm:space-x-8 overflow-x-auto">
+            <button onclick="switchTab('tab-flow')" id="btn-tab-flow" class="tab-btn py-3 px-3 text-sm font-medium text-slate-600 hover:text-blue-600 whitespace-nowrap tab-active flex items-center gap-1.5">
+                <i data-lucide="phone-call" class="w-4 h-4"></i> ① 基本トークフロー
+            </button>
+            <button onclick="switchTab('tab-branch')" id="btn-tab-branch" class="tab-btn py-3 px-3 text-sm font-medium text-slate-600 hover:text-blue-600 whitespace-nowrap flex items-center gap-1.5">
+                <i data-lucide="git-fork" class="w-4 h-4"></i> ② 反応別・切り返し
+            </button>
+            <button onclick="switchTab('tab-persona')" id="btn-tab-persona" class="tab-btn py-3 px-3 text-sm font-medium text-slate-600 hover:text-blue-600 whitespace-nowrap flex items-center gap-1.5">
+                <i data-lucide="users" class="w-4 h-4"></i> ③ 役職・ペルソナ別訴求
+            </button>
+            <button onclick="switchTab('tab-faq')" id="btn-tab-faq" class="tab-btn py-3 px-3 text-sm font-medium text-slate-600 hover:text-blue-600 whitespace-nowrap flex items-center gap-1.5">
+                <i data-lucide="help-circle" class="w-4 h-4"></i> ④ 即答FAQ & 事例
+            </button>
+            <button onclick="switchTab('tab-memo')" id="btn-tab-memo" class="tab-btn py-3 px-3 text-sm font-medium text-slate-600 hover:text-blue-600 whitespace-nowrap flex items-center gap-1.5">
+                <i data-lucide="clipboard-check" class="w-4 h-4"></i> ⑤ アポ獲得・ヒアリングメモ
+            </button>
+            <button onclick="switchTab('tab-email')" id="btn-tab-email" class="tab-btn py-3 px-3 text-sm font-medium text-slate-600 hover:text-blue-600 whitespace-nowrap flex items-center gap-1.5">
+                <i data-lucide="mail" class="w-4 h-4"></i> ⑥ 送付済みメール文面・活用ガイド
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
+
+        <!-- TAB 1: 基本トークフロー -->
+        <section id="tab-flow" class="tab-content space-y-6">
+
+            <!-- Flow Overview Steps -->
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-base font-bold text-slate-800 mb-3 flex items-center gap-2">
+                    <i data-lucide="route" class="w-5 h-5 text-blue-600"></i> 架電ステップ概要（クリックで該当スクリプトへ移動）
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+                    <a href="#step-1" class="p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-center transition">
+                        <span class="text-xs text-slate-500 font-bold block">STEP 1</span>
+                        <span class="text-xs font-semibold text-slate-800">受付突破</span>
+                    </a>
+                    <a href="#step-2" class="p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-center transition">
+                        <span class="text-xs text-slate-500 font-bold block">STEP 2</span>
+                        <span class="text-xs font-semibold text-slate-800">オープニング</span>
+                    </a>
+                    <a href="#step-3" class="p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-center transition">
+                        <span class="text-xs text-slate-500 font-bold block">STEP 3</span>
+                        <span class="text-xs font-semibold text-slate-800">課題発見・フック</span>
+                    </a>
+                    <a href="#step-4" class="p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-center transition">
+                        <span class="text-xs text-slate-500 font-bold block">STEP 4</span>
+                        <span class="text-xs font-semibold text-slate-800">簡易ピッチ</span>
+                    </a>
+                    <a href="#step-5" class="p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg text-center transition col-span-2 md:col-span-1">
+                        <span class="text-xs text-blue-600 font-bold block">STEP 5</span>
+                        <span class="text-xs font-bold text-blue-800">アポ打診・クロージング</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- STEP 1: 受付突破 -->
+            <div id="step-1" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">STEP 1</span>
+                    <h3 class="text-lg font-bold text-slate-800">受付突破（フロント対応）</h3>
+                    <span class="text-xs text-slate-500">ターゲット：総務・経理・DX推進部・手配担当</span>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="speech-bubble speech-bubble-operator">
+                        <p class="text-xs font-bold text-blue-600 mb-1">【あなた（営業）】</p>
+                        <p class="text-sm font-medium">
+                            「お世話になっております。株式会社エイチの〇〇（自分の名前）と申します。<br>
+                            業務効率化のご案内で先日お送りいたしましたメールの件で、**総務部（または経理部・DX推進部）の［キーマン氏名 / ご責任者様］**にお繋ぎいただけますでしょうか。」
+                        </p>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+                        <p class="text-xs font-bold text-amber-800 mb-1 flex items-center gap-1">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i> 受付に「どういったご用件でしょうか？」と突っ込まれた場合
+                        </p>
+                        <div class="speech-bubble speech-bubble-operator mt-2">
+                            <p class="text-sm">
+                                「はい、社内でご利用中の**kintone（またはMicrosoft 365）上で、出張や購買の申請から予約・経費精算までを一括完了できる新しいプラグイン機能『1approval』**のご案内メールでお電話いたしました。ご担当の〇〇様はいらっしゃいますでしょうか。」
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-600">
+                        <strong>💡 ポイント:</strong> 自信を持って「以前お送りしたメールの件」と伝えることで、売り込み感を排除します。担当者名が不明な場合は「出張手配や社内備品の購買申請を取りまとめていらっしゃる総務か経理のご責任者様」と指名します。
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: オープニング -->
+            <div id="step-2" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">STEP 2</span>
+                    <h3 class="text-lg font-bold text-slate-800">本人着席・オープニング</h3>
+                    <span class="text-xs text-slate-500">着信確認 ＆ 30秒の許可取得</span>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="speech-bubble speech-bubble-operator">
+                        <p class="text-xs font-bold text-blue-600 mb-1">【あなた（営業）】</p>
+                        <p class="text-sm font-medium">
+                            「お世話になっております。株式会社エイチの〇〇でございます。<br>
+                            本日、〇〇様へお送りいたしました**『1approval for kintone/365』**のご案内メールの件でご連絡いたしました。今1分ほどだけお時間よろしいでしょうか？」
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <span class="text-xs font-bold text-slate-700 block mb-1">パターンA：「メール見ていない／覚えていない」</span>
+                            <p class="text-xs text-slate-600">
+                                「ありがとうございます！件名が**『【ご案内】kintone/365上で承認と出張予約・精算が同時に終わる1approval』**でお送りしております。お手元になくても大丈夫ですので、簡潔に30秒だけ概要をお伝えさせてください。」
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <span class="text-xs font-bold text-slate-700 block mb-1">パターンB：「見たよ／はい大丈夫です」</span>
+                            <p class="text-xs text-slate-600">
+                                「ご確認いただきありがとうございます！まさに御社のようにkintone/365をご活用されている企業様向けにリリースした新機能でございまして、30秒でポイントだけお伝えさせていただきますね。」
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: 課題発見（フック） -->
+            <div id="step-3" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">STEP 3</span>
+                    <h3 class="text-lg font-bold text-slate-800">課題の言語化（共感フック）</h3>
+                    <span class="text-xs text-slate-500">ツギハギ運用の「不」に共感させる</span>
+                </div>
+
+                <div class="speech-bubble speech-bubble-operator">
+                    <p class="text-xs font-bold text-blue-600 mb-1">【あなた（営業）】</p>
+                    <p class="text-sm font-medium">
+                        「〇〇様の会社でも、出張や資材・備品購買の際、<br>
+                        <span class="bg-yellow-200 px-1 font-bold">① 社内のワークフローで承認をもらった後、別の予約サイト（じゃらんやJTB等）で各自が手配し直す手間</span>や、<br>
+                        <span class="bg-yellow-200 px-1 font-bold">② 出張後に領収書を集めて経費精算システムに手入力する二重作業</span>が発生していらっしゃいませんか？」
+                    </p>
+                </div>
+
+                <div class="bg-blue-50 p-3 rounded-lg border border-blue-200 text-xs text-blue-900">
+                    <strong>🎯 相手の反応を引き出す質問:</strong> 「各自で手配して立替精算してますね」「承認待ちの間にホテルの価格が変わって再申請になるのが面倒なんですよね」といった「あるあるの悩み」を引き出します。
+                </div>
+            </div>
+
+            <!-- STEP 4: 簡易製品ピッチ -->
+            <div id="step-4" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">STEP 4</span>
+                    <h3 class="text-lg font-bold text-slate-800">簡易製品説明（ピッチ）</h3>
+                    <span class="text-xs text-slate-500">価値と数値実績の提示</span>
+                </div>
+
+                <div class="speech-bubble speech-bubble-operator">
+                    <p class="text-xs font-bold text-blue-600 mb-1">【あなた（営業）】</p>
+                    <p class="text-sm font-medium">
+                        「左様でございますよね。<br>
+                        私どもが今回リリースしました『1approval』は、**既存のkintoneやMicrosoft 365の画面上で、申請の『承認ボタン』を押した瞬間に、ホテルや新幹線・航空券の予約が全自動で完結する**プラグインサービスです。<br><br>
+                        事前申請の価格と予約時の価格差も**ダイナミック・ポリシー機能で自動吸収**するため再承認も不要で、費用は会社宛への一括請求となるため、**社員様の立替精算や領収書の突合チェックが完全ゼロ**になります。<br>
+                        導入企業様（ユーグレナ様等）では、出張・購買に関する社内工数が<span class="text-red-600 font-bold underline">約85%削減（90分→15分）</span>された事例もございます。」
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div class="bg-slate-100 p-2 rounded border">
+                        <span class="text-slate-500 block">新システム導入</span>
+                        <span class="font-bold text-slate-800">不要（既存画面にアドオン）</span>
+                    </div>
+                    <div class="bg-slate-100 p-2 rounded border">
+                        <span class="text-slate-500 block">社員教育コスト</span>
+                        <span class="font-bold text-slate-800">ゼロ（ログインID管理なし）</span>
+                    </div>
+                    <div class="bg-slate-100 p-2 rounded border">
+                        <span class="text-slate-500 block">精算・領収書回収</span>
+                        <span class="font-bold text-emerald-600">完全に不要（月1回一括請求）</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 5: クロージング -->
+            <div id="step-5" class="bg-white p-6 rounded-xl border-2 border-blue-500 shadow-md space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">STEP 5</span>
+                    <h3 class="text-lg font-bold text-blue-900">打診 ＆ 日程調整（ゴールの獲得）</h3>
+                    <span class="text-xs text-blue-600 font-bold">目標：30分Web説明会（または訪問）アポ獲得</span>
+                </div>
+
+                <div class="speech-bubble speech-bubble-operator bg-blue-50/50">
+                    <p class="text-xs font-bold text-blue-600 mb-1">【あなた（営業）】</p>
+                    <p class="text-sm font-medium">
+                        「既存のkintoneや365の画面をそのまま使うため、新しいツールを入れて社員様へ教育する必要もございません。<br><br>
+                        そこでぜひ、他社様での導入事例や実際の操作デモを含めて、**30分ほどオンライン（Web会議）でご説明の機会**をいただけないかと思いご連絡いたしました。<br>
+                        来週の**〇日（水）〇時、または〇日（木）〇時**あたりで、ご都合のよろしいお時間はございますでしょうか？」
+                    </p>
+                </div>
+
+                <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-lg flex justify-between items-center">
+                    <div>
+                        <span class="text-xs font-bold text-emerald-800 block">【都内企業かつ大型案件の場合】</span>
+                        <span class="text-xs text-emerald-700">「ご訪問の上、実際の画面をご覧いただくことも可能です。都内近郊ですと〇日にお近くに伺う予定がございますが、いかがでしょうか。」</span>
+                    </div>
+                    <span class="text-xs bg-emerald-600 text-white px-2 py-1 rounded font-bold whitespace-nowrap">訪問打診</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- TAB 2: 反応別・切り返し -->
+        <section id="tab-branch" class="tab-content hidden space-y-4">
+
+            <div class="bg-slate-100 p-4 rounded-xl border border-slate-200">
+                <p class="text-xs text-slate-600">
+                    <strong>💡 切り返し原則:</strong> 相手のネガティブ反応を否定せず、一度「受容」してから「既存システムとの差別化（置き換え不要・ハブ構造）」へ展開します。
+                </p>
+            </div>
+
+            <!-- 分岐A: 時間がない / メール送っといて -->
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded">断りパターン A</span>
+                    <h4 class="font-bold text-slate-800 text-sm">「今忙しいので、とりあえず資料をメールで送っておいて」</h4>
+                </div>
+                <div class="speech-bubble speech-bubble-operator">
+                    <p class="text-sm">
+                        「承知いたしました。お忙しい中ありがとうございます！本日ご案内の概要資料をメールにて再送いたします。<br>
+                        1点だけご確認なのですが、御社では現在、**社内稟議のワークフローにはkintoneやTeams/Microsoft 365等をお使いでしょうか？**<br>
+                        （※相手が『はい』と答えた場合）<br>
+                        ありがとうございます！であれば、まさに御社の環境にそのまま組み込めるサービスです。資料をご覧いただくより、実際の画面を一度見ていただいた方が5分でイメージが湧くかと存じますので、来週どこかで**15分〜30分だけ画面共有**のお時間をいただくことは可能でしょうか？」
+                    </p>
+                </div>
+            </div>
+
+            <!-- 分岐B: 既にBTMやConcur/楽楽精算がある -->
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded">断りパターン B</span>
+                    <h4 class="font-bold text-slate-800 text-sm">「うちはすでにConcurや楽楽精算、JTB等のBTMを入れているから不要」</h4>
+                </div>
+                <div class="speech-bubble speech-bubble-operator">
+                    <p class="text-sm">
+                        「素晴らしい取り組みをされていますね！実は『1approval』は、Concurや楽楽精算といった**既存の精算システムやBTMを置き換えるものではなく、それらを『社内ワークフロー（kintone/365）』と自動でつなぐハブ**として動作いたします。<br><br>
+                        既存BTMをお使いの企業様でも、**『稟議承認後にBTMで再手配する二度手間』**や**『承認待ちの間に価格が変わって再承認になる問題』**が課題になっており、そこを自動化するために追加導入いただいております。<br>
+                        既存システムとどう連携して工数を削るのか、他社事例を交えて30分ほどでご共有させていただけませんか？」
+                    </p>
+                </div>
+            </div>
+
+            <!-- 分岐C: 出張がそこまで多くない -->
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded">断りパターン C</span>
+                    <h4 class="font-bold text-slate-800 text-sm">「うちは出張が多くないので必要ない」</h4>
+                </div>
+                <div class="speech-bubble speech-bubble-operator">
+                    <p class="text-sm">
+                        「ご教示ありがとうございます！今回は『出張（Trip）』のプラグインからスタートしておりますが、本サービスは最終的に**モノタロウやAmazon Businessでの備品・資材購入、会議室の手配など、あらゆる社内購買を一括統合**するロードマップとなっております。<br><br>
+                        『社員の立替・小口買い出しを減らしたい』『社内申請と購買を一気通貫にしたい』というお悩みがあれば確実にお役に立てますので、今後の情報収集として一度デモをご覧になりませんか？」
+                    </p>
+                </div>
+            </div>
+
+            <!-- 分岐D: 検討する担当部署が違う -->
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded">断りパターン D</span>
+                    <h4 class="font-bold text-slate-800 text-sm">「そういうシステム系は情シス（または経理・総務）の担当になる」</h4>
+                </div>
+                <div class="speech-bubble speech-bubble-operator">
+                    <p class="text-sm">
+                        「ご教示いただきありがとうございます！おっしゃる通り、情シス様や経理様と連携してご案内することが多いサービスでございます。<br>
+                        よろしければ、情シス（または経理）の〇〇様にも同席いただけるような形で、一度弊社から概要をご説明させていただけますでしょうか。〇〇様からお繋ぎいただくか、直接お電話をおかけしてもよろしいでしょうか？」
+                    </p>
+                </div>
+            </div>
+
+            <!-- 分岐E: 決まった会場やサイトを使っている -->
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded">断りパターン E</span>
+                    <h4 class="font-bold text-slate-800 text-sm">「いつも決まった宿泊サイトや旅行会社を使っているからいい」</h4>
+                </div>
+                <div class="speech-bubble speech-bubble-operator">
+                    <p class="text-sm">
+                        「さようでしたか。ちなみにどちらをお使いでしょうか？<br>
+                        1approvalはLCCを含む12社の航空会社や全国4万件以上のホテルデータベース（ピカパカ出張DX等）と連携しており、横断比較により**平均10〜15%のコスト削減**が可能です。<br>
+                        また、手配の手間自体がゼロになるため、一度概算見積もりや削減シミュレーションだけでも比較してみませんか？」
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- TAB 3: 役職・ペルソナ別訴求 -->
+        <section id="tab-persona" class="tab-content hidden space-y-6">
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="target" class="w-5 h-5 text-blue-600"></i> ペルソナ別・一発で刺さるキラーフレーズ
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <!-- 1. 現場・出張者 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded">現場・出張者</span>
+                            <span class="text-xs text-slate-500">（営業・施工管理・出張が多い社員）</span>
+                        </div>
+                        <p class="text-xs font-bold text-red-600 mb-2">【悩み】承認後に別サイトで手配し直す手間・出張後の領収書手入力と立替</p>
+                        <div class="bg-white p-3 rounded border text-xs text-slate-700 font-medium">
+                            「出張のたびに領収書を取っておいて経費入力するの、もうやめませんか？社内ワークフローで承認ボタンが押された瞬間に新幹線もホテルも予約完了。会社請求なので自分のお金を立て替える必要もゼロです。」
+                        </div>
+                    </div>
+
+                    <!-- 2. 承認者・現場上司 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-indigo-600 text-white text-xs font-bold px-2 py-0.5 rounded">承認者・現場上司</span>
+                            <span class="text-xs text-slate-500">（課長・部長・現場責任者）</span>
+                        </div>
+                        <p class="text-xs font-bold text-red-600 mb-2">【悩み】承認遅延、価格変動（1,000円値上がり等）による再承認・後戻り雑務</p>
+                        <div class="bg-white p-3 rounded border text-xs text-slate-700 font-medium">
+                            「承認した後に『価格が変わったので再承認してください』と戻ってくる無駄、無くせます。ダイナミック・ポリシー機能で許容範囲内の変動ならそのまま一発で手配を完了させます。」
+                        </div>
+                    </div>
+
+                    <!-- 3. 経理・管理部門 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-emerald-600 text-white text-xs font-bold px-2 py-0.5 rounded">経理・管理部門</span>
+                            <span class="text-xs text-slate-500">（経理部長・総務課長）</span>
+                        </div>
+                        <p class="text-xs font-bold text-red-600 mb-2">【悩み】大量の領収書・証憑突合、規定違反チェック、個人振込雑務</p>
+                        <div class="bg-white p-3 rounded border text-xs text-slate-700 font-medium">
+                            「経費精算の『規定に合っているか』を目視チェックするためだけに人を貼っていませんか？1approvalなら規定に沿った購買しか通さないため事後チェック自体が不要になり、支払いは月1枚の請求書にまとまります。」
+                        </div>
+                    </div>
+
+                    <!-- 4. DX・情シス担当 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-amber-600 text-white text-xs font-bold px-2 py-0.5 rounded">DX・情シス担当</span>
+                            <span class="text-xs text-slate-500">（情報システム部・DX推進部）</span>
+                        </div>
+                        <p class="text-xs font-bold text-red-600 mb-2">【悩み】新規SaaS導入に伴うID管理・セキュリティ審査・社員教育コスト</p>
+                        <div class="bg-white p-3 rounded border text-xs text-slate-700 font-medium">
+                            「新しい出張管理システムを入れて社員にログインさせる必要はありません。すでに使っているkintoneやMicrosoft 365の画面の中にプラグインを入れるだけなので、ID管理も運用教育も要りません。」
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Position Moat Comparison Table -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+                <h3 class="text-base font-bold text-slate-800 mb-3">競合・既存ツールとの圧倒的差別化（MOAT）</h3>
+                <table class="w-full text-xs text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 border-b border-slate-300">
+                            <th class="p-2.5 font-bold text-slate-700">比較項目</th>
+                            <th class="p-2.5 font-bold text-slate-700">一般的なBTM/経費精算 (Concur, 楽楽精算等)</th>
+                            <th class="p-2.5 font-bold text-slate-700">法人カード系 (Upsider等)</th>
+                            <th class="p-2.5 font-bold text-blue-700 bg-blue-50">1approval (ワン承認)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr>
+                            <td class="p-2.5 font-bold">導入アプローチ</td>
+                            <td class="p-2.5">既存システムの置き換えが必要（ツール増加）</td>
+                            <td class="p-2.5">決済手段の提供（領収書回収は残る）</td>
+                            <td class="p-2.5 font-bold text-blue-700 bg-blue-50">既存WF（kintone/365）にプラグイン接続</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2.5 font-bold">手配タイミング</td>
+                            <td class="p-2.5">承認後に各自で別サイトから手配（二度手間）</td>
+                            <td class="p-2.5">カードで個別決済（事後申請・精算が必要）</td>
+                            <td class="p-2.5 font-bold text-blue-700 bg-blue-50">承認ボタンを押した瞬間に全自動予約完結</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2.5 font-bold">価格変動対応</td>
+                            <td class="p-2.5">再申請・再承認が発生（後戻り）</td>
+                            <td class="p-2.5">不可</td>
+                            <td class="p-2.5 font-bold text-blue-700 bg-blue-50">ダイナミック・ポリシーで自動吸収</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2.5 font-bold">データ粒度</td>
+                            <td class="p-2.5">金額・加盟店名のみ（L2データ）</td>
+                            <td class="p-2.5">金額・加盟店名のみ（L2データ）</td>
+                            <td class="p-2.5 font-bold text-blue-700 bg-blue-50">品目・明細レベル（L3データ）をcXML保持</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <!-- TAB 4: 即答FAQ & 事例 -->
+        <section id="tab-faq" class="tab-content hidden space-y-6">
+
+            <!-- Case Study Highlight -->
+            <div class="bg-gradient-to-r from-slate-900 to-indigo-900 text-white p-6 rounded-xl shadow-md">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-emerald-500 text-white text-xs font-bold px-2 py-0.5 rounded">導入効果の実証事例</span>
+                    <h3 class="text-lg font-bold">株式会社ユーグレナ様（実証データ）</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-xs">
+                    <div class="bg-white/10 p-3 rounded-lg border border-white/20">
+                        <span class="text-slate-300 block mb-1">出張手続き工数</span>
+                        <span class="text-xl font-bold text-emerald-400">約85%削減</span>
+                        <span class="text-slate-300 block text-[11px] mt-1">1件90分 ➔ 15〜30分に短縮</span>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-lg border border-white/20">
+                        <span class="text-slate-300 block mb-1">経費精算時間</span>
+                        <span class="text-xl font-bold text-amber-300">5分以内に収まる</span>
+                        <span class="text-slate-300 block text-[11px] mt-1">領収書収集・手入力が消滅</span>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-lg border border-white/20">
+                        <span class="text-slate-300 block mb-1">二度手間の解消</span>
+                        <span class="text-xl font-bold text-blue-300">後戻りゼロ</span>
+                        <span class="text-slate-300 block text-[11px] mt-1">承認と手配が同時完了</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ List -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-base font-bold text-slate-800 mb-2">架電中に聞かれる質問と即答回答（FAQ）</h3>
+
+                <div class="space-y-3">
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <p class="font-bold text-sm text-slate-800 mb-1">Q1. 新しいシステムを全社員にログイン・定着させる必要がありますか？</p>
+                        <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded border">
+                            <strong>回答:</strong> いいえ、必要ありません。すでに御社でお使いのkintoneやMicrosoft 365の画面内にプラグインとして組み込まれます。社員様は新しいツールのID管理やログインを行う必要がなく、普段通りの画面で承認ボタンを押すだけで手配が完了します。
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <p class="font-bold text-sm text-slate-800 mb-1">Q2. すでにConcurや楽々精算などの経費精算システムを使っていますが併用できますか？</p>
+                        <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded border">
+                            <strong>回答:</strong> はい、完全に併用・連携可能です。1approvalは既存のBTMや経費精算システムをリプレイスするものではなく、それらを「社内ワークフロー」と自動接続するミドルウェア（ハブ）です。手配データや請求データは既存の会計・精算システムへ自動連携されます。
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <p class="font-bold text-sm text-slate-800 mb-1">Q3. 承認申請した後にホテルの料金が値上がりしていた場合はどうなりますか？</p>
+                        <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded border">
+                            <strong>回答:</strong> 「ダイナミック・ポリシー機能」により自動で価格変動を吸収できます。御社ごとに「許容する価格変動率（例：20%以内）」をあらかじめ設定しておくことで、上限範囲内の変動であれば再承認を取ることなく自動で手配を完結させます。
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <p class="font-bold text-sm text-slate-800 mb-1">Q4. 利用料金や契約プランはどうなっていますか？</p>
+                        <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded border">
+                            <strong>回答:</strong> プラグインの月額SaaS費用（月額98,000円〜/年間契約）と、手配代金の一括請求で構成されます。手配システム（ピカパカ出張DX等）の利用料は当月利用額に応じた従量手数料（5%〜利用額に応じて割引・無料化）となります。詳細なシミュレーションは商談にてお持ちいたします。
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <p class="font-bold text-sm text-slate-800 mb-1">Q5. エイチはどうやって利益を出しているのですか？手数料が高くなりませんか？</p>
+                        <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded border">
+                            <strong>回答:</strong> 弊社は月間数千万円規模の購買流通量を握っているため、ホテルや航空会社・サプライヤー側からスケールメリットを活かした手数料還元を受けております。そのため、御社に余分な手数料を転嫁することなく、むしろ最安値横断検索により全体コストを下げるご提案が可能です。
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <p class="font-bold text-sm text-slate-800 mb-1">Q6. 導入までにどのくらいの期間がかかりますか？</p>
+                        <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded border">
+                            <strong>回答:</strong> 最短1週間〜2週間程度で環境構築・運用開始が可能です。既存のkintoneアプリやSharePointにプラグインをインストールして初期設定を行うのみとなるため、大規模なシステム開発や長い導入リードタイムは不要です。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- TAB 5: アポ獲得・ヒアリングメモ -->
+        <section id="tab-memo" class="tab-content hidden space-y-6">
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="edit-3" class="w-5 h-5 text-blue-600"></i> アポイント獲得・ヒアリングメモ入力フォーム
+                </h3>
+                <p class="text-xs text-slate-500">通話中にヒアリングできた内容を記録し、次回商談（専任担当）へトスアップしてください。</p>
+
+                <form id="call-memo-form" class="space-y-4 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">企業名</label>
+                            <input type="text" placeholder="例：西松建設株式会社" class="w-full p-2.5 border rounded border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">部署・ご担当者名</label>
+                            <input type="text" placeholder="例：総務部 課長 〇〇様" class="w-full p-2.5 border rounded border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">導入中ワークフロー</label>
+                            <select class="w-full p-2.5 border rounded border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option>kintone</option>
+                                <option>Microsoft 365 (SharePoint/Power Automate)</option>
+                                <option>Garoon / サイボウズOffice</option>
+                                <option>その他（ジョブカン/AgileWorks等）</option>
+                                <option>不明・特になし</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">出張・購買の頻度</label>
+                            <select class="w-full p-2.5 border rounded border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option>月100件以上（非常に多い）</option>
+                                <option>月30〜100件程度（中程度）</option>
+                                <option>月30件未満（少ない）</option>
+                                <option>出張より資材・備品購買が多い</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">アポ形態</label>
+                            <select class="w-full p-2.5 border rounded border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option>Web会議（Google Meet/Teams/Zoom）</option>
+                                <option>訪問（都内・近郊企業）</option>
+                                <option>資料送付・後追いコール</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">アポ希望日時（第1希望・第2希望）</label>
+                            <input type="text" placeholder="例：〇月〇日（水）14:00〜" class="w-full p-2.5 border rounded border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">メールアドレス（資料・Googleカレンダー送付用）</label>
+                            <input type="email" placeholder="example@company.co.jp" class="w-full p-2.5 border rounded border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">現行の課題・特記事項（メモ）</label>
+                        <textarea rows="3" placeholder="例：現在はConcurを入れているが事前承認との二重手配に課題感あり。来期システム改修予定あり。" class="w-full p-2.5 border rounded border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                    </div>
+
+                    <button type="button" onclick="alert('メモを保存しました（デモ）')" class="bg-blue-600 text-white font-bold py-2.5 px-6 rounded-lg hover:bg-blue-700 transition">
+                        メモを保存・トスアップ
+                    </button>
+                </form>
+            </div>
+
+        </section>
+
+        <!-- TAB 6: 送付済みメール文面・活用ガイド -->
+        <section id="tab-email" class="tab-content hidden space-y-6">
+
+            <!-- Call Quick Guide linked with Mail -->
+            <div class="bg-blue-50 p-5 rounded-xl border border-blue-200 shadow-sm">
+                <h3 class="text-base font-bold text-blue-900 mb-2 flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-blue-600"></i> 電話口で使えるメール連動フレーズ
+                </h3>
+                <p class="text-xs text-blue-800 mb-3">「メールを見ていない」と言われた際も、以下のポイントを口頭で15秒補足することで興味を惹きつけることができます。</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div class="bg-white p-3 rounded-lg border border-blue-200 shadow-sm">
+                        <span class="font-bold text-blue-700 block mb-1">💡 フック1：M365版リリース（8月）</span>
+                        <p class="text-slate-600">「メール本文にも記載したのですが、kintone版に加え**8月にはMicrosoft 365（Teams/SharePoint）対応版**も登場いたします！」</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-blue-200 shadow-sm">
+                        <span class="font-bold text-blue-700 block mb-1">💡 フック2：ユーグレナ様事例</span>
+                        <p class="text-slate-600">「先行導入のユーグレナ様では、**1件あたり90分かかっていた出張手続きが15分以下（約85%削減）**に短縮されました。」</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-blue-200 shadow-sm">
+                        <span class="font-bold text-blue-700 block mb-1">💡 フック3：デモ動画案内</span>
+                        <p class="text-slate-600">「メール末尾に**実際の動きが分かるYouTubeデモ動画のURL**も記載しておりますので、ぜひ後ほどご確認ください！」</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Subject & Raw Content Display -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <div>
+                        <span class="bg-slate-800 text-white text-xs font-bold px-2.5 py-0.5 rounded">送付済みメール文面</span>
+                        <h3 class="text-base font-bold text-slate-800 mt-1">【新ご提案】[貴社名]様の出張・手配雑務を85%削減する統合購買Hub「1approval」ローンチのご案内（M365版も8月登場）</h3>
+                    </div>
+                    <span class="text-xs text-slate-400">事前送信リード用</span>
+                </div>
+
+                <div class="bg-slate-900 text-slate-200 p-4 rounded-lg font-mono text-xs leading-relaxed space-y-3 overflow-x-auto">
+                    <p class="text-amber-400">件名：【新ご提案】[貴社名]様の出張・手配雑務を85%削減する統合購買Hub「1approval」ローンチのご案内（M365版も8月登場）</p>
+                    <hr class="border-slate-800">
+                    <p>〇〇株式会社[部署名] [役職] [氏名] 様<br>(※氏名未入力の場合は「ご担当者様」)</p>
+                    <p>突然のご連絡にて失礼いたします。株式会社エイチの〇〇と申します。<br>
+                    貴社におかれましては、日頃より社員様の出張手配や備品手配、それに伴う事前承認や立替精算、領収書チェックなどの業務に多くの時間を費やされていませんでしょうか？</p>
+                    <p>この度、弊社では企業の承認ワークフローと購買を一気通貫でつなぐ統合Hub型プラットフォーム「1approval（ワンアプルーバル）」を正式にローンチいたしました。</p>
+                    
+                    <p class="text-blue-300 font-bold">■ 1approvalが解決する「出張手配・購買のツギハギ課題」</p>
+                    <p class="pl-2 border-l-2 border-slate-700">
+                    従来の出張手配や間接購買では、以下のような「二度手間・潜在的雑務」が日常的に発生しています。<br>
+                    ・検索・手配の二重手配: ワークフローで事前申請し、承認後に別サイトで本予約する手間。<br>
+                    ・価格タイムラグによる再承認: 承認待ちの間にホテルや航空券の価格が変動し、差し戻し・再申請が発生。<br>
+                    ・立替精算と領収書チェック: 出張後の領収書回収、経理への手入力、個人口座への振込処理。<br><br>
+                    1approvalは、既存のワークフロー上で「承認ボタンを押した瞬間に自動予約・発注が完結する」仕組みを実現し、これらの雑務をまとめて解消します。
+                    </p>
+
+                    <p class="text-blue-300 font-bold">■ 1approval 3つのコア価値</p>
+                    <p class="pl-2 border-l-2 border-blue-500">
+                    【工数85%削減】承認＝即手配完結 ＆ 立替精算のゼロ化<br>
+                    承認と同時に予約・発券が完了。費用はすべて法人一括請求（月1回の請求書払い）となるため、個人の立替負担や領収書のチェック・添付業務自体が消滅します。<br>
+                    (※先行導入いただいた株式会社ユーグレナ様では、1件あたり約90分かかっていた手続きが15分以下に短縮されました)<br><br>
+                    【再承認ゼロ】ダイナミック・ポリシー機能<br>
+                    承認途中の微小な価格変動（例: 20%許容設定）を吸収し、承認の差し戻しや再申請を完全にカットします。<br><br>
+                    【ID管理不要】既存ワークフローに「載せるだけ」<br>
+                    新しいSaaSへのログインやID管理は不要。既存の社内ワークフロー基盤上にプラグインとして接続するため、情シス部門の導入・管理負荷が一切発生しません。
+                    </p>
+
+                    <p class="text-emerald-300 font-bold">■ 【8月中にローンチ予定】1approval for Microsoft 365</p>
+                    <p class="pl-2 border-l-2 border-emerald-500">
+                    現在提供中のkintone版に加え、8月中には「Microsoft 365（SharePoint / Power Automate / Teams）」に対応した1approvalを新しくリリースいたします。<br>
+                    普段お使いのSharePointポータルやTeams承認通知から同様に、社内規定に沿った出張手配（新幹線・航空券・国内ホテル）や各種購買がワンストップで完結できるようになります。
+                    </p>
+
+                    <p class="text-blue-300 font-bold">■ 貴社でのROI試算・オンラインデモのご案内</p>
+                    <p class="pl-2 border-l-2 border-slate-700">
+                    「自社の現在の出張手配・精算フローでどの程度工数が削減できるか知りたい」<br>
+                    「Microsoft 365 / kintoneでの具体的な画面操作を見てみたい」<br>
+                    という企業様向けに、15分〜30分のオンラインデモ・ROIシミュレーションをご案内しております。<br><br>
+                    ご興味がございましたら、本メールへのご返信、または下記日程調整URLよりご都合の良い日時をお選びいただけますと幸いです。<br><br>
+                    ▼ オンライン説明会・デモのお申し込み（15分〜）<br>
+                    [日程調整ツールのURLを挿入]
+                    </p>
+
+                    <p>貴社の「潜在的雑務」を削減し、本業に集中できる環境づくりをご支援できましたら幸いです。</p>
+                    <p>
+                    ▼ウェブサイト <a href="https://1approval.com/" target="_blank" class="text-blue-400 underline">https://1approval.com/</a><br>
+                    ▼プロダクトデモ動画（YouTube）：<br>
+                    <a href="https://www.youtube.com/watch?v=LfRH49_sIUo" target="_blank" class="text-blue-400 underline">https://www.youtube.com/watch?v=LfRH49_sIUo</a>
+                    </p>
+                    <p class="text-slate-400">
+                    ご検討のほど、何卒よろしくお願い申し上げます。<br>
+                    --------------------------------------------------<br>
+                    株式会社エイチ（Eichiii Inc.）<br>
+                    1approval事業部<br>
+                    住所: 東京都千代田区神田鍛冶町3-4 oak神田鍛冶町7F
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-4 text-center border-t border-slate-800 mt-auto">
+        <p>© 1approval Expert Sales Team / 株式会社エイチ (Eichiii Inc.) All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Dynamic Interactions -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            // Remove active style from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('tab-active'));
+
+            // Show target content
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // Highlight target button
+            document.getElementById('btn-' + tabId).classList.add('tab-active');
+        }
+    </script>
+</body>
+</html>
