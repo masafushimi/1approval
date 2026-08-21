@@ -51,13 +51,8 @@
       transform: translateY(-2px);
     }
 
-    .card-hover {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .card-hover:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px -10px rgba(0, 176, 255, 0.15);
+    .card-shadow {
+      box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.06);
     }
 
     .tab-content {
@@ -71,7 +66,6 @@
       opacity: 1;
     }
 
-    /* 繋ぐイメージのアニメーション用ライン */
     .pulse-line {
       background: linear-gradient(90deg, #FF3366, #FFCC00, #00C853, #00B0FF);
       background-size: 200% 200%;
@@ -87,9 +81,7 @@
 </head>
 <body class="bg-white text-slate-800 antialiased selection:bg-cyan-500 selection:text-white">
 
-  <!-- ==========================================
-       HEADER
-       ========================================== -->
+  <!-- ==========================================       HEADER       ========================================== -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <a href="#" class="flex items-center gap-3 group">
@@ -105,8 +97,8 @@
       </a>
 
       <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
-        <a href="#hub-concept" class="hover:text-cyan-600 transition-colors">統合Hubの仕組み</a>
-        <a href="#lineup" class="hover:text-cyan-600 transition-colors">対応連携LP一覧</a>
+        <a href="#hub-architecture" class="hover:text-cyan-600 transition-colors">統合Hubの仕組み</a>
+        <a href="#lineup" class="hover:text-cyan-600 transition-colors">対応環境・領域</a>
         <a href="#value" class="hover:text-cyan-600 transition-colors">解決する課題</a>
         <a href="#features" class="hover:text-cyan-600 transition-colors">強み・特徴</a>
         <a href="#roadmap" class="hover:text-cyan-600 transition-colors">ロードマップ</a>
@@ -122,35 +114,95 @@
   </header>
 
   <main class="pt-20">
-    <!-- ==========================================
-         HERO SECTION (HUB INTEGRATION VISUAL)
-         ========================================== -->
-    <section class="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-b from-amber-50/30 via-white to-slate-50/50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- ==========================================         HERO SECTION (FIRST VIEW)         ========================================== -->
+    <section class="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-28 bg-gradient-to-b from-amber-50/40 via-white to-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         
-        <!-- Header Catch -->
-        <div class="text-center max-w-3xl mx-auto mb-12">
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 mb-6 shadow-sm">
-            <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
-            <span>既存の承認ワークフローに接続する統合OS</span>
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 mb-8 shadow-sm">
+          <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
+          <span>承認と間接購買をつなぐ統合Hubプラットフォーム</span>
+        </div>
+
+        <!-- Main Catchphrase -->
+        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800 tracking-tight leading-snug mb-4">
+          既存ワークフローにプラグインいれるだけで
+        </h1>
+        <div class="text-5xl sm:text-7xl lg:text-8xl font-black gradient-text tracking-tight leading-none mb-12">
+          さよなら雑務
+        </div>
+
+        <!-- 3 Main Benefits -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-14 text-left">
+          <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-md flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center shrink-0 text-xl font-bold">
+              ①
+            </div>
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-base mb-1">なめらかな承認・購買</h3>
+              <p class="text-xs text-slate-500 leading-relaxed font-medium">
+                発注・予約は全自動で完結。二重入力や二段手配の不毛な手間をゼロにします。
+              </p>
+            </div>
           </div>
-          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6">
-            社内承認が下りた瞬間に、<br>
-            <span class="gradient-text">発注・予約も自動完結。</span>
-          </h1>
-          <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-medium">
-            1approval（ワンアプルーバル）は、kintoneやMicrosoft 365などの既存ワークフローを変えずに「接続」する中間統合Hubです。<br class="hidden sm:inline">
-            1つの承認から出張・備品・会議室などの手配から一括請求までを自動連携し、潜在的雑務をゼロにします。
+
+          <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-md flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0 text-xl font-bold">
+              ②
+            </div>
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-base mb-1">経費精算のやりとり・チェック撲滅</h3>
+              <p class="text-xs text-slate-500 leading-relaxed font-medium">
+                社員の立替・領収書提出を撤廃。経理の整合性目視チェック雑務をなくします。
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-md flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-600 flex items-center justify-center shrink-0 text-xl font-bold">
+              ③
+            </div>
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-base mb-1">すべてのデータを統合管理</h3>
+              <p class="text-xs text-slate-500 leading-relaxed font-medium">
+                SKU（L3）明細を自動保持し、会計システムへワンストップでシームレス連動。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 連携プロダクトロゴ一覧（1段・横並び固定） -->
+        <div class="flex flex-nowrap items-center justify-center gap-6 sm:gap-10 max-w-4xl mx-auto overflow-x-auto py-2">
+          <a href="https://1approval.com/kintone/" class="shrink-0 transition-transform hover:scale-105 inline-block">
+            <img src="https://masafushimi.github.io/1approval/all/kintone.webp" alt="kintone" class="h-10 sm:h-12 w-auto object-contain">
+          </a>
+          <a href="https://1approval.com/m365/" class="shrink-0 transition-transform hover:scale-105 inline-block">
+            <img src="https://masafushimi.github.io/1approval/all/Microsoft365.svg" alt="Microsoft 365" class="h-10 sm:h-12 w-auto object-contain">
+          </a>
+          <a href="https://masafushimi.github.io/1approval/teams/" class="shrink-0 transition-transform hover:scale-105 inline-block">
+            <img src="https://masafushimi.github.io/1approval/all/teams.png" alt="Microsoft Teams" class="h-10 sm:h-12 w-auto object-contain">
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================         MIDDLEWARE ARCHITECTURE SECTION         ========================================== -->
+    <section id="hub-architecture" class="py-20 bg-slate-50 border-y border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <span class="text-xs font-bold uppercase tracking-widest text-slate-400">MIDDLEWARE ARCHITECTURE</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+            承認基盤と購買ポータルを繋ぐ中間統合レイヤー
+          </h2>
+          <p class="text-slate-500 text-sm sm:text-base leading-relaxed mt-2">
+            1approvalは「社内承認」と「外部の各種B2B購買ポータル」の間に位置し、データマッピングと自動発券・決済を一括処理します。
           </p>
         </div>
 
-        <!-- Dynamic Hub Architecture Diagram (FV Visual) -->
-        <div id="hub-concept" class="my-8 p-6 sm:p-10 rounded-3xl bg-white border border-slate-200/90 shadow-xl relative overflow-hidden">
-          <div class="text-center mb-8">
-            <span class="text-xs font-bold uppercase tracking-widest text-slate-400">MIDDLEWARE ARCHITECTURE</span>
-            <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mt-1">承認基盤と購買ポータルを繋ぐ中間統合レイヤー</h2>
-          </div>
-
+        <!-- Architecture Diagram Box -->
+        <div class="p-6 sm:p-10 rounded-3xl bg-white border border-slate-200/90 shadow-xl relative overflow-hidden">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center relative">
             
             <!-- Left Node: Approval Workflows -->
@@ -171,14 +223,13 @@
                   <i class="fa-solid fa-comments text-purple-500"></i> Teams
                 </div>
                 <div class="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-center gap-2 text-slate-400">
-                  Garoon / Salesforce...
+                  Garoon / サイボウズ...
                 </div>
               </div>
             </div>
 
             <!-- Middle Connector: 1approval Integration Hub -->
             <div class="lg:col-span-4 flex flex-col items-center justify-center my-4 lg:my-0">
-              <!-- Pulse Line Visual -->
               <div class="w-full h-1.5 pulse-line rounded-full mb-4 hidden lg:block"></div>
               
               <div class="w-full bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-xl border-2 border-amber-400 text-center relative">
@@ -223,14 +274,14 @@
 
           </div>
 
-          <!-- Bottom Summary Value Banner -->
+          <!-- Summary Metric Footer -->
           <div class="mt-8 pt-6 border-t border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div>
-              <span class="text-xs text-slate-400 font-bold block">二段手配・転記</span>
+              <span class="text-xs text-slate-400 font-bold block">二段手配・手動転記</span>
               <span class="text-lg font-black text-rose-500">完全ゼロ化</span>
             </div>
             <div>
-              <span class="text-xs text-slate-400 font-bold block">価格変動差し戻し</span>
+              <span class="text-xs text-slate-400 font-bold block">価格変動の戻し</span>
               <span class="text-lg font-black text-amber-500">自動吸収</span>
             </div>
             <div>
@@ -244,26 +295,13 @@
           </div>
         </div>
 
-        <!-- CTA Action in FV -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-          <a href="#lineup" class="btn-gradient px-8 py-4 rounded-xl font-bold text-white text-base shadow-xl shadow-rose-500/20 flex items-center justify-center gap-3">
-            <span>連携プロダクトLP一覧を見る</span>
-            <i class="fa-solid fa-chevron-down text-sm"></i>
-          </a>
-          <a href="https://1approval.com/" class="px-8 py-4 rounded-xl font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 text-base shadow-sm transition-all flex items-center justify-center gap-2">
-            <span>資料請求・お問い合わせ</span>
-            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-          </a>
-        </div>
-
       </div>
     </section>
 
-    <!-- ==========================================
-         LINEUP / MESH MATRIX SECTION
-         ========================================== -->
-    <section id="lineup" class="py-20 bg-slate-50 border-y border-slate-200/80">
+    <!-- ==========================================         LINEUP / MESH MATRIX SECTION         ========================================== -->
+    <section id="lineup" class="py-20 bg-white border-b border-slate-200/80">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
         <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
           <span class="text-xs font-bold tracking-widest text-brand-yellow bg-brand-yellow/10 border border-brand-yellow/20 px-3.5 py-1.5 rounded-full uppercase inline-block">
             2-AXIS INTEGRATION LINEUP
@@ -290,7 +328,6 @@
 
         <!-- View A: Workflow-based LPs -->
         <div id="tab-content-wf" class="tab-content active grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          
           <div class="bg-white rounded-2xl border border-slate-200 p-6 space-y-5 card-shadow flex flex-col justify-between hover:-translate-y-1 transition-transform">
             <div>
               <div class="flex items-center justify-between mb-3">
@@ -347,12 +384,10 @@
               </a>
             </div>
           </div>
-
         </div>
 
         <!-- View B: Product Category LPs -->
         <div id="tab-content-cat" class="tab-content grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          
           <div class="bg-white rounded-2xl border border-slate-200 p-6 space-y-5 card-shadow flex flex-col justify-between hover:-translate-y-1 transition-transform">
             <div>
               <div class="flex items-center justify-between mb-3">
@@ -409,15 +444,13 @@
               </a>
             </div>
           </div>
-
         </div>
+
       </div>
     </section>
 
-    <!-- ==========================================
-         PROBLEM & SOLUTION SECTION
-         ========================================== -->
-    <section id="value" class="py-24 bg-white border-t border-slate-200">
+    <!-- ==========================================         PROBLEM & SOLUTION SECTION         ========================================== -->
+    <section id="value" class="py-24 bg-slate-50 border-t border-slate-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <span class="text-xs font-bold tracking-widest text-cyan-600 uppercase">Before & After</span>
@@ -425,7 +458,7 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div class="bg-slate-50 rounded-2xl p-8 border border-rose-200 relative shadow-sm">
+          <div class="bg-white rounded-2xl p-8 border border-rose-200 relative shadow-sm">
             <div class="absolute top-0 right-0 bg-rose-500 text-white font-black text-xs px-4 py-1.5 rounded-bl-xl uppercase">BEFORE</div>
             <h3 class="text-xl font-bold text-rose-600 mb-6 flex items-center gap-2">
               <i class="fa-solid fa-circle-xmark"></i>
@@ -472,10 +505,8 @@
       </div>
     </section>
 
-    <!-- ==========================================
-         CORE FEATURES
-         ========================================== -->
-    <section id="features" class="py-24 bg-slate-50 border-t border-slate-200">
+    <!-- ==========================================         CORE FEATURES         ========================================== -->
+    <section id="features" class="py-24 bg-white border-t border-slate-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-16">
           <span class="text-xs font-bold tracking-widest text-cyan-600 uppercase">Core Competitive Edge</span>
@@ -483,7 +514,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="bg-white p-8 rounded-2xl border border-slate-200/90 shadow-sm">
+          <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200/90 shadow-sm">
             <div class="w-12 h-12 rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center mb-6">
               <i class="fa-solid fa-shield-halved text-xl"></i>
             </div>
@@ -493,7 +524,7 @@
             </p>
           </div>
 
-          <div class="bg-white p-8 rounded-2xl border border-slate-200/90 shadow-sm">
+          <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200/90 shadow-sm">
             <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-6">
               <i class="fa-solid fa-rotate text-xl"></i>
             </div>
@@ -503,7 +534,7 @@
             </p>
           </div>
 
-          <div class="bg-white p-8 rounded-2xl border border-slate-200/90 shadow-sm">
+          <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200/90 shadow-sm">
             <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-6">
               <i class="fa-solid fa-database text-xl"></i>
             </div>
@@ -513,7 +544,7 @@
             </p>
           </div>
 
-          <div class="bg-white p-8 rounded-2xl border border-slate-200/90 shadow-sm">
+          <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200/90 shadow-sm">
             <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-6">
               <i class="fa-solid fa-magnifying-glass-dollar text-xl"></i>
             </div>
@@ -526,10 +557,8 @@
       </div>
     </section>
 
-    <!-- ==========================================
-         ROADMAP
-         ========================================== -->
-    <section id="roadmap" class="py-24 bg-white border-t border-slate-200">
+    <!-- ==========================================         ROADMAP         ========================================== -->
+    <section id="roadmap" class="py-24 bg-slate-50 border-t border-slate-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-16">
           <span class="text-xs font-bold tracking-widest text-cyan-600 uppercase">Grand Roadmap</span>
@@ -537,7 +566,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-slate-50 p-6 rounded-2xl border border-cyan-400 relative shadow-sm">
+          <div class="bg-white p-6 rounded-2xl border border-cyan-400 relative shadow-sm">
             <div class="text-xs font-bold text-cyan-600 mb-2">PHASE 1 (NOW)</div>
             <h3 class="text-lg font-bold text-slate-900 mb-3">承認基盤の面展開</h3>
             <p class="text-xs text-slate-500 leading-relaxed">
@@ -545,7 +574,7 @@
             </p>
           </div>
 
-          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/90 shadow-sm">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm">
             <div class="text-xs font-bold text-slate-400 mb-2">PHASE 2</div>
             <h3 class="text-lg font-bold text-slate-900 mb-3">購買領域の全拡張</h3>
             <p class="text-xs text-slate-500 leading-relaxed">
@@ -553,7 +582,7 @@
             </p>
           </div>
 
-          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/90 shadow-sm">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm">
             <div class="text-xs font-bold text-slate-400 mb-2">PHASE 3</div>
             <h3 class="text-lg font-bold text-slate-900 mb-3">業務システム・会計統合</h3>
             <p class="text-xs text-slate-500 leading-relaxed">
@@ -561,7 +590,7 @@
             </p>
           </div>
 
-          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/90 shadow-sm">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm">
             <div class="text-xs font-bold text-slate-400 mb-2">PHASE 4</div>
             <h3 class="text-lg font-bold text-slate-900 mb-3">AI自律調達 & Ads</h3>
             <p class="text-xs text-slate-500 leading-relaxed">
@@ -572,10 +601,8 @@
       </div>
     </section>
 
-    <!-- ==========================================
-         FINAL CTA
-         ========================================== -->
-    <section id="contact" class="py-24 bg-gradient-to-br from-amber-50/50 via-white to-cyan-50/50 border-t border-slate-200 relative overflow-hidden">
+    <!-- ==========================================         FINAL CTA         ========================================== -->
+    <section class="py-24 bg-gradient-to-br from-amber-50/50 via-white to-cyan-50/50 border-t border-slate-200 relative overflow-hidden">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <h2 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight mb-6">
           社内の「潜在的雑務」を今すぐゼロへ。
@@ -595,10 +622,178 @@
       </div>
     </section>
   </main>
+<section id="contact" class="py-20 bg-brand-slatebg border-t border-slate-200 relative overflow-hidden">
+        <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>
+        
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center space-y-4 mb-12">
+                <div class="flex justify-center mb-2 shrink-0">
+                    <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto object-contain">
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">資料請求・デモ・無料相談</h2>
+                <p class="text-slate-500 text-xs sm:text-sm">
+                    出張・購買業務のDXについて、資料のご請求やオンラインデモ、個別のご相談をお気軽にお申し込みください。
+                </p>
+            </div>
 
-  <!-- ==========================================
-       FOOTER
-       ========================================== -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden p-6 sm:p-10">
+                <form id="lead-form" class="space-y-8">
+
+                    <div class="space-y-3">
+                        <label class="block font-bold text-slate-900 text-sm sm:text-base">
+                            お問い合わせの目的 <span class="text-xs bg-brand-danger text-white px-2 py-0.5 rounded ml-1.5 font-medium">必須</span>
+                        </label>
+                        <p class="text-xs text-slate-400">ご希望の項目をすべて選択してください（複数選択可）</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+
+                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 hover:bg-brand-slatebg transition-all group has-[:checked]:border-brand-yellow has-[:checked]:bg-brand-yellowlight">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" name="purpose" value="document_request" id="purpose-doc" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow focus:ring-2" checked="">
+                                    <span class="text-sm font-bold text-slate-700">資料請求/問合せ</span>
+                                </div>
+                                <i class="fa-solid fa-file-pdf text-slate-300 group-has-[:checked]:text-brand-yellow"></i>
+                            </label>
+
+                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 hover:bg-brand-slatebg transition-all group has-[:checked]:border-brand-yellow has-[:checked]:bg-brand-yellowlight">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" name="purpose" value="demo_request" id="purpose-demo" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow focus:ring-2">
+                                    <span class="text-sm font-bold text-slate-700">画面デモ依頼</span>
+                                </div>
+                                <i class="fa-solid fa-display text-slate-300 group-has-[:checked]:text-brand-yellow"></i>
+                            </label>
+
+                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 hover:bg-brand-slatebg transition-all group has-[:checked]:border-brand-yellow has-[:checked]:bg-brand-yellowlight">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" name="purpose" value="consultation" id="purpose-consult" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow focus:ring-2">
+                                    <span class="text-sm font-bold text-slate-700">個別無料相談</span>
+                                </div>
+                                <i class="fa-solid fa-comments text-slate-300 group-has-[:checked]:text-brand-yellow"></i>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <!-- 資料表示エリア or カレンダー表示エリアの共通ラッパー -->
+                    <div id="dynamic-display-section" class="fade-in-box show">
+                        
+                        <!-- 1. 資料画像表示エリア (「資料請求/問合せ」のみにチェックが入っている場合) -->
+                        <div id="material-inner-section" class="text-center bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4">
+                            <div class="flex items-start gap-3 text-left">
+                                <div class="w-8 h-8 rounded-full bg-brand-yellow/10 text-brand-yellow flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-book-open"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-900">ご案内資料『3分でわかる！1Approval』</h4>
+                                    <p class="text-xs text-slate-500 mt-0.5">お問い合わせ完了後、こちらの資料の営業PDFデータをすぐにお送りいたします。</p>
+                                </div>
+                            </div>
+                            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
+                                <img src="/material.png" alt="ご案内資料サムネイル" class="w-full h-auto max-h-[500px] object-contain mx-auto">
+                            </div>
+                        </div>
+
+                        <!-- 2. オンラインカレンダー事前予約エリア (「画面デモ」または「個別相談」にチェックが入っている場合) -->
+                        <div id="calendar-inner-section" class="hidden bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                                <div class="flex items-start gap-3 text-left">
+                                    <div class="w-8 h-8 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center shrink-0">
+                                        <i class="fa-regular fa-calendar-check"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-900">【その場で確定】オンライン日程の事前予約</h4>
+                                        <p class="text-xs text-slate-500 mt-0.5">以下のカレンダーから直接空き枠をお選びいただけます。</p>
+                                    </div>
+                                </div>
+                                <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1epnVB3j8YTuPK0e0KdOFEIsoHTP31XRjMwKigZKn7CYRp45fGWQ6rB5LaKD6okZqeZ-DtHIOZ?gv=true" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-white border border-slate-300 text-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl hover:border-brand-yellow hover:text-brand-yellow transition-all whitespace-nowrap shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-brand-yellow"></i> 別ウインドウで開く
+                                </a>
+                            </div>
+
+                            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-inner h-[550px] relative">
+                                <iframe src="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1epnVB3j8YTuPK0e0KdOFEIsoHTP31XRjMwKigZKn7CYRp45fGWQ6rB5LaKD6okZqeZ-DtHIOZ?gv=true" style="border: 0" width="100%" height="100%" frameborder="0"></iframe>
+                            </div>
+                            <p class="text-[10px] text-slate-400 mt-2 text-right">※今すぐ日程を決められない場合は、予約せずに下の入力項目へお進みいただいても構いません。</p>
+                        </div>
+
+                    </div>
+
+                    <div class="h-px bg-slate-200 my-6"></div>
+
+                    <div class="space-y-5">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1.5">
+                                <label class="block font-bold text-slate-700 text-xs tracking-wider">
+                                    会社名（法人の方） <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span>
+                                </label>
+                                <input type="text" name="company" required="" placeholder="例）株式会社〇〇〇〇" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block font-bold text-slate-700 text-xs tracking-wider">
+                                    部署名 <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span>
+                                </label>
+                                <input type="text" name="department" required="" placeholder="例）情報システム部 / 総務部" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1.5">
+                                <label class="block font-bold text-slate-700 text-xs tracking-wider">お名前 <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
+                                <input type="text" name="name" required="" placeholder="例）山田太郎" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block font-bold text-slate-700 text-xs tracking-wider">お名前（フリガナ） <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
+                                <input type="text" name="nameKana" required="" placeholder="例）ヤマダタロウ" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block font-bold text-slate-700 text-xs tracking-wider">ビジネスメールアドレス <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
+                            <input type="email" name="email" required="" placeholder="name@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
+                            <p class="text-[10px] text-slate-400">※資料請求の方には、このアドレス宛てに担当者より資料をお送りいたします。</p>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block font-bold text-slate-700 text-xs tracking-wider">電話番号 <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
+                            <input type="tel" name="phone" required="" placeholder="090-0000-0000（ハイフン可）" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block font-bold text-slate-700 text-xs tracking-wider">ご質問・ご要望（任意）</label>
+                            <textarea name="message" rows="4" placeholder="現在の社内システム環境（kintone導入状況など）や、出張手配に関する現状の課題などがございましたらご自由にご記入ください。" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all resize-y"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="bg-brand-slatebg p-4 rounded-xl border border-slate-200 text-center">
+                        <label class="inline-flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" name="privacyConsent" required="" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow">
+                            <span class="text-xs text-slate-600 font-medium">
+                                当社の<a href="https://eichiii.notion.site/ff4b77597e97434790d8016a8fee9616" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-blue-700">個人情報の取り扱い方針（プライバシーポリシー）</a>に同意して送信する
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- honeypot: ボットのみが埋める不可視フィールド -->
+                    <div class="hidden" aria-hidden="true">
+                        <label for="lead-form-hp">これは入力しないでください</label>
+                        <input type="text" id="lead-form-hp" name="_hp" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <p id="lead-form-error" class="hidden text-xs font-bold text-red-500 text-center"></p>
+
+                    <div class="text-center pt-2">
+                        <button type="submit" id="lead-form-submit" class="w-full sm:w-auto bg-brand-yellow text-brand-dark font-black text-center px-12 py-4 rounded-xl text-base hover:bg-brand-dark hover:text-white transition-all duration-300 shadow-lg hover:shadow-brand-yellow/20 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2 group">
+                            <span>資料・デモ動画をリクエストする (無料)</span>
+                            <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform text-sm"></i>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+  <!-- ==========================================       FOOTER       ========================================== -->
   <footer class="bg-slate-900 border-t border-slate-800 py-16 text-slate-400 text-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
@@ -607,7 +802,7 @@
             <span class="text-lg font-black text-white">1approval</span>
           </div>
           <p class="leading-relaxed text-slate-400">
-            株式会社エイチが提供する、承認ワークフローとB2B購買を統合する中間Hubプラットフォーム。[cite: 1, 2]
+            株式会社エイチが提供する、承認ワークフローとB2B購買を統合する中間Hubプラットフォーム。
           </p>
         </div>
 
@@ -631,15 +826,15 @@
         <div>
           <div class="font-bold text-slate-200 uppercase mb-4 tracking-wider">運営会社・パートナー</div>
           <ul class="space-y-2">
-            <li><a href="https://eichiii.com/" target="_blank" rel="noopener" class="hover:text-cyan-400 transition-colors">株式会社エイチ 企業サイト[cite: 1, 2]</a></li>
+            <li><a href="https://eichiii.com/" target="_blank" rel="noopener" class="hover:text-cyan-400 transition-colors">株式会社エイチ 企業サイト</a></li>
             <li><a href="https://1approval.com/" class="hover:text-cyan-400 transition-colors">プライバシーポリシー</a></li>
           </ul>
         </div>
       </div>
 
       <div class="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>&copy; Eichiii Inc. All Rights Reserved.[cite: 1, 2]</div>
-        <div>1approval（ワンアプルーバル）は株式会社エイチの登録商標または商標です。[cite: 1, 2]</div>
+        <div>&copy; Eichiii Inc. All Rights Reserved.</div>
+        <div>1approval（ワンアプルーバル）は株式会社エイチの登録商標または商標です。</div>
       </div>
     </div>
   </footer>
@@ -664,6 +859,5 @@
       }
     }
   </script>
-
 </body>
 </html>
