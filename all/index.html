@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1approval（ワンアプルーバル）| 企業の承認と間接購買を統合する中間Hubプラットフォーム</title>
+  <title>1approval| 企業の承認と間接購買を統合する中間Hubプラットフォーム</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -84,16 +84,8 @@
   <!-- ==========================================       HEADER       ========================================== -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl p-[2px] gradient-bg flex items-center justify-center shadow-md">
-          <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
-            <span class="font-black text-xl gradient-text">1A</span>
-          </div>
-        </div>
-        <div class="flex flex-col">
-          <span class="text-xl font-black tracking-tight text-slate-900 group-hover:text-cyan-600 transition-colors">1approval</span>
-          <span class="text-[10px] text-slate-400 font-bold tracking-widest uppercase -mt-1">Integration Hub</span>
-        </div>
+      <a href="#" class="flex items-center group">
+        <img src="https://masafushimi.github.io/1approval/all/1approval.png" alt="1approval Integration Hub" class="h-8 sm:h-10 w-auto object-contain">
       </a>
 
       <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
@@ -171,16 +163,16 @@
           </div>
         </div>
 
-        <!-- 連携プロダクトロゴ一覧（1段・横並び固定） -->
-        <div class="flex flex-nowrap items-center justify-center gap-6 sm:gap-10 max-w-4xl mx-auto overflow-x-auto py-2">
-          <a href="https://1approval.com/kintone/" class="shrink-0 transition-transform hover:scale-105 inline-block">
-            <img src="https://masafushimi.github.io/1approval/all/kintone.webp" alt="kintone" class="h-12 sm:h-12 w-auto object-contain">
+        <!-- 連携プロダクトロゴ一覧（サイズ揃え・1段横並び） -->
+        <div class="flex flex-nowrap items-center justify-center gap-8 sm:gap-12 max-w-4xl mx-auto overflow-x-auto py-2">
+          <a href="https://1approval.com/kintone/" class="shrink-0 transition-transform hover:scale-105 flex items-center justify-center h-8 sm:h-10">
+            <img src="https://masafushimi.github.io/1approval/all/kintone.webp" alt="kintone" class="h-full w-auto object-contain">
           </a>
-          <a href="https://1approval.com/m365/" class="shrink-0 transition-transform hover:scale-105 inline-block">
-            <img src="https://masafushimi.github.io/1approval/all/Microsoft365.svg" alt="Microsoft 365" class="h-10 sm:h-12 w-auto object-contain">
+          <a href="https://1approval.com/m365/" class="shrink-0 transition-transform hover:scale-105 flex items-center justify-center h-8 sm:h-10">
+            <img src="https://masafushimi.github.io/1approval/all/Microsoft365.svg" alt="Microsoft 365" class="h-full w-auto object-contain">
           </a>
-          <a href="https://masafushimi.github.io/1approval/teams/" class="shrink-0 transition-transform hover:scale-105 inline-block">
-            <img src="https://masafushimi.github.io/1approval/all/teams.png" alt="Microsoft Teams" class="h-20 sm:h-20 w-auto object-contain">
+          <a href="https://masafushimi.github.io/1approval/teams/" class="shrink-0 transition-transform hover:scale-105 flex items-center justify-center h-8 sm:h-10">
+            <img src="https://masafushimi.github.io/1approval/all/teams.png" alt="Microsoft Teams" class="h-full w-auto object-contain">
           </a>
         </div>
 
@@ -232,18 +224,12 @@
             <div class="lg:col-span-4 flex flex-col items-center justify-center my-4 lg:my-0">
               <div class="w-full h-1.5 pulse-line rounded-full mb-4 hidden lg:block"></div>
               
-              <div class="w-full bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-xl border-2 border-amber-400 text-center relative">
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-slate-900 text-[10px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider">
-                  中間統合 Hub
+              <!-- 背景色を明るく・枠線を調整して黒文字のロゴが綺麗に映えるよう修正 -->
+              <div class="w-full bg-gradient-to-br from-slate-50 to-amber-50/30 p-6 rounded-2xl shadow-xl border-2 border-amber-400 text-center relative flex flex-col items-center justify-center min-h-[140px]">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-slate-900 text-[10px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
+                  中間統合 HUB
                 </div>
-                <div class="text-2xl font-black tracking-tight mb-1">
-                  1approval
-                </div>
-                <p class="text-[11px] text-slate-300 font-medium leading-tight">
-                  承認データの自動取得・マッピング<br>
-                  ダイナミック・ポリシー（価格変動吸収）<br>
-                  SKU明細（L3）保持 & 月1回法人一括請求
-                </p>
+                <img src="https://masafushimi.github.io/1approval/all/1approval.png" alt="1approval" class="h-10 sm:h-12 w-auto object-contain">
               </div>
 
               <div class="w-full h-1.5 pulse-line rounded-full mt-4 hidden lg:block"></div>
@@ -622,177 +608,136 @@
       </div>
     </section>
   </main>
-<section id="contact" class="py-20 bg-brand-slatebg border-t border-slate-200 relative overflow-hidden">
-        <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>
-        
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center space-y-4 mb-12">
-                <div class="flex justify-center mb-2 shrink-0">
-                    <img src="logo11.png" alt="1Approval for kintone" class="h-9 sm:h-11 w-auto object-contain">
+
+  <!-- ==========================================       CONTACT FORM SECTION       ========================================== -->
+  <section id="contact" class="py-20 bg-brand-slatebg border-t border-slate-200 relative overflow-hidden">
+    <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>
+    
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center space-y-4 mb-12">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">資料請求・デモ・無料相談</h2>
+        <p class="text-slate-500 text-xs sm:text-sm">
+          出張・購買業務のDXについて、資料のご請求やオンラインデモ、個別のご相談をお気軽にお申し込みください。
+        </p>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden p-6 sm:p-10">
+        <form id="lead-form" class="space-y-8">
+
+          <div class="space-y-3">
+            <label class="block font-bold text-slate-900 text-sm sm:text-base">
+              お問い合わせの目的 <span class="text-xs bg-brand-danger text-white px-2 py-0.5 rounded ml-1.5 font-medium">必須</span>
+            </label>
+            <p class="text-xs text-slate-400">ご希望の項目をすべて選択してください（複数選択可）</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+
+              <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 hover:bg-brand-slatebg transition-all group has-[:checked]:border-brand-yellow has-[:checked]:bg-brand-yellowlight">
+                <div class="flex items-center gap-3">
+                  <input type="checkbox" name="purpose" value="document_request" id="purpose-doc" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow focus:ring-2" checked="">
+                  <span class="text-sm font-bold text-slate-700">資料請求/問合せ</span>
                 </div>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">資料請求・デモ・無料相談</h2>
-                <p class="text-slate-500 text-xs sm:text-sm">
-                    出張・購買業務のDXについて、資料のご請求やオンラインデモ、個別のご相談をお気軽にお申し込みください。
-                </p>
+                <i class="fa-solid fa-file-pdf text-slate-300 group-has-[:checked]:text-brand-yellow"></i>
+              </label>
+
+              <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 hover:bg-brand-slatebg transition-all group has-[:checked]:border-brand-yellow has-[:checked]:bg-brand-yellowlight">
+                <div class="flex items-center gap-3">
+                  <input type="checkbox" name="purpose" value="demo_request" id="purpose-demo" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow focus:ring-2">
+                  <span class="text-sm font-bold text-slate-700">画面デモ依頼</span>
+                </div>
+                <i class="fa-solid fa-display text-slate-300 group-has-[:checked]:text-brand-yellow"></i>
+              </label>
+
+              <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 hover:bg-brand-slatebg transition-all group has-[:checked]:border-brand-yellow has-[:checked]:bg-brand-yellowlight">
+                <div class="flex items-center gap-3">
+                  <input type="checkbox" name="purpose" value="consultation" id="purpose-consult" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow focus:ring-2">
+                  <span class="text-sm font-bold text-slate-700">個別無料相談</span>
+                </div>
+                <i class="fa-solid fa-comments text-slate-300 group-has-[:checked]:text-brand-yellow"></i>
+              </label>
+
+            </div>
+          </div>
+
+          <div id="dynamic-display-section" class="fade-in-box show">
+            <div id="material-inner-section" class="text-center bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4">
+              <div class="flex items-start gap-3 text-left">
+                <div class="w-8 h-8 rounded-full bg-brand-yellow/10 text-brand-yellow flex items-center justify-center shrink-0">
+                  <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900">ご案内資料『3分でわかる！1Approval』</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">お問い合わせ完了後、こちらの資料のPDFデータをすぐにお送りいたします。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="h-px bg-slate-200 my-6"></div>
+
+          <div class="space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1.5">
+                <label class="block font-bold text-slate-700 text-xs tracking-wider">
+                  会社名（法人の方） <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span>
+                </label>
+                <input type="text" name="company" required="" placeholder="例）株式会社〇〇〇〇" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all">
+              </div>
+              <div class="space-y-1.5">
+                <label class="block font-bold text-slate-700 text-xs tracking-wider">
+                  部署名 <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span>
+                </label>
+                <input type="text" name="department" required="" placeholder="例）情報システム部 / 総務部" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all">
+              </div>
             </div>
 
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden p-6 sm:p-10">
-                <form id="lead-form" class="space-y-8">
-
-                    <div class="space-y-3">
-                        <label class="block font-bold text-slate-900 text-sm sm:text-base">
-                            お問い合わせの目的 <span class="text-xs bg-brand-danger text-white px-2 py-0.5 rounded ml-1.5 font-medium">必須</span>
-                        </label>
-                        <p class="text-xs text-slate-400">ご希望の項目をすべて選択してください（複数選択可）</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-
-                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 hover:bg-brand-slatebg transition-all group has-[:checked]:border-brand-yellow has-[:checked]:bg-brand-yellowlight">
-                                <div class="flex items-center gap-3">
-                                    <input type="checkbox" name="purpose" value="document_request" id="purpose-doc" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow focus:ring-2" checked="">
-                                    <span class="text-sm font-bold text-slate-700">資料請求/問合せ</span>
-                                </div>
-                                <i class="fa-solid fa-file-pdf text-slate-300 group-has-[:checked]:text-brand-yellow"></i>
-                            </label>
-
-                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 hover:bg-brand-slatebg transition-all group has-[:checked]:border-brand-yellow has-[:checked]:bg-brand-yellowlight">
-                                <div class="flex items-center gap-3">
-                                    <input type="checkbox" name="purpose" value="demo_request" id="purpose-demo" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow focus:ring-2">
-                                    <span class="text-sm font-bold text-slate-700">画面デモ依頼</span>
-                                </div>
-                                <i class="fa-solid fa-display text-slate-300 group-has-[:checked]:text-brand-yellow"></i>
-                            </label>
-
-                            <label class="relative flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 hover:bg-brand-slatebg transition-all group has-[:checked]:border-brand-yellow has-[:checked]:bg-brand-yellowlight">
-                                <div class="flex items-center gap-3">
-                                    <input type="checkbox" name="purpose" value="consultation" id="purpose-consult" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow focus:ring-2">
-                                    <span class="text-sm font-bold text-slate-700">個別無料相談</span>
-                                </div>
-                                <i class="fa-solid fa-comments text-slate-300 group-has-[:checked]:text-brand-yellow"></i>
-                            </label>
-
-                        </div>
-                    </div>
-
-                    <!-- 資料表示エリア or カレンダー表示エリアの共通ラッパー -->
-                    <div id="dynamic-display-section" class="fade-in-box show">
-                        
-                        <!-- 1. 資料画像表示エリア (「資料請求/問合せ」のみにチェックが入っている場合) -->
-                        <div id="material-inner-section" class="text-center bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4">
-                            <div class="flex items-start gap-3 text-left">
-                                <div class="w-8 h-8 rounded-full bg-brand-yellow/10 text-brand-yellow flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-book-open"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-bold text-slate-900">ご案内資料『3分でわかる！1Approval』</h4>
-                                    <p class="text-xs text-slate-500 mt-0.5">お問い合わせ完了後、こちらの資料の営業PDFデータをすぐにお送りいたします。</p>
-                                </div>
-                            </div>
-                            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm bg-white">
-                                <img src="/material.png" alt="ご案内資料サムネイル" class="w-full h-auto max-h-[500px] object-contain mx-auto">
-                            </div>
-                        </div>
-
-                        <!-- 2. オンラインカレンダー事前予約エリア (「画面デモ」または「個別相談」にチェックが入っている場合) -->
-                        <div id="calendar-inner-section" class="hidden bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-6">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                                <div class="flex items-start gap-3 text-left">
-                                    <div class="w-8 h-8 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center shrink-0">
-                                        <i class="fa-regular fa-calendar-check"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-sm font-bold text-slate-900">【その場で確定】オンライン日程の事前予約</h4>
-                                        <p class="text-xs text-slate-500 mt-0.5">以下のカレンダーから直接空き枠をお選びいただけます。</p>
-                                    </div>
-                                </div>
-                                <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1epnVB3j8YTuPK0e0KdOFEIsoHTP31XRjMwKigZKn7CYRp45fGWQ6rB5LaKD6okZqeZ-DtHIOZ?gv=true" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-white border border-slate-300 text-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl hover:border-brand-yellow hover:text-brand-yellow transition-all whitespace-nowrap shrink-0 shadow-sm">
-                                    <i class="fa-solid fa-arrow-up-right-from-square text-brand-yellow"></i> 別ウインドウで開く
-                                </a>
-                            </div>
-
-                            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-inner h-[550px] relative">
-                                <iframe src="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1epnVB3j8YTuPK0e0KdOFEIsoHTP31XRjMwKigZKn7CYRp45fGWQ6rB5LaKD6okZqeZ-DtHIOZ?gv=true" style="border: 0" width="100%" height="100%" frameborder="0"></iframe>
-                            </div>
-                            <p class="text-[10px] text-slate-400 mt-2 text-right">※今すぐ日程を決められない場合は、予約せずに下の入力項目へお進みいただいても構いません。</p>
-                        </div>
-
-                    </div>
-
-                    <div class="h-px bg-slate-200 my-6"></div>
-
-                    <div class="space-y-5">
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1.5">
-                                <label class="block font-bold text-slate-700 text-xs tracking-wider">
-                                    会社名（法人の方） <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span>
-                                </label>
-                                <input type="text" name="company" required="" placeholder="例）株式会社〇〇〇〇" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
-                            </div>
-                            <div class="space-y-1.5">
-                                <label class="block font-bold text-slate-700 text-xs tracking-wider">
-                                    部署名 <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span>
-                                </label>
-                                <input type="text" name="department" required="" placeholder="例）情報システム部 / 総務部" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1.5">
-                                <label class="block font-bold text-slate-700 text-xs tracking-wider">お名前 <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
-                                <input type="text" name="name" required="" placeholder="例）山田太郎" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
-                            </div>
-                            <div class="space-y-1.5">
-                                <label class="block font-bold text-slate-700 text-xs tracking-wider">お名前（フリガナ） <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
-                                <input type="text" name="nameKana" required="" placeholder="例）ヤマダタロウ" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
-                            </div>
-                        </div>
-
-                        <div class="space-y-1.5">
-                            <label class="block font-bold text-slate-700 text-xs tracking-wider">ビジネスメールアドレス <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
-                            <input type="email" name="email" required="" placeholder="name@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
-                            <p class="text-[10px] text-slate-400">※資料請求の方には、このアドレス宛てに担当者より資料をお送りいたします。</p>
-                        </div>
-
-                        <div class="space-y-1.5">
-                            <label class="block font-bold text-slate-700 text-xs tracking-wider">電話番号 <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
-                            <input type="tel" name="phone" required="" placeholder="090-0000-0000（ハイフン可）" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all invalid:border-red-200 focus:invalid:border-brand-danger focus:invalid:ring-brand-danger/10">
-                        </div>
-
-                        <div class="space-y-1.5">
-                            <label class="block font-bold text-slate-700 text-xs tracking-wider">ご質問・ご要望（任意）</label>
-                            <textarea name="message" rows="4" placeholder="現在の社内システム環境（kintone導入状況など）や、出張手配に関する現状の課題などがございましたらご自由にご記入ください。" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all resize-y"></textarea>
-                        </div>
-
-                    </div>
-
-                    <div class="bg-brand-slatebg p-4 rounded-xl border border-slate-200 text-center">
-                        <label class="inline-flex items-center gap-2.5 cursor-pointer">
-                            <input type="checkbox" name="privacyConsent" required="" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow">
-                            <span class="text-xs text-slate-600 font-medium">
-                                当社の<a href="https://eichiii.notion.site/ff4b77597e97434790d8016a8fee9616" target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:text-blue-700">個人情報の取り扱い方針（プライバシーポリシー）</a>に同意して送信する
-                            </span>
-                        </label>
-                    </div>
-
-                    <!-- honeypot: ボットのみが埋める不可視フィールド -->
-                    <div class="hidden" aria-hidden="true">
-                        <label for="lead-form-hp">これは入力しないでください</label>
-                        <input type="text" id="lead-form-hp" name="_hp" tabindex="-1" autocomplete="off">
-                    </div>
-
-                    <p id="lead-form-error" class="hidden text-xs font-bold text-red-500 text-center"></p>
-
-                    <div class="text-center pt-2">
-                        <button type="submit" id="lead-form-submit" class="w-full sm:w-auto bg-brand-yellow text-brand-dark font-black text-center px-12 py-4 rounded-xl text-base hover:bg-brand-dark hover:text-white transition-all duration-300 shadow-lg hover:shadow-brand-yellow/20 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2 group">
-                            <span>資料・デモ動画をリクエストする (無料)</span>
-                            <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform text-sm"></i>
-                        </button>
-                    </div>
-
-                </form>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1.5">
+                <label class="block font-bold text-slate-700 text-xs tracking-wider">お名前 <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
+                <input type="text" name="name" required="" placeholder="例）山田太郎" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all">
+              </div>
+              <div class="space-y-1.5">
+                <label class="block font-bold text-slate-700 text-xs tracking-wider">お名前（フリガナ） <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
+                <input type="text" name="nameKana" required="" placeholder="例）ヤマダタロウ" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all">
+              </div>
             </div>
-        </div>
-    </section>
+
+            <div class="space-y-1.5">
+              <label class="block font-bold text-slate-700 text-xs tracking-wider">ビジネスメールアドレス <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
+              <input type="email" name="email" required="" placeholder="name@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all">
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="block font-bold text-slate-700 text-xs tracking-wider">電話番号 <span class="text-[10px] bg-brand-danger text-white px-1.5 py-0.2 rounded ml-1 font-medium">必須</span></label>
+              <input type="tel" name="phone" required="" placeholder="090-0000-0000（ハイフン可）" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all">
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="block font-bold text-slate-700 text-xs tracking-wider">ご質問・ご要望（任意）</label>
+              <textarea name="message" rows="4" placeholder="現在の社内システム環境や出張手配の課題などがございましたらご自由にご記入ください。" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 outline-none transition-all resize-y"></textarea>
+            </div>
+          </div>
+
+          <div class="bg-brand-slatebg p-4 rounded-xl border border-slate-200 text-center">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" name="privacyConsent" required="" class="w-4 h-4 text-brand-yellow border-slate-300 rounded focus:ring-brand-yellow">
+              <span class="text-xs text-slate-600 font-medium">
+                個人情報の取り扱い方針（プライバシーポリシー）に同意して送信する
+              </span>
+            </label>
+          </div>
+
+          <div class="text-center pt-2">
+            <button type="submit" id="lead-form-submit" class="w-full sm:w-auto bg-brand-yellow text-brand-dark font-black text-center px-12 py-4 rounded-xl text-base hover:bg-brand-dark hover:text-white transition-all duration-300 shadow-lg inline-flex items-center justify-center gap-2 group">
+              <span>資料・デモ動画をリクエストする (無料)</span>
+              <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform text-sm"></i>
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </section>
+
   <!-- ==========================================       FOOTER       ========================================== -->
   <footer class="bg-slate-900 border-t border-slate-800 py-16 text-slate-400 text-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -834,7 +779,7 @@
 
       <div class="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>&copy; Eichiii Inc. All Rights Reserved.</div>
-        <div>1approval（ワンアプルーバル）は株式会社エイチの登録商標または商標です。</div>
+        <div>1approvalは株式会社エイチの登録商標または商標です。</div>
       </div>
     </div>
   </footer>
