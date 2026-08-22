@@ -106,7 +106,7 @@
   </header>
 
   <main class="pt-20">
-    <!-- ==========================================         HERO SECTION (FIRST VIEW)         ========================================== -->
+<!-- ==========================================         HERO SECTION (FIRST VIEW)         ========================================== -->
     <section class="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-28 bg-gradient-to-b from-amber-50/40 via-white to-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         
@@ -124,43 +124,54 @@
           さよなら雑務
         </div>
 
-        <!-- 3 Main Benefits -->
+        <!-- 3 Main Benefits (カラーアクセント・コンパクト化) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-14 text-left">
-          <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-md flex items-start gap-4">
-            <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center shrink-0 text-xl font-bold">
-              ①
-            </div>
+          
+          <!-- Benefit 1: 赤アクセント -->
+          <div class="bg-white p-6 rounded-2xl border-l-4 border-l-[#FF3366] border-t border-r border-b border-slate-200 shadow-md flex flex-col justify-between hover:-translate-y-1 transition-transform">
             <div>
-              <h3 class="font-extrabold text-slate-900 text-base mb-1">なめらかな承認・購買</h3>
-              <p class="text-xs text-slate-500 leading-relaxed font-medium">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-[#FF3366] flex items-center justify-center shrink-0">
+                  <i class="fa-solid fa-bolt text-sm"></i>
+                </div>
+                <h3 class="font-extrabold text-slate-900 text-base leading-tight">なめらかな承認・購買</h3>
+              </div>
+              <p class="text-xs text-slate-500 leading-relaxed font-medium pt-1">
                 発注・予約は全自動で完結。二重入力や二段手配の不毛な手間をゼロにします。
               </p>
             </div>
           </div>
 
-          <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-md flex items-start gap-4">
-            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0 text-xl font-bold">
-              ②
-            </div>
+          <!-- Benefit 2: オレンジ/黄色アクセント -->
+          <div class="bg-white p-6 rounded-2xl border-l-4 border-l-[#FF9900] border-t border-r border-b border-slate-200 shadow-md flex flex-col justify-between hover:-translate-y-1 transition-transform">
             <div>
-              <h3 class="font-extrabold text-slate-900 text-base mb-1">経費精算のやりとり・チェック撲滅</h3>
-              <p class="text-xs text-slate-500 leading-relaxed font-medium">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-[#FF9900] flex items-center justify-center shrink-0">
+                  <i class="fa-solid fa-receipt text-sm"></i>
+                </div>
+                <h3 class="font-extrabold text-slate-900 text-base leading-tight">経費精算のやりとり・チェック撲滅</h3>
+              </div>
+              <p class="text-xs text-slate-500 leading-relaxed font-medium pt-1">
                 社員の立替・領収書提出を撤廃。経理の整合性目視チェック雑務をなくします。
               </p>
             </div>
           </div>
 
-          <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-md flex items-start gap-4">
-            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-600 flex items-center justify-center shrink-0 text-xl font-bold">
-              ③
-            </div>
+          <!-- Benefit 3: 緑アクセント -->
+          <div class="bg-white p-6 rounded-2xl border-l-4 border-l-[#00C853] border-t border-r border-b border-slate-200 shadow-md flex flex-col justify-between hover:-translate-y-1 transition-transform">
             <div>
-              <h3 class="font-extrabold text-slate-900 text-base mb-1">すべてのデータを統合管理</h3>
-              <p class="text-xs text-slate-500 leading-relaxed font-medium">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-[#00C853] flex items-center justify-center shrink-0">
+                  <i class="fa-solid fa-database text-sm"></i>
+                </div>
+                <h3 class="font-extrabold text-slate-900 text-base leading-tight">すべてのデータを統合管理</h3>
+              </div>
+              <p class="text-xs text-slate-500 leading-relaxed font-medium pt-1">
                 SKU（L3）明細を自動保持し、会計システムへワンストップでシームレス連動。
               </p>
             </div>
           </div>
+
         </div>
 
         <!-- 連携プロダクトロゴ一覧（サイズ揃え・1段横並び） -->
