@@ -107,6 +107,9 @@
             <button onclick="switchTab('tab-email')" id="btn-tab-email" class="tab-btn py-3 px-3 text-sm font-medium text-slate-600 hover:text-blue-600 whitespace-nowrap flex items-center gap-1.5">
                 <i data-lucide="mail" class="w-4 h-4"></i> ⑥ 送付済みメール文面・活用ガイド
             </button>
+            <button onclick="switchTab('tab-webinar')" id="btn-tab-webinar" class="tab-btn py-3 px-3 text-sm font-medium text-slate-600 hover:text-blue-600 whitespace-nowrap flex items-center gap-1.5">
+                <i data-lucide="video" class="w-4 h-4"></i> ⑦ ウェビナー後追いスクリプト
+            </button>
         </div>
     </nav>
 
@@ -213,7 +216,7 @@
                 </div>
             </div>
 
-            <!-- STEP 3: 課題発見（フック） 【新ナレッジ拡張】 -->
+            <!-- STEP 3: 課題発見（フック） -->
             <div id="step-3" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b pb-3">
                     <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">STEP 3</span>
@@ -221,7 +224,6 @@
                     <span class="text-xs text-slate-500">接続先相手の部署に応じて問いかけを切り替える</span>
                 </div>
 
-                <!-- 部署切り替えタブ付きコンテンツ -->
                 <div class="space-y-4">
                     <div class="bg-blue-50 border border-blue-200 p-3 rounded-lg text-xs text-blue-900">
                         <strong>🎯 ナレッジ連携ポイント:</strong> 単に「購買」として話すとペインが薄くなります。現場（営業）には「手間のめんどくささ」、経理には「チェック作業の無駄」、情シスには「既存基盤（M365/kintone）の定着」と切り口を明確に分けます。
@@ -275,7 +277,7 @@
                 </div>
             </div>
 
-            <!-- STEP 4: 簡易製品ピッチ 【新ナレッジ拡張】 -->
+            <!-- STEP 4: 簡易製品ピッチ -->
             <div id="step-4" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b pb-3">
                     <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">STEP 4</span>
@@ -342,7 +344,7 @@
                 </div>
             </div>
 
-            <!-- STEP 5: クロージング 【新ナレッジ拡張】 -->
+            <!-- STEP 5: クロージング -->
             <div id="step-5" class="bg-white p-6 rounded-xl border-2 border-blue-500 shadow-md space-y-4">
                 <div class="flex justify-between items-center border-b pb-3">
                     <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">STEP 5</span>
@@ -350,7 +352,6 @@
                     <span class="text-xs text-blue-600 font-bold">目標：30分Web説明会 / 他部署（経理・情シス等）へのトスアップ</span>
                 </div>
 
-                <!-- 部署別打診スクリプト -->
                 <div class="space-y-3">
                     <!-- 営業部から打診する場合 -->
                     <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -824,6 +825,151 @@
                     1approval事業部<br>
                     住所: 東京都千代田区神田鍛冶町3-4 oak神田鍛冶町7F
                     </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- TAB 7: ウェビナー後追いスクリプト 【新追加】 -->
+        <section id="tab-webinar" class="tab-content hidden space-y-6">
+
+            <div class="bg-indigo-900 text-white p-5 rounded-xl shadow-md">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-amber-400 text-slate-900 text-xs font-bold px-2 py-0.5 rounded">事例連動型</span>
+                    <h2 class="text-lg font-bold">⑦ ウェビナー後追い・事例架電 完全スクリプト</h2>
+                </div>
+                <p class="text-xs text-indigo-200">ユーグレナ様の事例資料や案内を送付したリードに対する後追いコール専用です。</p>
+            </div>
+
+            <!-- STEP 1: 受付突破 -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">1. 受付突破</span>
+                    <span class="text-xs text-slate-500">「ウェビナー案内」「資料確認」の強調</span>
+                </div>
+                <div class="speech-bubble speech-bubble-operator">
+                    <p class="text-xs font-bold text-blue-600 mb-1">【IS/BDR】</p>
+                    <p class="text-sm font-medium">
+                        「お世話になっております。株式会社エイチの〇〇（自分の名前）と申します。<br>
+                        先日、弊社の**『ユーグレナ様の出張・購買自動化事例』に関するウェビナー資料をご確認いただいた件**で、［部署名］の［キーマン氏名 / 畔上様］にお電話いたしました。恐れ入りますが、［キーマン氏名 / 畔上様］はいらっしゃいますでしょうか？」
+                    </p>
+                </div>
+                <div class="bg-slate-50 p-2.5 rounded border border-slate-200 text-xs text-slate-600">
+                    <strong>💡 ポイント:</strong> 「ウェビナー案内」「資料ご確認」を強調することで売り込み感をなくし、受付での遮断を効果的に防止します。
+                </div>
+            </div>
+
+            <!-- STEP 2: オープニング -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">2. オープニング</span>
+                    <span class="text-xs text-slate-500">30秒の許可取得</span>
+                </div>
+                <div class="speech-bubble speech-bubble-operator">
+                    <p class="text-xs font-bold text-blue-600 mb-1">【IS/BDR】</p>
+                    <p class="text-sm font-medium">
+                        「〇〇様、お世話になっております！株式会社エイチの〇〇と申します。<br>
+                        先日は弊社からお送りいたしました、**ユーグレナ様のAX（自動化）事例セミナーのご案内**をご覧いただき、誠にありがとうございました。本日は1分だけお礼を兼ねてお電話させていただいたのですが、今少しだけお時間よろしいでしょうか？」
+                    </p>
+                </div>
+            </div>
+
+            <!-- STEP 3: 課題の言語化 -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">3. 課題の言語化</span>
+                    <span class="text-xs text-slate-500">共感フック（あるある課題の提示）</span>
+                </div>
+                <div class="speech-bubble speech-bubble-operator space-y-3">
+                    <div>
+                        <p class="text-xs font-bold text-blue-600 mb-1">【IS/BDR】</p>
+                        <p class="text-sm font-medium">
+                            「今回ご案内したセミナーですが、まさに［〇〇様/貴社］のような拠点の多い企業様でよく課題となる、<br>
+                            <span class="bg-yellow-200 px-1 font-bold">①『事前申請の承認後に、社員様が別サイトで予約し直す二度手間』</span>や、<br>
+                            <span class="bg-yellow-200 px-1 font-bold">②『価格変動による再申請のループ』</span>、<br>
+                            <span class="bg-yellow-200 px-1 font-bold">③『出張後の領収書チェック雑務』</span><br>
+                            をいかに自動化（ゼロ化）するかをお伝えする内容となっております。」
+                        </p>
+                    </div>
+                    <hr class="border-blue-200">
+                    <div>
+                        <p class="text-xs font-bold text-blue-600 mb-1">【IS/BDR】</p>
+                        <p class="text-sm font-medium">
+                            「〇〇様ご自身や社内の皆様も、こうした承認後の手配や領収書集めの手間を感じられるような場面はございませんでしょうか？」
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4: 簡易ピッチ -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">4. 簡易ピッチ</span>
+                    <span class="text-xs text-slate-500">実績数値（工数85%削減）の提示</span>
+                </div>
+                <div class="speech-bubble speech-bubble-operator">
+                    <p class="text-xs font-bold text-blue-600 mb-1">【IS/BDR】</p>
+                    <p class="text-sm font-medium">
+                        「弊社が提供する『1approval』をご活用いただくことで、普段お使いのワークフロー（Microsoft 365やkintone等）上で**承認ボタンを押した瞬間に手配が自動完了**いたします。<br><br>
+                        実際にゲスト登壇いただくユーグレナ様では、**1件90分かかっていた手続きを15分〜30分に短縮し、工数を約85%削減**された実績がございます。」
+                    </p>
+                </div>
+            </div>
+
+            <!-- STEP 5: アポ打診 -->
+            <div class="bg-white p-6 rounded-xl border-2 border-indigo-500 shadow-md space-y-4">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">5. アポ打診</span>
+                    <span class="text-xs text-indigo-600 font-bold">二者択一・日程不一致からの個別デモ展開</span>
+                </div>
+
+                <!-- パターンA -->
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2">
+                    <span class="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded">パターンA：ウェビナー日程の打診</span>
+                    <div class="speech-bubble speech-bubble-operator">
+                        <p class="text-sm font-medium">
+                            「もしよろしければ、**9月16日(水) 11時からの無料オンラインセミナー**にご参加いただけそうでしょうか？」
+                        </p>
+                    </div>
+                </div>
+
+                <!-- パターンB -->
+                <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded">パターンB：日程が合わないと言われた場合（★超重要）</span>
+                        <span class="text-xs font-bold text-indigo-800">録画送付 ➔ 個別デモ打診へ展開</span>
+                    </div>
+
+                    <div class="bg-white p-3 rounded border text-xs space-y-1">
+                        <p class="font-bold text-slate-500">【顧客】</p>
+                        <p class="text-slate-800">「あ〜、その日はあいにく予定が入っていまして…」</p>
+                    </div>
+
+                    <div class="speech-bubble speech-bubble-operator">
+                        <p class="text-xs font-bold text-blue-600 mb-1">【IS/BDR（動画提案）】</p>
+                        <p class="text-sm font-medium mb-2">
+                            「さようでございますか！ご予定がある中でご確認いただきありがとうございます。<br>
+                            それでしたら、ご都合の良い時にお手元でご覧いただける**『録画アーカイブ動画（またはセミナー概要資料）』をお送りさせていただく形**でもよろしいでしょうか？」
+                        </p>
+
+                        <div class="border-t border-blue-200 pt-2 mt-2">
+                            <p class="text-xs text-indigo-700 font-bold mb-1">（承諾を得た後のキラーフレーズ）</p>
+                            <p class="text-sm font-medium">
+                                「ありがとうございます！〇〇様のメールアドレスへお送りいたしますね。<br>
+                                ちなみに1点だけ伺いたいのですが、［貴社名］様では社内稟議や申請に**Microsoft 365などのワークフロー**はお使いでしょうか？」
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-2.5 rounded border border-blue-200 my-2 text-xs">
+                            <p class="font-bold text-slate-500">【顧客】</p>
+                            <p class="text-slate-800">「ええ、M365（や社内ワークフロー）を使っていますよ」</p>
+                        </div>
+
+                        <p class="text-sm font-medium">
+                            「ありがとうございます！それでしたら、動画をご覧いただくよりも、**御社でお使いの画面上でどのように承認〜予約が自動完結するのか、15分ほどWeb画面で実際のデモをお見せする方が一発でイメージを掴んでいただける**かと存じます。<br>
+                            今週の〇日（〇）〇時、または〇日（〇）〇時で、15分だけお時間いただくことは可能でしょうか？」
+                        </p>
+                    </div>
                 </div>
             </div>
 
