@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="ja" class="h-full bg-slate-50 text-slate-800">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1approval for Google Workspace アーキテクチャ＆パンチアウトAPI仕様書</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0284c7',
+              700: '#0369a1',
+              accent: '#f59e0b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .tab-active { border-bottom: 2px solid #0284c7; color: #0284c7; font-weight: 700; background-color: #f0f9ff; }
+    pre code { font-family: 'Fira Code', 'Courier New', Courier, monospace; }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-anim { animation: modalFadeIn 0.2s ease-out forwards; }
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans antialiased bg-slate-50 text-slate-800">
+
+  <header class="border-b border-slate-200 bg-white sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center font-bold text-white text-lg shadow-md shadow-sky-500/20">
+          1A
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            1approval <span class="text-xs font-semibold px-2 py-0.5 rounded bg-sky-100 text-sky-700 border border-sky-200">for Google Workspace</span>
+          </h1>
+          <p class="text-xs text-slate-500">統合Webポータル (kintone画面完全準拠) ＋ 1approval Hub 経理管理者ダッシュボード仕様書 (v2.8)</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3 text-xs">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> kintone出張手配申請DB項目100%完全同期
+        </span>
+        <button onclick="window.print()" class="px-3 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5 font-medium border border-slate-200">
+          <i class="fa-solid fa-print"></i> 印刷/PDF出力
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex-1 flex flex-col max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Navigation Tabs -->
+    <nav class="flex space-x-1 border-b border-slate-200 text-sm font-medium overflow-x-auto bg-white p-1 rounded-t-xl border-t border-x">
+      <button onclick="switchTab('overview')" id="tab-overview" class="tab-button tab-active px-4 py-3 rounded-t-lg transition flex items-center gap-2">
+        <i class="fa-solid fa-sitemap text-sky-600"></i> システム概要 & 全体構想
+      </button>
+      <button onclick="switchTab('architecture')" id="tab-architecture" class="tab-button text-slate-500 hover:text-slate-800 px-4 py-3 rounded-t-lg transition flex items-center gap-2">
+        <i class="fa-solid fa-network-wired text-indigo-600"></i> アーキテクチャ & シーケンス
+      </button>
+      <button onclick="switchTab('db-schema')" id="tab-db-schema" class="tab-button text-slate-500 hover:text-slate-800 px-4 py-3 rounded-t-lg transition flex items-center gap-2">
+        <i class="fa-solid fa-table text-emerald-600"></i> DB設計 (kintone全項目100%完全同期)
+      </button>
+      <button onclick="switchTab('api-cxml')" id="tab-api-cxml" class="tab-button text-slate-500 hover:text-slate-800 px-4 py-3 rounded-t-lg transition flex items-center gap-2">
+        <i class="fa-solid fa-code text-amber-600"></i> Punchout API & cXML仕様
+      </button>
+      <button onclick="switchTab('code-samples')" id="tab-code-samples" class="tab-button text-slate-500 hover:text-slate-800 px-4 py-3 rounded-t-lg transition flex items-center gap-2">
+        <i class="fa-solid fa-file-code text-purple-600"></i> 実装コード (GAS Code.gs)
+      </button>
+      <button onclick="switchTab('prototype')" id="tab-prototype" class="tab-button text-slate-600 hover:text-slate-900 px-4 py-3 rounded-t-lg transition flex items-center gap-2 font-bold text-pink-600">
+        <i class="fa-solid fa-laptop-code text-pink-600"></i> 統合Webポータル E2Eデモ (経理視点含む)
+      </button>
+    </nav>
+
+    <section id="content-overview" class="tab-content space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-5 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
+          <div class="text-xs text-rose-600 font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-triangle-exclamation"></i> 課題と背景
+          </div>
+          <div class="text-base font-bold text-slate-900">Googleフォームの権限散逸・事故</div>
+          <p class="text-xs text-slate-600 leading-relaxed">個別フォーム作成による権限・承認ルートの散逸。生のスプレッドシートにアクセスさせると関数破壊や全社データ漏洩のリスクが深刻化。</p>
+        </div>
+        <div class="p-5 rounded-xl bg-white border border-sky-200 shadow-sm space-y-2">
+          <div class="text-xs text-sky-600 font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-shield-halved"></i> アーキテクチャの解答
+          </div>
+          <div class="text-base font-bold text-sky-900">GAS HTML Service 統合ポータル</div>
+          <p class="text-xs text-slate-600 leading-relaxed">1つのHTML Webポータルで全権限・画面を動的制御。バックエンドのGoogleスプレッドシートは一般ユーザー非公開のDBとして完全隠蔽。</p>
+        </div>
+        <div class="p-5 rounded-xl bg-white border border-emerald-200 shadow-sm space-y-2">
+          <div class="text-xs text-emerald-600 font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-chart-line"></i> 1approval 統合管理Hub
+          </div>
+          <div class="text-base font-bold text-emerald-900">経理・管理者ポータル (5/mock)</div>
+          <p class="text-xs text-slate-600 leading-relaxed">経理部門は1approval管理アプリ画面（`5/mock`）で全社一括請求・L3明細確認・勘定奉行/PCA自動仕訳・BI分析を一元実行。</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-slate-200 p-6 space-y-4 shadow-sm">
+        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-bullseye text-sky-600"></i> システム構築要件 ＆ 画面分離・管理方針
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+          <div class="space-y-3">
+            <h3 class="font-bold text-sky-700 text-xs uppercase tracking-wider border-b border-sky-100 pb-1">フロントエンド (現場申請者・上長)</h3>
+            <ul class="space-y-2 text-slate-600 list-disc list-inside">
+              <li><strong class="text-slate-900">ログイン・権限統合:</strong> Google IDから部署・役職に応じた入力項目や承認ルートをHTML側で動的制御。</li>
+              <li><strong class="text-slate-900">kintone申請フィールド完全互換:</strong> 出張者・出張先・目的・スケジュール・ホテル/航空券/経費テーブル・金額集計の完全再現。</li>
+              <li><strong class="text-slate-900">cXML パンチアウト:</strong> ポータルから1approval Hub経由でピカパカ/モノタロウをモーダル起動。</li>
+              <li><strong class="text-slate-900">Google Chat Card承認:</strong> 上長はChatメッセージからワンクリック承認・即時自動PO発注。</li>
+            </ul>
+          </div>
+          <div class="space-y-3">
+            <h3 class="font-bold text-emerald-700 text-xs uppercase tracking-wider border-b border-emerald-100 pb-1">バックオフィス (経理・全社管理者: 5/mock)</h3>
+            <ul class="space-y-2 text-slate-600 list-disc list-inside">
+              <li><strong class="text-slate-900">月1回の一括請求・突合:</strong> 全拠点のピカパカ・モノタロウ等購買を会社宛1枚の請求書に集約・一括処理。</li>
+              <li><strong class="text-slate-900">会計仕訳連携 (PEPPOL):</strong> L3詳細データ（品目・SKU・区間等）を保持し、勘定奉行/PCA/freee等へ自動仕訳出力。</li>
+              <li><strong class="text-slate-900">ダイナミック・ポリシー集中管理:</strong> 価格変動許容値（`priceThreshold`: 20%など）や役職規定の一元設定。</li>
+              <li><strong class="text-slate-900">全社購買BI分析:</strong> 拠点別・カテゴリ別支出のリアルタイム可視化と不正アラート検知。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="content-architecture" class="tab-content space-y-6 hidden">
+      <div class="bg-white rounded-xl border border-slate-200 p-6 space-y-4 shadow-sm">
+        <h2 class="text-base font-bold text-slate-900 flex items-center justify-between">
+          <span><i class="fa-solid fa-network-wired text-indigo-600 mr-2"></i>全体アーキテクチャ設計図 (全社統合管理 Hub 連携)</span>
+          <span class="text-xs font-normal text-slate-500">Google Workspace (HTML/GAS) ＋ 1approval Integration Hub (`5/mock`)</span>
+        </h2>
+        <div class="p-6 bg-slate-50 rounded-lg border border-slate-200 overflow-x-auto">
+          <div class="min-w-[800px] flex flex-col items-center space-y-6">
+            
+            <div class="w-full flex justify-around items-center">
+              <div class="w-60 p-3.5 rounded-xl bg-white border border-sky-300 text-center shadow-sm">
+                <div class="text-xs text-sky-700 font-bold mb-1">一般社員 / 申請者</div>
+                <div class="text-sm font-semibold text-slate-900"><i class="fa-brands fa-google text-lg mr-1 text-sky-600"></i> GAS Webポータル (HTML)</div>
+                <div class="text-[11px] text-slate-500 mt-1">手配開始 / カート自動入力 / 申請提出</div>
+              </div>
+              <div class="w-60 p-3.5 rounded-xl bg-white border border-purple-300 text-center shadow-sm">
+                <div class="text-xs text-purple-700 font-bold mb-1">承認者（上長・役員）</div>
+                <div class="text-sm font-semibold text-slate-900"><i class="fa-solid fa-envelope text-lg mr-1 text-purple-600"></i> Gmail / Google Chat Card</div>
+                <div class="text-[11px] text-slate-500 mt-1">1クリック承認ボタン（Webhook通知）</div>
+              </div>
+              <div class="w-60 p-3.5 rounded-xl bg-white border border-emerald-300 text-center shadow-sm">
+                <div class="text-xs text-emerald-700 font-bold mb-1">経理・総務・全社管理者</div>
+                <div class="text-sm font-semibold text-slate-900"><i class="fa-solid fa-chart-pie text-lg mr-1 text-emerald-600"></i> 1approval 統合ポータル (`5/mock`)</div>
+                <div class="text-[11px] text-slate-500 mt-1">月1回一括請求 / 会計仕訳 / BI分析</div>
+              </div>
+            </div>
+
+            <div class="text-slate-400 font-mono text-xs"><i class="fa-solid fa-arrow-down-long text-base mr-1"></i> REST API / Webhook (JSON / L3明細)</div>
+
+            <div class="w-full p-4 rounded-xl bg-white border border-slate-300 flex justify-between items-center space-x-4 shadow-sm">
+              <div class="w-1/2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="text-xs font-bold text-amber-700 mb-1"><i class="fa-solid fa-gear"></i> GAS バックエンド (Code.gs)</div>
+                <ul class="text-[11px] text-slate-600 space-y-1">
+                  <li>・`doGet()`: Webポータル動的レンダリング</li>
+                  <li>・`google.script.run`: 権限参照・申請処理</li>
+                  <li>・`doPost()`: 1approval Webhook受領</li>
+                </ul>
+              </div>
+              <div class="w-1/2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="text-xs font-bold text-emerald-700 mb-1"><i class="fa-solid fa-database"></i> 非公開 Google スプレッドシートDB</div>
+                <ul class="text-[11px] text-slate-600 space-y-1">
+                  <li>・申請マスター (`requests`)</li>
+                  <li>・行動予定マスタ (`request_schedules`)</li>
+                  <li>・L3明細マスター (`request_items`)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="text-slate-400 font-mono text-xs"><i class="fa-solid fa-arrows-up-down text-base mr-1"></i> HTTPS / cXML通信 (PunchOutSetupRequest / OrderRequest)</div>
+
+            <div class="w-full p-4 rounded-xl bg-sky-50 border border-sky-300 text-center relative shadow-sm">
+              <span class="absolute -top-3 left-6 px-2.5 py-0.5 rounded bg-sky-600 text-[10px] font-bold text-white uppercase shadow-sm">1approval Core Integration Hub</span>
+              <div class="grid grid-cols-4 gap-3 text-xs text-slate-800 mt-1">
+                <div class="p-2.5 bg-white rounded-lg border border-sky-200 shadow-xs">
+                  <div class="font-bold text-sky-700">cXML Engine</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">SetupReq / OrderRequest変換</div>
+                </div>
+                <div class="p-2.5 bg-white rounded-lg border border-amber-200 shadow-xs">
+                  <div class="font-bold text-amber-700">Dynamic Policy</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">価格変動自動吸収 (`priceThreshold`)</div>
+                </div>
+                <div class="p-2.5 bg-white rounded-lg border border-emerald-200 shadow-xs">
+                  <div class="font-bold text-emerald-700">L3 Data Vault</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">SKU・明細保持 / PEPPOL変換</div>
+                </div>
+                <div class="p-2.5 bg-white rounded-lg border border-purple-200 shadow-xs">
+                  <div class="font-bold text-purple-700">Accounting Connector</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">勘定奉行/PCA/freee自動連携</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-slate-400 font-mono text-xs"><i class="fa-solid fa-arrows-up-down text-base mr-1"></i> Punchout cXML / Auto-PO API</div>
+
+            <div class="w-full grid grid-cols-3 gap-3">
+              <div class="p-3 bg-white rounded-xl border border-slate-200 text-center shadow-xs">
+                <div class="text-xs font-bold text-sky-700">ピカパカ出張DX</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">新幹線・航空券・ホテル</div>
+              </div>
+              <div class="p-3 bg-white rounded-xl border border-slate-200 text-center shadow-xs">
+                <div class="text-xs font-bold text-amber-700">モノタロウ / トラスコ</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">現場資材・工具・消耗品</div>
+              </div>
+              <div class="p-3 bg-white rounded-xl border border-slate-200 text-center shadow-xs">
+                <div class="text-xs font-bold text-orange-700">Amazon Business</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">IT機器・オフィス備品</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="content-db-schema" class="tab-content space-y-6 hidden">
+      <div class="bg-white rounded-xl border border-slate-200 p-6 space-y-4 shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-table text-emerald-600"></i> 非公開 Google スプレッドシート DB スキーマ定義
+            </h2>
+            <p class="text-xs text-slate-500">kintone「出張手配申請」の実機全フィールド・全サブテーブルと100%完全整合する構造設計です。</p>
+          </div>
+          <span class="text-xs px-2.5 py-1 bg-rose-50 text-rose-700 rounded border border-rose-200 font-mono font-semibold"><i class="fa-solid fa-lock"></i> 一般アクセス完全遮断 (システム所有者のみ)</span>
+        </div>
+
+        <div class="space-y-3">
+          <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-file-invoice text-sky-600"></i> Table 1: `requests` (申請ヘッダーマスター - kintone主要全フィールド対応)
+          </h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-200">
+            <table class="w-full text-xs text-left text-slate-700">
+              <thead class="bg-slate-100 text-slate-700 border-b border-slate-200 font-mono font-semibold">
+                <tr><th class="py-2.5 px-3">Col</th><th class="py-2.5 px-3">Column Name</th><th class="py-2.5 px-3">Data Type</th><th class="py-2.5 px-3">kintoneフィールド名 / 概要</th><th class="py-2.5 px-3">Example Data</th></tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 font-mono text-[11px]">
+                <tr><td class="py-2 px-3 text-slate-400">A</td><td class="py-2 px-3 text-sky-700 font-bold">request_id</td><td>STRING</td><td>レコード番号 / PK</td><td>REQ-20260910-0012</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">B</td><td class="py-2 px-3 text-sky-700">created_at</td><td>DATETIME</td><td>作成日時</td><td>2026-07-02 16:51</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">C</td><td class="py-2 px-3 text-sky-700">creator_name</td><td>STRING</td><td>作成者</td><td>デモ (demo@example.com)</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">D</td><td class="py-2 px-3 text-sky-700">traveler_name</td><td>STRING</td><td>出張者</td><td>デモ</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">E</td><td class="py-2 px-3 text-sky-700">approver_name</td><td>STRING</td><td>承認者</td><td>デモ (佐藤部長)</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">F</td><td class="py-2 px-3 text-sky-700">destination</td><td>STRING</td><td>出張先</td><td>福岡</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">G</td><td class="py-2 px-3 text-sky-700">purpose</td><td>STRING</td><td>出張目的</td><td>福岡のクライアントに会って現地商談...</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">H</td><td class="py-2 px-3 text-sky-700">departure_date</td><td>DATE</td><td>出発日</td><td>2026-09-10</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">I</td><td class="py-2 px-3 text-sky-700">return_date</td><td>DATE</td><td>帰着日</td><td>2026-09-11</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">J</td><td class="py-2 px-3 text-sky-700">remarks</td><td>TEXT</td><td>備考</td><td>補足コメント等</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">K</td><td class="py-2 px-3 text-sky-700">buyer_cookie</td><td>STRING</td><td>`punchout.js` 識別子 Cookie</td><td>1002-REQ-20260910-1</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">L</td><td class="py-2 px-3 text-amber-700 font-bold">status</td><td>STRING</td><td>ステータス (`未処理`/`事前承認済`等)</td><td>事前承認済</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">M</td><td class="py-2 px-3 text-emerald-700 font-bold">company_amount</td><td>NUMBER</td><td>会社請求金額</td><td>0</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">N</td><td class="py-2 px-3 text-emerald-700 font-bold">expense_amount</td><td>NUMBER</td><td>経費精算金額</td><td>10000</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">O</td><td class="py-2 px-3 text-emerald-700 font-bold">total_amount</td><td>NUMBER</td><td>出張合計金額</td><td>10000</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-indigo-600"></i> Table 2: `request_schedules` (スケジュール・行動予定サブテーブル)
+          </h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-200">
+            <table class="w-full text-xs text-left text-slate-700 font-mono text-[11px]">
+              <thead class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                <tr><th class="py-2.5 px-3">Col</th><th class="py-2.5 px-3">Column Name</th><th class="py-2.5 px-3">Description</th><th class="py-2.5 px-3">Example Data</th></tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr><td class="py-2 px-3 text-slate-400">A</td><td class="py-2 px-3 text-sky-700 font-bold">schedule_id</td><td>Primary Key (PK)</td><td>SCH-991201</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">B</td><td class="py-2 px-3 text-sky-700 font-bold">request_id</td><td>Foreign Key (FK)</td><td>REQ-20260910-0012</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">C</td><td class="py-2 px-3 text-slate-800">visit_date</td><td>日程</td><td>2026-09-10</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">D</td><td class="py-2 px-3 text-slate-800">visit_place</td><td>訪問先</td><td>株式会社岩田屋三越</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">E</td><td class="py-2 px-3 text-slate-800">purpose_detail</td><td>目的・用件</td><td>出張支援SaaSの訪問提案</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-amber-600"></i> Table 3: `request_items` (手配・経費詳細サブテーブル - ホテル/航空券/経費統合)
+          </h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-200">
+            <table class="w-full text-xs text-left text-slate-700 font-mono text-[11px]">
+              <thead class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                <tr><th class="py-2.5 px-3">Col</th><th class="py-2.5 px-3">Column Name</th><th class="py-2.5 px-3">SubTable Target</th><th class="py-2.5 px-3">Description / L3明細項目</th><th class="py-2.5 px-3">Example Data</th></tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr><td class="py-2 px-3 text-slate-400">A</td><td class="py-2 px-3 text-sky-700 font-bold">item_id</td><td>PRIMARY</td><td>明細ユニークID (PK)</td><td>ITM-883921</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">B</td><td class="py-2 px-3 text-sky-700 font-bold">request_id</td><td>FOREIGN</td><td>親申請ID (FK)</td><td>REQ-20260910-0012</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">C</td><td class="py-2 px-3 text-sky-700">table_type</td><td>TYPE</td><td>`HOTEL` / `AIR` / `EXPENSE`</td><td>EXPENSE</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">D</td><td class="py-2 px-3 text-slate-800">reservation_no</td><td>予約番号</td><td>cXML返却予約No</td><td>RES-20260910-8812</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">E</td><td class="py-2 px-3 text-slate-800">status</td><td>ステータス</td><td>手配状態 (`予約済`/`未予約`)</td><td>予約済</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">F</td><td class="py-2 px-3 text-slate-800">user_name</td><td>利用者</td><td>利用社員名</td><td>デモ</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">G</td><td class="py-2 px-3 text-slate-800">classification</td><td>区分</td><td>`宿泊` / `交通` など</td><td>宿泊</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">H</td><td class="py-2 px-3 text-slate-800">type_name</td><td>種別</td><td>`国内ホテル` / `タクシー` 等</td><td>国内ホテル</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">I</td><td class="py-2 px-3 text-slate-800">use_date_start</td><td>利用日/CI</td><td>利用日・チェックイン</td><td>2026-09-10</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">J</td><td class="py-2 px-3 text-slate-800">use_date_end</td><td>CO</td><td>チェックアウト</td><td>2026-09-11</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">K</td><td class="py-2 px-3 text-slate-800">origin</td><td>出発地/泊地</td><td>出発地 / 宿泊場所</td><td>東京</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">L</td><td class="py-2 px-3 text-slate-800">destination</td><td>到着地</td><td>到着場所</td><td>福岡天神</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">M</td><td class="py-2 px-3 text-slate-800">arrangement_content</td><td>手配内容</td><td>宿泊施設名・商談目的詳細</td><td>リッチモンドホテル福岡天神予定</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">N</td><td class="py-2 px-3 text-slate-800">people_count</td><td>人数</td><td>利用人数</td><td>1人</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">O</td><td class="py-2 px-3 text-slate-800">nights_count</td><td>泊数</td><td>宿泊日数</td><td>3泊</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">P</td><td class="py-2 px-3 text-slate-800">distance</td><td>距離</td><td>移動距離 (km)</td><td>1090 km</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Q</td><td class="py-2 px-3 text-sky-700 font-bold">method</td><td>手配方式</td><td>`ピカパカ` / `個人立替` / `カード`</td><td>ピカパカ</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">R</td><td class="py-2 px-3 text-emerald-700 font-bold">amount</td><td>金額</td><td>小計金額（税込）</td><td>10000</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">S</td><td class="py-2 px-3 text-slate-800">tax_category</td><td>税込区分</td><td>`宿泊税` / `課税` など</td><td>宿泊税</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">T</td><td class="py-2 px-3 text-slate-800">remarks</td><td>備考</td><td>税額補足等のメモ</td><td>宿泊税は200円想定</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="content-api-cxml" class="tab-content space-y-6 hidden">
+      <div class="bg-white rounded-xl border border-slate-200 p-6 space-y-4 shadow-sm">
+        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-code text-amber-600"></i> Punchout API ＆ cXML JSON 通信仕様 (1approval Punchout API Spec)
+        </h2>
+        <p class="text-xs text-slate-500">1approval Integration Hub (Notion Punchout-API 仕様書 ＆ `punchout.js` 準拠) のエンドポイント通信仕様です。認証には `x-api-key` ヘッダーを使用します。</p>
+
+        <div class="space-y-4">
+          <!-- Setup Request -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-bold text-sky-700 uppercase tracking-wider flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-200">POST</span> `/api/v1.0/punchout/setup?mode=dev`
+              </h3>
+              <span class="text-[10px] text-slate-500 font-mono">Header: `x-api-key: {hubApiKey}`, `Content-Type: application/json`</span>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 font-mono text-xs text-amber-300 overflow-x-auto">
+              <pre><code>{
+  "cXML": {
+    "@payloadID": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+    "@timestamp": "2026-09-10T10:15:00+09:00",
+    "Header": {
+      "From": { "Credential": { "@domain": "DUNS", "Identity": "eichiii-dev" } },
+      "To": { "Credential": { "@domain": "DUNS", "Identity": "pikapaka-btm" } },
+      "Sender": {
+        "Credential": {
+          "@domain": "NetworkID",
+          "Identity": "punchout_eichiii_dev",
+          "SharedSecret": "jN7!xR2pQ9@vL4wZ"
+        },
+        "UserAgent": "PikapakaSystem/1.0"
+      }
+    },
+    "Request": {
+      "PunchOutSetupRequest": {
+        "@operation": "create",
+        "BuyerCookie": "1002-REQ-20260910-0012",
+        "ItemIn": [
+          {
+            "@quantity": "1",
+            "@lineNumber": "1",
+            "ItemID": { "SupplierPartID": "SETUP-REQUEST" },
+            "ItemDetail": { "Description": { "@xml:lang": "en", "#text": "User Registration Request" }, "UnitOfMeasure": "EA" },
+            "Extrinsic": [
+              { "@name": "register_email", "#text": "demo@example.com" },
+              { "@name": "service", "#text": "dom-hotel" },
+              { "@name": "checkin_date", "#text": "2026-09-10" },
+              { "@name": "checkout_date", "#text": "2026-09-11" }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+
+          <!-- Order Request -->
+          <div class="space-y-2 pt-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">POST</span> `/api/v1.0/punchout/order-request?mode=dev`
+              </h3>
+              <span class="text-[10px] text-slate-500 font-mono">Header: `x-api-key: {hubApiKey}`, `Content-Type: application/json`</span>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 font-mono text-xs text-emerald-300 overflow-x-auto">
+              <pre><code>{
+  "cXML": {
+    "@payloadID": "123e4567-e89b-12d3-a456-426614174000",
+    "@timestamp": "2026-09-10T10:30:00+09:00",
+    "Header": {
+      "From": { "Credential": { "@domain": "DUNS", "Identity": "eichiii-dev" } },
+      "To": { "Credential": { "@domain": "DUNS", "Identity": "pikapaka-btm" } },
+      "Sender": {
+        "Credential": { "@domain": "NetworkID", "Identity": "punchout_eichiii_dev", "SharedSecret": "jN7!xR2pQ9@vL4wZ" },
+        "UserAgent": "LaravelSystem/1.0"
+      }
+    },
+    "Request": {
+      "OrderRequest": {
+        "OrderRequestHeader": {
+          "@orderID": "1002-REQ-20260910-0012",
+          "@orderDate": "2026-09-10T10:30:00+09:00",
+          "type": "new"
+        },
+        "ItemOut": [
+          {
+            "@quantity": "1",
+            "@lineNumber": "1",
+            "ItemID": { "SupplierPartID": "HOTEL-FUKUOKA-01" },
+            "ItemDetail": {
+              "Description": { "@xml:lang": "ja", "#text": "リッチモンドホテル福岡天神 (3泊)" },
+              "UnitOfMeasure": "EA"
+            },
+            "Extrinsic": { "@name": "ReservationNumber", "#text": "RES-20260910-9921" }
+          }
+        ]
+      }
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="content-code-samples" class="tab-content space-y-6 hidden">
+      <div class="bg-white rounded-xl border border-slate-200 p-6 space-y-4 shadow-sm">
+        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-file-code text-purple-600"></i> Code.gs (GAS Server-Side Communicator)
+        </h2>
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 font-mono text-xs text-purple-200 overflow-x-auto">
+          <pre><code>const SPREADSHEET_ID = "YOUR_PRIVATE_SPREADSHEET_ID_HERE";
+const HUB_CONFIG = {
+  baseRelayServerUrl: "https://nibf0p7eg2.execute-api.ap-southeast-2.amazonaws.com/prod",
+  urlModeSuffix: "?mode=dev",
+  hubApiKey: "YOUR_1APPROVAL_HUB_API_KEY",
+  priceThreshold: 20
+};
+
+function doGet(e) {
+  const userEmail = Session.getActiveUser().getEmail();
+  const template = HtmlService.createTemplateFromFile('Index');
+  template.userEmail = userEmail;
+  return template.evaluate()
+    .setTitle('出張手配申請 - 1approval for Google Workspace')
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1.0')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+function executePunchoutSetup(serviceType, buyerCookie) {
+  const userEmail = Session.getActiveUser().getEmail();
+  const payload = {
+    cXML: {
+      "@payloadID": Utilities.getUuid(),
+      "@timestamp": new Date().toISOString(),
+      Header: {
+        From: { Credential: { "@domain": "DUNS", Identity: "eichiii-dev" } },
+        To: { Credential: { "@domain": "DUNS", Identity: "pikapaka-btm" } },
+        Sender: { Credential: { "@domain": "NetworkID", Identity: "punchout_eichiii_dev", SharedSecret: "jN7!xR2pQ9@vL4wZ" }, UserAgent: "PikapakaSystem/1.0" }
+      },
+      Request: {
+        PunchOutSetupRequest: {
+          "@operation": "create",
+          BuyerCookie: buyerCookie,
+          ItemIn: [{
+            "@quantity": "1", "@lineNumber": "1",
+            ItemID: { SupplierPartID: "SETUP-REQUEST" },
+            ItemDetail: { Description: { "@xml:lang": "en", "#text": "User Registration Request" }, UnitOfMeasure: "EA" },
+            Extrinsic: [
+              { "@name": "register_email", "#text": userEmail },
+              { "@name": "service", "#text": serviceType }
+            ]
+          }]
+        }
+      }
+    }
+  };
+
+  const options = {
+    method: "post",
+    contentType: "application/json",
+    headers: { "x-api-key": HUB_CONFIG.hubApiKey },
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  };
+
+  const response = UrlFetchApp.fetch(`${HUB_CONFIG.baseRelayServerUrl}/api/v1.0/punchout/setup${HUB_CONFIG.urlModeSuffix}`, options);
+  return JSON.parse(response.getContentText());
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="content-prototype" class="tab-content space-y-6">
+      <div class="bg-white rounded-xl border border-slate-200 p-6 space-y-5 shadow-sm">
+        
+        <!-- Header Controls -->
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+          <div>
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-laptop-code text-pink-600"></i> kintone「出張手配申請-0.5.4-stg-eichi」画面再現 E2E動作デモ
+            </h2>
+            <p class="text-xs text-slate-500">申請者画面、承認者Chatカード、および経理・管理者向け「1approval 統合管理ポータル (`5/mock`)」の全視点を体験できます。</p>
+          </div>
+          <div class="flex items-center space-x-2 bg-slate-100 p-1 rounded-lg border border-slate-200">
+            <span class="text-[11px] font-bold text-slate-600 px-2">視点切り替え:</span>
+            <button onclick="toggleUserRole('APPLICANT')" id="role-btn-applicant" class="px-3 py-1 rounded-md bg-sky-600 text-white font-bold text-xs shadow-xs">申請者（デモ）</button>
+            <button onclick="toggleUserRole('APPROVER')" id="role-btn-approver" class="px-3 py-1 rounded-md bg-white text-slate-600 font-bold text-xs hover:bg-slate-50 border border-slate-200">承認者（佐藤部長）</button>
+            <button onclick="toggleUserRole('ADMIN')" id="role-btn-admin" class="px-3 py-1 rounded-md bg-white text-slate-600 font-bold text-xs hover:bg-slate-50 border border-slate-200 flex items-center gap-1">
+              <i class="fa-solid fa-chart-pie text-emerald-600"></i> 経理管理者 (`5/mock`)
+            </button>
+          </div>
+        </div>
+
+        <!-- Custom Notification Toast -->
+        <div id="custom-toast" class="hidden fixed top-20 right-8 z-50 p-4 rounded-xl shadow-xl text-xs font-bold transition-all duration-300 border backdrop-blur">
+          <span id="toast-message">メッセージ</span>
+        </div>
+
+        <!-- Custom Confirm Dialog -->
+        <div id="custom-confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div class="bg-white border border-slate-300 rounded-xl max-w-sm w-full p-5 space-y-4 shadow-2xl modal-anim">
+            <div class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-circle-question text-amber-500"></i> <span id="confirm-modal-title">確認</span>
+            </div>
+            <p class="text-xs text-slate-600" id="confirm-modal-body">カート内の明細を空にしてもよろしいですか？</p>
+            <div class="flex justify-end space-x-2">
+              <button onclick="resolveConfirmModal(false)" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium">キャンセル</button>
+              <button onclick="resolveConfirmModal(true)" class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-xs">実行する</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMO PANEL 1: APPLICANT VIEW (kintone matched UI) -->
+        <div id="demo-applicant-view" class="space-y-6 max-w-5xl mx-auto">
+          
+          <!-- kintone App Status Header Bar -->
+          <div class="bg-sky-50 p-3.5 rounded-xl border border-sky-200 flex items-center justify-between text-xs">
+            <div class="flex items-center space-x-3">
+              <span class="px-2.5 py-1 rounded bg-sky-600 text-white font-bold text-[11px]">ステータス: <span id="app-status-badge">事前承認済</span></span>
+              <span class="text-slate-600">現在の作業者: <strong class="text-slate-900 font-bold">デモ</strong></span>
+            </div>
+            <div class="text-slate-500 font-mono text-[11px]">
+              作成日時: <span class="text-slate-700 font-semibold">2026-07-02 16:51</span>
+            </div>
+          </div>
+
+          <!-- Section 1: Basic Applicant Form Fields -->
+          <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200 space-y-4">
+            <div class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-200 pb-2">
+              <i class="fa-solid fa-user-gear text-sky-600"></i> 基本情報（kintone出張手配申請フィールド完全整合）
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+              <div>
+                <label class="block text-slate-500 mb-1">作成者</label>
+                <input type="text" readonly value="デモ (demo@example.com)" class="w-full bg-slate-100 border border-slate-300 rounded-lg px-3 py-1.5 text-slate-700 font-medium">
+              </div>
+              <div>
+                <label class="block text-slate-500 mb-1">出張者 <span class="text-rose-500">*</span></label>
+                <input id="demo-traveler" type="text" value="デモ" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-slate-800 font-medium focus:outline-none focus:border-sky-500">
+              </div>
+              <div>
+                <label class="block text-slate-500 mb-1">承認者 <span class="text-rose-500">*</span></label>
+                <input id="demo-approver" type="text" value="デモ (佐藤部長)" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-slate-800 font-medium focus:outline-none focus:border-sky-500">
+              </div>
+              <div>
+                <label class="block text-slate-500 mb-1">出張先 <span class="text-rose-500">*</span></label>
+                <input id="demo-destination" type="text" value="福岡" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-slate-800 font-medium focus:outline-none focus:border-sky-500">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div>
+                <label class="block text-slate-500 mb-1">出発日 <span class="text-rose-500">*</span></label>
+                <input id="demo-departure-date" type="date" value="2026-09-10" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-slate-800 font-medium focus:outline-none focus:border-sky-500">
+              </div>
+              <div>
+                <label class="block text-slate-500 mb-1">帰着日 <span class="text-rose-500">*</span></label>
+                <input id="demo-return-date" type="date" value="2026-09-11" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-slate-800 font-medium focus:outline-none focus:border-sky-500">
+              </div>
+              <div>
+                <label class="block text-slate-500 mb-1">出張目的</label>
+                <input id="demo-purpose" type="text" value="福岡のクライアントに会って現地商談を行い親睦を深めるため。" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-slate-800 font-medium focus:outline-none focus:border-sky-500">
+              </div>
+            </div>
+
+            <!-- Schedule Sub-Table -->
+            <div class="space-y-2 pt-2">
+              <label class="block text-[11px] font-bold text-slate-700 uppercase">スケジュール（行動予定サブテーブル）</label>
+              <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="w-full text-xs text-left">
+                  <thead class="bg-sky-600 text-white font-semibold text-[11px]">
+                    <tr>
+                      <th class="py-2 px-3 w-1/4">日程</th>
+                      <th class="py-2 px-3 w-1/3">訪問先</th>
+                      <th class="py-2 px-3">目的・用件</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-slate-200 text-[11px]">
+                    <tr>
+                      <td class="py-2 px-3 font-mono">2026-09-10</td>
+                      <td class="py-2 px-3 font-medium text-slate-800">株式会社岩田屋三越</td>
+                      <td class="py-2 px-3 text-slate-600">出張支援SaaSの訪問提案</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] text-slate-500 mb-1">備考</label>
+              <textarea id="demo-remarks" rows="2" class="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-xs text-slate-800 focus:outline-none focus:border-sky-500" placeholder="補足事項を入力..."></textarea>
+            </div>
+          </div>
+
+          <!-- Section 2: Punchout Service Cards (`punchout.js` UI) -->
+          <div class="space-y-3 pt-2">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                <span>手配サービスの起動（`punchout.js` サービスカード型UI）</span>
+              </label>
+              <button id="demo-empty-cart-btn" disabled onclick="emptyDemoCart()" class="px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-400 cursor-not-allowed transition flex items-center gap-1">
+                <i class="fa-solid fa-trash-can"></i> カートを空にする
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button onclick="openPunchoutModal('dom-hotel')" class="p-3.5 rounded-xl border border-sky-300 bg-white hover:bg-sky-50 transition text-left group flex items-center space-x-3 shadow-xs hover:border-sky-500">
+                <div class="w-10 h-10 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center text-lg group-hover:scale-105 transition flex-shrink-0">
+                  <i class="fa-solid fa-hotel"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 truncate">ホテル ピカパカ出張DX</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">国内4万件から最安値予約</div>
+                </div>
+              </button>
+
+              <button onclick="openPunchoutModal('train')" class="p-3.5 rounded-xl border border-indigo-300 bg-white hover:bg-indigo-50 transition text-left group flex items-center space-x-3 shadow-xs hover:border-indigo-500">
+                <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg group-hover:scale-105 transition flex-shrink-0">
+                  <i class="fa-solid fa-plane"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 truncate">航空券・新幹線 ピカパカ</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">LCC含む横断最安比較</div>
+                </div>
+              </button>
+
+              <button onclick="openPunchoutModal('goods')" class="p-3.5 rounded-xl border border-amber-300 bg-white hover:bg-amber-50 transition text-left group flex items-center space-x-3 shadow-xs hover:border-amber-500">
+                <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-lg group-hover:scale-105 transition flex-shrink-0">
+                  <i class="fa-solid fa-boxes-packing"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 truncate">資材・備品 モノタロウ</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">現場工具・消耗品カタログ</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Section 3: Sub-Tables for Hotel, Air, and Expense Settlement -->
+          <div class="space-y-5 border-t border-slate-200 pt-4">
+            
+            <!-- Hotel Table -->
+            <div class="space-y-1.5">
+              <h4 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-hotel text-sky-600"></i> ホテル手配サブテーブル
+              </h4>
+              <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="w-full text-xs text-left">
+                  <thead class="bg-sky-600 text-white font-semibold text-[11px]">
+                    <tr>
+                      <th class="py-2 px-2.5">予約番号</th>
+                      <th class="py-2 px-2.5">ステータス</th>
+                      <th class="py-2 px-2.5">利用者</th>
+                      <th class="py-2 px-2.5">チェックイン</th>
+                      <th class="py-2 px-2.5">チェックアウト</th>
+                      <th class="py-2 px-2.5">宿泊地</th>
+                      <th class="py-2 px-2.5">手配内容</th>
+                      <th class="py-2 px-2.5">人数/泊数</th>
+                      <th class="py-2 px-2.5">金額</th>
+                      <th class="py-2 px-2.5">リンク</th>
+                      <th class="py-2 px-2.5">手配方式</th>
+                    </tr>
+                  </thead>
+                  <tbody id="hotel-table-body" class="bg-white divide-y divide-slate-200 text-[11px] font-mono">
+                    <tr class="text-slate-400 italic"><td colspan="11" class="py-3 px-3 text-center">手配データなし（上のサービスカードから手配を実行してください）</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Air/Train Table -->
+            <div class="space-y-1.5">
+              <h4 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-plane-departure text-indigo-600"></i> 航空券/新幹線手配サブテーブル
+              </h4>
+              <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="w-full text-xs text-left">
+                  <thead class="bg-sky-600 text-white font-semibold text-[11px]">
+                    <tr>
+                      <th class="py-2 px-2.5">予約番号</th>
+                      <th class="py-2 px-2.5">ステータス</th>
+                      <th class="py-2 px-2.5">利用者</th>
+                      <th class="py-2 px-2.5">利用日</th>
+                      <th class="py-2 px-2.5">出発</th>
+                      <th class="py-2 px-2.5">到着</th>
+                      <th class="py-2 px-2.5">手配内容</th>
+                      <th class="py-2 px-2.5">金額</th>
+                      <th class="py-2 px-2.5">リンク</th>
+                      <th class="py-2 px-2.5">手配方式</th>
+                    </tr>
+                  </thead>
+                  <tbody id="air-table-body" class="bg-white divide-y divide-slate-200 text-[11px] font-mono">
+                    <tr class="text-slate-400 italic"><td colspan="10" class="py-3 px-3 text-center">手配データなし</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Expense Table -->
+            <div class="space-y-1.5">
+              <h4 class="text-xs font-bold text-slate-800 flex items-center justify-between">
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-calculator text-emerald-600"></i> 経費精算サブテーブル（L3自動書き戻し）</span>
+                <span id="demo-dynamic-policy-badge" class="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">ダイナミック・ポリシー (許容 20%)</span>
+              </h4>
+              <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="w-full text-xs text-left">
+                  <thead class="bg-sky-600 text-white font-semibold text-[11px]">
+                    <tr>
+                      <th class="py-2 px-2">区分</th>
+                      <th class="py-2 px-2">種別</th>
+                      <th class="py-2 px-2">利用者</th>
+                      <th class="py-2 px-2">利用日</th>
+                      <th class="py-2 px-2">出発地/泊地</th>
+                      <th class="py-2 px-2">到着地</th>
+                      <th class="py-2 px-2">手配内容</th>
+                      <th class="py-2 px-2">人数</th>
+                      <th class="py-2 px-2">泊数</th>
+                      <th class="py-2 px-2">距離</th>
+                      <th class="py-2 px-2">手配方式</th>
+                      <th class="py-2 px-2">金額</th>
+                      <th class="py-2 px-2">詳細</th>
+                      <th class="py-2 px-2">税込区分</th>
+                      <th class="py-2 px-2">備考</th>
+                    </tr>
+                  </thead>
+                  <tbody id="expense-table-body" class="bg-white divide-y divide-slate-200 text-[11px] font-mono">
+                    <tr>
+                      <td class="py-2 px-2 font-bold text-slate-800">宿泊</td>
+                      <td class="py-2 px-2 text-slate-700">国内ホテル</td>
+                      <td class="py-2 px-2 text-slate-700">デモ</td>
+                      <td class="py-2 px-2 text-slate-600">2026-09-10</td>
+                      <td class="py-2 px-2 text-slate-600">東京</td>
+                      <td class="py-2 px-2 text-slate-600">福岡天神</td>
+                      <td class="py-2 px-2 text-slate-700">岩田屋三越での新規イベント交渉...</td>
+                      <td class="py-2 px-2 text-slate-600">1人</td>
+                      <td class="py-2 px-2 text-slate-600">3泊</td>
+                      <td class="py-2 px-2 text-slate-600">1090 km</td>
+                      <td class="py-2 px-2 font-bold text-sky-600">ピカパカ</td>
+                      <td class="py-2 px-2 font-bold text-emerald-600">10,000 円</td>
+                      <td class="py-2 px-2 text-slate-600">リッチモンドホテル福岡天神予定</td>
+                      <td class="py-2 px-2 text-slate-600">宿泊税</td>
+                      <td class="py-2 px-2 text-slate-500">宿泊税は200円想定</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Section 4: Totals Summary Bar -->
+          <div class="bg-slate-100 p-4 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-3 rounded-lg border border-slate-200">
+              <div class="text-[11px] text-slate-500">会社請求金額</div>
+              <div id="demo-company-amount" class="text-xl font-bold text-slate-800 font-mono mt-0.5">0 円</div>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-slate-200">
+              <div class="text-[11px] text-slate-500">経費精算金額</div>
+              <div id="demo-expense-amount" class="text-xl font-bold text-emerald-600 font-mono mt-0.5">10,000 円</div>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-sky-300">
+              <div class="text-[11px] text-sky-700 font-bold">出張合計金額</div>
+              <div id="demo-total-amount" class="text-2xl font-bold text-sky-700 font-mono mt-0.5">10,000 円</div>
+            </div>
+          </div>
+
+          <!-- Submit Bar -->
+          <div class="flex justify-end">
+            <button id="demo-submit-btn" onclick="submitApplicantForm()" class="px-8 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition shadow-md shadow-emerald-600/20 flex items-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-paper-plane"></i> 申請を提出 (非公開シートDB更新 ＆ Google Chat承認依頼送信)
+            </button>
+          </div>
+
+          <div id="demo-submit-success-alert" class="hidden p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs space-y-1">
+            <div class="font-bold text-emerald-900 flex items-center gap-2">
+              <i class="fa-solid fa-circle-check text-base text-emerald-600"></i> 申請が正常に提出されました！非公開シートDB（`requests`）へ格納完了。
+            </div>
+            <p class="text-slate-600">承認者（佐藤部長）の Google Chat へ Interactive Card 承認依頼メッセージを自動送信しました。画面右上の視点切替ボタンで「承認者（佐藤部長）」に切り替えて承認テストを行ってください。</p>
+          </div>
+
+        </div>
+
+        <!-- DEMO PANEL 2: APPROVER VIEW (GOOGLE CHAT INTERACTIVE CARD DEMO) -->
+        <div id="demo-approver-view" class="hidden space-y-6 max-w-3xl mx-auto">
+          <div class="p-5 rounded-xl bg-purple-50 border border-purple-200 space-y-3">
+            <div class="flex items-center justify-between border-b border-purple-200 pb-2">
+              <span class="text-xs font-bold text-purple-900 flex items-center gap-2">
+                <i class="fa-brands fa-google text-sm text-purple-600"></i> Google Chat 承認通知メッセージ（佐藤部長のメッセージ画面）
+              </span>
+              <span class="text-[10px] px-2.5 py-0.5 rounded bg-purple-200 text-purple-800 font-mono font-bold">Interactive Card</span>
+            </div>
+
+            <div id="approver-card-container" class="bg-white p-4 rounded-xl border border-slate-200 space-y-3 text-xs shadow-xs">
+              <div class="text-slate-500 text-center py-6">
+                現在、保留中の承認依頼はありません。申請者視点で手配を行い申請を提出してください。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMO PANEL 3: ADMIN / ACCOUNTING VIEW (1approval 統合管理ポータル 5/mock) -->
+        <div id="demo-admin-view" class="hidden space-y-6 max-w-5xl mx-auto">
+          <div class="bg-slate-900 text-white p-5 rounded-xl space-y-4 shadow-xl">
+            
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500 text-white font-bold flex items-center justify-center text-sm shadow-md">
+                  <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    1approval 統合管理ポータル <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-900/80 text-emerald-300 border border-emerald-700">`5/mock` 実機画面連動</span>
+                  </h3>
+                  <p class="text-[11px] text-slate-400">全社一括請求・L3明細データ突合・会計システム（勘定奉行/PCA/freee等）自動仕訳出力</p>
+                </div>
+              </div>
+              <span class="text-xs px-2.5 py-1 bg-slate-800 text-slate-300 rounded border border-slate-700 font-mono"><i class="fa-solid fa-user-shield text-emerald-400 mr-1"></i> 経理・全社管理者モード</span>
+            </div>
+
+            <!-- Dashboard Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+              <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700">
+                <div class="text-slate-400 text-[10px]">当月 全社手配総額 (GMV)</div>
+                <div class="text-lg font-bold text-white font-mono mt-1">¥12,450,000</div>
+                <div class="text-[10px] text-emerald-400 mt-0.5">前月比 +14.2%</div>
+              </div>
+              <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700">
+                <div class="text-slate-400 text-[10px]">会社一括請求額 (請求一本化)</div>
+                <div class="text-lg font-bold text-sky-400 font-mono mt-1">¥10,800,000</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">領収書回収不要 (立替ゼロ)</div>
+              </div>
+              <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700">
+                <div class="text-slate-400 text-[10px]">経費精算 (立替分) 総額</div>
+                <div class="text-lg font-bold text-emerald-400 font-mono mt-1">¥1,650,000</div>
+                <div class="text-[10px] text-emerald-400 mt-0.5">全件仕訳自動生成済</div>
+              </div>
+              <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700">
+                <div class="text-slate-400 text-[10px]">削減された間接工数 (ROI)</div>
+                <div class="text-lg font-bold text-amber-400 font-mono mt-1">420 時間</div>
+                <div class="text-[10px] text-amber-400 mt-0.5">出張工数 85.7% 削減達成</div>
+              </div>
+            </div>
+
+            <!-- Controls & Export Actions -->
+            <div class="bg-slate-800/50 p-3.5 rounded-xl border border-slate-700 flex items-center justify-between text-xs">
+              <div class="flex items-center space-x-3">
+                <span class="text-slate-300 font-bold">会計連携フォーマット:</span>
+                <select class="bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-slate-200 font-medium">
+                  <option>勘定奉行クラウド (OBC)</option>
+                  <option>PCAクラウド (PCA)</option>
+                  <option>freee会計 / MFクラウド</option>
+                  <option>マネーフォワード クラウド経費</option>
+                </select>
+              </div>
+              <div class="flex items-center space-x-2">
+                <button onclick="showToast('PEPPOL規格 L3明細・全社一括請求書データをダウンロードしました。')" class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                  <i class="fa-solid fa-file-invoice text-sm"></i> 月次一括請求データ (PEPPOL)
+                </button>
+                <button onclick="showToast('勘定奉行クラウド連携用 CSVデータを出力しました。')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                  <i class="fa-solid fa-download text-sm"></i> 会計仕訳CSVダウンロード
+                </button>
+              </div>
+            </div>
+
+            <!-- Admin Live Data Table (L3 detail aggregated from all workflows) -->
+            <div class="space-y-2">
+              <div class="text-xs font-bold text-slate-300 flex items-center justify-between">
+                <span>全社購買・手配 L3明細データログ (kintone / M365 / Google Workspace 統合)</span>
+                <span class="text-[10px] text-slate-400 font-mono">Realtime Sync with 1approval Integration Hub</span>
+              </div>
+              <div class="overflow-x-auto rounded-lg border border-slate-700">
+                <table class="w-full text-[11px] text-left text-slate-300 font-mono">
+                  <thead class="bg-slate-800 text-slate-200 border-b border-slate-700">
+                    <tr>
+                      <th class="py-2 px-2.5">申請ID / WF源泉</th>
+                      <th class="py-2 px-2.5">申請者/部署</th>
+                      <th class="py-2 px-2.5">手配先/SKU</th>
+                      <th class="py-2 px-2.5">L3手配明細詳細</th>
+                      <th class="py-2 px-2.5">手配方式</th>
+                      <th class="py-2 px-2.5">金額</th>
+                      <th class="py-2 px-2.5">ステータス</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800 bg-slate-900/60">
+                    <tr>
+                      <td class="py-2 px-2.5 font-bold text-sky-400">REQ-20260910-0012 <span class="text-[9px] px-1 bg-sky-900 text-sky-300 rounded">Google</span></td>
+                      <td class="py-2 px-2.5">デモ (営業部)</td>
+                      <td class="py-2 px-2.5 text-slate-400">ピカパカ / HOTEL-FUKUOKA-01</td>
+                      <td class="py-2 px-2.5 text-slate-200">リッチモンドホテル福岡天神 (3泊) ＋ ANA国内線</td>
+                      <td class="py-2 px-2.5 font-bold text-sky-400">ピカパカ一括</td>
+                      <td class="py-2 px-2.5 font-bold text-emerald-400">¥35,000</td>
+                      <td class="py-2 px-2.5 text-emerald-400 font-bold">予約・発注完了</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-2.5 font-bold text-indigo-400">REQ-20260908-8812 <span class="text-[9px] px-1 bg-indigo-900 text-indigo-300 rounded">kintone</span></td>
+                      <td class="py-2 px-2.5">山田 (施工管理課)</td>
+                      <td class="py-2 px-2.5 text-slate-400">モノタロウ / MNT-88192</td>
+                      <td class="py-2 px-2.5 text-slate-200">高輝度LED作業ヘッドライト 2個 ＋ 乾電池一式</td>
+                      <td class="py-2 px-2.5 font-bold text-amber-400">モノタロウ一括</td>
+                      <td class="py-2 px-2.5 font-bold text-emerald-400">¥18,400</td>
+                      <td class="py-2 px-2.5 text-emerald-400 font-bold">発送完了</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-2.5 font-bold text-purple-400">REQ-20260905-3319 <span class="text-[9px] px-1 bg-purple-900 text-purple-300 rounded">M365</span></td>
+                      <td class="py-2 px-2.5">鈴木 (開発部)</td>
+                      <td class="py-2 px-2.5 text-slate-400">Amazon / AMZ-99212</td>
+                      <td class="py-2 px-2.5 text-slate-200">4K 27インチ開発用外部モニター 1台</td>
+                      <td class="py-2 px-2.5 font-bold text-orange-400">Amazon一括</td>
+                      <td class="py-2 px-2.5 font-bold text-emerald-400">¥42,000</td>
+                      <td class="py-2 px-2.5 text-emerald-400 font-bold">納品完了</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- PUNCHOUT MODAL SIMULATOR -->
+  <div id="punchout-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-300 rounded-2xl max-w-2xl w-full p-6 space-y-5 shadow-2xl modal-anim relative">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <div class="flex items-center space-x-2">
+          <span id="modal-supplier-badge" class="px-2.5 py-1 rounded bg-sky-100 text-sky-800 font-bold text-xs border border-sky-200">
+            ピカパカ出張DX
+          </span>
+          <span class="text-xs font-bold text-slate-800">パンチアウト手配画面 (cXML Session)</span>
+        </div>
+        <button onclick="closePunchoutModal()" class="text-slate-400 hover:text-slate-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Modal Body Loading / Selection Simulator -->
+      <div id="modal-loading-state" class="py-12 text-center space-y-3">
+        <div class="w-10 h-10 border-4 border-sky-200 border-t-sky-600 rounded-full animate-spin mx-auto"></div>
+        <div class="text-xs font-bold text-slate-700">1approval Hub 経由で cXML PunchOutSetupRequest を送信中...</div>
+        <div class="text-[10px] text-slate-400 font-mono">POST https://nibf0p7eg2.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1.0/punchout/setup?mode=dev</div>
+      </div>
+
+      <div id="modal-interactive-state" class="hidden space-y-4">
+        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+          <div class="text-xs font-bold text-slate-900" id="modal-item-title">リッチモンドホテル福岡天神 (3泊)＋新幹線/航空券</div>
+          <p class="text-[11px] text-slate-500" id="modal-item-desc">出張者: デモ | 利用日: 2026-09-10 ~ 2026-09-11</p>
+        </div>
+
+        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs">
+          <div class="font-bold text-slate-800 text-[11px] flex justify-between border-b border-slate-200 pb-1.5">
+            <span>カート投入予定のL3詳細明細</span>
+            <span class="text-emerald-600 font-mono font-bold" id="modal-item-price">¥35,000</span>
+          </div>
+          <ul class="text-[11px] text-slate-600 space-y-1 list-disc list-inside" id="modal-item-list">
+            <li>リッチモンドホテル福岡天神 (3泊/朝食付) - ¥25,000 (税込) [SKU: HOTEL-FUKUOKA-01]</li>
+            <li>国内航空券 (羽田 ⇔ 福岡 往復) - ¥10,000 (税込) [SKU: AIR-TOKYO-FUKUOKA]</li>
+          </ul>
+        </div>
+
+        <button onclick="completePunchoutCart()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-cart-plus"></i> カートに入れて1approvalポータルへ書き戻す (cXML OrderMessage)
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Custom Toast System
+    function showToast(msg, isSuccess = true) {
+      const toast = document.getElementById('custom-toast');
+      const toastMsg = document.getElementById('toast-message');
+      toastMsg.innerText = msg;
+      
+      if (isSuccess) {
+        toast.className = "fixed top-20 right-8 z-50 p-4 rounded-xl shadow-xl text-xs font-bold transition-all duration-300 border bg-emerald-600 text-white border-emerald-500 backdrop-blur modal-anim";
+      } else {
+        toast.className = "fixed top-20 right-8 z-50 p-4 rounded-xl shadow-xl text-xs font-bold transition-all duration-300 border bg-amber-500 text-white border-amber-400 backdrop-blur modal-anim";
+      }
+      
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+
+    // Custom Confirm Dialog
+    let confirmResolver = null;
+
+    function customConfirm(title, body) {
+      document.getElementById('confirm-modal-title').innerText = title;
+      document.getElementById('confirm-modal-body').innerText = body;
+      document.getElementById('custom-confirm-modal').classList.remove('hidden');
+      
+      return new Promise((resolve) => {
+        confirmResolver = resolve;
+      });
+    }
+
+    function resolveConfirmModal(res) {
+      document.getElementById('custom-confirm-modal').classList.add('hidden');
+      if (confirmResolver) confirmResolver(res);
+    }
+
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-button').forEach(el => {
+        el.classList.remove('tab-active');
+        el.classList.add('text-slate-500');
+      });
+
+      document.getElementById('content-' + tabId).classList.remove('hidden');
+      const activeBtn = document.getElementById('tab-' + tabId);
+      activeBtn.classList.add('tab-active');
+      activeBtn.classList.remove('text-slate-500');
+    }
+
+    // Role View Switching (Applicant, Approver, Admin)
+    function toggleUserRole(role) {
+      const applicantView = document.getElementById('demo-applicant-view');
+      const approverView = document.getElementById('demo-approver-view');
+      const adminView = document.getElementById('demo-admin-view');
+
+      const btnApplicant = document.getElementById('role-btn-applicant');
+      const btnApprover = document.getElementById('role-btn-approver');
+      const btnAdmin = document.getElementById('role-btn-admin');
+
+      applicantView.classList.add('hidden');
+      approverView.classList.add('hidden');
+      adminView.classList.add('hidden');
+
+      btnApplicant.className = "px-3 py-1 rounded-md bg-white text-slate-600 font-bold text-xs hover:bg-slate-50 border border-slate-200";
+      btnApprover.className = "px-3 py-1 rounded-md bg-white text-slate-600 font-bold text-xs hover:bg-slate-50 border border-slate-200";
+      btnAdmin.className = "px-3 py-1 rounded-md bg-white text-slate-600 font-bold text-xs hover:bg-slate-50 border border-slate-200 flex items-center gap-1";
+
+      if (role === 'APPLICANT') {
+        applicantView.classList.remove('hidden');
+        btnApplicant.className = "px-3 py-1 rounded-md bg-sky-600 text-white font-bold text-xs shadow-xs";
+      } else if (role === 'APPROVER') {
+        approverView.classList.remove('hidden');
+        btnApprover.className = "px-3 py-1 rounded-md bg-purple-600 text-white font-bold text-xs shadow-xs";
+      } else if (role === 'ADMIN') {
+        adminView.classList.remove('hidden');
+        btnAdmin.className = "px-3 py-1 rounded-md bg-emerald-600 text-white font-bold text-xs shadow-xs flex items-center gap-1";
+      }
+    }
+
+    // Demo State initialized with kintone image data
+    let currentCartState = {
+      hotelItems: [],
+      airItems: [],
+      expenseItems: [
+        {
+          category: "宿泊",
+          type: "国内ホテル",
+          user: "デモ",
+          useDate: "2026-09-10",
+          origin: "東京",
+          destination: "福岡天神",
+          content: "岩田屋三越での新規イベント交渉商談用",
+          people: "1人",
+          nights: "3泊",
+          distance: "1090 km",
+          method: "ピカパカ",
+          amount: 10000,
+          detail: "リッチモンドホテル福岡天神予定",
+          taxCategory: "宿泊税",
+          remarks: "宿泊税は200円想定"
+        }
+      ],
+      companyAmount: 0,
+      expenseAmount: 10000,
+      totalAmount: 10000,
+      currentSupplier: 'ピカパカ',
+      submittedRequest: null
+    };
+
+    let activeServiceType = '';
+
+    // Modal Operations
+    function openPunchoutModal(serviceType) {
+      activeServiceType = serviceType;
+      const modal = document.getElementById('punchout-modal');
+      const loading = document.getElementById('modal-loading-state');
+      const interactive = document.getElementById('modal-interactive-state');
+      const badge = document.getElementById('modal-supplier-badge');
+      const title = document.getElementById('modal-item-title');
+      const desc = document.getElementById('modal-item-desc');
+      const price = document.getElementById('modal-item-price');
+      const list = document.getElementById('modal-item-list');
+
+      modal.classList.remove('hidden');
+      loading.classList.remove('hidden');
+      interactive.classList.add('hidden');
+
+      if (serviceType === 'dom-hotel' || serviceType === 'train') {
+        badge.innerText = "ピカパカ出張DX";
+        badge.className = "px-2.5 py-1 rounded bg-sky-100 text-sky-800 font-bold text-xs border border-sky-200";
+        title.innerText = "リッチモンドホテル福岡天神 ＋ ANA国内航空券";
+        desc.innerText = "出張者: デモ | 日程: 2026-09-10 ~ 2026-09-11";
+        price.innerText = "¥35,000";
+        list.innerHTML = `
+          <li>リッチモンドホテル福岡天神 (3泊) - ¥25,000 (税込) [SKU: HOTEL-FUKUOKA-01]</li>
+          <li>ANA国内航空券 (羽田 ⇔ 福岡) - ¥10,000 (税込) [SKU: AIR-ANA-FUKUOKA]</li>
+        `;
+      } else {
+        badge.innerText = "モノタロウ (現場資材・工具)";
+        badge.className = "px-2.5 py-1 rounded bg-amber-100 text-amber-800 font-bold text-xs border border-amber-200";
+        title.innerText = "現場保護具・LED作業灯・電池一式";
+        desc.innerText = "納品先: 福岡営業所 | 納品予定: 2026-09-12";
+        price.innerText = "¥18,400";
+        list.innerHTML = `
+          <li>高輝度LED作業ヘッドライト x 2 - ¥8,400 (税込)</li>
+          <li>単4形アルカリ乾電池 50本パック x 2 - ¥10,000 (税込)</li>
+        `;
+      }
+
+      setTimeout(() => {
+        loading.classList.add('hidden');
+        interactive.classList.remove('hidden');
+      }, 800);
+    }
+
+    function closePunchoutModal() {
+      document.getElementById('punchout-modal').classList.add('hidden');
+    }
+
+    // Complete Punchout Cart & Write Back to Portal
+    function completePunchoutCart() {
+      closePunchoutModal();
+
+      if (activeServiceType === 'dom-hotel' || activeServiceType === 'train') {
+        currentCartState.currentSupplier = "ピカパカ";
+        currentCartState.hotelItems = [
+          { reservationNo: "RES-20260910-8812", status: "予約済", user: "デモ", checkin: "2026-09-10", checkout: "2026-09-11", location: "福岡天神", content: "リッチモンドホテル福岡天神", peopleNights: "1人/3泊", amount: 25000, link: "詳細確認", method: "ピカパカ" }
+        ];
+        currentCartState.airItems = [
+          { reservationNo: "RES-20260910-9921", status: "予約済", user: "デモ", useDate: "2026-09-10", departure: "羽田", arrival: "福岡", content: "ANA2451便 指定席", amount: 10000, link: "詳細確認", method: "ピカパカ" }
+        ];
+        currentCartState.companyAmount = 35000;
+        currentCartState.expenseAmount = 10000;
+        currentCartState.totalAmount = 45000;
+      } else {
+        currentCartState.currentSupplier = "モノタロウ";
+        currentCartState.expenseItems.push({
+          category: "備品", type: "現場資材", user: "デモ", useDate: "2026-09-12", origin: "モノタロウ", destination: "福岡営業所", content: "高輝度LED作業ヘッドライト・乾電池一式", people: "1", nights: "-", distance: "-", method: "モノタロウ", amount: 18400, detail: "モノタロウ一括請求", taxCategory: "課税", remarks: "現場資材"
+        });
+        currentCartState.companyAmount = 18400;
+        currentCartState.totalAmount = currentCartState.companyAmount + currentCartState.expenseAmount;
+      }
+
+      renderAllTables();
+      showToast("cXML OrderMessage を受領し、L3明細データをkintoneフォーマットテーブルへ自動書き戻し完了しました。");
+    }
+
+    // Render Tables
+    function renderAllTables() {
+      const hotelBody = document.getElementById('hotel-table-body');
+      const airBody = document.getElementById('air-table-body');
+      const expenseBody = document.getElementById('expense-table-body');
+      const compAmt = document.getElementById('demo-company-amount');
+      const expAmt = document.getElementById('demo-expense-amount');
+      const totAmt = document.getElementById('demo-total-amount');
+      const emptyBtn = document.getElementById('demo-empty-cart-btn');
+
+      // Hotel Table
+      if (currentCartState.hotelItems.length === 0) {
+        hotelBody.innerHTML = `<tr class="text-slate-400 italic"><td colspan="11" class="py-3 px-3 text-center">手配データなし（上のサービスカードから手配を実行してください）</td></tr>`;
+      } else {
+        hotelBody.innerHTML = currentCartState.hotelItems.map(item => `
+          <tr>
+            <td class="py-2 px-2.5 font-bold text-sky-700">${item.reservationNo}</td>
+            <td class="py-2 px-2.5 text-emerald-600 font-bold">${item.status}</td>
+            <td class="py-2 px-2.5 text-slate-800">${item.user}</td>
+            <td class="py-2 px-2.5 text-slate-600">${item.checkin}</td>
+            <td class="py-2 px-2.5 text-slate-600">${item.checkout}</td>
+            <td class="py-2 px-2.5 text-slate-700">${item.location}</td>
+            <td class="py-2 px-2.5 text-slate-800 font-medium">${item.content}</td>
+            <td class="py-2 px-2.5 text-slate-600">${item.peopleNights}</td>
+            <td class="py-2 px-2.5 font-bold text-slate-900">¥${item.amount.toLocaleString()}</td>
+            <td class="py-2 px-2.5"><span class="text-sky-600 hover:underline cursor-pointer"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${item.link}</span></td>
+            <td class="py-2 px-2.5 font-bold text-sky-700">${item.method}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Air Table
+      if (currentCartState.airItems.length === 0) {
+        airBody.innerHTML = `<tr class="text-slate-400 italic"><td colspan="10" class="py-3 px-3 text-center">手配データなし</td></tr>`;
+      } else {
+        airBody.innerHTML = currentCartState.airItems.map(item => `
+          <tr>
+            <td class="py-2 px-2.5 font-bold text-indigo-700">${item.reservationNo}</td>
+            <td class="py-2 px-2.5 text-emerald-600 font-bold">${item.status}</td>
+            <td class="py-2 px-2.5 text-slate-800">${item.user}</td>
+            <td class="py-2 px-2.5 text-slate-600">${item.useDate}</td>
+            <td class="py-2 px-2.5 text-slate-700">${item.departure}</td>
+            <td class="py-2 px-2.5 text-slate-700">${item.arrival}</td>
+            <td class="py-2 px-2.5 text-slate-800 font-medium">${item.content}</td>
+            <td class="py-2 px-2.5 font-bold text-slate-900">¥${item.amount.toLocaleString()}</td>
+            <td class="py-2 px-2.5"><span class="text-indigo-600 hover:underline cursor-pointer"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${item.link}</span></td>
+            <td class="py-2 px-2.5 font-bold text-sky-700">${item.method}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Expense Table
+      expenseBody.innerHTML = currentCartState.expenseItems.map(item => `
+        <tr>
+          <td class="py-2 px-2 font-bold text-slate-800">${item.category}</td>
+          <td class="py-2 px-2 text-slate-700">${item.type}</td>
+          <td class="py-2 px-2 text-slate-700">${item.user}</td>
+          <td class="py-2 px-2 text-slate-600">${item.useDate}</td>
+          <td class="py-2 px-2 text-slate-600">${item.origin}</td>
+          <td class="py-2 px-2 text-slate-600">${item.destination}</td>
+          <td class="py-2 px-2 text-slate-700">${item.content}</td>
+          <td class="py-2 px-2 text-slate-600">${item.people}</td>
+          <td class="py-2 px-2 text-slate-600">${item.nights}</td>
+          <td class="py-2 px-2 text-slate-600">${item.distance}</td>
+          <td class="py-2 px-2 font-bold text-sky-700">${item.method}</td>
+          <td class="py-2 px-2 font-bold text-emerald-600">¥${item.amount.toLocaleString()} 円</td>
+          <td class="py-2 px-2 text-slate-600">${item.detail}</td>
+          <td class="py-2 px-2 text-slate-600">${item.taxCategory}</td>
+          <td class="py-2 px-2 text-slate-500">${item.remarks}</td>
+        </tr>
+      `).join('');
+
+      // Totals
+      compAmt.innerText = "¥" + currentCartState.companyAmount.toLocaleString() + " 円";
+      expAmt.innerText = "¥" + currentCartState.expenseAmount.toLocaleString() + " 円";
+      totAmt.innerText = "¥" + currentCartState.totalAmount.toLocaleString() + " 円";
+
+      const hasExtraData = currentCartState.hotelItems.length > 0 || currentCartState.airItems.length > 0 || currentCartState.expenseItems.length > 1;
+      emptyBtn.disabled = !hasExtraData;
+      if (hasExtraData) {
+        emptyBtn.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700 border border-rose-200 hover:bg-rose-200 transition flex items-center gap-1 cursor-pointer";
+      } else {
+        emptyBtn.className = "px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-400 cursor-not-allowed transition flex items-center gap-1";
+      }
+    }
+
+    // Empty Cart
+    async function emptyDemoCart() {
+      const ok = await customConfirm("確認", "手配追加されたカート明細をリセットしますか？");
+      if (ok) {
+        currentCartState.hotelItems = [];
+        currentCartState.airItems = [];
+        currentCartState.companyAmount = 0;
+        currentCartState.totalAmount = currentCartState.expenseAmount;
+        renderAllTables();
+        showToast("手配カート明細をクリアしました。");
+      }
+    }
+
+    // Submit Form
+    function submitApplicantForm() {
+      const reqId = "REQ-20260910-" + Math.floor(1000 + Math.random() * 9000);
+      const purpose = document.getElementById('demo-purpose').value;
+
+      currentCartState.submittedRequest = {
+        requestId: reqId,
+        purpose: purpose,
+        applicant: "デモ",
+        approver: "佐藤 部長 (sato_mgr@example.com)",
+        destination: "福岡",
+        totalAmount: currentCartState.totalAmount,
+        status: "事前承認依頼中"
+      };
+
+      document.getElementById('app-status-badge').innerText = "事前承認依頼中";
+      document.getElementById('demo-submit-success-alert').classList.remove('hidden');
+      showToast("申請が提出されました。非公開シートへ格納されました。");
+
+      renderApproverCard();
+    }
+
+    // Render Google Chat Interactive Card for Approver
+    function renderApproverCard() {
+      const container = document.getElementById('approver-card-container');
+      const req = currentCartState.submittedRequest;
+
+      if (!req) return;
+
+      container.innerHTML = `
+        <div class="space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+              <span class="font-bold text-slate-900 text-xs">承認依頼: 【1approval】出張手配申請 (${req.destination}行き)</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-500">${req.requestId}</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-700">
+            <div>申請者: <strong class="text-slate-900">${req.applicant}</strong></div>
+            <div>手配元: <strong class="text-sky-700">${currentCartState.currentSupplier}</strong></div>
+            <div>出張目的: <span class="text-slate-600">${req.purpose}</span></div>
+            <div>出張合計金額: <strong class="text-sky-700 text-sm font-mono">¥${req.totalAmount.toLocaleString()} 円</strong></div>
+          </div>
+
+          <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1">
+            <div class="text-[10px] text-slate-500 font-bold">L3手配明細・ダイナミックポリシー:</div>
+            <div class="text-[11px] text-slate-700 flex justify-between">
+              <span>・新幹線/航空券 ＋ ホテルパック手配</span>
+              <span class="font-mono text-emerald-600 font-bold">許容内 (価格変動 0% / 閾値 20%)</span>
+            </div>
+          </div>
+
+          <div id="approver-action-bar" class="flex items-center space-x-3 pt-1">
+            <button onclick="approveRequestByApprover()" class="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer">
+              <i class="fa-solid fa-check"></i> 承認する (1approval Hub即時自動発注)
+            </button>
+            <button onclick="rejectRequestByApprover()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition border border-slate-200 cursor-pointer">
+              差し戻し
+            </button>
+          </div>
+
+          <div id="approver-result-status" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i> 承認完了！1approval HubへPO自動発注を発行し、予約確定・一括請求処理を完了しました。
+          </div>
+        </div>
+      `;
+    }
+
+    function approveRequestByApprover() {
+      document.getElementById('approver-action-bar').classList.add('hidden');
+      document.getElementById('approver-result-status').classList.remove('hidden');
+      document.getElementById('app-status-badge').innerText = "事前承認済";
+      showToast("承認が完了しました。1approval Hubを通じて自動発注・予約確定されました。");
+    }
+
+    function rejectRequestByApprover() {
+      showToast("申請を差し戻しました。", false);
+    }
+
+    // Initialize Default View
+    window.onload = function() {
+      renderAllTables();
+    };
+  </script>
+</body>
+</html>
