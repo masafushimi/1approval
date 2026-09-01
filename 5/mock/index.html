@@ -2227,7 +2227,556 @@
             </div>
         </div>
     </div>
+ <!-- スクリプト -->
+    <script>
+        // AI Agent Purchase State
+        const state = {
+            activeTab: 'buy-for-me',
+            stockQty: 3,
+            stockThreshold: 10,
+            generatedCart: null,
+            pendingApprovals: [
+                {
+                    id: 'REQ-20260902-001',
+                    type: 'inventory_auto',
+                    title: '【AI自律発注】備品自動補充：単4アルカリ乾電池 50本',
+                    applicant: '1approval Workflow AI Agent',
+                    dept: '総務部（自動在庫連携）',
+                    amount: 3230,
+                    originalAmount: 3800,
+                    discount: 570,
+                    supplier: 'モノタロウ (法人)',
+                    sku: 'MNTR-BAT-AAA-50P',
+                    items: [{ name: '高品質 単4アルカリ乾電池 50本パック (PB代替推奨)', qty: 1, unitPrice: 3230 }],
+                    status: 'pending',
+                    time: '10:42 AM'
+                }
+            ],
+            cardTransactions: [
+                {
+                    id: 'TX-99482',
+                    reqId: 'REQ-20260830-088',
+                    itemSummary: 'ピカパカ出張DX (東京-新大阪新幹線 + ホテル阪急インターナショナル1泊)',
+                    skuCount: 2,
+                    totalAmount: 35800,
+                    oneTimeCardNo: '4532-8819-2041-8812',
+                    issuerFee: 608,
+                    takeRateFee: 1790,
+                    timestamp: '2026-08-30 14:22',
+                    status: 'PEPPOL連動完了'
+                }
+            ],
+            approvedSites: [
+                { id: 1, name: 'Amazon Business', domain: 'business.amazon.co.jp', category: 'IT・オフィス備品', authType: 'SAML / IPASS', cardApi: 'OneTimeCard v2 API', status: '許可済み' },
+                { id: 2, name: 'モノタロウ (MonotaRO)', domain: 'www.monotaro.com', category: '現場資材・工具・電池', authType: 'cXML PunchOut', cardApi: 'OneTimeCard v2 API', status: '許可済み' },
+                { id: 3, name: 'トラスコ中山 (オレンジブック)', domain: 'www.orangebook.com', category: '機械工具・プロツール', authType: 'IPASS Auto-Login', cardApi: 'OneTimeCard v2 API', status: '許可済み' },
+                { id: 4, name: 'ピカパカ出張DX', domain: 'pikapaka-dx.com', category: 'ホテル・新幹線・航空券', authType: 'OAuth 2.0 SSO', cardApi: 'OneTimeCard v2 API', status: '許可済み' },
+                { id: 5, name: 'エイチ MICE/会議室ポータル', domain: 'eichiii.com', category: '貸し会議室・イベント会場', authType: 'Direct Hub Connect', cardApi: 'OneTimeCard v2 API', status: '許可済み' }
+            ]
+        };
 
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-slate-900 text-white border-brand-500' :
+                           type === 'warning' ? 'bg-amber-500 text-white' :
+                           type === 'info' ? 'bg-blue-600 text-white' : 'bg-rose-600 text-white';
+            toast.className = `toast-msg p-3 rounded-xl border-l-4 shadow-xl text-xs flex items-center space-x-2.5 ${bgClass}`;
+            toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-info'}"></i><span class="font-bold">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`screen-${screenId}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-orange-50', 'text-brand-600', 'border-l-4', 'border-brand-500', 'font-bold');
+                el.classList.add('text-slate-600');
+            });
+            const activeNav = document.getElementById(`nav-${screenId}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-600');
+                activeNav.classList.add('bg-orange-50', 'text-brand-600', 'border-l-4', 'border-brand-500', 'font-bold');
+            }
+
+            const titles = {
+                'l3ledger': '4. L3 Ledger 最重要データコントロールハブ',
+                'dashboard': '5. 統合支出・購買・予実ダッシュボード',
+                'catalogue': 'Company Catalogue（全社スタンダード購買品）設定',
+                'bi-analytics': 'コスト削減余地分析 (Procurement Optimization BI)',
+                'flowbuilder': '1&2. ビジュアルフロービルダー (Flowbuilder) ＆ SaaS設定',
+                'card-ic': '2.7 コーポレートカード ＆ 交通系IC明細・定期自動控除',
+                'orgsync': '3. 人事Sync ＆ API一括連携（プロビジョニング）',
+                'ai-agent-purchase': 'AI Agent Purchase (Buy for Me 互換 AIエージェント)',
+                'budget': '6. 部署別・科目別 予算分配カレンダーマトリクス',
+                'governance': '7. ガバナンス・不正・異常検知コンソール',
+                'reports': '8. 経営・出張・交際費BIアナリティクス',
+                'assets': '9. 統合資産 ＋ MDM IT端末台帳',
+                'fieldops': '10. カレンダー型貸出予約 ＆ スマホカメラ実地棚卸',
+                'rfp': 'メモ3. RFP・特注品相見積もり比較ボード',
+                'ads-manager': '層5: 1approval Ads 出稿主管理ポータル',
+                'cart-demo': '層5: カートイン & AIレコメンド リアルタイム比較デモ'
+            };
+            document.getElementById('screen-title').innerText = titles[screenId] || '1approval Core';
+
+            if (screenId === 'ai-agent-purchase') {
+                renderAll();
+            }
+        }
+
+        // AI Agent Purchase 内のサブタブ切り替え
+        function switchTab(tabId) {
+            state.activeTab = tabId;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-xs transition shrink-0 text-slate-600 hover:text-slate-900 hover:bg-slate-100';
+            });
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = 'tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-xs transition shrink-0 bg-blue-50 text-blue-700 border border-blue-200/80 shadow-sm font-bold';
+            }
+
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            const activeContent = document.getElementById(`tab-content-${tabId}`);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+            }
+
+            renderAll();
+        }
+
+        function handlePromptSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-prompt-input');
+            const promptText = input.value.trim();
+            if (!promptText) return;
+
+            const btn = document.getElementById('btn-ai-prompt');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i><span>AI思考・代理カート投入中...</span>`;
+
+            setTimeout(() => {
+                state.generatedCart = {
+                    prompt: promptText,
+                    sku: 'AMZ-BIZ-AAA-BAT-50',
+                    productName: '【Amazon Business】Amazonベーシック 単4形アルカリ乾電池 50本パック',
+                    supplier: 'Amazon Business',
+                    originalPrice: 3980,
+                    recommendedPrice: 3230,
+                    savings: 750,
+                    l3Detail: { category: '事務用品/消耗品', skuCode: 'B07NLL8V8T', taxRate: '10%', unitPrice: 3230, qty: 1 }
+                };
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i><span>AI Agentに頼む</span>`;
+                renderAiCartPreview();
+            }, 1000);
+        }
+
+        function handleSimulateStockLow() {
+            state.stockQty = 2;
+            const newReq = {
+                id: `REQ-AUTO-${Math.floor(100 + Math.random() * 900)}`,
+                type: 'inventory_auto',
+                title: `【AI在庫自律起票】パナソニック 単4形アルカリ乾電池（残2本/閾値10本）`,
+                applicant: '1approval Inventory AI Agent',
+                dept: '自動購買ロジスティクス',
+                amount: 3230,
+                originalAmount: 3800,
+                discount: 570,
+                supplier: 'モノタロウ (法人)',
+                sku: 'PAN-AAA-10P',
+                items: [{ name: '高品質 単4アルカリ乾電池 50本パック (自動最適化)', qty: 1, unitPrice: 3230 }],
+                status: 'pending',
+                time: 'たった今'
+            };
+            state.pendingApprovals.unshift(newReq);
+            switchTab('teams-approval');
+            showToast('在庫減少通知を受信: AI Agentが自律発注リクエストを作成しました！', 'warning');
+        }
+
+        function handleTripSearch() {
+            const btn = document.getElementById('btn-trip-reco');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i><span>AI嗜好解析 & 規定内最安値検索中...</span>`;
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i><span>ポチッとAIレコメンド生成</span>`;
+                document.getElementById('trip-reco-container').classList.remove('hidden');
+            }, 800);
+        }
+
+        function handleTripApprovalCreate() {
+            const newReq = {
+                id: `REQ-TRIP-${Math.floor(100 + Math.random() * 900)}`,
+                type: 'trip',
+                title: `【出張手配】大阪支社（梅田・中之島） (2026-10-24〜)`,
+                applicant: '伏見 匡矩 (営業部)',
+                dept: '営業第一本部',
+                amount: 46900,
+                originalAmount: 51200,
+                discount: 4300,
+                supplier: 'ピカパカ出張DX (法人一括)',
+                sku: 'TRIP-PKPK-OSAKA-2026',
+                items: [
+                    { name: 'ホテル阪急インターナショナル（梅田駅徒歩3分・禁煙）', qty: 1, unitPrice: 18500 },
+                    { name: '新幹線EX予約：東京 ⇔ 新大阪（往復指定席・のぞみ）', qty: 1, unitPrice: 28400 }
+                ],
+                status: 'pending',
+                time: 'たった今'
+            };
+            state.pendingApprovals.unshift(newReq);
+            document.getElementById('trip-reco-container').classList.add('hidden');
+            switchTab('teams-approval');
+            showToast('Teams承認リクエストカードを送信しました！');
+        }
+
+        function handleApproveInTeams(reqId) {
+            const req = state.pendingApprovals.find(r => r.id === reqId);
+            if (!req) return;
+
+            req.status = 'approved';
+
+            const issuerFee = Math.round(req.amount * 0.017);
+            const takeRateFee = Math.round(req.amount * 0.05);
+            const randomCard = `4532-${Math.floor(1000+Math.random()*9000)}-${Math.floor(1000+Math.random()*9000)}-${Math.floor(1000+Math.random()*9000)}`;
+
+            const newTx = {
+                id: `TX-${Math.floor(10000 + Math.random() * 90000)}`,
+                reqId: req.id,
+                itemSummary: req.title,
+                skuCount: req.items.length,
+                totalAmount: req.amount,
+                oneTimeCardNo: randomCard,
+                issuerFee: issuerFee,
+                takeRateFee: takeRateFee,
+                timestamp: new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' }),
+                status: 'PEPPOL連動完了'
+            };
+
+            state.cardTransactions.unshift(newTx);
+            renderAll();
+            showToast(`承認完了！OneTimeCard発行 (イシュア還元率1.7%: +¥${issuerFee.toLocaleString()})`);
+        }
+
+        function createApprovalFromAi() {
+            if (!state.generatedCart) return;
+            const gc = state.generatedCart;
+            const newReq = {
+                id: `REQ-${Date.now().toString().slice(-6)}`,
+                type: 'buy_for_me',
+                title: `【Buy for Me AI】${gc.productName}`,
+                applicant: '伏見 匡矩 (営業部)',
+                dept: '営業第一本部',
+                amount: gc.recommendedPrice,
+                originalAmount: gc.originalPrice,
+                discount: gc.savings,
+                supplier: gc.supplier,
+                sku: gc.sku,
+                items: [{ name: gc.productName, qty: 1, unitPrice: gc.recommendedPrice }],
+                status: 'pending',
+                time: 'たった今'
+            };
+            state.pendingApprovals.unshift(newReq);
+            state.generatedCart = null;
+            document.getElementById('chat-prompt-input').value = '';
+            switchTab('teams-approval');
+            showToast('AI代理カート情報をTeamsへ送信しました！');
+        }
+
+        function renderAiCartPreview() {
+            const container = document.getElementById('ai-cart-container');
+            const adsBadge = document.getElementById('ads-badge');
+            if (!container) return;
+            if (!state.generatedCart) {
+                if (adsBadge) adsBadge.classList.add('hidden');
+                container.className = "min-h-48 flex flex-col items-center justify-center text-center text-slate-400 border-2 border-dashed border-slate-200 rounded-xl p-6";
+                container.innerHTML = `
+                    <i class="fa-solid fa-wand-magic-sparkles text-3xl mb-2 text-slate-300"></i>
+                    <p class="text-sm font-medium text-slate-600 mb-1">AI Agentへの指示待ちです</p>
+                    <p class="text-xs text-slate-400">上の検索窓に自由な言葉で依頼を入力するか、左の「在庫減少デモ」ボタンを押してください。</p>
+                `;
+                return;
+            }
+
+            if (adsBadge) adsBadge.classList.remove('hidden');
+            const gc = state.generatedCart;
+            container.className = "space-y-4 text-left border-0 p-0";
+            container.innerHTML = `
+                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 font-bold text-sm">
+                        AI
+                    </div>
+                    <div class="text-xs text-slate-700 leading-relaxed">
+                        プロンプト<strong>「${gc.prompt}」</strong>を受領。<br/>
+                        過去の購買動向からAmazon Businessとモノタロウの価格・納期を比較。現在最安値かつ即日届く<strong>「${gc.productName}」</strong>を選定し、代理カート投入を行いました。
+                    </div>
+                </div>
+
+                <div class="border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 bg-white rounded-lg border border-slate-200 p-2 flex items-center justify-center text-amber-500 shrink-0">
+                            <i class="fa-solid fa-battery-full text-2xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">${gc.supplier} | SKU: ${gc.l3Detail.skuCode}</span>
+                            <h4 class="font-bold text-slate-800 text-sm">${gc.productName}</h4>
+                            <p class="text-xs text-slate-500">L3明細: 単価 ¥${gc.l3Detail.unitPrice.toLocaleString()} × 数量 ${gc.l3Detail.qty} | 消費税 ${gc.l3Detail.taxRate}</p>
+                        </div>
+                    </div>
+
+                    <div class="text-right sm:border-l sm:pl-6 border-slate-200 w-full sm:w-auto">
+                        <div class="text-xs text-slate-400 line-through">定価 ¥${gc.originalPrice.toLocaleString()}</div>
+                        <div class="text-lg font-black text-blue-600">¥${gc.recommendedPrice.toLocaleString()} <span class="text-xs font-normal text-slate-500">(税込)</span></div>
+                        <div class="text-[11px] font-bold text-emerald-600">¥${gc.savings.toLocaleString()} 削減成功</div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button onclick="state.generatedCart=null; renderAiCartPreview();" class="px-4 py-2 text-xs font-medium text-slate-500 hover:text-slate-800">
+                        キャンセル
+                    </button>
+                    <button onclick="createApprovalFromAi()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md text-xs transition flex items-center space-x-2">
+                        <i class="fa-brands fa-microsoft"></i>
+                        <span>Teamsへ事前承認リクエストを送信</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderApprovalCards() {
+            const container = document.getElementById('approval-card-list');
+            if (!container) return;
+            const pendingCount = state.pendingApprovals.filter(a => a.status === 'pending').length;
+            const badge = document.getElementById('teams-pending-count');
+            if (badge) badge.textContent = pendingCount;
+
+            container.innerHTML = state.pendingApprovals.map(req => `
+                <div class="border border-purple-200 rounded-2xl p-5 bg-gradient-to-br from-slate-50 to-purple-50/30 shadow-sm card-enter">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">1approval Bot</span>
+                            <span class="text-xs text-slate-400">${req.time}</span>
+                        </div>
+                        <span class="text-xs font-bold px-2.5 py-0.5 rounded-full ${req.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
+                            ${req.status === 'approved' ? '✓ 承認・手配完了 (OneTimeCard決済済)' : '⏳ 上長承認待ち'}
+                        </span>
+                    </div>
+
+                    <h4 class="font-bold text-slate-900 text-base mb-2">${req.title}</h4>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white p-3 rounded-xl border border-slate-200 text-xs mb-4">
+                        <div>
+                            <span class="text-slate-400 block text-[10px]">申請者 / 部署</span>
+                            <span class="font-bold text-slate-700">${req.applicant}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block text-[10px]">手配先EC / BTM</span>
+                            <span class="font-bold text-slate-700">${req.supplier}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block text-[10px]">SKU / 型番識別</span>
+                            <span class="font-mono text-slate-700">${req.sku}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block text-[10px]">決済確定金額</span>
+                            <span class="font-black text-blue-600 text-sm">¥${req.amount.toLocaleString()}</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-slate-100 p-3 mb-4 text-xs">
+                        <div class="text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">L3 明細構成</div>
+                        ${req.items.map(item => `
+                            <div class="flex justify-between py-1 border-b border-slate-50 last:border-0">
+                                <span class="text-slate-700 font-medium">${item.name} × ${item.qty}</span>
+                                <span class="font-bold text-slate-800">¥${(item.unitPrice * item.qty).toLocaleString()}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${req.status === 'pending' ? `
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-200/60">
+                            <div class="text-[11px] text-slate-500">
+                                <i class="fa-solid fa-lock text-slate-400 mr-1"></i>
+                                承認時に上限¥${Math.round(req.amount * 1.2).toLocaleString()}の1回限りバーチャルカードを発行
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="showToast('差戻し処理を行いました', 'warning')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs">
+                                    差戻し
+                                </button>
+                                <button onclick="handleApproveInTeams('${req.id}')" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md transition flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>1-Click 承認 & 自動発注</span>
+                                </button>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex items-center justify-between text-xs text-emerald-800 font-medium">
+                            <span><i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> OneTimeCard決済完了 (イシュア還元率 1.7% 対象)</span>
+                            <span class="font-mono text-[10px] text-emerald-600">PEPPOL XML連動ID: ${req.id}</span>
+                        </div>
+                    `}
+                </div>
+            `).join('');
+        }
+
+        function renderTransactions() {
+            const totalGmv = state.cardTransactions.reduce((sum, t) => sum + t.totalAmount, 0);
+            const totalIssuerFee = state.cardTransactions.reduce((sum, t) => sum + t.issuerFee, 0);
+            const totalTakeRateFee = state.cardTransactions.reduce((sum, t) => sum + t.takeRateFee, 0);
+
+            const dashGmv = document.getElementById('dash-gmv');
+            if (dashGmv) dashGmv.textContent = `¥${totalGmv.toLocaleString()}`;
+            const dashIssuer = document.getElementById('dash-issuer-fee');
+            if (dashIssuer) dashIssuer.textContent = `¥${totalIssuerFee.toLocaleString()}`;
+            const dashTake = document.getElementById('dash-take-rate');
+            if (dashTake) dashTake.textContent = `¥${totalTakeRateFee.toLocaleString()}`;
+
+            const tbody = document.getElementById('tx-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = state.cardTransactions.map(tx => `
+                <tr class="hover:bg-slate-50/80 transition">
+                    <td class="py-3.5 px-4 font-mono">
+                        <div class="font-bold text-slate-800">${tx.id}</div>
+                        <div class="text-[10px] text-slate-400">${tx.timestamp}</div>
+                    </td>
+                    <td class="py-3.5 px-4 font-medium text-slate-800 max-w-xs truncate">
+                        ${tx.itemSummary}
+                    </td>
+                    <td class="py-3.5 px-4 font-mono text-slate-600">
+                        <span class="bg-slate-100 px-2 py-1 rounded text-[11px]">${tx.oneTimeCardNo}</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-right font-black text-slate-900">
+                        ¥${tx.totalAmount.toLocaleString()}
+                    </td>
+                    <td class="py-3.5 px-4 text-right font-bold text-emerald-600">
+                        +¥${tx.issuerFee.toLocaleString()}
+                    </td>
+                    <td class="py-3.5 px-4 text-right font-bold text-cyan-600">
+                        +¥${tx.takeRateFee.toLocaleString()}
+                    </td>
+                    <td class="py-3.5 px-4 text-center">
+                        <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            ${tx.status}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderApprovedSites() {
+            const grid = document.getElementById('approved-sites-grid');
+            if (!grid) return;
+            grid.innerHTML = state.approvedSites.map(site => `
+                <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50 hover:bg-white hover:border-amber-300 transition shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
+                            ${site.category}
+                        </span>
+                        <span class="text-[11px] font-bold text-emerald-600 flex items-center">
+                            <i class="fa-solid fa-circle-check mr-1"></i> ${site.status}
+                        </span>
+                    </div>
+
+                    <h4 class="font-bold text-slate-800 text-sm mb-1">${site.name}</h4>
+                    <p class="text-xs font-mono text-slate-400 mb-4">${site.domain}</p>
+
+                    <div class="space-y-2 bg-white p-3 rounded-xl border border-slate-100 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400 text-[11px]">認証・ログイン</span>
+                            <span class="font-bold text-slate-700">${site.authType}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400 text-[11px]">動的決済モジュール</span>
+                            <span class="font-bold text-blue-600">${site.cardApi}</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                        <span class="text-[10px] text-slate-400">AI Agent自動巡回: 有効</span>
+                        <button onclick="showToast('${site.name}のIPASS/API設定ダイアログを開きます')" class="text-amber-600 font-bold hover:underline">設定変更</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderStockUI() {
+            const qtyText = document.getElementById('stock-qty-text');
+            const stockBar = document.getElementById('stock-bar');
+            if (!qtyText || !stockBar) return;
+            qtyText.textContent = `${state.stockQty} 本`;
+            if (state.stockQty <= state.stockThreshold) {
+                qtyText.className = "text-lg font-black text-rose-600";
+                stockBar.className = "h-full bg-rose-500 transition-all duration-500";
+            } else {
+                qtyText.className = "text-lg font-black text-slate-800";
+                stockBar.className = "h-full bg-blue-600 transition-all duration-500";
+            }
+            stockBar.style.width = `${(state.stockQty / 20) * 100}%`;
+        }
+
+        function renderAll() {
+            renderStockUI();
+            renderAiCartPreview();
+            renderApprovalCards();
+            renderTransactions();
+            renderApprovedSites();
+        }
+
+        function filterL3Rows() {
+            const who = document.getElementById('l3-search-who').value.toLowerCase();
+            const what = document.getElementById('l3-search-what').value.toLowerCase();
+            const where = document.getElementById('l3-select-where').value;
+            const alertType = document.getElementById('l3-select-alert').value;
+
+            const rows = document.querySelectorAll('#l3-table-body tr');
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                const rowAlert = row.getAttribute('data-alert');
+
+                let match = text.includes(who) && text.includes(what);
+                if (where && !text.includes(where)) match = false;
+                if (alertType && rowAlert !== alertType) match = false;
+
+                row.style.display = match ? '' : 'none';
+            });
+        }
+
+        function filterL3Table(type) {
+            document.getElementById('l3-select-alert').value = type === 'ALL' ? '' : type;
+            filterL3Rows();
+        }
+
+        function viewL3AuditDetail(code, user, item, price, reason) {
+            showToast(`[${code}] 監査詳細: ${user} - ${item} (${price})`);
+        }
+
+        function toggleRagChatWindow() {
+            const win = document.getElementById('rag-chat-window');
+            if (win) win.classList.toggle('hidden');
+        }
+
+        function triggerAiAgent() {
+            showToast('AI Agent 分析完了: 相場割高・重複精算疑いを検知しました。', 'warning');
+            switchScreen('l3ledger');
+        }
+
+        function exportL3Csv() { showToast('L3 Ledger Raw Data CSVを出力しました。'); }
+        function openRagAdminModal() { showToast('RAG学習管理モーダルを表示します'); }
+        function openBatchImportModal() { showToast('URLs一括インポートモーダルを表示します'); }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAll();
+        });
+    </script>
     <!-- JavaScript Application Logic -->
     <script>
         let biChartTrend = null;
