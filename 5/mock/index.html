@@ -175,7 +175,14 @@
                     <i class="fa-solid fa-users-gear w-4 text-sky-500"></i>
                     <span class="font-semibold">3. 人事Sync ＆ 全社SaaSプロビジョニング</span>
                 </button>
-
+                <!-- ★【追加指定項目】3. 人事Sync のすぐ下に配置 -->
+                <button onclick="switchScreen('ai-agent-purchase')" id="nav-ai-agent-purchase" class="nav-item w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition border-l-2 border-transparent">
+                    <span class="flex items-center space-x-3">
+                        <i class="fa-solid fa-robot w-4 text-cyan-600"></i>
+                        <span class="font-bold text-slate-800">AI agent purchase</span>
+                    </span>
+                    <span class="px-1.5 py-0.2 bg-cyan-100 text-cyan-800 text-[9px] font-bold rounded-full">New</span>
+                </button>
                 <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-3">層 2: 予算・分析 ＆ 統制</div>
                 <button onclick="switchScreen('budget')" id="nav-budget" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition">
                     <i class="fa-solid fa-wallet w-4 text-emerald-500"></i>
@@ -456,7 +463,349 @@
                     </div>
                 </div>
             </div>
+           <!-- ★【新規追加指定画面】AI Agent Purchase (Buy for Me, Trip AI, Teams, L3, IPASS/API) -->
+            <div id="screen-ai-agent-purchase" class="screen-content hidden space-y-6">
+                <!-- AI Agent Purchase サブタブナビゲーション -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-2 shadow-sm sticky top-0 z-30">
+                    <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto" id="tab-nav">
+                        <button onclick="switchTab('buy-for-me')" id="btn-buy-for-me" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-xs transition shrink-0 bg-blue-50 text-blue-700 border border-blue-200/80 shadow-sm font-bold">
+                            <i class="fa-solid fa-robot text-blue-600"></i>
+                            <span>Buy for Me (AI購買Agent)</span>
+                        </button>
+                        <button onclick="switchTab('trip-ai')" id="btn-trip-ai" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-xs transition shrink-0 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                            <i class="fa-solid fa-plane-departure text-cyan-600"></i>
+                            <span>出張スマート予約 (Trip AI)</span>
+                        </button>
+                        <button onclick="switchTab('teams-approval')" id="btn-teams-approval" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-xs transition shrink-0 relative text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                            <i class="fa-brands fa-microsoft text-purple-600"></i>
+                            <span>Teams 1-Click 承認</span>
+                            <span id="teams-pending-count" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold ml-1">1</span>
+                        </button>
+                        <button onclick="switchTab('l3-dashboard')" id="btn-l3-dashboard" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-xs transition shrink-0 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                            <i class="fa-solid fa-receipt text-emerald-600"></i>
+                            <span>L3明細 & カード収益</span>
+                        </button>
+                        <button onclick="switchTab('approved-sites')" id="btn-approved-sites" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-xs transition shrink-0 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                            <i class="fa-solid fa-shield-halved text-amber-600"></i>
+                            <span>許可サイト & IPASS/API管理</span>
+                        </button>
+                    </nav>
+                </div>
 
+                <!-- SUB TAB 1: Buy for Me -->
+                <section id="tab-content-buy-for-me" class="tab-content space-y-6">
+                    <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl relative overflow-hidden">
+                        <div class="absolute right-0 top-0 opacity-10 translate-x-10 -translate-y-10 pointer-events-none">
+                            <i class="fa-solid fa-robot text-9xl"></i>
+                        </div>
+                        <div class="relative z-10 max-w-3xl">
+                            <span class="bg-blue-500/30 text-blue-300 border border-blue-400/30 text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wider">
+                                Amazon Buy for Me 互換 AIエージェント
+                            </span>
+                            <h2 class="text-2xl sm:text-3xl font-black mt-3 mb-2 leading-tight">
+                                プロンプトか在庫アラートで、AI Agentが代理購入。
+                            </h2>
+                            <p class="text-slate-300 text-xs sm:text-sm mb-6 leading-relaxed">
+                                「いつもの電池を届けて」「出張に必要な備品を買っておいて」と伝えるだけ。AI Agentが会社承認済みのECサイトを巡回し、過去の購買動向から最安SKU（Variant）を選定して自動的に承認申請を作成します。
+                            </p>
+
+                            <!-- プロンプト入力フォーム -->
+                            <form onsubmit="handlePromptSubmit(event)" class="flex flex-col sm:flex-row gap-2 bg-white/10 p-2 rounded-2xl border border-white/20 backdrop-blur-md">
+                                <input
+                                    type="text"
+                                    id="chat-prompt-input"
+                                    placeholder="例: いつも買ってる単4電池がなくなったから、50本くらい本社に届けて。安いやつでいいよ。"
+                                    class="flex-1 bg-white/90 text-slate-900 px-4 py-3 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 text-xs font-medium"
+                                />
+                                <button
+                                    type="submit"
+                                    id="btn-ai-prompt"
+                                    class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 shrink-0 text-xs"
+                                >
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                    <span>AI Agentに頼む</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- 在庫連携オート機能デモパネル -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- 左: 在庫モニタリングパネル -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center">
+                                        <i class="fa-solid fa-boxes-stacked mr-1.5 text-blue-600"></i>
+                                        リアルタイム在庫連携
+                                    </span>
+                                    <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full">kintone資材アプリ連動</span>
+                                </div>
+
+                                <h3 class="font-bold text-slate-800 text-sm mb-1" id="stock-item-name">パナソニック 単4形アルカリ乾電池 10本パック</h3>
+                                <p class="text-xs text-slate-400 mb-4">SKU: PAN-AAA-10P | 最終購買: モノタロウ</p>
+
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-xs text-slate-600 font-medium">現在の社内在庫</span>
+                                        <span id="stock-qty-text" class="text-lg font-black text-rose-600">3 本</span>
+                                    </div>
+                                    <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                                        <div id="stock-bar" class="h-full bg-rose-500 transition-all duration-500" style="width: 15%;"></div>
+                                    </div>
+                                    <div class="flex justify-between text-[11px] text-slate-400 mt-2">
+                                        <span>発注安全閾値: 10本</span>
+                                        <span>自動補充数: 50本</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button
+                                onclick="handleSimulateStockLow()"
+                                class="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold py-2.5 px-4 rounded-xl border border-rose-200 text-xs transition flex items-center justify-center space-x-2"
+                            >
+                                <i class="fa-solid fa-bolt text-rose-500"></i>
+                                <span>[デモ] 在庫減少アラート発生 → AI Agent自律起動</span>
+                            </button>
+                        </div>
+
+                        <!-- 中央・右: AI代理カート作成結果パネル -->
+                        <div class="md:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-slate-800 text-sm mb-4 flex items-center justify-between">
+                                <span class="flex items-center">
+                                    <i class="fa-solid fa-cart-shopping mr-2 text-blue-600"></i>
+                                    AI Agent代理購入・カート生成プレビュー
+                                </span>
+                                <span id="ads-badge" class="hidden bg-cyan-100 text-cyan-800 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                                    1approval Ads レコメンド適用済 (15%OFF)
+                                </span>
+                            </h3>
+
+                            <div id="ai-cart-container" class="min-h-48 flex flex-col items-center justify-center text-center text-slate-400 border-2 border-dashed border-slate-200 rounded-xl p-6">
+                                <i class="fa-solid fa-wand-magic-sparkles text-3xl mb-2 text-slate-300"></i>
+                                <p class="text-sm font-medium text-slate-600 mb-1">AI Agentへの指示待ちです</p>
+                                <p class="text-xs text-slate-400">上の検索窓に自由な言葉で依頼を入力するか、左の「在庫減少デモ」ボタンを押してください。</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SUB TAB 2: Trip AI -->
+                <section id="tab-content-trip-ai" class="tab-content hidden space-y-6">
+                    <div class="bg-gradient-to-r from-cyan-900 via-blue-900 to-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl">
+                        <div class="max-w-3xl">
+                            <span class="bg-cyan-500/30 text-cyan-300 border border-cyan-400/30 text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wider">
+                                1approval for Trip × AI Auto-Reco
+                            </span>
+                            <h2 class="text-2xl sm:text-3xl font-black mt-3 mb-2">
+                                日程と場所が決まったら、ポチッと押すだけ。
+                            </h2>
+                            <p class="text-slate-300 text-xs mb-6">
+                                社内規定（ダイナミック・ポリシー）と過去の行動嗜好（禁煙、特定の駅近ホテル、指定席）をAIが学習。ポチッと押せば最適なホテル・新幹線をレコメンドし、事前承認と即時予約を完結させます。
+                            </p>
+
+                            <!-- 出張条件フォーム -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-white/10 p-4 rounded-2xl border border-white/20 backdrop-blur-md">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-cyan-200 mb-1">出張目的地・訪問先</label>
+                                    <input
+                                        type="text"
+                                        id="trip-destination"
+                                        value="大阪支社（梅田・中之島）"
+                                        class="w-full bg-white/90 text-slate-900 px-3 py-2 rounded-lg text-xs font-medium focus:outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-cyan-200 mb-1">出発日 〜 帰着日</label>
+                                    <input
+                                        type="date"
+                                        id="trip-date"
+                                        value="2026-10-24"
+                                        class="w-full bg-white/90 text-slate-900 px-3 py-2 rounded-lg text-xs font-medium focus:outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-cyan-200 mb-1">出張目的・背景</label>
+                                    <input
+                                        type="text"
+                                        id="trip-purpose"
+                                        value="関西エリア重要クライアントとの戦略商談"
+                                        class="w-full bg-white/90 text-slate-900 px-3 py-2 rounded-lg text-xs font-medium focus:outline-none"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="mt-4 flex justify-end">
+                                <button
+                                    onclick="handleTripSearch()"
+                                    id="btn-trip-reco"
+                                    class="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-900 font-extrabold px-8 py-3 rounded-xl shadow-lg transition flex items-center space-x-2 text-xs"
+                                >
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    <span>ポチッとAIレコメンド生成</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AIレコメンド結果表示 -->
+                    <div id="trip-reco-container" class="hidden bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6 card-enter">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                            <div>
+                                <span class="text-xs font-bold text-cyan-600 uppercase tracking-wider">AI Travel Agent Recommendation</span>
+                                <h3 class="text-lg font-bold text-slate-800">1approval 最適出張パッケージ案</h3>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs text-slate-400 line-through">通常合計 ¥51,200</span>
+                                <div class="text-2xl font-black text-blue-600">¥46,900 <span class="text-xs text-slate-500 font-normal">(税込)</span></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- ホテル -->
+                            <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-bold text-blue-600 bg-blue-100 px-2.5 py-0.5 rounded-md">
+                                        <i class="fa-solid fa-hotel mr-1"></i> 宿泊手配
+                                    </span>
+                                    <span class="text-sm font-extrabold text-slate-800">¥18,500</span>
+                                </div>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">ホテル阪急インターナショナル（梅田駅徒歩3分・禁煙）</h4>
+                                <p class="text-xs text-slate-500 bg-white p-2.5 rounded-lg border border-slate-200/60 mt-2">
+                                    💡 <strong>AI推薦理由:</strong> 過去5回の出張履歴から「梅田徒歩5分圏内・禁煙・朝食高評価」をAIが自動抽出。規定上限（20,000円）内。
+                                </p>
+                            </div>
+
+                            <!-- 交通 -->
+                            <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-bold text-cyan-600 bg-cyan-100 px-2.5 py-0.5 rounded-md">
+                                        <i class="fa-solid fa-train mr-1"></i> 新幹線手配
+                                    </span>
+                                    <span class="text-sm font-extrabold text-slate-800">¥28,400</span>
+                                </div>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">新幹線EX予約：東京 ⇔ 新大阪（往復指定席・のぞみ）</h4>
+                                <p class="text-xs text-slate-500 bg-white p-2.5 rounded-lg border border-slate-200/60 mt-2">
+                                    💡 <strong>AI推薦理由:</strong> 過去移動動向より、午前10時商談に間に合う8:00東京発便を自動アサイン。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center justify-between flex-wrap gap-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-shield-check text-emerald-600 text-2xl"></i>
+                                <div>
+                                    <h5 class="text-xs font-bold text-emerald-900">ダイナミック・ポリシー適合確認済み</h5>
+                                    <p class="text-[11px] text-emerald-700">承認時の許容価格変動幅 (20%) が設定されているため、承認中の価格変動での引き戻し雑務はゼロです。</p>
+                                </div>
+                            </div>
+                            <button
+                                onclick="handleTripApprovalCreate()"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition shadow-md whitespace-nowrap"
+                            >
+                                Teamsで事前承認申請をする
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SUB TAB 3: Teams 1-Click 承認 -->
+                <section id="tab-content-teams-approval" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-brands fa-microsoft"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-base">Microsoft Teams 1-Click 承認カード</h3>
+                                    <p class="text-xs text-slate-400">チャット画面上で上長が承認を押した瞬間に、OneTimeCardが動的発行され即時購入・予約が完結します。</p>
+                                </div>
+                            </div>
+                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full">
+                                Adaptive Cards v1.5 連動
+                            </span>
+                        </div>
+
+                        <div id="approval-card-list" class="space-y-4">
+                            <!-- JS動的レンダリング -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SUB TAB 4: L3明細 & カード収益 -->
+                <section id="tab-content-l3-dashboard" class="tab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="text-xs font-bold text-slate-400 mb-1">総購買決済額 (GMV)</div>
+                            <div class="text-2xl font-black text-slate-800" id="dash-gmv">¥35,800</div>
+                            <div class="text-[11px] text-slate-400 mt-1">1approval 経由での自動手配総額</div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-5 rounded-2xl shadow-md">
+                            <div class="text-xs font-bold text-emerald-100 mb-1">カードイシュア手数料収入 (1.7%)</div>
+                            <div class="text-2xl font-black" id="dash-issuer-fee">¥608</div>
+                            <div class="text-[11px] text-emerald-200 mt-1">OneTimeCard発行によるエイチ社直接収益</div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-cyan-500 to-blue-700 text-white p-5 rounded-2xl shadow-md">
+                            <div class="text-xs font-bold text-cyan-100 mb-1">サプライヤー送客手数料 (Take Rate 5%)</div>
+                            <div class="text-2xl font-black" id="dash-take-rate">¥1,790</div>
+                            <div class="text-[11px] text-cyan-200 mt-1">EC/BTM等からのアフィリエイト・送客還元</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-base">L3購買明細（SKU単位）＆ OneTimeCard決済ログ</h3>
+                                <p class="text-xs text-slate-400">クレカ（L2）とは異なり、品名・型番・数量のL3明細をcXML/PEPPOL形式で保持。領収書回収が100%不要になります。</p>
+                            </div>
+                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full">
+                                PEPPOL JP PINT準拠
+                            </span>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
+                                        <th class="py-3 px-4">取引ID / 日時</th>
+                                        <th class="py-3 px-4">購入明細概要 (L3 Data)</th>
+                                        <th class="py-3 px-4">発行OneTimeCard</th>
+                                        <th class="py-3 px-4 text-right">決済金額</th>
+                                        <th class="py-3 px-4 text-right text-emerald-600">イシュアフィー(1.7%)</th>
+                                        <th class="py-3 px-4 text-right text-cyan-600">送客手数料(5.0%)</th>
+                                        <th class="py-3 px-4 text-center">会計/PEPPOLステータス</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tx-table-body" class="divide-y divide-slate-100">
+                                    <!-- JS動的描画 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SUB TAB 5: 許可サイト & IPASS/API管理 -->
+                <section id="tab-content-approved-sites" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 mb-6 gap-2">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-base">会社許可EC/BTMドメイン ＆ 認証(IPASS)・決済API管理</h3>
+                                <p class="text-xs text-slate-400">社内規定で購買・予約を許可するECサイト・BTMポータルを管理。各サイトへの共通ログイン情報（IPASS）とOneTimeCard発行APIが埋め込まれます。</p>
+                            </div>
+                            <button onclick="showToast('新規許可ドメイン登録ダイアログを開きます')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm self-start sm:self-auto">
+                                + 新規許可サイトを追加
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="approved-sites-grid">
+                            <!-- JS動的描画 -->
+                        </div>
+                    </div>
+                </section>
+            </div>
             <!-- 画面 5: 統合支出・予実ダッシュボード -->
             <div id="screen-dashboard" class="screen-content hidden space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
