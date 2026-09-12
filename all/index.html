@@ -11,7 +11,7 @@
   <!-- FontAwesome CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
-  <style>
+<style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
     
     :root {
@@ -89,77 +89,92 @@
       </a>
 
 <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
-  <a href="#hub-architecture" class="hover:text-cyan-600 transition-colors">統合Hubの仕組み</a>
-  
-  <!-- ① 連携システム一覧（ドロップダウン） -->
-  <div class="relative group py-6">
-    <button class="flex items-center gap-1 hover:text-cyan-600 transition-colors focus:outline-none">
-      <span>連携システム一覧</span>
-      <i class="fa-solid fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
-    </button>
-    <div class="absolute left-0 top-full hidden group-hover:block w-56 bg-white border border-slate-200 rounded-xl shadow-xl py-2 transition-all">
-      <a href="https://1approval.com/kintone/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
-        <i class="fa-solid fa-layer-group text-amber-500 w-4 text-center"></i>
-        <span>kintone</span>
-      </a>
-      <a href="https://1approval.com/m365/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
-        <i class="fa-brands fa-microsoft text-blue-500 w-4 text-center"></i>
-        <span>Microsoft 365</span>
-      </a>
-      <a href="https://masafushimi.github.io/1approval/teams/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
-        <i class="fa-solid fa-comments text-purple-500 w-4 text-center"></i>
-        <span>Microsoft Teams</span>
-      </a>
-    </div>
-  </div>
+        <a href="#hub-architecture" class="hover:text-cyan-600 transition-colors">統合Hubの仕組み</a>
+        
+        <!-- 連携システム一覧（ドロップダウン） -->
+        <div class="relative group py-6">
+          <button class="flex items-center gap-1 hover:text-cyan-600 transition-colors focus:outline-none">
+            <span>連携システム一覧</span>
+            <i class="fa-solid fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+          </button>
+          
+          <div class="absolute left-0 top-full hidden group-hover:block w-60 bg-white border border-slate-200 rounded-xl shadow-xl py-2 transition-all">
+            <a href="https://1approval.com/kintone/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
+              <i class="fa-solid fa-layer-group text-amber-500 w-4 text-center"></i>
+              <span>kintone</span>
+            </a>
+            <a href="https://1approval.com/m365/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
+              <i class="fa-brands fa-microsoft text-blue-500 w-4 text-center"></i>
+              <span>Microsoft 365</span>
+            </a>
+            <!-- 未ローンチ: Microsoft Teams -->
+            <div class="flex items-center justify-between px-4 py-2.5 text-slate-400 cursor-not-allowed select-none bg-slate-50/50">
+              <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-comments text-slate-400 w-4 text-center"></i>
+                <span>Microsoft Teams</span>
+              </div>
+              <span class="text-[9px] font-bold bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded">Coming Soon</span>
+            </div>
+          </div>
+        </div>
 
-  <!-- ② 連携領域一覧（新規追加・ドロップダウン） -->
-  <div class="relative group py-6">
-    <button class="flex items-center gap-1 hover:text-cyan-600 transition-colors focus:outline-none">
-      <span>連携領域一覧</span>
-      <i class="fa-solid fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
-    </button>
-    <div class="absolute left-0 top-full hidden group-hover:block w-60 bg-white border border-slate-200 rounded-xl shadow-xl py-2 transition-all">
-      <a href="https://1approval.com/services/trip/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
-        <i class="fa-solid fa-plane-departure text-emerald-500 w-4 text-center"></i>
-        <span>出張手配</span>
-      </a>
-      <a href="https://masafushimi.github.io/1approval/4/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
-        <i class="fa-solid fa-boxes-packing text-rose-500 w-4 text-center"></i>
-        <span>消耗品・備品等手配</span>
-      </a>
-      <a href="https://1approval.com/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
-        <i class="fa-solid fa-users-rectangle text-amber-500 w-4 text-center"></i>
-        <span>MICE・イベント手配</span>
-      </a>
-    </div>
-  </div>
+        <!-- 連携領域一覧（ドロップダウン） -->
+        <div class="relative group py-6">
+          <button class="flex items-center gap-1 hover:text-cyan-600 transition-colors focus:outline-none">
+            <span>連携領域一覧</span>
+            <i class="fa-solid fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+          </button>
+          
+          <div class="absolute left-0 top-full hidden group-hover:block w-64 bg-white border border-slate-200 rounded-xl shadow-xl py-2 transition-all">
+            <a href="https://1approval.com/services/trip/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
+              <i class="fa-solid fa-plane-departure text-emerald-500 w-4 text-center"></i>
+              <span>出張手配</span>
+            </a>
+            <!-- 未ローンチ: 消耗品・備品等手配 -->
+            <div class="flex items-center justify-between px-4 py-2.5 text-slate-400 cursor-not-allowed select-none bg-slate-50/50">
+              <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-boxes-packing text-slate-400 w-4 text-center"></i>
+                <span>消耗品・備品等手配</span>
+              </div>
+              <span class="text-[9px] font-bold bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded">Coming Soon</span>
+            </div>
+            <!-- 未ローンチ: MICE・イベント手配 -->
+            <div class="flex items-center justify-between px-4 py-2.5 text-slate-400 cursor-not-allowed select-none bg-slate-50/50">
+              <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-users-rectangle text-slate-400 w-4 text-center"></i>
+                <span>MICE・イベント手配</span>
+              </div>
+              <span class="text-[9px] font-bold bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded">Coming Soon</span>
+            </div>
+          </div>
+        </div>
 
-  <a href="#value" class="hover:text-cyan-600 transition-colors">解決する課題</a>
-  <a href="#features" class="hover:text-cyan-600 transition-colors">強み・特徴</a>
-  
-  <!-- お役立ち記事（ドロップダウン） -->
-  <div class="relative group py-6">
-    <button class="flex items-center gap-1 hover:text-cyan-600 transition-colors focus:outline-none">
-      <span>お役立ち記事</span>
-      <i class="fa-solid fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
-    </button>
-    <div class="absolute left-0 top-full hidden group-hover:block w-56 bg-white border border-slate-200 rounded-xl shadow-xl py-2 transition-all">
-      <a href="https://1approval.com/m365/article/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
-        <i class="fa-brands fa-microsoft text-blue-500 w-4 text-center"></i>
-        <span>Microsoft 365</span>
-      </a>
-      <a href="https://1approval.com/googleworkspace/article/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
-        <i class="fa-brands fa-google text-red-500 w-4 text-center"></i>
-        <span>Google Workspace</span>
-      </a>
-      <a href="https://1approval.com/kintone/article/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
-        <i class="fa-solid fa-layer-group text-amber-500 w-4 text-center"></i>
-        <span>kintone</span>
-      </a>
-    </div>
-  </div>
-</nav>
+        <a href="#value" class="hover:text-cyan-600 transition-colors">解決する課題</a>
+        <a href="#features" class="hover:text-cyan-600 transition-colors">強み・特徴</a>
+        
+        <!-- お役立ち記事（ドロップダウン） -->
+        <div class="relative group py-6">
+          <button class="flex items-center gap-1 hover:text-cyan-600 transition-colors focus:outline-none">
+            <span>お役立ち記事</span>
+            <i class="fa-solid fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+          </button>
+          
+          <div class="absolute left-0 top-full hidden group-hover:block w-56 bg-white border border-slate-200 rounded-xl shadow-xl py-2 transition-all">
+            <a href="https://1approval.com/m365/article/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
+              <i class="fa-brands fa-microsoft text-blue-500 w-4 text-center"></i>
+              <span>Microsoft 365</span>
+            </a>
+            <a href="https://1approval.com/googleworkspace/article/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
+              <i class="fa-brands fa-google text-red-500 w-4 text-center"></i>
+              <span>Google Workspace</span>
+            </a>
+            <a href="https://1approval.com/kintone/article/" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-50 text-slate-700 hover:text-cyan-600 transition-colors">
+              <i class="fa-solid fa-layer-group text-amber-500 w-4 text-center"></i>
+              <span>kintone</span>
+            </a>
+          </div>
+        </div>
+      </nav>
 
       <div class="flex items-center gap-4">
         <a href="#contact" class="btn-gradient px-5 py-2.5 rounded-lg text-sm font-bold text-white shadow-lg shadow-rose-500/20 flex items-center gap-2">
