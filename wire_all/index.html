@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1Approval 画面一覧とフェーズ構成｜1Approval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:#F6F7FB;color:#17171A;
+ line-height:1.9;-webkit-font-smoothing:antialiased}
+header.top{background:#fff;border-bottom:1px solid #E6E7EE;padding:16px 28px;display:flex;align-items:center;gap:12px;
+ position:sticky;top:0;z-index:5}
+header.top img{height:20px;width:auto}
+header.top b{font-size:14px}
+header.top nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+header.top nav a{font-size:12px;color:#17171A;background:#fff;border:1px solid #D6D8E3;border-radius:8px;
+ padding:7px 13px;text-decoration:none}
+header.top nav a:hover{background:#F6F7FB}
+header.top nav a.on{background:#17171A;color:#fff;border-color:#17171A}
+.wrap{max-width:860px;margin:0 auto;padding:36px 28px 90px}
+h1{font-size:30px;font-weight:700;letter-spacing:-0.02em;margin:0 0 6px;line-height:1.4}
+.date{font-size:12px;color:#5F6169;font-family:ui-monospace,Menlo,monospace;margin-bottom:26px}
+h2{font-size:21px;font-weight:700;letter-spacing:-0.01em;margin:46px 0 14px;padding-top:22px;
+ border-top:1px solid #E6E7EE;line-height:1.5}
+h3{font-size:16px;font-weight:700;margin:30px 0 10px}
+p{margin:0 0 15px;font-size:15px}
+ul,ol{margin:0 0 16px;padding-left:24px;font-size:15px}
+li{margin-bottom:7px}
+strong{font-weight:700}
+code{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:#EDEEF4;border-radius:4px;padding:2px 6px}
+table{border-collapse:collapse;width:100%;margin:6px 0 22px;background:#fff;border:1px solid #E6E7EE;
+ border-radius:10px;overflow:hidden;font-size:13.5px;display:table}
+th{background:#F6F7FB;text-align:left;font-weight:700;padding:11px 13px;border-bottom:1px solid #E6E7EE;
+ font-size:12px;color:#5F6169;white-space:nowrap}
+td{padding:12px 13px;border-bottom:1px solid #EDEEF4;vertical-align:top;line-height:1.75}
+tr:last-child td{border-bottom:0}
+.mermaid{background:#fff;border:1px solid #E6E7EE;border-radius:10px;padding:22px;margin:6px 0 24px;text-align:center}
+.toc{background:#fff;border:1px solid #E6E7EE;border-radius:10px;padding:18px 22px;margin:0 0 34px}
+.toc b{display:block;font-size:11px;color:#5F6169;letter-spacing:.06em;margin-bottom:9px}
+.toc a{display:block;font-size:13px;color:#17171A;text-decoration:none;padding:4px 0}
+.toc a:hover{color:#2826FF}
+footer{border-top:1px solid #E6E7EE;margin-top:50px;padding-top:20px;font-size:12px;color:#5F6169}
+@media (max-width:760px){.wrap{padding:24px 18px 60px}h1{font-size:24px}table{font-size:12.5px}}
+</style>
+</head>
+<body>
+<header class="top"><img src="../admin/assets/logo.png" alt="1Approval"><b>1Approval 画面一覧とフェーズ構成</b>
+<nav><a href="../admin/index.html">モックアップ</a><a href="../admin/wirefreame/">画面モックアップ</a><a href="../admin/spec/">仕様レビュー</a><a href="../wire_all/" class="on">画面一覧とフェーズ</a><a href="../functions_group/">機能群の切り分け</a></nav></header>
+<div class="wrap">
+<h1>1Approval 画面一覧とフェーズ構成</h1>
+<div class="date">2026-09-20</div>
+<div class="toc"><b>目次</b><a href="#s0">このドキュメントについて</a><a href="#s1">フェーズ構成</a><a href="#s2">3つのシステム</a><a href="#s3">Phase-1 の画面（40枚）</a><a href="#s4">Phase-2〜6 の画面</a><a href="#s5">画面の関係と URL の規則</a><a href="#s6">作っていないものと、主な設計判断</a></div>
+
+<h2 id="s0">このドキュメントについて</h2>
+<p>1Approval の画面仕様を、73枚のワイヤーフレームから起こしたものです。画面ごとに、何を決める画面か・何を表示するか・どの操作が何を起こすかを書いています。</p>
+<p>対象は 1Approval for Goods（備品・消耗品の購買と資産管理）の管理画面を中心に、そこから派生する5つのフェーズです。出張手配は Phase-3 のエージェントとして扱い、それ以外の 1Approval for Trip 固有機能は対象外です。</p>
+<p>粒度は「実装者が画面を組める」ところまでです。データモデルと状態遷移は、仕様レビューに分けてあります。</p>
+<h2 id="s1">フェーズ構成</h2>
+<p>6フェーズ・合計73画面。Phase-1 だけで40画面で、ここが製品の本体です。</p>
+<table><thead><tr><th>フェーズ</th><th>内容</th><th>解く問題</th><th>画面数</th></tr></thead><tbody><tr><td>Phase-1</td><td>購買・検収・分類・モノの管理・設定</td><td>承認＝発注を成立させ、届いたあとの台帳を自動で埋める</td><td>40</td></tr><tr><td>Phase-2</td><td>固定資産ソフト・MDM・SaaSライセンス</td><td>買ったものと、外部システムが持つ台帳のずれを消す</td><td>3</td></tr><tr><td>Phase-3</td><td>1Approval Agent Purchase</td><td>申請者がカタログを探さなくても済むようにする</td><td>6</td></tr><tr><td>Phase-4</td><td>人事・組織マスターの一括同期</td><td>入退社で備品とライセンスが取り残されるのを止める</td><td>2</td></tr><tr><td>Phase-5</td><td>社内規程のRAG学習・全社標準品カタログ</td><td>「何を買ってよいか」を規程と標準品から決める</td><td>2</td></tr><tr><td>Phase-6</td><td>1Approval Ads（B2B広告事業）</td><td>購買先メーカーからの収益を作る</td><td>4</td></tr></tbody></table>
+<p>順番には理由があります。Phase-3 の AI レコメンドは、Phase-1 で貯まった購買明細（品番・数量・周期・納入先）がないと提案できません。Phase-5 の標準品カタログは、申請画面（Phase-3）がないと効かせる先がありません。Phase-6 は掲載面が Phase-3 なので、その後になります。</p>
+<h2 id="s2">3つのシステム</h2>
+<p>73画面は、1つの製品ではなく、使う人が違う3つのシステムに分かれます。見た目を意図的に変えています。</p>
+<table><thead><tr><th></th><th>管理画面</th><th>Agent Purchase</th><th>Ads</th></tr></thead><tbody><tr><td>フェーズ</td><td>1・2・4・5</td><td>3</td><td>6</td></tr><tr><td>使う人</td><td>総務・購買・情シス・経理</td><td>現場の全員</td><td>購買先メーカー</td></tr><tr><td>ドメイン</td><td>1approval.app</td><td>app.1approval.com</td><td>ads.1approval.com</td></tr><tr><td>地色</td><td>#F6F7FB（青みグレー）</td><td>#0A0C12（ダーク）</td><td>#F4F6F7</td></tr><tr><td>主色</td><td>#2826FF</td><td>#4F7BFF→#9B6BFF のグラデーション</td><td>#0CA678</td></tr><tr><td>書体</td><td>Noto Sans JP</td><td>Inter + Noto Sans JP</td><td>Inter + Noto Sans JP</td></tr><tr><td>ナビ</td><td>左サイドバー16項目</td><td>上部タブ5項目</td><td>上部タブ3項目</td></tr></tbody></table>
+<p>見た目を揃えない理由は、同じ画面の続きだと誤解されると、承認の重さが伝わらないためです。管理画面は台帳を見る場所、Agent Purchase は買う場所、Ads は売る側の場所です。</p>
+<p>Ads の4枚のうち、掲載イメージは Agent Purchase の中（app/agent）、受け入れ設定は管理画面の中（/settings/ads）にあります。</p>
+<h2 id="s3">Phase-1 の画面（40枚）</h2>
+<h3>購買（9枚）</h3>
+<table><thead><tr><th>画面</th><th>URL</th><th>何をする画面か</th></tr></thead><tbody><tr><td>購買明細台帳</td><td>/purchases</td><td>全チャネルの購買を WHO / WHAT / WHEN / WHERE / WHY に正規化して保持する中核。診断列、電帳法の検索要件、保存した絞り込み</td></tr><tr><td>分類の確定</td><td>/purchases/classify</td><td>自動判定の確信度が低いものだけを人が確定。判定の根拠と確信度を表示。未検収は確定不可</td></tr><tr><td>確定しました</td><td>/purchases/classify?done=4</td><td>確定後の結果と取消し。会計出力前（本日18:00まで）なら取り消せる</td></tr><tr><td>検収</td><td>/purchases/receiving</td><td>到着待ちと未検収をさばく。送り状バーコード・到着予定・注文番号の3入口</td></tr><tr><td>差異の処理</td><td>/purchases/receiving/:id/discrepancy</td><td>数量差異の理由を記録し、注文・在庫・請求・承認の扱いを決める。理由5択</td></tr><tr><td>支出分析</td><td>/purchases/analytics</td><td>部門別の支出と予算消化、重複抑止の効果</td></tr><tr><td>期間を変更</td><td>/purchases/analytics</td><td>集計の基準日を選ぶ。検収日／発注日／申請日</td></tr><tr><td>予算設定</td><td>/purchases/budgets</td><td>部署 × 勘定科目 × 月。80/100/120% で振る舞いが変わる</td></tr><tr><td>SP 検収</td><td>/m/receiving</td><td>現場での検収。シリアルスキャン（MDM連携用）</td></tr></tbody></table>
+<h3>モノ：個体管理（8枚）</h3>
+<p>備品・資産（/assets）、個体詳細（/assets/:id）、QRラベル（/assets/labels）、ラベルのプレビュー（/assets/labels/preview）、点検・修理（/assets/maintenance）、点検記録の登録（/assets/maintenance/new）、廃棄・除却（/assets/disposals）、除却の起票（/assets/disposals/new）。</p>
+<p>除却の起票では、PCを含むとデータ消去証明なしでは承認に出せません。確定で MDM 削除依頼とマニフェスト登録の ToDo が立ちます。</p>
+<h3>モノ：数量と貸出（9枚）</h3>
+<p>在庫（/stock）、拠点間の移動（/stock/transfers）、移動の起票（/stock/transfers/new）、期限（/expiry）、貸出（/loans）、貸出カレンダー（/loans/calendar）、貸し出す・返す（/loans/new）、SP 出庫（/m/issue）、SP 貸出（/m/loans）。</p>
+<p>貸出カレンダーは個体 × 2週間のガント。稼働率8割超は台数不足、1割未満は見直し候補として提示します。</p>
+<h3>棚卸とリース（6枚）</h3>
+<p>棚卸（/stocktakes）、棚卸の起票（/stocktakes/new）、差異確定（/stocktakes/:id/diff）、リース契約（/leases）、リース契約の登録（/leases/new）、SP 棚卸（/m/stocktakes）。</p>
+<p>棚卸の差異は「理由を選んでから確定」が既定です。自動上書きは差異の原因が追えなくなるため非推奨。</p>
+<h3>人（3枚）</h3>
+<p>メンバー（/members）、メンバーの詳細（/members/:id）、入退社（/members/onboarding）。</p>
+<p>メンバーの詳細で、1人の持ち物・SaaS・購買傾向が1枚に集まります。退職時に何が残るかがここで分かります。</p>
+<h3>設定（11枚）</h3>
+<p>購買設定（/settings/purchasing）、品目の編集（/settings/purchasing/items/:id）、ルール設定（/settings/rules）、システム設定（/settings/systems）、kintone接続（/settings/systems/kintone）、購買先の接続（/settings/systems/:ec）、接続を追加（/settings/systems/new）、接続テスト（/settings/systems/:ec/test）、勘定奉行（/settings/systems/obc）、楽楽精算（/settings/systems/rakuraku）、接続ログ（/settings/systems/logs）。</p>
+<p>品目の編集に登録した品目は、分類の確定を通らず自動確定します。購買先の接続では「誰が使えるか（拠点・部署・ロール）」と「カタログの範囲」を決めます。接続している購買先が、そのまま会社が認めた購買先です。</p>
+<h3>権限・拠点・記録（4枚）</h3>
+<p>権限とロール（/settings/roles）、ロールの編集（/settings/roles/:id）、拠点とロケーション（/settings/locations/:id）、監査ログ（/settings/audit）。</p>
+<p>ここで決めるのは 1Approval の画面で何ができるかです。購買の承認権限は kintone / M365 側で決まります。</p>
+<p>このほかに、ホーム（/）、通知（/notifications）、通知設定（/settings/notifications、16種類 × 4経路）、ログイン（/login）、初期データの移行（/settings/import）があります。</p>
+<h2 id="s4">Phase-2〜6 の画面</h2>
+<table><thead><tr><th>フェーズ</th><th>画面</th><th>URL</th><th>何をする画面か</th></tr></thead><tbody><tr><td>2</td><td>SaaSライセンス</td><td>/saas</td><td>契約席数と実利用の差。休眠・退職者残存を色分け</td></tr><tr><td>2</td><td>SaaS契約の詳細</td><td>/saas/:id</td><td>席ごとの最終ログイン。年間契約は更新時しか減らせない</td></tr><tr><td>2</td><td>MDM連携</td><td>/mdm/gap</td><td>検収済みなのにMDMにいない端末</td></tr><tr><td>3</td><td>AIレコメンド</td><td>app/agent</td><td>在庫・履歴・期限の3シグナルから下書きを作る。発注はしない</td></tr><tr><td>3</td><td>出張手配</td><td>app/trip</td><td>日程と場所からパッケージを組む。規程の確認を条文番号つきで</td></tr><tr><td>3</td><td>カタログ</td><td>app/catalog</td><td>連携済みECを並べ、どこからでも同じカートに入れる</td></tr><tr><td>3</td><td>申請</td><td>app/requests</td><td>自分の申請の状態。確保の有効期限72時間</td></tr><tr><td>3</td><td>申請の詳細</td><td>app/requests/:id</td><td>6段の経過。承認の記録</td></tr><tr><td>3</td><td>承認</td><td>app/approvals/:id</td><td>承認＝発注を決める。自動チェックの結果</td></tr><tr><td>4</td><td>人事マスターの同期</td><td>/org/sync</td><td>人事を正とした6サービスとの差分</td></tr><tr><td>4</td><td>付与ルール</td><td>/org/provisioning</td><td>部署・役職ごとの支給セット</td></tr><tr><td>5</td><td>全社標準品カタログ</td><td>/catalogue</td><td>「当社ではこれを買う」を先に決める</td></tr><tr><td>5</td><td>社内規程の学習</td><td>/policies</td><td>規程の条文からルール候補を抽出。条文番号を必ず付ける</td></tr><tr><td>6</td><td>クリック課金</td><td>ads/campaigns/cpc</td><td>業種・部門・規模・企業指定での配信</td></tr><tr><td>6</td><td>コンバージョン課金</td><td>ads/campaigns/conquest</td><td>競合品がカートに入った瞬間の比較</td></tr><tr><td>6</td><td>掲載イメージ</td><td>app/agent</td><td>広告がどこに出て、どこに出ないか</td></tr><tr><td>6</td><td>広告の受け入れ</td><td>/settings/ads</td><td>買い手が表示を決める</td></tr></tbody></table>
+<h2 id="s5">画面の関係と URL の規則</h2>
+<p>一覧は複数形、詳細は ID、新規作成は /new で統一しています。</p>
+<div class="mermaid">flowchart LR
+  A[購買明細台帳&lt;br/&gt;/purchases] --&gt; B[分類の確定&lt;br/&gt;/classify]
+  A --&gt; C[検収&lt;br/&gt;/receiving]
+  C --&gt; D[差異の処理&lt;br/&gt;/discrepancy]
+  A --&gt; E[支出分析&lt;br/&gt;/analytics]
+  E --&gt; F[予算設定&lt;br/&gt;/budgets]
+  C --&gt; G[在庫・資産台帳]
+  B --&gt; H[会計・経費へ出力]</div>
+<p>台帳から始まって、検収でモノの管理に分岐し、分類の確定で会計に抜けます。この3本が Phase-1 の背骨です。</p>
+<p>導線の規則は4つです。</p>
+<ol><li>操作ボタンの宛先は一覧ではなく起票画面。「貸し出す」は /loans ではなく /loans/new へ</li><li>どの画面にも下部に「つながる画面」を置き、前の画面・次の画面・関連を並べる</li><li>CSV出力は遷移ではなくその場のダウンロード</li><li>完了のフィードバックはポップアップで、取り消せる条件を必ず書く</li></ol>
+<p>Phase-1〜2 は 1approval.app、Phase-3 は app.1approval.com、Phase-6 の広告主向けは ads.1approval.com です。スマホは /m/ 配下にまとめ、QR からは /a/:id で個体詳細に飛びます。</p>
+<h2 id="s6">作っていないものと、主な設計判断</h2>
+<p>意図的に作っていない画面があります。</p>
+<ul><li><strong>kintone / Microsoft 365 上の承認カード</strong>。各基盤のUIで作るもので、この管理画面の対象外です。管理画面側に必要なのは、承認カードに何を出すかのマッピング設定だけです</li><li><strong>カード明細・交通系IC・立替精算</strong>。経費精算と Trip の領域です。ただし購買明細台帳のデータ構造は、後からチャネルを足せる形にしておきます</li><li><strong>RFP・相見積の比較</strong>。単発高額品の業務で、消耗品の購買統制とは別物です</li></ul>
+<p>仕様を読むときに知っておくべき判断が4つあります。</p>
+<p><strong>発注は原則として止めません。</strong> ルールに引っかかっても記録して承認者に判断させます。止めると現場が台帳の外で買い、見えなくなるからです。</p>
+<p><strong>受け取っていない数量は台帳に載せません。</strong> 検収した数だけが在庫になります。だから数量差異で除却は発生しません。除却は受け入れた後に壊れた・期限切れだと分かったときだけです。</p>
+<p><strong>減額方向は再承認不要、増額方向は再承認。</strong> 事前承認は「この金額まで使ってよい」という枠なので、枠内なら通し、超えるなら戻します。</p>
+<p><strong>広告を受け入れても利用料は下がりません。</strong> 値引きを条件にすると断れなくなり、購買統制ツールが広告に買われていると見られた時点で製品の信頼が崩れます。</p>
+<footer>1Approval 管理機能ドキュメント ／ 2026-09-20 時点</footer>
+</div>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true,theme:'neutral',fontFamily:'"Noto Sans JP",sans-serif'});
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>購買明細台帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:#F6F7FB;color:#17171A}
+a{color:#2826FF}a:hover{color:#1F1DD1}
+</style>
+</head>
+<body style="margin:0;display:flex;justify-content:center;align-items:flex-start;">
+<div style="width: 1440px; height: 900px; box-sizing: border-box; display: flex; background: #F6F7FB;">
+
+  <nav style="width: 224px; flex-shrink: 0; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E7EE; padding: 18px 0; display: flex; flex-direction: column; gap: 2px;" aria-label="メインメニュー"><div style="padding: 0 18px 18px; display: flex; align-items: center; gap: 8px;"><img src="../assets/logo.png" alt="1Approval" style="height: 22px; width: auto;"><span style="font-size: 11px; color: #5F6169; border: 1px solid #E6E7EE; border-radius: 4px; padding: 1px 6px;">管理</span></div><a href="Home.html" style="display: flex; align-items: center; gap: 10px; margin: 0 10px; padding: 10px 12px; text-decoration: none; font-size: 14px; border-radius: 8px; color: #33343B;">やること<span style="margin-left: auto; background: #2826FF; color: #FFFFFF; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 9px;">27</span></a><div style="padding: 16px 18px 6px; font-size: 11px; color: #8A8D98; letter-spacing: 0.08em;">購買</div><a href="Ledger.html" style="margin: 0 10px; padding: 9px 12px; background: #EEF0FE; color: #2826FF; text-decoration: none; font-size: 14px; font-weight: 700; border-radius: 8px;">購買明細台帳</a><a href="Receiving.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">検収</a><a href="Spend.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">支出分析</a><div style="padding: 16px 18px 6px; font-size: 11px; color: #8A8D98; letter-spacing: 0.08em;">モノ</div><a href="Assets.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">備品・資産</a><a href="Stock.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">在庫</a><a href="Expiry.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">期限</a><a href="Loan.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">貸出</a><a href="Stocktake.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">棚卸</a><a href="Leases.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">リース契約</a><div style="padding: 16px 18px 6px; font-size: 11px; color: #8A8D98; letter-spacing: 0.08em;">IT・SaaS</div><a href="SaaSLicenses.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">SaaSライセンス</a><a href="MdmGap.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">MDM連携</a><div style="padding: 16px 18px 6px; font-size: 11px; color: #8A8D98; letter-spacing: 0.08em;">人</div><a href="Members.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">メンバー</a><a href="Onboarding.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">入退社</a><div style="margin: 14px 18px 8px; height: 1px; background: #EDEEF4;"></div><a href="Notifications.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">通知</a><div style="margin: auto 10px 0; padding: 10px 12px; background: #F6F7FB; border-radius: 8px;"><div style="font-size: 12px; font-weight: 700;">伏見 匡矩</div><div style="font-size: 11px; color: #5F6169; margin-top: 2px;">総務部 ／ システム管理者</div><a href="Login.html" style="display: inline-block; margin-top: 6px; font-size: 11px;">ログアウト</a></div><a href="Settings.html" style="margin: 10px 10px 0; padding: 9px 12px; text-decoration: none; font-size: 14px; border-radius: 8px; color: #5F6169;">設定</a></nav>
+
+  <main style="flex-grow: 1; box-sizing: border-box; padding: 24px 28px; overflow: hidden;"><div style="display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px; padding: 5px 10px; background: #FFFFFF; border: 1px solid #E6E7EE; border-radius: 6px; font-size: 11px; color: #5F6169; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg><span>1approval.app<strong style="color: #17171A; font-weight: 700;">/purchases</strong></span></div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 700;">購買明細台帳</h1>
+      <span style="font-size: 13px; color: #5F6169;">1,284件</span>
+      <div style="margin-left: auto; display: flex; gap: 8px;">
+        <a href="SettingsAccounting.html" style="font-family: inherit; font-size: 13px; font-weight: 500; color: #17171A; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 7px; padding: 9px 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">会計ソフト向けCSV</a>
+        <a href="SettingsExpense.html" style="font-family: inherit; font-size: 13px; font-weight: 500; color: #17171A; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 7px; padding: 9px 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">経費精算向けCSV</a>
+        <a href="Classify.html" style="font-family: inherit; font-size: 13px; font-weight: 700; color: #FFFFFF; background: #2826FF; border: none; border-radius: 7px; padding: 9px 16px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">分類を確定（12件）</a>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px; margin-top: 16px; background: #FFFFFF; border: 1px solid #E6E7EE; border-radius: 10px; padding: 12px 14px;">
+      <label for="q" style="font-size: 12px; color: #5F6169;">検索</label>
+      <input id="q" type="search" value="手袋" style="font-family: inherit; font-size: 13px; width: 150px; padding: 7px 10px; border: 1px solid #D6D8E3; border-radius: 6px; background: #FFFFFF;">
+      <label for="d1" style="font-size: 12px; color: #5F6169; margin-left: 6px;">取引年月日</label>
+      <input id="d1" type="date" value="2026-09-01" style="font-family: inherit; font-size: 13px; padding: 7px 8px; border: 1px solid #D6D8E3; border-radius: 6px;">
+      <span style="font-size: 12px; color: #5F6169;">〜</span>
+      <input id="d2" type="date" value="2026-09-20" style="font-family: inherit; font-size: 13px; padding: 7px 8px; border: 1px solid #D6D8E3; border-radius: 6px;">
+      <label for="amt" style="font-size: 12px; color: #5F6169; margin-left: 6px;">金額</label>
+      <input id="amt" type="text" value="10,000 〜 500,000" style="font-family: inherit; font-size: 13px; width: 140px; padding: 7px 10px; border: 1px solid #D6D8E3; border-radius: 6px;">
+      <label for="sup" style="font-size: 12px; color: #5F6169; margin-left: 6px;">取引先</label>
+      <select id="sup" style="font-family: inherit; font-size: 13px; padding: 7px 8px; border: 1px solid #D6D8E3; border-radius: 6px; background: #FFFFFF;">
+        <option>すべて</option><option selected>モノタロウ</option><option>トラスコ中山</option>
+      </select>
+      <span style="margin-left: auto; font-size: 12px; color: #5F6169;">電帳法の検索要件（日付・金額・取引先）に対応</span>
+    </div>
+
+    <div style="display: flex; gap: 8px; margin-top: 12px; align-items: center;">
+      <span style="font-size: 12px; color: #5F6169;">保存した絞り込み</span>
+      <a href="Receiving.html" style="font-family: inherit; font-size: 12px; background: #17171A; color: #FFFFFF; border: none; border-radius: 14px; padding: 6px 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">未検収だけ</a>
+      <a href="Ledger.html" style="font-family: inherit; font-size: 12px; background: #FFFFFF; color: #17171A; border: 1px solid #D6D8E3; border-radius: 14px; padding: 6px 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">自部門の今月</a>
+      <a href="Assets.html" style="font-family: inherit; font-size: 12px; background: #FFFFFF; color: #17171A; border: 1px solid #D6D8E3; border-radius: 14px; padding: 6px 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">固定資産の候補</a>
+      <a href="Expiry.html" style="font-family: inherit; font-size: 12px; background: #FFFFFF; color: #17171A; border: 1px solid #D6D8E3; border-radius: 14px; padding: 6px 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">期限管理が必要なもの</a>
+    </div>
+
+    <div style="margin-top: 14px; background: #FFFFFF; border: 1px solid #E6E7EE; border-radius: 10px; overflow: hidden;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <thead>
+          <tr style="background: #F6F7FB; text-align: left;">
+            <th scope="col" style="padding: 11px 12px; font-weight: 700; width: 132px; border-bottom: 1px solid #E6E7EE;">診断</th>
+            <th scope="col" style="padding: 11px 12px; font-weight: 700; width: 150px; border-bottom: 1px solid #E6E7EE;">WHO 申請者／部署</th>
+            <th scope="col" style="padding: 11px 12px; font-weight: 700; border-bottom: 1px solid #E6E7EE;">WHAT 品名／品番</th>
+            <th scope="col" style="padding: 11px 12px; font-weight: 700; width: 108px; text-align: right; border-bottom: 1px solid #E6E7EE;">金額（税込）</th>
+            <th scope="col" style="padding: 11px 12px; font-weight: 700; width: 160px; border-bottom: 1px solid #E6E7EE;">WHEN 発注／検収</th>
+            <th scope="col" style="padding: 11px 12px; font-weight: 700; width: 120px; border-bottom: 1px solid #E6E7EE;">WHERE 購買元／拠点</th>
+            <th scope="col" style="padding: 11px 12px; font-weight: 700; width: 148px; border-bottom: 1px solid #E6E7EE;">WHY 勘定／目的</th>
+            <th scope="col" style="padding: 11px 12px; font-weight: 700; width: 104px; border-bottom: 1px solid #E6E7EE;">管理区分</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #FFF7F7;">
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #E02424; background: #FDECEC; padding: 3px 8px; border-radius: 5px;">相場超過 ×7</span></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">佐々木 誠<div style="color: #5F6169; font-size: 12px;">第3工場 保全課</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">デジタルノギス 150mm<div style="color: #5F6169; font-size: 12px;">01658877 ／ JAN 4582333302021</div></td>
+            <td style="padding: 12px; text-align: right; font-weight: 700; border-bottom: 1px solid #EDEEF4;">¥128,900</td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">9/18 発注<div style="color: #5F6169; font-size: 12px;">検収 9/19</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">モノタロウ<div style="color: #5F6169; font-size: 12px;">第3工場</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">工具器具備品<div style="color: #5F6169; font-size: 12px;">設備保全</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="font-size: 11px; font-weight: 700; color: #2826FF; background: #EEF0FE; padding: 3px 8px; border-radius: 5px;">資産候補</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #B26B00; background: #FFF3E3; padding: 3px 8px; border-radius: 5px;">重複の疑い</span></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">田中 浩二<div style="color: #5F6169; font-size: 12px;">大阪拠点 製造1課</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">耐切創手袋 L 10双入<div style="color: #5F6169; font-size: 12px;">01658877 ／ 5日前に同一品番を発注</div></td>
+            <td style="padding: 12px; text-align: right; font-weight: 700; border-bottom: 1px solid #EDEEF4;">¥14,080</td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">9/19 発注<div style="color: #5F6169; font-size: 12px;">検収 9/20</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">モノタロウ<div style="color: #5F6169; font-size: 12px;">大阪拠点</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">消耗品費<div style="color: #5F6169; font-size: 12px;">現場消耗品</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="font-size: 11px; font-weight: 700; color: #0E8A4F; background: #E4F6EC; padding: 3px 8px; border-radius: 5px;">消耗品</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #B26B00; background: #FFF3E3; padding: 3px 8px; border-radius: 5px;">未検収 5日</span></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">山本 恵<div style="color: #5F6169; font-size: 12px;">第2研究棟 分析課</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">特級試薬A 500mL<div style="color: #5F6169; font-size: 12px;">RG-4482 ／ 期限管理あり</div></td>
+            <td style="padding: 12px; text-align: right; font-weight: 700; border-bottom: 1px solid #EDEEF4;">¥412,000</td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">9/12 発注<div style="color: #E02424; font-size: 12px;">発送 9/15・未検収</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">モノタロウ<div style="color: #5F6169; font-size: 12px;">第2研究棟</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">研究材料費<div style="color: #5F6169; font-size: 12px;">研究開発</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="font-size: 11px; font-weight: 700; color: #5F6169; background: #EDEEF4; padding: 3px 8px; border-radius: 5px;">未分類</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #0E8A4F; background: #E4F6EC; padding: 3px 8px; border-radius: 5px;">正常</span></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">伏見 匡矩<div style="color: #5F6169; font-size: 12px;">本社 総務部</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">MacBook Air 13インチ<div style="color: #5F6169; font-size: 12px;">MC7X4J/A ／ 入社支給セット</div></td>
+            <td style="padding: 12px; text-align: right; font-weight: 700; border-bottom: 1px solid #EDEEF4;">¥184,800</td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">9/16 発注<div style="color: #5F6169; font-size: 12px;">検収 9/19</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">トラスコ中山<div style="color: #5F6169; font-size: 12px;">本社</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">工具器具備品<div style="color: #5F6169; font-size: 12px;">入社支給</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="font-size: 11px; font-weight: 700; color: #2826FF; background: #EEF0FE; padding: 3px 8px; border-radius: 5px;">固定資産</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #0E8A4F; background: #E4F6EC; padding: 3px 8px; border-radius: 5px;">正常</span></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">中村 亮<div style="color: #5F6169; font-size: 12px;">第3工場 製造2課</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">潤滑スプレー 420mL ×12<div style="color: #5F6169; font-size: 12px;">28374615</div></td>
+            <td style="padding: 12px; text-align: right; font-weight: 700; border-bottom: 1px solid #EDEEF4;">¥10,296</td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">9/17 発注<div style="color: #5F6169; font-size: 12px;">検収 9/19</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">モノタロウ<div style="color: #5F6169; font-size: 12px;">第3工場</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">消耗品費<div style="color: #5F6169; font-size: 12px;">設備保全</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="font-size: 11px; font-weight: 700; color: #0E8A4F; background: #E4F6EC; padding: 3px 8px; border-radius: 5px;">消耗品</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #0E8A4F; background: #E4F6EC; padding: 3px 8px; border-radius: 5px;">正常</span></td>
+            <td style="padding: 12px;">林 さやか<div style="color: #5F6169; font-size: 12px;">本社 営業部</div></td>
+            <td style="padding: 12px;">A4コピー用紙 5000枚<div style="color: #5F6169; font-size: 12px;">管理対象外の品目</div></td>
+            <td style="padding: 12px; text-align: right; font-weight: 700;">¥19,800</td>
+            <td style="padding: 12px;">9/18 発注<div style="color: #5F6169; font-size: 12px;">検収 9/20</div></td>
+            <td style="padding: 12px;">トラスコ中山<div style="color: #5F6169; font-size: 12px;">本社</div></td>
+            <td style="padding: 12px;">消耗品費<div style="color: #5F6169; font-size: 12px;">オフィス</div></td>
+            <td style="padding: 12px;"><span style="font-size: 11px; font-weight: 700; color: #5F6169; background: #EDEEF4; padding: 3px 8px; border-radius: 5px;">管理対象外</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 12px; color: #5F6169;">
+      <span>1〜6件（全1,284件）</span>
+      <span style="margin-left: auto;">在庫のある品目を発注しようとした申請は、申請画面で他拠点の在庫と最短期限を表示して抑止します。</span>
+    </div>
+  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid #E6E7EE; margin-top: 18px; padding-top: 14px; padding: 12px 0 0;"><span style="font-size: 11px; color: #5F6169; font-weight: 700; margin-right: 2px;">つながる画面</span><a href="AdsSettings.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">広告の受け入れ</a><a href="Rules.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">ルール設定</a><a href="Home.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 14px; font-size: 12px; color: #17171A; text-decoration: none; font-weight: 700;">← ホーム</a><a href="Receiving.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #EEF0FE; border: 1px solid #DDE1FD; border-radius: 14px; font-size: 12px; color: #2826FF; text-decoration: none; font-weight: 700;">検収 →</a><a href="Spend.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #EEF0FE; border: 1px solid #DDE1FD; border-radius: 14px; font-size: 12px; color: #2826FF; text-decoration: none; font-weight: 700;">支出分析 →</a><a href="Assets.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">備品・資産</a><a href="Stock.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">在庫</a><a href="SettingsAccounting.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">勘定奉行</a><a href="AuditLog.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">監査ログ</a><a href="AgentPurchase.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">AIエージェント購買（Phase-3）</a></div></main>
+</div>
+</body>
+</html>

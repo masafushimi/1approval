@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1Approval 機能群の切り分けとプライシング｜1Approval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:#F6F7FB;color:#17171A;
+ line-height:1.9;-webkit-font-smoothing:antialiased}
+header.top{background:#fff;border-bottom:1px solid #E6E7EE;padding:16px 28px;display:flex;align-items:center;gap:12px;
+ position:sticky;top:0;z-index:5}
+header.top img{height:20px;width:auto}
+header.top b{font-size:14px}
+header.top nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+header.top nav a{font-size:12px;color:#17171A;background:#fff;border:1px solid #D6D8E3;border-radius:8px;
+ padding:7px 13px;text-decoration:none}
+header.top nav a:hover{background:#F6F7FB}
+header.top nav a.on{background:#17171A;color:#fff;border-color:#17171A}
+.wrap{max-width:860px;margin:0 auto;padding:36px 28px 90px}
+h1{font-size:30px;font-weight:700;letter-spacing:-0.02em;margin:0 0 6px;line-height:1.4}
+.date{font-size:12px;color:#5F6169;font-family:ui-monospace,Menlo,monospace;margin-bottom:26px}
+h2{font-size:21px;font-weight:700;letter-spacing:-0.01em;margin:46px 0 14px;padding-top:22px;
+ border-top:1px solid #E6E7EE;line-height:1.5}
+h3{font-size:16px;font-weight:700;margin:30px 0 10px}
+p{margin:0 0 15px;font-size:15px}
+ul,ol{margin:0 0 16px;padding-left:24px;font-size:15px}
+li{margin-bottom:7px}
+strong{font-weight:700}
+code{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:#EDEEF4;border-radius:4px;padding:2px 6px}
+table{border-collapse:collapse;width:100%;margin:6px 0 22px;background:#fff;border:1px solid #E6E7EE;
+ border-radius:10px;overflow:hidden;font-size:13.5px;display:table}
+th{background:#F6F7FB;text-align:left;font-weight:700;padding:11px 13px;border-bottom:1px solid #E6E7EE;
+ font-size:12px;color:#5F6169;white-space:nowrap}
+td{padding:12px 13px;border-bottom:1px solid #EDEEF4;vertical-align:top;line-height:1.75}
+tr:last-child td{border-bottom:0}
+.mermaid{background:#fff;border:1px solid #E6E7EE;border-radius:10px;padding:22px;margin:6px 0 24px;text-align:center}
+.toc{background:#fff;border:1px solid #E6E7EE;border-radius:10px;padding:18px 22px;margin:0 0 34px}
+.toc b{display:block;font-size:11px;color:#5F6169;letter-spacing:.06em;margin-bottom:9px}
+.toc a{display:block;font-size:13px;color:#17171A;text-decoration:none;padding:4px 0}
+.toc a:hover{color:#2826FF}
+footer{border-top:1px solid #E6E7EE;margin-top:50px;padding-top:20px;font-size:12px;color:#5F6169}
+@media (max-width:760px){.wrap{padding:24px 18px 60px}h1{font-size:24px}table{font-size:12.5px}}
+</style>
+</head>
+<body>
+<header class="top"><img src="../admin/assets/logo.png" alt="1Approval"><b>1Approval 機能群の切り分けとプライシング</b>
+<nav><a href="../admin/index.html">モックアップ</a><a href="../admin/wirefreame/">画面モックアップ</a><a href="../admin/spec/">仕様レビュー</a><a href="../wire_all/">画面一覧とフェーズ</a><a href="../functions_group/" class="on">機能群の切り分け</a></nav></header>
+<div class="wrap">
+<h1>1Approval 機能群の切り分けとプライシング</h1>
+<div class="date">2026-09-20</div>
+<div class="toc"><b>目次</b><a href="#s0">結論：基本＋7オプション</a><a href="#s1">切り分けの原則</a><a href="#s2">機能群ごとの中身</a><a href="#s3">規模による変動</a><a href="#s4">初期費用</a><a href="#s5">見積例</a><a href="#s6">値付けの根拠とリスク</a></div>
+
+<p>エンタープライズ向けに、機能をオプションとして切り分ける場合の提案です。73画面を「誰が使うか」で束ね直しています。</p>
+<h2 id="s0">結論：基本＋7オプション</h2>
+<p>基本料金を月額 9.8万円のまま残し、そこに7つのオプションを乗せます。全部入れると月額 56.6万円＋ユーザー課金です。</p>
+<table><thead><tr><th>パッケージ</th><th>月額</th><th>課金単位</th><th>主な中身</th></tr></thead><tbody><tr><td><strong>Core</strong>（必須）</td><td>¥98,000</td><td>定額</td><td>購買明細台帳・検収・差異処理・分類の確定・支出分析・予算・ルール・通知・監査ログ・権限・拠点</td></tr><tr><td>モノ管理</td><td>+¥48,000</td><td>定額</td><td>備品・資産台帳・在庫・期限・貸出・棚卸・QRラベル・スマホ4画面</td></tr><tr><td>リース・固定資産</td><td>+¥38,000</td><td>定額</td><td>リース契約管理・新リース会計基準対応・固定資産ソフト連携</td></tr><tr><td>会計・経費自動連携</td><td>+¥38,000</td><td>1接続ごと</td><td>勘定奉行・PCA・freee・マネーフォワード・楽楽精算・バクラク</td></tr><tr><td>IT資産（Phase-2）</td><td>+¥58,000</td><td>定額</td><td>MDM連携・SaaSライセンス台帳・未登録検出</td></tr><tr><td><strong>Agent Purchase</strong>（Phase-3）</td><td>+¥400</td><td>1ユーザー月</td><td>AIレコメンド・出張手配・カタログ・単体申請承認（最低 ¥98,000）</td></tr><tr><td>人事マスター連携（Phase-4）</td><td>+¥68,000</td><td>定額</td><td>6サービスとの差分同期・付与ルール・SCIM</td></tr><tr><td>規程・標準品（Phase-5）</td><td>+¥88,000</td><td>定額</td><td>社内規程のRAG学習・全社標準品カタログ</td></tr></tbody></table>
+<p>初期費用は Core が20万円、オプションは接続と移行の工数に応じて 10〜60万円。Phase-6 の Ads は課金ではなく収益源なので、この表には入りません。</p>
+<h2 id="s1">切り分けの原則</h2>
+<p>機能ではなく、<strong>誰が使うか</strong>で束ねます。ここを間違えると、安いプランで人数を増やす抜け道ができます。</p>
+<ol><li><strong>管理者が使う機能は定額</strong>。総務・購買・情シス・経理の何人かしか触らないので、人数で取っても伸びません。</li><li><strong>現場の全員が触る機能はユーザー課金</strong>。Agent Purchase は使う人が増えるほど価値も原価も上がります。</li><li><strong>外部システムとの接続は接続数課金</strong>。実装も保守も接続の本数に比例します。</li><li><strong>統制の根幹は Core から外さない</strong>。予算・ルール・監査ログ・権限をオプションにすると、「統制のない購買ツール」が売られることになります。それは製品の説明が破綻します。</li></ol>
+<p>この原則から、<strong>分類の確定と差異の処理も Core に入れます</strong>。どちらも台帳が正しく埋まるための条件で、これがないと会計に出せません。</p>
+<p>逆に、<strong>モノ管理は外せます</strong>。購買の統制だけが欲しい会社（既に備品台帳を持っている、あるいは管理するモノが少ない）が実際にあるからです。LP でも資産管理は付加機能と位置づけています。</p>
+<h2 id="s2">機能群ごとの中身</h2>
+<h3>Core ¥98,000 / 月（21画面）</h3>
+<p>購買明細台帳、分類の確定、検収と差異の処理、支出分析、予算設定、ルール設定、通知設定、権限とロール、拠点、監査ログ、初期移行、購買先EC接続1本、承認基盤接続1本、スマホ検収。</p>
+<p>これだけで「承認したら発注が終わっている」が成立し、会計に出せるところまで行きます。<strong>現行の Goods の価格をそのまま置いています。</strong>既存顧客の値上げにはしません。</p>
+<h3>モノ管理 +¥48,000 / 月（23画面）</h3>
+<p>備品・資産、個体詳細、在庫、拠点間の移動、期限、貸出（カレンダー含む）、棚卸、点検・修理、廃棄・除却、QRラベル、スマホ3画面。</p>
+<p>画面数では Core を上回りますが、値付けは半分にしています。備品管理単体の相場（アストロラボ等）が月額3〜5万円帯で、そこと並べられるからです。</p>
+<h3>リース・固定資産 +¥38,000 / 月</h3>
+<p>リース契約の台帳と登録、支払スケジュールの自動生成、固定資産ソフトへの連携。</p>
+<p><strong>2027年4月の新リース会計基準が値付けの根拠です。</strong>オペレーティング・リースもオンバランスになり、契約の棚卸しが必要になります。期限が決まっているので、このオプションは前年度から売れます。</p>
+<h3>会計・経費自動連携 +¥38,000 / 1接続</h3>
+<p>勘定奉行、PCA、freee、マネーフォワード、楽楽精算、バクラク。接続ごとに項目マッピング、テスト出力、接続ログ。</p>
+<p>値付けの根拠は実装と保守の工数です。先方のバージョンアップごとに確認が必要で、これは減りません。<strong>CSV出力は Core に含め、API連携だけを有償にします。</strong>手作業を残して金を取る形にはしません。</p>
+<h3>IT資産 +¥58,000 / 月（3画面）</h3>
+<p>MDM連携の未登録検出、SaaSライセンス台帳、契約の詳細。</p>
+<p>画面は3枚ですが、<strong>回収できる金額が大きい</strong>のでこの価格です。ワイヤーの例では休眠・退職者残存で12席、月 ¥33,000・年 ¥396,000 の削減余地が出ています。ライセンスの多い会社ほど投資回収が早くなります。</p>
+<h3>Agent Purchase +¥400 / ユーザー月（6画面）</h3>
+<p>AIレコメンド、出張手配、カタログ、申請、申請の詳細、承認。最低料金 ¥98,000（245人相当）。</p>
+<p>唯一のユーザー課金です。推論のコストが人数と回数に比例するので、定額にすると大企業で逆ざやになります。逆に小さく始められるので、<strong>現場の一部に先行導入してから広げる売り方</strong>ができます。</p>
+<h3>人事マスター連携 +¥68,000 / 月（2画面）</h3>
+<p>Entra ID / 人事システムを正とした差分同期、付与ルール、SCIM でのプロビジョニング。</p>
+<p>IT資産オプションと対で使うと効きます。単体でも成立しますが、<strong>セットで ¥110,000（¥16,000引き）</strong>にするのを推奨します。</p>
+<h3>規程・標準品 +¥88,000 / 月（2画面）</h3>
+<p>社内規程のRAG学習、全社標準品カタログ。</p>
+<p>規程の取込・条文の構造化・ルール候補の抽出に人手がかかるので、月額に初年度の伴走分を乗せています。<strong>Agent Purchase を入れていない会社には売らない</strong>方がいいです。効かせる先の申請画面がないためです。</p>
+<h2 id="s3">規模による変動</h2>
+<p>定額部分は拠点数で係数をかけます。ユーザー数では取りません。管理工数は人数ではなく<strong>拠点数とロケーション数</strong>で伸びるからです。</p>
+<table><thead><tr><th>拠点数</th><th>定額部分の係数</th><th>目安</th></tr></thead><tbody><tr><td>1〜3拠点</td><td>×1.0</td><td>基準</td></tr><tr><td>4〜10拠点</td><td>×1.4</td><td>複数工場・営業所</td></tr><tr><td>11〜30拠点</td><td>×1.8</td><td>全国展開</td></tr><tr><td>31拠点以上</td><td>個別</td><td>チェーン・多拠点</td></tr></tbody></table>
+<p>接続数は実数です。購買先ECは2本目から +¥18,000 / 月、承認基盤（kintone と M365 の両方など）は2本目から +¥28,000 / 月。会計・経費は1接続 ¥38,000 をその都度。</p>
+<p>Agent Purchase のユーザー数は、<strong>実際に申請・承認をした人の月次ユニーク数</strong>で数えます。登録だけして使っていない人は課金しません。負けているようですが、全社展開の障壁を下げるほうが長期では大きくなります。</p>
+<p>エンタープライズで必ず聞かれるものは別途です。SSO（SAML / OIDC）は Core に含め、<strong>監査ログの7年保存も Core に含めます</strong>。これを有償にすると審査で落ちます。SLA 保証（99.9%）、専用サポート窓口、リージョン指定は Enterprise プランとして +¥120,000 / 月。</p>
+<h2 id="s4">初期費用</h2>
+<p>データ移行と接続構築は、定着するかどうかの分かれ目です。ここを安く見せて失敗させるより、正直な金額を出します。</p>
+<table><thead><tr><th>項目</th><th>金額</th><th>内容</th></tr></thead><tbody><tr><td>Core 初期</td><td>¥200,000</td><td>テナント構築、拠点・部署・権限の設定、購買先EC 1本と承認基盤 1本の接続</td></tr><tr><td>品目マスタ移行</td><td>¥150,000〜</td><td>300品目まで。分類既定値の初期設定を含む</td></tr><tr><td>備品台帳の移行</td><td>¥300,000〜</td><td>500点まで。既存の資産番号体系を引き継ぐ</td></tr><tr><td>QRラベルの貼付代行</td><td>¥180,000 / 拠点</td><td>訪問して現物に貼り、初回棚卸を同時に実施</td></tr><tr><td>会計・経費接続</td><td>¥300,000 / 接続</td><td>項目マッピング、テスト出力、並行運用の伴走</td></tr><tr><td>人事マスター連携</td><td>¥400,000</td><td>属性の突合、SCIM 設定、6サービスまで</td></tr><tr><td>規程の学習</td><td>¥600,000</td><td>5規程まで。条文の構造化とルール候補の精査</td></tr></tbody></table>
+<p>移行については、初期移行画面に書いたとおり<strong>最初から全部やらない</strong>進め方を推奨します。高額品と期限管理品だけ先に入れ、消耗品は運用開始後の購買から自然に溜める。初日の負担が段違いです。</p>
+<h2 id="s5">見積例</h2>
+<table><thead><tr><th></th><th>A社：製造・3拠点・148名</th><th>B社：製造・8拠点・600名</th><th>C社：研究・2拠点・90名</th></tr></thead><tbody><tr><td>Core</td><td>¥98,000</td><td>¥137,200（×1.4）</td><td>¥98,000</td></tr><tr><td>モノ管理</td><td>¥48,000</td><td>¥67,200</td><td>¥48,000</td></tr><tr><td>リース・固定資産</td><td>—</td><td>¥53,200</td><td>¥38,000</td></tr><tr><td>会計・経費連携</td><td>¥38,000（1接続）</td><td>¥76,000（2接続）</td><td>¥38,000</td></tr><tr><td>IT資産</td><td>—</td><td>¥81,200</td><td>—</td></tr><tr><td>人事マスター連携</td><td>—</td><td>¥95,200</td><td>—</td></tr><tr><td>Agent Purchase</td><td>—</td><td>¥180,000（450人）</td><td>¥98,000（最低）</td></tr><tr><td>規程・標準品</td><td>—</td><td>¥88,000</td><td>—</td></tr><tr><td><strong>月額合計</strong></td><td><strong>¥184,000</strong></td><td><strong>¥778,000</strong></td><td><strong>¥320,000</strong></td></tr><tr><td>初期</td><td>¥650,000</td><td>¥3,240,000</td><td>¥950,000</td></tr></tbody></table>
+<p>A社は現行の Goods の売り方に近い形です。B社がエンタープライズの想定で、<strong>月額のフル構成で 78万円</strong>。年間 934万円です。</p>
+<p>C社は研究機関で、備品は少ないが試薬の期限管理と分析機器のリースが重いケース。人数は少ないので Agent Purchase は最低料金に当たります。</p>
+<h2 id="s6">値付けの根拠とリスク</h2>
+<p>根拠は3つです。</p>
+<p><strong>回収できる金額</strong>。ワイヤーの数値で言えば、重複購買の抑止が月 ¥286,400、SaaS の休眠席が月 ¥33,000、退職者残存が月 ¥48,500。B社規模なら月額の料金を回収できる水準になります。</p>
+<p><strong>単体製品の相場</strong>。備品管理クラウドが月 3〜5万円、SaaS 管理が 5〜15万円、購買管理（大手）が 30万円以上。個別に並べられても負けない価格にしてあります。</p>
+<p><strong>提供原価</strong>。推論コストと接続の保守だけが人数・本数に比例します。そこだけを変動にし、残りは定額にしています。</p>
+<p>リスクも書いておきます。</p>
+<p><strong>細かく切りすぎると販売が重くなります</strong>。7オプションは、提案書の作成と見積の説明に時間を食います。実際には <strong>Standard（Core＋モノ管理）、Enterprise（＋IT資産＋人事連携＋連携API）</strong> の2バンドルを先に見せ、個別オプションは聞かれたら出すのが現実的です。</p>
+<p><strong>統制機能をオプションにしない</strong>。予算・ルール・監査ログ・権限を外すと、安いプランが「統制のない購買ツール」になります。製品の説明が成り立たなくなるので、ここは売上を捨てても Core に残します。</p>
+<p><strong>既存顧客の扱い</strong>。現行の 9.8万円には備品管理が含まれる前提で売っています。切り分けを入れるなら、<strong>既存契約は Core＋モノ管理を 9.8万円のまま据え置き</strong>にするのが筋です。途中で値上げに見える変更は、信用の損が大きいです。</p>
+<p><strong>未確定の前提</strong>。Agent Purchase のユーザー単価 ¥400 は、推論コストの実測前の数字です。1人月あたりの問い合わせ回数が読めたら見直します。</p>
+<footer>1Approval 管理機能ドキュメント ／ 2026-09-20 時点</footer>
+</div>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true,theme:'neutral',fontFamily:'"Noto Sans JP",sans-serif'});
+</script>
+</body>
+</html>

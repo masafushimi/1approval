@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>検収（スマホ）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:#FFFFFF;color:#17171A}
+a{color:#2826FF}a:hover{color:#1F1DD1}
+</style>
+</head>
+<body style="margin:0;display:flex;justify-content:center;align-items:flex-start;">
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #FFFFFF;">
+
+  <div style="flex-shrink: 0; box-sizing: border-box; padding: 6px 16px; background: #F6F7FB; border-bottom: 1px solid #E6E7EE; font-size: 11px; color: #5F6169; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;">1approval.app/m/receiving</div><header style="flex-shrink: 0; box-sizing: border-box; padding: 14px 16px; border-bottom: 1px solid #E6E7EE; display: flex; align-items: center; gap: 10px;">
+    <a href="Home.html" style="display: flex; align-items: center; color: #17171A; text-decoration: none;" aria-label="戻る">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+    </a>
+    <img src="../assets/logo.png" alt="1Approval" style="height: 18px; width: auto;">
+    <span style="font-size: 15px; font-weight: 700;">検収</span>
+    <span style="margin-left: auto; font-size: 11px; font-weight: 700; color: #B26B00; background: #FFF3E3; padding: 4px 9px; border-radius: 12px;">未同期 2件</span>
+  </header>
+
+  <div style="flex-shrink: 0; box-sizing: border-box; padding: 16px 16px 12px;">
+    <div style="font-size: 12px; color: #5F6169;">第3工場 荷受場 ／ 9月20日 14:32</div>
+    <div style="margin-top: 10px; background: #17171A; border-radius: 14px; height: 208px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+      <div style="width: 186px; height: 126px; border: 3px solid #FFFFFF; border-radius: 10px; opacity: 0.9;"></div>
+      <div style="position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: #2826FF;"></div>
+      <div style="position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: #FFFFFF; font-size: 13px; font-weight: 500;">送り状のバーコードを枠に合わせてください</div>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 10px;"><a href="Receiving.html" style="flex-grow: 1; font-family: inherit; font-size: 14px; font-weight: 700; color: #2826FF; background: #EEF0FE; border: none; border-radius: 10px; padding: 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">今日の到着予定（3件）から選ぶ</a><a href="MobileReceive.html" style="flex-shrink: 0; font-family: inherit; font-size: 14px; font-weight: 500; color: #17171A; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 10px; padding: 13px 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">番号入力</a></div>
+  </div>
+
+  <main style="flex-grow: 1; box-sizing: border-box; padding: 4px 16px 0; overflow: hidden;">
+    <div style="background: #EEF0FE; border: 1px solid #DDE1FD; border-radius: 12px; padding: 14px;">
+      <div style="font-size: 11px; font-weight: 700; color: #2826FF; letter-spacing: 0.04em;">読み取りました</div>
+      <div style="font-size: 15px; font-weight: 700; margin-top: 4px;">PO-2026-01284 ／ モノタロウ</div>
+      <div style="font-size: 12px; color: #5F6169; margin-top: 3px;">申請者 田中 浩二（製造1課）・発送 9月18日</div>
+    </div>
+
+    <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+
+      <div style="border: 1px solid #E6E7EE; border-radius: 12px; padding: 14px;">
+        <div style="font-size: 14px; font-weight: 700;">耐切創手袋 L 10双入</div>
+        <div style="font-size: 12px; color: #5F6169; margin-top: 2px;">01658877 ／ 発注 5</div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 11px;">
+          <label for="q1" style="font-size: 13px; color: #5F6169;">検収数</label>
+          <a href="MobileReceive.html" style="font-family: inherit; width: 46px; height: 46px; font-size: 20px; border: 1px solid #D6D8E3; background: #FFFFFF; border-radius: 10px; cursor: pointer; text-decoration: none; color: inherit; display: inline-flex; align-items: center; justify-content: center;">−</a>
+          <input id="q1" type="text" value="5" style="font-family: inherit; width: 54px; height: 46px; box-sizing: border-box; text-align: center; font-size: 17px; font-weight: 700; border: 1px solid #D6D8E3; border-radius: 10px;">
+          <a href="MobileReceive.html" style="font-family: inherit; width: 46px; height: 46px; font-size: 20px; border: 1px solid #D6D8E3; background: #FFFFFF; border-radius: 10px; cursor: pointer; text-decoration: none; color: inherit; display: inline-flex; align-items: center; justify-content: center;">＋</a>
+          <span style="margin-left: auto; font-size: 12px; font-weight: 700; color: #0E8A4F; background: #E4F6EC; padding: 5px 10px; border-radius: 8px;">数量一致</span>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #F0DFBB; background: #FFF9EE; border-radius: 12px; padding: 14px;">
+        <div style="font-size: 14px; font-weight: 700;">特級試薬A 500mL</div>
+        <div style="font-size: 12px; color: #5F6169; margin-top: 2px;">RG-4482 ／ 発注 3 ・期限管理あり</div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 11px;">
+          <label for="q2" style="font-size: 13px; color: #5F6169;">検収数</label>
+          <a href="MobileReceive.html" style="font-family: inherit; width: 46px; height: 46px; font-size: 20px; border: 1px solid #D6D8E3; background: #FFFFFF; border-radius: 10px; cursor: pointer; text-decoration: none; color: inherit; display: inline-flex; align-items: center; justify-content: center;">−</a>
+          <input id="q2" type="text" value="2" style="font-family: inherit; width: 54px; height: 46px; box-sizing: border-box; text-align: center; font-size: 17px; font-weight: 700; border: 1px solid #D6D8E3; border-radius: 10px;">
+          <a href="MobileReceive.html" style="font-family: inherit; width: 46px; height: 46px; font-size: 20px; border: 1px solid #D6D8E3; background: #FFFFFF; border-radius: 10px; cursor: pointer; text-decoration: none; color: inherit; display: inline-flex; align-items: center; justify-content: center;">＋</a>
+          <span style="margin-left: auto; font-size: 12px; font-weight: 700; color: #B26B00; background: #FFF3E3; padding: 5px 10px; border-radius: 8px;">1個 不足</span>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 11px;">
+          <div style="flex-grow: 1;">
+            <label for="exp" style="display: block; font-size: 12px; color: #5F6169; margin-bottom: 4px;">使用期限</label>
+            <input id="exp" type="date" value="2026-10-04" style="font-family: inherit; width: 100%; box-sizing: border-box; height: 46px; font-size: 14px; padding: 0 10px; border: 1px solid #D6D8E3; border-radius: 10px;">
+          </div>
+          <div style="flex-grow: 1;">
+            <label for="lot" style="display: block; font-size: 12px; color: #5F6169; margin-bottom: 4px;">ロット番号</label>
+            <input id="lot" type="text" value="240915" style="font-family: inherit; width: 100%; box-sizing: border-box; height: 46px; font-size: 14px; padding: 0 10px; border: 1px solid #D6D8E3; border-radius: 10px;">
+          </div>
+        </div>
+        <a href="Discrepancy.html" style="margin-top: 9px; width: 100%; font-family: inherit; font-size: 13px; font-weight: 500; color: #17171A; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 10px; padding: 12px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">不足の理由を記録する</a>
+      </div>
+
+      <div style="border: 1px solid #E6E7EE; border-radius: 12px; padding: 14px;">
+        <div style="font-size: 14px; font-weight: 700;">MacBook Air 13インチ</div>
+        <div style="font-size: 12px; color: #5F6169; margin-top: 2px;">MC7X4J/A ／ 発注 1 ・IT機器</div>
+        <a href="MobileReceive.html" style="margin-top: 11px; width: 100%; font-family: inherit; font-size: 14px; font-weight: 700; color: #2826FF; background: #EEF0FE; border: none; border-radius: 10px; padding: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7V5h4M20 7V5h-4M4 17v2h4M20 17v2h-4M7 12h10"/></svg>
+          シリアル番号をスキャン（0/1）
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid #E6E7EE; background: #FFFFFF; padding: 10px 16px;"><span style="font-size: 11px; color: #5F6169; font-weight: 700; margin-right: 2px;">つながる画面</span><a href="Discrepancy.html" style="font-size: 12px; color: #2826FF; text-decoration: none;">差異の処理 →</a><a href="Receiving.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 14px; font-size: 12px; color: #17171A; text-decoration: none; font-weight: 700;">← 検収</a></div><footer style="flex-shrink: 0; box-sizing: border-box; padding: 12px 16px 20px; border-top: 1px solid #E6E7EE; background: #FFFFFF;">
+    <a href="Receiving.html" style="width: 100%; font-family: inherit; font-size: 16px; font-weight: 700; color: #FFFFFF; background: #2826FF; border: none; border-radius: 12px; padding: 17px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">検収を確定する</a>
+    <div style="text-align: center; font-size: 11px; color: #5F6169; margin-top: 9px;">圏外でも記録できます。電波が戻ったときに自動で送信します。</div>
+  </footer>
+</div>
+</body>
+</html>

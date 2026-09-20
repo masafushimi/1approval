@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1Approval 管理機能 仕様レビュー｜1Approval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:#F6F7FB;color:#17171A;
+ line-height:1.9;-webkit-font-smoothing:antialiased}
+header.top{background:#fff;border-bottom:1px solid #E6E7EE;padding:16px 28px;display:flex;align-items:center;gap:12px;
+ position:sticky;top:0;z-index:5}
+header.top img{height:20px;width:auto}
+header.top b{font-size:14px}
+header.top nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+header.top nav a{font-size:12px;color:#17171A;background:#fff;border:1px solid #D6D8E3;border-radius:8px;
+ padding:7px 13px;text-decoration:none}
+header.top nav a:hover{background:#F6F7FB}
+header.top nav a.on{background:#17171A;color:#fff;border-color:#17171A}
+.wrap{max-width:860px;margin:0 auto;padding:36px 28px 90px}
+h1{font-size:30px;font-weight:700;letter-spacing:-0.02em;margin:0 0 6px;line-height:1.4}
+.date{font-size:12px;color:#5F6169;font-family:ui-monospace,Menlo,monospace;margin-bottom:26px}
+h2{font-size:21px;font-weight:700;letter-spacing:-0.01em;margin:46px 0 14px;padding-top:22px;
+ border-top:1px solid #E6E7EE;line-height:1.5}
+h3{font-size:16px;font-weight:700;margin:30px 0 10px}
+p{margin:0 0 15px;font-size:15px}
+ul,ol{margin:0 0 16px;padding-left:24px;font-size:15px}
+li{margin-bottom:7px}
+strong{font-weight:700}
+code{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:#EDEEF4;border-radius:4px;padding:2px 6px}
+table{border-collapse:collapse;width:100%;margin:6px 0 22px;background:#fff;border:1px solid #E6E7EE;
+ border-radius:10px;overflow:hidden;font-size:13.5px;display:table}
+th{background:#F6F7FB;text-align:left;font-weight:700;padding:11px 13px;border-bottom:1px solid #E6E7EE;
+ font-size:12px;color:#5F6169;white-space:nowrap}
+td{padding:12px 13px;border-bottom:1px solid #EDEEF4;vertical-align:top;line-height:1.75}
+tr:last-child td{border-bottom:0}
+.mermaid{background:#fff;border:1px solid #E6E7EE;border-radius:10px;padding:22px;margin:6px 0 24px;text-align:center}
+.toc{background:#fff;border:1px solid #E6E7EE;border-radius:10px;padding:18px 22px;margin:0 0 34px}
+.toc b{display:block;font-size:11px;color:#5F6169;letter-spacing:.06em;margin-bottom:9px}
+.toc a{display:block;font-size:13px;color:#17171A;text-decoration:none;padding:4px 0}
+.toc a:hover{color:#2826FF}
+footer{border-top:1px solid #E6E7EE;margin-top:50px;padding-top:20px;font-size:12px;color:#5F6169}
+@media (max-width:760px){.wrap{padding:24px 18px 60px}h1{font-size:24px}table{font-size:12.5px}}
+</style>
+</head>
+<body>
+<header class="top"><img src="../../admin/assets/logo.png" alt="1Approval"><b>1Approval 管理機能 仕様レビュー</b>
+<nav><a href="../../admin/index.html">モックアップ</a><a href="../../admin/wirefreame/">画面モックアップ</a><a href="../../admin/spec/" class="on">仕様レビュー</a><a href="../../wire_all/">画面一覧とフェーズ</a><a href="../../functions_group/">機能群の切り分け</a></nav></header>
+<div class="wrap">
+<h1>1Approval 管理機能 仕様レビュー</h1>
+<div class="date">2026-09-20</div>
+<div class="toc"><b>目次</b><a href="#s0">決定事項</a><a href="#s1">全体設計の前提</a><a href="#s2">分類エンジン（機能②③④を一本化）</a><a href="#s3">購買明細台帳と検収</a><a href="#s4">現物管理（機能⑤〜⑧）</a><a href="#s5">人と外部台帳、承認基盤連携</a><a href="#s6">仕様から抜けていた機能</a><a href="#s7">データモデルと状態遷移</a><a href="#s8">モノタロウ接続</a><a href="#s9">アストロラボとの突合</a><a href="#s10">UI 設計</a><a href="#s11">実装順序と、残る論点</a></div>
+
+<p>機能①〜⑩のレビューと、その後に確定した決定事項・外部仕様・UI設計を、時系列ではなく<strong>実装の順番</strong>で並べ直したものです。</p>
+<p>最重要の提言は2つです。<strong>機能②③④を別々に作らず、一つの分類エンジンの3つのビューにすること</strong>。そして<strong>検収画面を最初に作ること</strong>。検収が在庫・資産・期限のすべての起点です。</p>
+<h2 id="s0">決定事項</h2>
+<p>要決定9件はすべて回答済みです。実装の前提としてここを見てください。</p>
+<table><thead><tr><th>論点</th><th>決定</th><th>仕様への影響</th></tr></thead><tbody><tr><td>消耗品の出庫</td><td>QRでの出庫を基本とし、定期棚卸の差分と購買サイクルから消耗サイクルを検知</td><td>リアルタイム在庫を持つ。管理するものとしないものを品目マスタで分ける</td></tr><tr><td>固定資産のしきい値</td><td>テナント（顧客企業）ごとに設定</td><td>10万／20万／30万を固定値にしない。中小企業特例の適用有無もテナント設定</td></tr><tr><td>税情報</td><td>明細行ごとに詳細に持つ</td><td>税率区分・税抜金額・税額を分けて保持。仕訳CSVの精度が上がる</td></tr><tr><td>電帳法</td><td>スコープに入れる</td><td>取引年月日・金額（範囲）・取引先で検索できること。ダウンロードした証憑の保存も含む</td></tr><tr><td>マルチテナント</td><td>行レベル分離（PostgreSQL RLS）</td><td>全クエリにテナントとスコープが効くこと</td></tr><tr><td>個体ID</td><td>既存の資産番号体系を引き継ぐ</td><td>移行時に重複と欠番を検出。新規分だけ 1Approval の規則で採番</td></tr><tr><td>QRラベル</td><td>PDF一括印刷</td><td>A4面付け、開始位置のずらし、耐候ラベルの選択</td></tr><tr><td>自動購買申請</td><td>申請の自動作成まで</td><td>発注はしない。同一SKUで未完了の申請がある間は再起票しない</td></tr><tr><td>会計・経費</td><td>勘定奉行、PCA、freee、マネーフォワード、楽楽精算、バクラク</td><td>接続ごとに項目マッピングとテスト出力を持つ</td></tr></tbody></table>
+<p>このうち実装に最も重く効くのは<strong>リアルタイム在庫</strong>です。在庫を持つと決めた以上、出庫の瞬間を定義する必要があり、それがQR出庫です。ただし紙や付箋まで追うのは無理なので、<strong>管理対象外</strong>という区分を品目マスタに持たせます。</p>
+<h2 id="s1">全体設計の前提</h2>
+<p>個別機能より先にこの5つを決めてください。あとから直すのが高いものばかりです。</p>
+<h3>1. 3層構造にする</h3>
+<p>購買明細が1本あり、そこから分類されて各台帳に分かれる、という流れです。</p>
+<div class="mermaid">flowchart TD
+  A[購買明細&lt;br/&gt;PurchaseLine] --&gt; B{分類エンジン}
+  B --&gt;|固定資産| C[個体台帳&lt;br/&gt;AssetItem]
+  B --&gt;|消耗品| D[在庫&lt;br/&gt;StockBalance]
+  B --&gt;|管理対象外| E[台帳に載せない]
+  C --&gt; F[貸出・点検・除却]
+  D --&gt; G[出庫・棚卸]
+  C --&gt; H[期限管理]
+  D --&gt; H</div>
+<p>消耗品と期限管理は排他ではありません。試薬は消耗品であり、同時に期限管理対象です。この事実が分類エンジン一本化の根拠になります。</p>
+<h3>2. ID体系を先に決める</h3>
+<p>品目を指すIDと、現物を1点ずつ指すIDを分けます。SKUの名寄せは必須で、同じ手袋が購買先ごとに違う品番で来ます。JAN と自社品目コードの両方を持ち、どちらかで突合します。</p>
+<p>個体IDは既存体系を引き継ぐと決まったので、<strong>採番規則はテナントごとの設定</strong>になります。拠点接頭辞＋種別＋連番が既定値です。</p>
+<h3>3. 権限は行レベルで持つ</h3>
+<p>ロールだけでは足りません。<strong>スコープ（拠点・部門）</strong>を全クエリに効かせます。ただし例外が1つあり、<strong>他拠点の在庫数だけはどのロールでも見える</strong>ようにします。見えないと重複購買を防げません。</p>
+<p>購買の承認権限は 1Approval ではなく kintone / Microsoft 365 側で決まります。二重管理にしないための切り分けです。</p>
+<h3>4. 監査ログを最初から入れる</h3>
+<p>固定資産と在庫は会計数値に直結するので、あとから足せません。資産計上・除却・在庫の手動調整・会計出力・権限変更・接続情報の変更を追記のみで残し、7年保存します。ログの閲覧自体も記録します。</p>
+<h3>5. 取り込みの冪等性</h3>
+<p>同じ注文を二度取り込んでも二重にならないこと。外部キー（注文番号・行番号）で upsert します。出荷通知も請求通知も同じです。</p>
+<h2 id="s2">分類エンジン（機能②③④を一本化）</h2>
+<p>このレビューで最も大きな修正提案です。ボタンを3つに分けるのではなく、<strong>1つの分類エンジンと、3つのビュー</strong>にしてください。</p>
+<p>分けてはいけない理由は単純です。試薬は「消耗品」でもあり「期限管理」でもあり、高額な分析機器は「固定資産」であり「校正期限あり」です。排他のボタンにすると、どちらかに入れた瞬間にもう片方の管理が落ちます。</p>
+<p>推奨する形は、明細1行に対して<strong>管理区分</strong>と<strong>期限管理の有無（フラグ）</strong>を持たせることです。</p>
+<p>判定の順番は上から順に、当たったところで確定します。</p>
+<ol><li><strong>品目マスタ照合</strong>（品番・JAN）— 登録済みなら勘定科目・管理区分・期限管理の有無まで決まる。最優先</li><li><strong>カテゴリ既定値</strong> — マスタ未登録なら EC のカテゴリから推定</li><li><strong>金額しきい値</strong> — 税抜・1個あたり。テナント設定の10／20／30万円</li><li><strong>例外ルール</strong> — 送料・役務・保守は金額に関係なく費用固定。セット品は按分</li><li><strong>過去の手直しからの学習</strong> — 人が直した結果を次回の既定値に昇格</li></ol>
+<p>判定には<strong>確信度</strong>を付け、低いものだけを未分類としてレビューキューに出します。これが画面上の「分類の確定」です。</p>
+<h3>② 固定資産化</h3>
+<p>しきい値を超えたものを候補として抽出し、人が確定します。不足していたのは<strong>逆方向の処理</strong>です。除却・売却・廃棄がないと、台帳が増える一方になります。</p>
+<h3>③ 消耗品</h3>
+<p>最大の設計論点は<strong>在庫が減る瞬間の定義</strong>でした。決定は QR 出庫です。安全在庫は初期は「平均消費量 × リードタイム」の単純な式で十分です。</p>
+<p>自動購買申請は<strong>暴走防止が必須</strong>です。同一SKUで未完了の申請がある間は再起票しない、を入れてください。</p>
+<h3>④ 期限</h3>
+<p>期限は品目ではなく<strong>ロットに付きます</strong>。同じ試薬でも入荷日が違えば期限が違います。取り出すときは期限の近いロットから（FEFO）。</p>
+<p>購買時のアラートは、<strong>申請画面で同SKUの期限ロットを見せる</strong>形が最も効きます。買う前に気づかせることが重要で、買ったあとの通知では遅いです。</p>
+<h2 id="s3">購買明細台帳と検収</h2>
+<h3>機能① 購買明細台帳</h3>
+<p>方向は正しいです。不足は<strong>明細粒度・税情報・検収</strong>の3点と、アラートの判定ロジックでした。</p>
+<p>追加すべき項目は、明細行ごとの税率区分・税抜金額・税額、検収ステータスと検収日・検収者、発注数量と受領数量の両方、ロット番号とシリアル番号、送料・手数料の按分です。</p>
+<p>電帳法対応をスコープに入れたので、<strong>取引年月日・取引金額・取引先の3項目で検索でき、金額は範囲指定できる</strong>ことが要件です。</p>
+<p>アラートはすべて<strong>ルール設定画面でしきい値を持ちます</strong>。相場超過は過去12か月の中央値比、1.5倍以上で理由の記入を必須に。重複は同一品番・7日以内・全拠点横断。分割発注はしきい値直下が30日で3回。各アラートには<strong>状態（未対応／確認済み／問題なし）</strong>を持たせます。</p>
+<p>CSV出力は「会計ソフトを指定する」だけでは不十分で、出力単位（明細／伝票）、出力済みフラグと再出力、勘定科目と補助科目のマッピング、部門コードの変換が要ります。</p>
+<h3>検収がすべての起点</h3>
+<p>当初の仕様には<strong>検収する画面がありませんでした</strong>。これが最大の欠落です。</p>
+<div class="mermaid">flowchart LR
+  A[発注済み] --&gt; B[出荷通知]
+  B --&gt; C[検収（スマホ）]
+  C --&gt; D{数量が合うか}
+  D --&gt;|合う| E[分類の確定]
+  D --&gt;|合わない| F[差異の処理]
+  E --&gt; G[在庫・資産台帳へ]
+  E --&gt; H[会計へ出力]</div>
+<p>入口は3つ用意します。送り状バーコード（ShipmentIdentifier）、今日の到着予定から選ぶ、注文番号の手入力。<strong>納品書のQRは前提にできません</strong>。</p>
+<h3>差異の処理</h3>
+<p>記録するのは差異の数ではなく<strong>理由</strong>です。理由が決まれば、注文・在庫・請求・承認の扱いが自動で決まります。</p>
+<table><thead><tr><th>理由</th><th>注文</th><th>在庫</th><th>お金</th></tr></thead><tbody><tr><td>分納</td><td>開いたまま、残数が到着予定に残る</td><td>来た分だけ</td><td>請求も分かれて来る</td></tr><tr><td>欠品・打ち切り</td><td>残数をクローズし発注数を減らす</td><td>来た分だけ</td><td>ベンダー側の請求が減額される</td></tr><tr><td>破損・誤品</td><td>返品数は未受領扱い</td><td>入れない</td><td>貸方請求を待つ</td></tr><tr><td>過納</td><td>返送か受け入れ</td><td>受け入れるなら増える</td><td>超過分は承認が要る</td></tr><tr><td>数え間違い</td><td>変わらない</td><td>変わらない</td><td>変わらない</td></tr></tbody></table>
+<p>重要な判断が2つあります。<strong>受け取っていない数量は台帳に載らないので、除却は発生しません。</strong>そして<strong>減額は自社で直すのではなく、ベンダーの請求自体が減るのが正</strong>です。1Approval は3者照合（発注・検収・請求）で止める側に回ります。</p>
+<p>許容差（数量±2%・金額±1,000円）の内側は理由を聞かずに通します。この値もルール設定で持ちます。</p>
+<h2 id="s4">現物管理（機能⑤〜⑧）</h2>
+<h3>⑤ 個体管理</h3>
+<p>追加すべきは5点。状態の持ち方（在庫中・貸出中・修理中・除却済み）、現在位置と使用者の分離、所有区分（自社／リース／レンタル）、取得・事業供用日・耐用年数、そして購買明細への逆引きです。</p>
+<h3>⑥ 貸出・予約</h3>
+<p>最重要の抜けは<strong>予約の競合制御</strong>でした。同じ個体に重なる期間の予約を入れさせないこと。カレンダー表示にしたのはこのためです。</p>
+<p>そのほか、返却予定日と延長の可否、引き渡し時の状態確認、校正期限が返却予定日をまたぐ個体は選べないこと、付属品のチェック。</p>
+<h3>⑦ 棚卸</h3>
+<p>「全てのQRを読みに行く」では回りません。<strong>プロジェクトとして管理</strong>します。対象範囲を決め、担当と期間を持ち、未スキャンが残る前提で差異の理由付けをする。差異の理由は紛失・所在違い・登録漏れ・破棄済みの4択。</p>
+<p>複数担当者が同じ個体を読んだ場合は後勝ちではなく、最初のスキャンを採用します。</p>
+<h3>⑧ 点検・修理</h3>
+<p>当初の仕様は故障後の対応だけで、<strong>予防保全（定期点検・校正）</strong>が抜けていました。測定機器は校正が切れると使えません。期限切れの個体は<strong>貸出できなくなる</strong>、を仕様に入れます。</p>
+<p>修理はお金がかかるので承認を通します。見積が<strong>取得価額の50%を超えたら買い替えを提案</strong>します。費用は原則修繕費、価値を高める改修は資本的支出として資産に乗せます。</p>
+<h2 id="s5">人と外部台帳、承認基盤連携</h2>
+<h3>⑨ メンバー管理</h3>
+<p>氏名・部署だけでは不十分です。<strong>権限マトリクスを先に埋める</strong>こと、退職・異動で<strong>回収・引き継ぎタスクを自動起票</strong>すること、SSO とユーザー同期を入れること。3つ目は Phase-4 に分離しました。</p>
+<h3>⑩ 固定資産ソフト連携</h3>
+<p>CSV を出すだけでは不十分で、<strong>突合レポート</strong>が必要です。固定資産ソフトから資産一覧を取り込み、<strong>片方にしかないものをリスト化</strong>します。連携項目には<strong>事業供用日</strong>（取得日とは別。償却開始の基準）を忘れずに。</p>
+<h3>⑩-2 リース</h3>
+<p>アストロラボとの突合で唯一不足していた領域です。リース品は「現物はあるが自社資産ではない」ので、<strong>所有区分</strong>で分けます。</p>
+<p>保持するのは、リース会社、契約番号、満了日、月額と総額、<strong>解約通知期限</strong>、中途解約違約金、残価。満了時は再リース・買取・返却の3分岐を、90日前に促します。</p>
+<p>返却時に現物が見つからないと弁償が発生するので、<strong>リース品こそ棚卸対象に含めます</strong>。</p>
+<p>会計面では、企業会計基準第34号により 2027年4月1日以後開始の事業年度から、オペレーティング・リースも含めて使用権資産とリース負債を計上します。これは<strong>追い風</strong>です。リース契約を漏れなく集める必要が生じるからです。</p>
+<h3>11 MDM 連携</h3>
+<p>実装上の論点は<strong>シリアル番号の取得経路</strong>だけです。出荷通知には含まれないので、<strong>検収時にスキャンして紐づける</strong>のが現実解です。</p>
+<h3>12 SaaS ライセンス</h3>
+<p><strong>SaaS は「個体」ではなく「契約」です</strong>。個体IDのモデルを流用せず、契約（Subscription）と席（Seat）という別エンティティにします。年間契約は<strong>更新時しか席数を減らせない</strong>ので、解約通知期限から逆算して棚卸しを促します。</p>
+<h3>13 承認基盤連携</h3>
+<p>購買でやっていることを、貸出と入退社にも広げます。</p>
+<p><strong>貸出申請</strong>は kintone / M365 で行い、承認された瞬間に貸出予約が確定します。購買と同じ形です。承認前は仮押さえで、他の人の確定予約が優先します。</p>
+<p><strong>入退社承認</strong>をトリガに、支給セットの購買申請・ライセンス付与・回収 ToDo が自動で走ります。ToDo は通知ではなく<strong>状態を持つタスク</strong>として扱います。これで「退職者のPCが戻ってこない」が止まります。</p>
+<h2 id="s6">仕様から抜けていた機能</h2>
+<p>機能①〜⑩に入っていなかった12件です。いずれも<strong>ないと他の機能が回らない</strong>ものです。現在はすべて画面化済みです。</p>
+<table><thead><tr><th>#</th><th>機能</th><th>ないとどうなるか</th><th>現在の画面</th></tr></thead><tbody><tr><td>1</td><td>検収</td><td>在庫も資産も登録されない</td><td>/purchases/receiving</td></tr><tr><td>2</td><td>差異の処理</td><td>数量が合わないと止まる</td><td>/receiving/:id/discrepancy</td></tr><tr><td>3</td><td>品目マスタ</td><td>分類が毎回手作業になる</td><td>/settings/purchasing/items/:id</td></tr><tr><td>4</td><td>ルール設定</td><td>しきい値を決める場所がない</td><td>/settings/rules</td></tr><tr><td>5</td><td>予算設定</td><td>消化率を表示する元データがない</td><td>/purchases/budgets</td></tr><tr><td>6</td><td>拠点間の移動</td><td>他拠点の在庫を使えない</td><td>/stock/transfers</td></tr><tr><td>7</td><td>QRラベル発行</td><td>個体を現物と紐づけられない</td><td>/assets/labels</td></tr><tr><td>8</td><td>除却の起票</td><td>台帳が増える一方になる</td><td>/assets/disposals/new</td></tr><tr><td>9</td><td>拠点・ロケーション</td><td>在庫の単位が決まらない</td><td>/settings/locations/:id</td></tr><tr><td>10</td><td>通知設定</td><td>全員に送って誰も見なくなる</td><td>/settings/notifications</td></tr><tr><td>11</td><td>監査ログ</td><td>会計数値の変更が追えない</td><td>/settings/audit</td></tr><tr><td>12</td><td>初期データ移行</td><td>運用開始日に台帳が空</td><td>/settings/import</td></tr></tbody></table>
+<p>このうち2件（検収・差異）が最優先です。残りは、設定系（3・4・5・9・10）を先に、運用系（6・7・8・12）を次に。</p>
+<h2 id="s7">データモデルと状態遷移</h2>
+<p>中核は6つです。PurchaseLine（購買明細）、Item（品目マスタ）、AssetItem（個体）、StockBalance / StockMove（在庫）、Lot（ロットと期限）、Subscription / Seat（SaaS）。</p>
+<p>在庫は <strong>StockBalance（現在高）＋ StockMove（動きの台帳）</strong> の二層を推奨します。差分だけで持つと棚卸のときに追えなくなり、現在高だけだと原因が分からなくなります。</p>
+<p>個体の状態遷移は次のとおりです。</p>
+<div class="mermaid">stateDiagram-v2
+  [*] --&gt; 検収済み
+  検収済み --&gt; 在庫中: 台帳に登録
+  在庫中 --&gt; 貸出中: 貸出
+  貸出中 --&gt; 在庫中: 返却
+  在庫中 --&gt; 点検中: 校正・修理
+  点検中 --&gt; 在庫中: 完了
+  在庫中 --&gt; 輸送中: 拠点間の移動
+  輸送中 --&gt; 在庫中: 着荷
+  在庫中 --&gt; 除却済み: 除却の承認
+  点検中 --&gt; 除却済み: 修理不能
+  除却済み --&gt; [*]</div>
+<p>設計上のポイントが3つ。<strong>貸出中・点検中・輸送中は引当不可</strong>。<strong>除却済みは棚卸対象から外れQRも無効になる</strong>。<strong>期限切れの個体は貸出中に遷移できない</strong>。</p>
+<h2 id="s8">モノタロウ接続</h2>
+<p>仕様書（MonotaRO cXML Specification v2.11）を取得して確定した内容です。それ以前に「取れない」と書いていた項目の多くが覆りました。</p>
+<h3>実装の現状</h3>
+<p><code>eichiii-inc/1approval</code> で実装済みのEC接続は <strong>pikapaka（出張）のみ</strong>です。モノタロウは未実装。ただし受け皿はできています。<code>Adapters::Ec::Registry</code> に ec_kind を追加する形で、アダプタを差し込めます。</p>
+<h3>対応文書は7種</h3>
+<p>チェックイン（PunchOutSetupRequest）、カート戻し（PunchOutOrderMessage）、発注（OrderRequest）、注文確認（ConfirmationRequest）、商品検索（PunchOutItemSearchRequest）、<strong>出荷通知（ShipNoticeRequest）</strong>、<strong>請求通知（InvoiceDetailRequest）</strong>。</p>
+<p>重要なのは後ろ2つです。<strong>納品タイミングと税額の内訳が取れます</strong>。出荷通知からは ShipControl 配下の CarrierIdentifier と ShipmentIdentifier（送り状番号）、請求通知からは TaxDetail の TaxableAmount と TaxAmount。これで検収の入口と3者照合が成立します。</p>
+<h3>取れないことが確定したもの</h3>
+<p>シリアル番号は含まれません。検収時のスキャンで補います。</p>
+<h3>在庫確保の扱い（未解決）</h3>
+<p>cXML パンチアウトに<strong>在庫引当のセマンティクスはありません</strong>。オレンジコマースの資料でも「在庫引当ができれば予定納期を連携」と、<strong>出荷通知段階</strong>の話として書かれています。</p>
+<p>LP の「申請時点で在庫を確保」という表現は、現状の仕様書だけでは裏付けられません。<strong>モノタロウに確認すべき最優先事項</strong>です。</p>
+<p>代わりに仕様書で裏付けられるのは、<strong>カート内容と総額を確定させて承認に回せること</strong>と、<strong>発注後に ConfirmationRequest で注文の受付を確認できること</strong>です。</p>
+<h2 id="s9">アストロラボとの突合</h2>
+<p>同社が掲げる備品管理クラウドの機能12項目のうち、<strong>11項目は今回の仕様でカバーできています</strong>。</p>
+<p>カバー済みは、台帳管理、QRラベル、棚卸、貸出予約、在庫、期限、点検・修理、除却、拠点・ロケーション、権限、スマホ対応。</p>
+<p>差分は<strong>リース管理のみ</strong>でした。これは機能⑩-2 として仕様に追加済みです。</p>
+<p>逆に、こちらにしかないものがあります。<strong>購買明細から台帳が埋まる</strong>ことです。アストロラボは台帳から始まるので、最初の登録を人がやります。こちらは検収が登録を兼ねるので、<strong>入力の負担が構造的に少ない</strong>。ここが競合との差分です。</p>
+<h2 id="s10">UI 設計</h2>
+<p>他社3製品（アストロラボ・dxeco・ジョーシス）の公開情報を見たうえでの情報設計です。3社は<strong>中核に置くものが違う</strong>ため、メニューの並びが根本から違います。</p>
+<p>取るべきは3つ。<strong>タスクを並べるホーム</strong>（通知メールだけだと見られない）、<strong>人軸のビュー</strong>（誰が何を持っているか）、<strong>登録の負担を下げる工夫</strong>。</p>
+<p>取らないものは2つ。<strong>発見系のUI</strong>（ブラウザ拡張でのSaaS検知など）と、<strong>台帳を中核に置く構成</strong>。1Approval の中核は台帳ではなく<strong>未処理の購買明細</strong>です。</p>
+<h3>メニューの群</h3>
+<p>購買（台帳・検収・支出分析）、モノ（備品・在庫・期限・貸出・棚卸・リース）、IT・SaaS、人（メンバー・入退社）、設定の5群。他社にないのが<strong>購買群を先頭に置いている</strong>ことです。</p>
+<h3>主要画面</h3>
+<p><strong>ホーム（やること）</strong> は数字を並べるダッシュボードにしません。<strong>行動できるものだけ</strong>を並べ、各行はクリックするとその場で片づく。</p>
+<p><strong>購買明細台帳</strong> の列は WHO / WHAT / WHEN / WHERE / WHY の5軸を踏襲します。電帳法対応として取引年月日・金額（範囲）・取引先で検索できること。</p>
+<p><strong>個体詳細</strong> は1画面に全部入れます。上部に状態バッジと現在位置・使用者、下に取得情報と履歴。リース品は<strong>満了までの残日数と解約通知期限</strong>を常時表示。</p>
+<h3>現場のモバイル</h3>
+<p>検収・出庫・貸出・棚卸は<strong>全てスマホで、片手で1分以内</strong>。PC画面の縮小版にはしません。<strong>オフライン前提</strong>です。倉庫や工場は電波が届かないことがあります。</p>
+<h3>画面をまたぐ共通ルール</h3>
+<p>状態は<strong>色だけで区別しない</strong>。色覚異常と屋外の視認性のため、必ず文字を添えます。</p>
+<p>一覧画面の作法は、保存した絞り込みを持つこと、行から次の操作に飛べること、CSVはその場で落ちること。</p>
+<p>通知は<strong>対象者を絞り、鍵を持たせる</strong>。全員に送ると誰も見なくなります。同じ対象への重複通知は1日1通にまとめます。</p>
+<h2 id="s11">実装順序と、残る論点</h2>
+<p>機能番号順に作ると手戻りします。依存関係の順に並べ直してください。</p>
+<table><thead><tr><th>Wave</th><th>内容</th><th>理由</th></tr></thead><tbody><tr><td>1</td><td>購買明細台帳、品目マスタ、拠点・権限、監査ログ</td><td>他の全てがこれに乗る</td></tr><tr><td>2</td><td><strong>検収と差異の処理</strong>、分類エンジン、ルール設定</td><td>ここまでで台帳が埋まり、会計に出せる</td></tr><tr><td>3</td><td>在庫、出庫（スマホ）、期限、拠点間の移動</td><td>消耗品の運用が回り始める</td></tr><tr><td>4</td><td>個体管理、QRラベル、棚卸</td><td>現物と紐づく</td></tr><tr><td>5</td><td>貸出・予約、点検・修理、除却、リース</td><td>個体台帳があって初めて成立</td></tr><tr><td>6</td><td>承認基盤連携（13-1 貸出・13-2 入退社）</td><td>貸出とメンバーが先に要る</td></tr><tr><td>7</td><td>固定資産ソフト連携、MDM、SaaS</td><td>外部システム依存</td></tr></tbody></table>
+<p>MVP は <strong>Wave 1 + 2</strong> です。この範囲だけで「承認したら発注が終わっていて、台帳が埋まり、会計に出せる」が成立します。逆に、<strong>個体管理（Wave 4）を最初のリリースに入れない</strong>ことを推奨します。QRの貼付と初期棚卸が重く、ここで止まる導入が多いからです。</p>
+<h3>残る論点</h3>
+<p>決定事項は埋まりましたが、2つ残っています。</p>
+<p><strong>モノタロウの在庫引当</strong>。ShipmentIdentifier に実際に何が入るかと合わせて、先方に確認が必要です。LP の表現に直結します。</p>
+<p><strong>購買明細台帳のチャネル拡張</strong>。カード明細や立替精算を将来入れるのか。画面を作るかどうかとは別に、<strong>データ構造を後からチャネルを足せる形にしておくか</strong>は今決める価値があります。</p>
+<h3>現在地</h3>
+<p>このレビューの内容は<strong>73画面のワイヤーフレームとして実体化済み</strong>です。画面一覧とフェーズ構成は別ドキュメントに分けてあります。</p>
+<footer>1Approval 管理機能ドキュメント ／ 2026-09-20 時点</footer>
+</div>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true,theme:'neutral',fontFamily:'"Noto Sans JP",sans-serif'});
+</script>
+</body>
+</html>
