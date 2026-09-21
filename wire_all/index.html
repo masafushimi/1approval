@@ -52,24 +52,28 @@ footer{border-top:1px solid #E6E7EE;margin-top:50px;padding-top:20px;font-size:1
 <div class="wrap">
 <h1>1Approval 画面一覧とフェーズ構成</h1>
 <div class="date">2026-09-20</div>
-<div class="toc"><b>目次</b><a href="#s0">このドキュメントについて</a><a href="#s1">フェーズ構成</a><a href="#s2">3つのシステム</a><a href="#s3">Phase-1 の画面（40枚）</a><a href="#s4">Phase-2〜6 の画面</a><a href="#s5">画面の関係と URL の規則</a><a href="#s6">作っていないものと、主な設計判断</a></div>
+<div class="toc"><b>目次</b><a href="#s0">このドキュメントについて</a><a href="#s1">フェーズ構成</a><a href="#s2">3つのシステム</a><a href="#s3">Phase-0 と Phase-1 の画面（56枚）</a><a href="#s4">Phase-2〜6 の画面</a><a href="#s5">画面の関係と URL の規則</a><a href="#s6">作っていないものと、主な設計判断</a></div>
 
 <h2 id="s0">このドキュメントについて</h2>
 <p>1Approval の画面仕様を、73枚のワイヤーフレームから起こしたものです。画面ごとに、何を決める画面か・何を表示するか・どの操作が何を起こすかを書いています。</p>
 <p>対象は 1Approval for Goods（備品・消耗品の購買と資産管理）の管理画面を中心に、そこから派生する5つのフェーズです。出張手配は Phase-3 のエージェントとして扱い、それ以外の 1Approval for Trip 固有機能は対象外です。</p>
 <p>粒度は「実装者が画面を組める」ところまでです。データモデルと状態遷移は、仕様レビューに分けてあります。</p>
 <h2 id="s1">フェーズ構成</h2>
-<p>6フェーズ・合計73画面。Phase-1 だけで40画面で、ここが製品の本体です。</p>
-<table><thead><tr><th>フェーズ</th><th>内容</th><th>解く問題</th><th>画面数</th></tr></thead><tbody><tr><td>Phase-1</td><td>購買・検収・分類・モノの管理・設定</td><td>承認＝発注を成立させ、届いたあとの台帳を自動で埋める</td><td>40</td></tr><tr><td>Phase-2</td><td>固定資産ソフト・MDM・SaaSライセンス</td><td>買ったものと、外部システムが持つ台帳のずれを消す</td><td>3</td></tr><tr><td>Phase-3</td><td>1Approval Agent Purchase</td><td>申請者がカタログを探さなくても済むようにする</td><td>6</td></tr><tr><td>Phase-4</td><td>人事・組織マスターの一括同期</td><td>入退社で備品とライセンスが取り残されるのを止める</td><td>2</td></tr><tr><td>Phase-5</td><td>社内規程のRAG学習・全社標準品カタログ</td><td>「何を買ってよいか」を規程と標準品から決める</td><td>2</td></tr><tr><td>Phase-6</td><td>1Approval Ads（B2B広告事業）</td><td>購買先メーカーからの収益を作る</td><td>4</td></tr></tbody></table>
+<p>7フェーズ・合計73画面。Phase-0 と Phase-1 で56画面あり、ここが製品の本体です。</p>
+<table><thead><tr><th>フェーズ</th><th>内容</th><th>解く問題</th><th>画面数</th></tr></thead><tbody><tr><td>Phase-0</td><td>購買明細台帳・支出分析・会計／経費へのCSV出力</td><td>買った明細を集めて、会計と経費精算に出せる状態にする</td><td>23</td></tr><tr><td>Phase-1</td><td>承認＝発注・検収・モノの管理</td><td>承認された瞬間に発注し、検収から台帳が自動で埋まる</td><td>33</td></tr><tr><td>Phase-2</td><td>固定資産ソフト・MDM・SaaSライセンス</td><td>買ったものと、外部システムが持つ台帳のずれを消す</td><td>3</td></tr><tr><td>Phase-3</td><td>1Approval Agent Purchase</td><td>申請者がカタログを探さなくても済むようにする</td><td>6</td></tr><tr><td>Phase-4</td><td>人事・組織マスターの一括同期</td><td>入退社で備品とライセンスが取り残されるのを止める</td><td>2</td></tr><tr><td>Phase-5</td><td>社内規程のRAG学習・全社標準品カタログ</td><td>「何を買ってよいか」を規程と標準品から決める</td><td>2</td></tr><tr><td>Phase-6</td><td>1Approval Ads（B2B広告事業）</td><td>購買先メーカーからの収益を作る</td><td>4</td></tr></tbody></table>
+<p>Phase-0 と Phase-1 の境目は、<strong>書き込みをするかどうか</strong>です。Phase-0 は他システムで買ったものを集めて見せるだけで、発注も検収もしません。データは kintone や CSV から入ります。Phase-1 で初めて、1Approval が発注を実行し、検収で在庫と資産台帳に書き込みます。</p>
+<p>この切り方だと、Phase-0 だけでも「支出が見えて、会計に出せる」という完結した価値になります。導入の初期費用も小さく、現物管理の負担（QR貼付・初期棚卸）が後ろに回ります。</p>
 <p>順番には理由があります。Phase-3 の AI レコメンドは、Phase-1 で貯まった購買明細（品番・数量・周期・納入先）がないと提案できません。Phase-5 の標準品カタログは、申請画面（Phase-3）がないと効かせる先がありません。Phase-6 は掲載面が Phase-3 なので、その後になります。</p>
 <h2 id="s2">3つのシステム</h2>
 <p>73画面は、1つの製品ではなく、使う人が違う3つのシステムに分かれます。見た目を意図的に変えています。</p>
 <table><thead><tr><th></th><th>管理画面</th><th>Agent Purchase</th><th>Ads</th></tr></thead><tbody><tr><td>フェーズ</td><td>1・2・4・5</td><td>3</td><td>6</td></tr><tr><td>使う人</td><td>総務・購買・情シス・経理</td><td>現場の全員</td><td>購買先メーカー</td></tr><tr><td>ドメイン</td><td>1approval.app</td><td>app.1approval.com</td><td>ads.1approval.com</td></tr><tr><td>地色</td><td>#F6F7FB（青みグレー）</td><td>#0A0C12（ダーク）</td><td>#F4F6F7</td></tr><tr><td>主色</td><td>#2826FF</td><td>#4F7BFF→#9B6BFF のグラデーション</td><td>#0CA678</td></tr><tr><td>書体</td><td>Noto Sans JP</td><td>Inter + Noto Sans JP</td><td>Inter + Noto Sans JP</td></tr><tr><td>ナビ</td><td>左サイドバー16項目</td><td>上部タブ5項目</td><td>上部タブ3項目</td></tr></tbody></table>
 <p>見た目を揃えない理由は、同じ画面の続きだと誤解されると、承認の重さが伝わらないためです。管理画面は台帳を見る場所、Agent Purchase は買う場所、Ads は売る側の場所です。</p>
 <p>Ads の4枚のうち、掲載イメージは Agent Purchase の中（app/agent）、受け入れ設定は管理画面の中（/settings/ads）にあります。</p>
-<h2 id="s3">Phase-1 の画面（40枚）</h2>
-<h3>購買（9枚）</h3>
+<h2 id="s3">Phase-0 と Phase-1 の画面（56枚）</h2>
+<p>Phase-0 は 購買明細台帳・分類の確定・支出分析・予算設定・品目マスタ・ルール設定・会計／経費の接続・権限・拠点・監査ログ・初期移行の23画面。Phase-1 は 検収・差異の処理・購買先EC接続と、モノと人の33画面です。</p>
+<h3>購買（Phase-0：6枚）</h3>
 <table><thead><tr><th>画面</th><th>URL</th><th>何をする画面か</th></tr></thead><tbody><tr><td>購買明細台帳</td><td>/purchases</td><td>全チャネルの購買を WHO / WHAT / WHEN / WHERE / WHY に正規化して保持する中核。診断列、電帳法の検索要件、保存した絞り込み</td></tr><tr><td>分類の確定</td><td>/purchases/classify</td><td>自動判定の確信度が低いものだけを人が確定。判定の根拠と確信度を表示。未検収は確定不可</td></tr><tr><td>確定しました</td><td>/purchases/classify?done=4</td><td>確定後の結果と取消し。会計出力前（本日18:00まで）なら取り消せる</td></tr><tr><td>検収</td><td>/purchases/receiving</td><td>到着待ちと未検収をさばく。送り状バーコード・到着予定・注文番号の3入口</td></tr><tr><td>差異の処理</td><td>/purchases/receiving/:id/discrepancy</td><td>数量差異の理由を記録し、注文・在庫・請求・承認の扱いを決める。理由5択</td></tr><tr><td>支出分析</td><td>/purchases/analytics</td><td>部門別の支出と予算消化、重複抑止の効果</td></tr><tr><td>期間を変更</td><td>/purchases/analytics</td><td>集計の基準日を選ぶ。検収日／発注日／申請日</td></tr><tr><td>予算設定</td><td>/purchases/budgets</td><td>部署 × 勘定科目 × 月。80/100/120% で振る舞いが変わる</td></tr><tr><td>SP 検収</td><td>/m/receiving</td><td>現場での検収。シリアルスキャン（MDM連携用）</td></tr></tbody></table>
+<p>検収（/purchases/receiving）、差異の処理、SP検収の3枚は Phase-1 です。メニュー上も購買ではなく<strong>モノ</strong>の先頭に置いています。受け取る行為は、買う行為ではなくモノが増える瞬間だからです。</p>
 <h3>モノ：個体管理（8枚）</h3>
 <p>備品・資産（/assets）、個体詳細（/assets/:id）、QRラベル（/assets/labels）、ラベルのプレビュー（/assets/labels/preview）、点検・修理（/assets/maintenance）、点検記録の登録（/assets/maintenance/new）、廃棄・除却（/assets/disposals）、除却の起票（/assets/disposals/new）。</p>
 <p>除却の起票では、PCを含むとデータ消去証明なしでは承認に出せません。確定で MDM 削除依頼とマニフェスト登録の ToDo が立ちます。</p>

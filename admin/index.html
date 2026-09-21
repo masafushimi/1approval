@@ -17,7 +17,9 @@ aside{width:286px;flex-shrink:0;background:#171A22;border-right:1px solid #262B3
 .brand b{font-size:13px;font-weight:700;letter-spacing:-0.01em}
 .brand span{font-size:10px;color:#8B93A7;border:1px solid #333947;border-radius:999px;padding:2px 8px}
 .list{flex-grow:1;overflow-y:auto;padding:10px 10px 30px}
-.g{font-size:10px;color:#6B7385;letter-spacing:.08em;padding:14px 10px 6px;font-weight:700}
+.g{font-size:10px;color:#8B93A7;letter-spacing:.06em;padding:16px 10px 7px;font-weight:700;display:flex;
+ align-items:center;gap:7px}
+.g .n{font-size:9px;color:#6B7385;border:1px solid #333947;border-radius:999px;padding:1px 6px;font-weight:400}
 a.s{display:block;padding:7px 10px;border-radius:7px;color:#C9CEDA;text-decoration:none;font-size:13px;line-height:1.35}
 a.s:hover{background:#1E222C}
 a.s.on{background:#2826FF;color:#fff}
@@ -52,24 +54,36 @@ iframe{border:0;display:block}
 <body>
 <aside>
   <div class="brand"><img src="assets/1approval_logo.webp" alt="1Approval"><b>管理画面モックアップ</b><span>73画面</span></div>
-  <div class="jumps"><button class="j" data-g="g1020">購買</button><button class="j" data-g="g2040">モノ</button><button class="j" data-g="g5100">人</button><button class="j" data-g="g6120">設定</button><button class="j" data-g="g8420">Phase-2</button><button class="j" data-g="g9700">Phase-3</button><button class="j" data-g="g10980">Phase-4</button><button class="j" data-g="g12260">Phase-5</button><button class="j" data-g="g13540">Phase-6</button></div>
+  <div class="jumps"><button class="j" data-g="gp0">Phase-0</button><button class="j" data-g="gp1">Phase-1</button><button class="j" data-g="gp2">Phase-2</button><button class="j" data-g="gp3">Phase-3</button><button class="j" data-g="gp4">Phase-4</button><button class="j" data-g="gp5">Phase-5</button><button class="j" data-g="gp6">Phase-6</button></div>
   <div class="list" id="list">
-<div class="g" id="g0">トップ</div>
+<div class="g" id="gp0">Phase-0 購買データ基盤<span class="n">23</span></div>
 <a class="s" data-f="Login.html" data-w="1440" data-h="900" data-t="ログイン" data-p="/login" href="#Login">ログイン <span class="p">/login</span></a>
 <a class="s" data-f="Home.html" data-w="1440" data-h="900" data-t="ホーム（やること）" data-p="/" href="#Home">ホーム（やること） <span class="p">/</span></a>
 <a class="s" data-f="Notifications.html" data-w="1440" data-h="900" data-t="通知" data-p="/notifications" href="#Notifications">通知 <span class="p">/notifications</span></a>
 <a class="s" data-f="NotificationSettings.html" data-w="1440" data-h="900" data-t="通知設定" data-p="/settings/notifications" href="#NotificationSettings">通知設定 <span class="p">/settings/notifications</span></a>
-<div class="g" id="g1020">購買</div>
 <a class="s" data-f="Ledger.html" data-w="1440" data-h="900" data-t="購買明細台帳" data-p="/purchases" href="#Ledger">購買明細台帳 <span class="p">/purchases</span></a>
 <a class="s" data-f="Classify.html" data-w="1440" data-h="900" data-t="分類の確定" data-p="/purchases/classify" href="#Classify">分類の確定 <span class="p">/purchases/classify</span></a>
 <a class="s" data-f="ClassifyDone.html" data-w="1440" data-h="900" data-t="確定しました（ポップアップ）" data-p="/purchases/classify?done=4" href="#ClassifyDone">確定しました（ポップアップ） <span class="p">/purchases/classify?done=4</span></a>
-<a class="s" data-f="Receiving.html" data-w="1440" data-h="900" data-t="検収" data-p="/purchases/receiving" href="#Receiving">検収 <span class="p">/purchases/receiving</span></a>
-<a class="s" data-f="Discrepancy.html" data-w="1440" data-h="900" data-t="差異の処理" data-p="/purchases/receiving/:id/discrepancy" href="#Discrepancy">差異の処理 <span class="p">/purchases/receiving/:id/discrepancy</span></a>
 <a class="s" data-f="Spend.html" data-w="1440" data-h="900" data-t="支出分析" data-p="/purchases/analytics" href="#Spend">支出分析 <span class="p">/purchases/analytics</span></a>
 <a class="s" data-f="SpendPeriod.html" data-w="1440" data-h="900" data-t="期間を変更（ポップオーバー）" data-p="/purchases/analytics" href="#SpendPeriod">期間を変更（ポップオーバー） <span class="p">/purchases/analytics</span></a>
 <a class="s" data-f="Budget.html" data-w="1440" data-h="900" data-t="予算設定" data-p="/purchases/budgets" href="#Budget">予算設定 <span class="p">/purchases/budgets</span></a>
+<a class="s" data-f="Settings.html" data-w="1440" data-h="900" data-t="設定・購買" data-p="/settings/purchasing" href="#Settings">設定・購買 <span class="p">/settings/purchasing</span></a>
+<a class="s" data-f="ItemEdit.html" data-w="1440" data-h="900" data-t="品目の編集" data-p="/settings/purchasing/items/:id" href="#ItemEdit">品目の編集 <span class="p">/settings/purchasing/items/:id</span></a>
+<a class="s" data-f="Rules.html" data-w="1440" data-h="900" data-t="ルール設定" data-p="/settings/rules" href="#Rules">ルール設定 <span class="p">/settings/rules</span></a>
+<a class="s" data-f="SettingsSystem.html" data-w="1440" data-h="900" data-t="設定・システム" data-p="/settings/systems" href="#SettingsSystem">設定・システム <span class="p">/settings/systems</span></a>
+<a class="s" data-f="SettingsAccounting.html" data-w="1440" data-h="900" data-t="勘定奉行" data-p="/settings/systems/obc" href="#SettingsAccounting">勘定奉行 <span class="p">/settings/systems/obc</span></a>
+<a class="s" data-f="SettingsExpense.html" data-w="1440" data-h="900" data-t="楽楽精算" data-p="/settings/systems/rakuraku" href="#SettingsExpense">楽楽精算 <span class="p">/settings/systems/rakuraku</span></a>
+<a class="s" data-f="SettingsLog.html" data-w="1440" data-h="900" data-t="接続ログ" data-p="/settings/systems/logs" href="#SettingsLog">接続ログ <span class="p">/settings/systems/logs</span></a>
+<a class="s" data-f="Roles.html" data-w="1440" data-h="900" data-t="権限とロール" data-p="/settings/roles" href="#Roles">権限とロール <span class="p">/settings/roles</span></a>
+<a class="s" data-f="RoleEdit.html" data-w="1440" data-h="900" data-t="ロールの編集" data-p="/settings/roles/:id" href="#RoleEdit">ロールの編集 <span class="p">/settings/roles/:id</span></a>
+<a class="s" data-f="Locations.html" data-w="1440" data-h="900" data-t="拠点" data-p="/settings/locations" href="#Locations">拠点 <span class="p">/settings/locations</span></a>
+<a class="s" data-f="LocationEdit.html" data-w="1440" data-h="900" data-t="拠点の編集" data-p="/settings/locations/:id" href="#LocationEdit">拠点の編集 <span class="p">/settings/locations/:id</span></a>
+<a class="s" data-f="AuditLog.html" data-w="1440" data-h="900" data-t="監査ログ" data-p="/settings/audit" href="#AuditLog">監査ログ <span class="p">/settings/audit</span></a>
+<a class="s" data-f="Import.html" data-w="1440" data-h="900" data-t="初期移行" data-p="/settings/import" href="#Import">初期移行 <span class="p">/settings/import</span></a>
+<div class="g" id="gp1">Phase-1 承認＝発注と現物管理<span class="n">33</span></div>
+<a class="s" data-f="Receiving.html" data-w="1440" data-h="900" data-t="検収" data-p="/purchases/receiving" href="#Receiving">検収 <span class="p">/purchases/receiving</span></a>
+<a class="s" data-f="Discrepancy.html" data-w="1440" data-h="900" data-t="差異の処理" data-p="/purchases/receiving/:id/discrepancy" href="#Discrepancy">差異の処理 <span class="p">/purchases/receiving/:id/discrepancy</span></a>
 <a class="s" data-f="MobileReceive.html" data-w="390" data-h="844" data-t="SP 検収" data-p="/m/receiving" href="#MobileReceive">SP 検収 <span class="p">/m/receiving</span></a>
-<div class="g" id="g2040">モノ：個体</div>
 <a class="s" data-f="Assets.html" data-w="1440" data-h="900" data-t="備品・資産" data-p="/assets" href="#Assets">備品・資産 <span class="p">/assets</span></a>
 <a class="s" data-f="AssetDetail.html" data-w="1440" data-h="900" data-t="個体詳細" data-p="/assets/:id" href="#AssetDetail">個体詳細 <span class="p">/assets/:id</span></a>
 <a class="s" data-f="Labels.html" data-w="1440" data-h="900" data-t="QRラベル" data-p="/assets/labels" href="#Labels">QRラベル <span class="p">/assets/labels</span></a>
@@ -78,7 +92,6 @@ iframe{border:0;display:block}
 <a class="s" data-f="MaintenanceNew.html" data-w="1440" data-h="900" data-t="点検記録の登録" data-p="/assets/maintenance/new" href="#MaintenanceNew">点検記録の登録 <span class="p">/assets/maintenance/new</span></a>
 <a class="s" data-f="Disposal.html" data-w="1440" data-h="900" data-t="廃棄・除却" data-p="/assets/disposals" href="#Disposal">廃棄・除却 <span class="p">/assets/disposals</span></a>
 <a class="s" data-f="DisposalNew.html" data-w="1440" data-h="900" data-t="除却の起票" data-p="/assets/disposals/new" href="#DisposalNew">除却の起票 <span class="p">/assets/disposals/new</span></a>
-<div class="g" id="g3060">モノ：数量と貸出</div>
 <a class="s" data-f="Stock.html" data-w="1440" data-h="900" data-t="在庫" data-p="/stock" href="#Stock">在庫 <span class="p">/stock</span></a>
 <a class="s" data-f="Transfer.html" data-w="1440" data-h="900" data-t="拠点間の移動" data-p="/stock/transfers" href="#Transfer">拠点間の移動 <span class="p">/stock/transfers</span></a>
 <a class="s" data-f="TransferNew.html" data-w="1440" data-h="900" data-t="移動の起票" data-p="/stock/transfers/new" href="#TransferNew">移動の起票 <span class="p">/stock/transfers/new</span></a>
@@ -88,54 +101,37 @@ iframe{border:0;display:block}
 <a class="s" data-f="LoanNew.html" data-w="1440" data-h="900" data-t="貸し出す・返す" data-p="/loans/new" href="#LoanNew">貸し出す・返す <span class="p">/loans/new</span></a>
 <a class="s" data-f="MobileIssue.html" data-w="390" data-h="844" data-t="SP 出庫" data-p="/m/issue" href="#MobileIssue">SP 出庫 <span class="p">/m/issue</span></a>
 <a class="s" data-f="MobileLoan.html" data-w="390" data-h="844" data-t="SP 貸出" data-p="/m/loans" href="#MobileLoan">SP 貸出 <span class="p">/m/loans</span></a>
-<div class="g" id="g4080">棚卸とリース</div>
 <a class="s" data-f="Stocktake.html" data-w="1440" data-h="900" data-t="棚卸" data-p="/stocktakes" href="#Stocktake">棚卸 <span class="p">/stocktakes</span></a>
 <a class="s" data-f="StocktakeNew.html" data-w="1440" data-h="900" data-t="棚卸の起票" data-p="/stocktakes/new" href="#StocktakeNew">棚卸の起票 <span class="p">/stocktakes/new</span></a>
 <a class="s" data-f="StocktakeDiff.html" data-w="1440" data-h="900" data-t="差異確定" data-p="/stocktakes/:id/diff" href="#StocktakeDiff">差異確定 <span class="p">/stocktakes/:id/diff</span></a>
 <a class="s" data-f="Leases.html" data-w="1440" data-h="900" data-t="リース契約" data-p="/leases" href="#Leases">リース契約 <span class="p">/leases</span></a>
 <a class="s" data-f="LeaseNew.html" data-w="1440" data-h="900" data-t="リース契約の登録" data-p="/leases/new" href="#LeaseNew">リース契約の登録 <span class="p">/leases/new</span></a>
 <a class="s" data-f="MobileStocktake.html" data-w="390" data-h="844" data-t="SP 棚卸" data-p="/m/stocktakes" href="#MobileStocktake">SP 棚卸 <span class="p">/m/stocktakes</span></a>
-<div class="g" id="g5100">人</div>
 <a class="s" data-f="Members.html" data-w="1440" data-h="900" data-t="メンバー" data-p="/members" href="#Members">メンバー <span class="p">/members</span></a>
 <a class="s" data-f="MemberDetail.html" data-w="1440" data-h="900" data-t="メンバーの詳細" data-p="/members/:id" href="#MemberDetail">メンバーの詳細 <span class="p">/members/:id</span></a>
 <a class="s" data-f="Onboarding.html" data-w="1440" data-h="900" data-t="入退社" data-p="/members/onboarding" href="#Onboarding">入退社 <span class="p">/members/onboarding</span></a>
-<div class="g" id="g6120">設定</div>
-<a class="s" data-f="Settings.html" data-w="1440" data-h="900" data-t="設定・購買" data-p="/settings/purchasing" href="#Settings">設定・購買 <span class="p">/settings/purchasing</span></a>
-<a class="s" data-f="ItemEdit.html" data-w="1440" data-h="900" data-t="品目の編集" data-p="/settings/purchasing/items/:id" href="#ItemEdit">品目の編集 <span class="p">/settings/purchasing/items/:id</span></a>
-<a class="s" data-f="Rules.html" data-w="1440" data-h="900" data-t="ルール設定" data-p="/settings/rules" href="#Rules">ルール設定 <span class="p">/settings/rules</span></a>
-<a class="s" data-f="SettingsSystem.html" data-w="1440" data-h="900" data-t="設定・システム" data-p="/settings/systems" href="#SettingsSystem">設定・システム <span class="p">/settings/systems</span></a>
 <a class="s" data-f="SettingsMapping.html" data-w="1440" data-h="900" data-t="kintone接続" data-p="/settings/systems/kintone" href="#SettingsMapping">kintone接続 <span class="p">/settings/systems/kintone</span></a>
-<a class="s" data-f="SettingsAccounting.html" data-w="1440" data-h="900" data-t="勘定奉行" data-p="/settings/systems/obc" href="#SettingsAccounting">勘定奉行 <span class="p">/settings/systems/obc</span></a>
-<a class="s" data-f="SettingsExpense.html" data-w="1440" data-h="900" data-t="楽楽精算" data-p="/settings/systems/rakuraku" href="#SettingsExpense">楽楽精算 <span class="p">/settings/systems/rakuraku</span></a>
-<a class="s" data-f="SettingsLog.html" data-w="1440" data-h="900" data-t="接続ログ" data-p="/settings/systems/logs" href="#SettingsLog">接続ログ <span class="p">/settings/systems/logs</span></a>
 <a class="s" data-f="SettingsAddConnection.html" data-w="1440" data-h="900" data-t="接続を追加" data-p="/settings/systems/new" href="#SettingsAddConnection">接続を追加 <span class="p">/settings/systems/new</span></a>
 <a class="s" data-f="SettingsEc.html" data-w="1440" data-h="900" data-t="購買先の接続" data-p="/settings/systems/:ec" href="#SettingsEc">購買先の接続 <span class="p">/settings/systems/:ec</span></a>
 <a class="s" data-f="SettingsTest.html" data-w="1440" data-h="900" data-t="接続テスト" data-p="/settings/systems/:ec/test" href="#SettingsTest">接続テスト <span class="p">/settings/systems/:ec/test</span></a>
-<div class="g" id="g7140">権限・拠点・記録</div>
-<a class="s" data-f="Roles.html" data-w="1440" data-h="900" data-t="権限とロール" data-p="/settings/roles" href="#Roles">権限とロール <span class="p">/settings/roles</span></a>
-<a class="s" data-f="RoleEdit.html" data-w="1440" data-h="900" data-t="ロールの編集" data-p="/settings/roles/:id" href="#RoleEdit">ロールの編集 <span class="p">/settings/roles/:id</span></a>
-<a class="s" data-f="Locations.html" data-w="1440" data-h="900" data-t="拠点" data-p="/settings/locations" href="#Locations">拠点 <span class="p">/settings/locations</span></a>
-<a class="s" data-f="LocationEdit.html" data-w="1440" data-h="900" data-t="拠点の編集" data-p="/settings/locations/:id" href="#LocationEdit">拠点の編集 <span class="p">/settings/locations/:id</span></a>
-<a class="s" data-f="AuditLog.html" data-w="1440" data-h="900" data-t="監査ログ" data-p="/settings/audit" href="#AuditLog">監査ログ <span class="p">/settings/audit</span></a>
-<a class="s" data-f="Import.html" data-w="1440" data-h="900" data-t="初期移行" data-p="/settings/import" href="#Import">初期移行 <span class="p">/settings/import</span></a>
-<div class="g" id="g8420">Phase-2 外部連携</div>
+<div class="g" id="gp2">Phase-2 外部システム連携<span class="n">3</span></div>
 <a class="s" data-f="SaaSLicenses.html" data-w="1440" data-h="900" data-t="Phase-2 SaaSライセンス" data-p="/saas" href="#SaaSLicenses">Phase-2 SaaSライセンス <span class="p">/saas</span></a>
 <a class="s" data-f="SaaSDetail.html" data-w="1440" data-h="900" data-t="SaaS契約の詳細" data-p="/saas/:id" href="#SaaSDetail">SaaS契約の詳細 <span class="p">/saas/:id</span></a>
 <a class="s" data-f="MdmGap.html" data-w="1440" data-h="900" data-t="Phase-2 MDM連携" data-p="/mdm/gap" href="#MdmGap">Phase-2 MDM連携 <span class="p">/mdm/gap</span></a>
-<div class="g" id="g9700">Phase-3 Agent Purchase</div>
+<div class="g" id="gp3">Phase-3 Agent Purchase<span class="n">6</span></div>
 <a class="s" data-f="AgentPurchase.html" data-w="1440" data-h="900" data-t="Agent Purchase ｜ AIレコメンド" data-p="app/agent" href="#AgentPurchase">Agent Purchase ｜ AIレコメンド <span class="p">app/agent</span></a>
 <a class="s" data-f="AgentTrip.html" data-w="1440" data-h="900" data-t="Agent Purchase ｜ 出張手配" data-p="app/trip" href="#AgentTrip">Agent Purchase ｜ 出張手配 <span class="p">app/trip</span></a>
 <a class="s" data-f="RequestCatalog.html" data-w="1440" data-h="900" data-t="Agent Purchase ｜ カタログ" data-p="app/catalog" href="#RequestCatalog">Agent Purchase ｜ カタログ <span class="p">app/catalog</span></a>
 <a class="s" data-f="MyRequests.html" data-w="1440" data-h="900" data-t="Agent Purchase ｜ 申請" data-p="app/requests" href="#MyRequests">Agent Purchase ｜ 申請 <span class="p">app/requests</span></a>
 <a class="s" data-f="RequestDetail.html" data-w="1440" data-h="900" data-t="Agent Purchase ｜ 申請の詳細" data-p="app/requests/:id" href="#RequestDetail">Agent Purchase ｜ 申請の詳細 <span class="p">app/requests/:id</span></a>
 <a class="s" data-f="Approve.html" data-w="1440" data-h="900" data-t="Agent Purchase ｜ 承認" data-p="app/approvals/:id" href="#Approve">Agent Purchase ｜ 承認 <span class="p">app/approvals/:id</span></a>
-<div class="g" id="g10980">Phase-4 人事同期</div>
+<div class="g" id="gp4">Phase-4 人事マスターの一括同期<span class="n">2</span></div>
 <a class="s" data-f="OrgSync.html" data-w="1440" data-h="900" data-t="Phase-4 人事マスターの同期" data-p="/org/sync" href="#OrgSync">Phase-4 人事マスターの同期 <span class="p">/org/sync</span></a>
 <a class="s" data-f="ProvisionRules.html" data-w="1440" data-h="900" data-t="付与ルール" data-p="/org/provisioning" href="#ProvisionRules">付与ルール <span class="p">/org/provisioning</span></a>
-<div class="g" id="g12260">Phase-5 規程とカタログ</div>
+<div class="g" id="gp5">Phase-5 規程と標準品<span class="n">2</span></div>
 <a class="s" data-f="Catalogue.html" data-w="1440" data-h="900" data-t="Phase-5 全社標準品カタログ" data-p="/catalogue" href="#Catalogue">Phase-5 全社標準品カタログ <span class="p">/catalogue</span></a>
 <a class="s" data-f="PolicyRag.html" data-w="1440" data-h="900" data-t="Phase-5 社内規程の学習" data-p="/policies" href="#PolicyRag">Phase-5 社内規程の学習 <span class="p">/policies</span></a>
-<div class="g" id="g13540">Phase-6 1Approval Ads</div>
+<div class="g" id="gp6">Phase-6 1Approval Ads<span class="n">4</span></div>
 <a class="s" data-f="AdsCampaign.html" data-w="1440" data-h="900" data-t="Phase-6 クリック課金" data-p="ads/campaigns/cpc" href="#AdsCampaign">Phase-6 クリック課金 <span class="p">ads/campaigns/cpc</span></a>
 <a class="s" data-f="AdsConquest.html" data-w="1440" data-h="900" data-t="Phase-6 コンバージョン課金" data-p="ads/campaigns/conquest" href="#AdsConquest">Phase-6 コンバージョン課金 <span class="p">ads/campaigns/conquest</span></a>
 <a class="s" data-f="AdsPlacement.html" data-w="1440" data-h="900" data-t="Phase-6 掲載イメージ" data-p="app/agent" href="#AdsPlacement">Phase-6 掲載イメージ <span class="p">app/agent</span></a>
