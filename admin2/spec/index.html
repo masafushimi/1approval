@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1Approval 管理機能 追加分 画面仕様｜1Approval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:#F6F7FB;color:#17171A;
+ line-height:1.9;-webkit-font-smoothing:antialiased}
+header.top{background:#fff;border-bottom:1px solid #E6E7EE;padding:16px 28px;display:flex;align-items:center;gap:12px;
+ position:sticky;top:0;z-index:5}
+header.top img{height:20px;width:auto}
+header.top b{font-size:14px}
+header.top nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+header.top nav a{font-size:12px;color:#17171A;background:#fff;border:1px solid #D6D8E3;border-radius:8px;
+ padding:7px 13px;text-decoration:none}
+header.top nav a:hover{background:#F6F7FB}
+header.top nav a.on{background:#17171A;color:#fff;border-color:#17171A}
+.wrap{max-width:860px;margin:0 auto;padding:36px 28px 90px}
+h1{font-size:30px;font-weight:700;letter-spacing:-0.02em;margin:0 0 6px;line-height:1.4}
+.date{font-size:12px;color:#5F6169;font-family:ui-monospace,Menlo,monospace;margin-bottom:26px}
+h2{font-size:21px;font-weight:700;letter-spacing:-0.01em;margin:46px 0 14px;padding-top:22px;
+ border-top:1px solid #E6E7EE;line-height:1.5}
+h3{font-size:16px;font-weight:700;margin:30px 0 10px}
+h4{font-size:14px;font-weight:700;margin:22px 0 8px;color:#5F6169}
+p{margin:0 0 15px;font-size:15px}
+ul,ol{margin:0 0 16px;padding-left:24px;font-size:15px}
+li{margin-bottom:7px}
+strong{font-weight:700}
+code{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:#EDEEF4;border-radius:4px;padding:2px 6px}
+table{border-collapse:collapse;width:100%;margin:6px 0 22px;background:#fff;border:1px solid #E6E7EE;
+ border-radius:10px;overflow:hidden;font-size:13.5px;display:table}
+th{background:#F6F7FB;text-align:left;font-weight:700;padding:11px 13px;border-bottom:1px solid #E6E7EE;
+ font-size:12px;color:#5F6169;white-space:nowrap}
+td{padding:12px 13px;border-bottom:1px solid #EDEEF4;vertical-align:top;line-height:1.75}
+tr:last-child td{border-bottom:0}
+.note{background:#fff;border:1px solid #E6E7EE;border-left:3px solid #2826FF;border-radius:0 10px 10px 0;
+ padding:16px 20px;margin:0 0 22px;font-size:14.5px}
+.toc{background:#fff;border:1px solid #E6E7EE;border-radius:10px;padding:18px 22px;margin:0 0 34px}
+.toc b{display:block;font-size:11px;color:#5F6169;letter-spacing:.06em;margin-bottom:9px}
+.toc a{display:block;font-size:13px;color:#17171A;text-decoration:none;padding:4px 0}
+.toc a:hover{color:#2826FF}
+footer{border-top:1px solid #E6E7EE;margin-top:50px;padding-top:20px;font-size:12px;color:#5F6169}
+@media (max-width:760px){.wrap{padding:24px 18px 60px}h1{font-size:24px}table{font-size:12.5px}}
+</style>
+</head>
+<body>
+<header class="top"><img src="../../admin/assets/1approval_logo.webp" alt="1Approval"><b>1Approval 管理機能 追加分 画面仕様</b>
+<nav><a href="../../admin/index.html">モックアップ</a><a href="../../admin/wireframe/">画面モックアップ</a><a href="../../admin/spec/">仕様レビュー</a><a href="../../admin2/spec/" class="on">追加分 画面仕様</a><a href="../../wire_all/">画面一覧とフェーズ</a><a href="../../functions_group/">機能群の切り分け</a></nav></header>
+<div class="wrap">
+<h1>1Approval 管理機能 追加分 画面仕様</h1>
+<div class="date">2026-09-21</div>
+
+<div class="note"><strong>この文書は既存の<a href="../../admin/spec/">仕様レビュー</a>とは切り分けてあります。</strong>あちらは機能①〜⑬のレビューと確定事項をまとめたもので、そのまま有効です。こちらは<strong>新しい機能案（購買の入口を増やす一連の提案）を採用した場合に、追加・改修が必要になる管理画面</strong>だけを書いたものです。採用しない場合、この文書は丸ごと不要になります。</div>
+
+<div class="toc"><b>目次</b><a href="#s0">この文書の範囲</a><a href="#s1">最大の構造変化 — 取引先が主要オブジェクトになる</a><a href="#s2">新規画面</a><a href="#s3">既存画面の改修</a><a href="#s4">メニュー構成への影響</a><a href="#s5">フェーズの切り分け</a><a href="#s6">先に決めること</a></div>
+
+<h2 id="s0">この文書の範囲</h2>
+<p>前提となるのは、購買を1Approvalに取り込む<strong>入口を5つに増やす</strong>という提案と、それに付随する2つの仕組みです。</p>
+<table><thead><tr><th>前提の機能</th><th>内容</th></tr></thead><tbody>
+<tr><td>EC連携（PunchOut）</td><td>既存。モノタロウなど対応済みのEC</td></tr>
+<tr><td><strong>見積依頼フォーム</strong></td><td>会社名・メールアドレス・品名・数量の4項目で見積依頼を送る。EC以外の仕入先が対象</td></tr>
+<tr><td><strong>Chrome拡張</strong></td><td>PunchOut連携していないECサイトから、商品情報を拾って申請を立てる</td></tr>
+<tr><td><strong>見積の受信</strong></td><td>サプライヤーから届いた見積を専用アドレスに転送すると、申請の下書きが立つ</td></tr>
+<tr><td><strong>スケジュール起票</strong></td><td>SES・保守・定期契約などを、期日で自動起票する</td></tr>
+<tr><td><strong>ワンタイムカード</strong></td><td>承認と同時に使い切りカードを発行し、承認金額を支払の上限として執行する</td></tr>
+<tr><td><strong>取引先の主格化</strong></td><td>下記のとおり、取引先が購買の起点になる</td></tr>
+</tbody></table>
+<p>これらを実装すると、<strong>新規20〜25画面、既存7画面の改修</strong>が発生します。既存仕様の73画面に対して、おおよそ95画面前後になる規模感です。</p>
+
+<h2 id="s1">最大の構造変化 — 取引先が主要オブジェクトになる</h2>
+<p>既存仕様で取引先は、<strong>会計連携の項目マッピングの一部</strong>として扱われています。部門マスタや勘定科目マスタと並ぶ、設定の中の1項目です。</p>
+<p>新機能を入れると、取引先は<strong>購買の起点そのもの</strong>になります。</p>
+<ul>
+<li>見積依頼の宛先になる</li>
+<li>新規かどうかで<strong>事前承認の要否が決まる</strong></li>
+<li>法人番号・T番号・ドメインで<strong>実在を確認する</strong></li>
+<li>取引先ごとに<strong>購買カタログが育つ</strong>（過去品目と価格履歴）</li>
+<li>受信した見積メールの<strong>送信元照合</strong>に使う</li>
+<li>スケジュール起票の宛先になる</li>
+</ul>
+<p>設定の中に置くには重すぎるので、<strong>メニューに独立した群が必要</strong>になります。</p>
+<h3>もう一段の変化 — 誰がマスタを作るのか</h3>
+<p>既存仕様は「初期データ移行」画面で既存マスタを取り込む前提です。しかし新機能では、<strong>申請時に現場が打った会社名から取引先が自動で生えます</strong>。</p>
+<p>つまり取引先マスタが、<strong>管理者が整備するものから、使ううちに育つものへ変わります</strong>。購買カタログと同じ構造で、同じ問題を抱えます——表記揺れで同じ会社が複数生まれる。だから<strong>法人番号を主キーにする設計と、名寄せ・統合画面がセット</strong>で要ります。ここを後回しにすると、半年後にマスタが壊れます。</p>
+
+<h2 id="s2">新規画面</h2>
+
+<h3>取引先</h3>
+<table><thead><tr><th>パス</th><th>画面</th><th>主な内容</th></tr></thead><tbody>
+<tr><td><code>/partners</code></td><td>取引先一覧</td><td>取引実績・初回取引フラグ・適格請求書発行事業者かどうかで絞り込み</td></tr>
+<tr><td><code>/partners/:id</code></td><td>取引先詳細</td><td>法人番号、T番号と登録状況、ドメイン、受信許可アドレス、連絡先、取引履歴</td></tr>
+<tr><td><code>/partners/:id/catalog</code></td><td><strong>購買カタログ</strong></td><td>過去に購入した品目と価格履歴。2回目以降の申請はここから選ぶ</td></tr>
+<tr><td><code>/partners/merge</code></td><td>名寄せ・統合</td><td>同じ会社が別表記で登録された場合のマージ。法人番号一致を候補に出す</td></tr>
+<tr><td><code>/partners/unverified</code></td><td>未確認キュー</td><td>サプライヤー直送の受信で、送信元が取引先マスタにないもの</td></tr>
+</tbody></table>
+
+<h3>見積依頼</h3>
+<table><thead><tr><th>パス</th><th>画面</th><th>主な内容</th></tr></thead><tbody>
+<tr><td><code>/quotes</code></td><td>見積依頼一覧</td><td>ステータス別（下書き／承認待ち／送信済み／回答あり／期限切れ／取り下げ）。<strong>滞留が見える</strong>ことが主目的</td></tr>
+<tr><td><code>/quotes/:id</code></td><td>見積依頼詳細</td><td>送信履歴、リマインド履歴、返信スレッド、添付の原本</td></tr>
+<tr><td><code>/quotes/:id/review</code></td><td><strong>見積回答の確認・確定</strong></td><td>解析結果を人が直す。確信度の低い項目をハイライトし、原本と並べて表示。申請内容との差分（増えた行・変わった数量）を明示</td></tr>
+<tr><td><code>/settings/quotes/templates</code></td><td>依頼メールのテンプレート</td><td>文面のカスタマイズ。テナントごと</td></tr>
+</tbody></table>
+
+<h3>メール基盤</h3>
+<table><thead><tr><th>パス</th><th>画面</th><th>主な内容</th></tr></thead><tbody>
+<tr><td><code>/settings/mail</code></td><td>メール設定</td><td>受信アドレス、送信ドメイン、<strong>SPF / DKIM / DMARC の設定状態と到達率</strong>。実務でかなり効く</td></tr>
+<tr><td><code>/mail/inbox</code></td><td>受信の振り分け</td><td>申請者が特定できないもの、未登録の送信元、重複の疑いがあるもの</td></tr>
+</tbody></table>
+
+<h3>Chrome拡張</h3>
+<table><thead><tr><th>パス</th><th>画面</th><th>主な内容</th></tr></thead><tbody>
+<tr><td><code>/settings/extension</code></td><td>配布とインストール状況</td><td>誰が入れているか。情シスの審査を通ったかどうか</td></tr>
+<tr><td><code>/settings/extension/sites</code></td><td>対応サイト管理</td><td>個別対応サイトのホワイトリストと取得ルール。それ以外は汎用フォールバック</td></tr>
+<tr><td><code>/settings/extension/health</code></td><td><strong>取得成功率モニタ</strong></td><td>サイト別の成功率。<strong>急落したら個別対応が壊れた合図</strong>。新しい運用監視の概念になる</td></tr>
+</tbody></table>
+
+<h3>スケジュール起票</h3>
+<table><thead><tr><th>パス</th><th>画面</th><th>主な内容</th></tr></thead><tbody>
+<tr><td><code>/settings/schedules</code></td><td>ルール一覧</td><td>何が・いつ・誰に飛ぶか</td></tr>
+<tr><td><code>/settings/schedules/:id</code></td><td>ルール編集</td><td>トリガー（在庫／時間／外部イベント）、対象、頻度、宛先</td></tr>
+<tr><td><code>/schedules/calendar</code></td><td><strong>起票予定カレンダー</strong></td><td>今後3か月に何が自動で立つか。あると効く</td></tr>
+<tr><td><code>/schedules/history</code></td><td>起票履歴</td><td>実際に立ったもの、<strong>スキップされたもの</strong>（未完了の申請があって再起票しなかった等）</td></tr>
+</tbody></table>
+<p>既存仕様には<strong>時間トリガーの自動起票が3か所バラバラに存在しています</strong>——自動購買申請（在庫トリガー）、リース満了の90日前、SaaSの解約通知期限。これらを1つの機能に統一する前提で設計します。</p>
+
+<h3>ワンタイムカード</h3>
+<table><thead><tr><th>パス</th><th>画面</th><th>主な内容</th></tr></thead><tbody>
+<tr><td><code>/settings/cards</code></td><td>発行ルール</td><td>限度額の上乗せ率（送料分）、有効期限、利用回数、加盟店制限。カード事業者との接続</td></tr>
+<tr><td><code>/cards</code></td><td>発行済みカード一覧</td><td>未使用／使用済み／失効。承認との紐づき</td></tr>
+<tr><td><code>/cards/reconciliation</code></td><td><strong>決済と申請の照合</strong></td><td>自動照合の結果と、照合できなかったもの</td></tr>
+</tbody></table>
+<p>カード明細と発注が1対1で紐づくため、既存仕様の残論点だった「カード明細をどう購買明細台帳に取り込むか」は<strong>この方式では発生しません</strong>。</p>
+
+<h3>分析</h3>
+<table><thead><tr><th>パス</th><th>画面</th><th>主な内容</th></tr></thead><tbody>
+<tr><td><code>/purchases/analytics/channels</code></td><td>入口別の支出</td><td>どの入口から入った購買か</td></tr>
+<tr><td><code>/purchases/analytics/coverage</code></td><td><strong>1Approvalを通った購買の割合</strong></td><td>会計側の支出総額と突き合わせて、制度の外に逃げている分を推計する</td></tr>
+<tr><td><code>/purchases/analytics/leadtime</code></td><td>リードタイム</td><td>申請から発注、見積依頼から回答まで</td></tr>
+</tbody></table>
+<p>2つ目が本丸の指標です。<strong>分母の取り方が難しい</strong>ので、会計連携とセットで設計する必要があります。</p>
+
+<h2 id="s3">既存画面の改修</h2>
+<table><thead><tr><th>画面</th><th>何が変わるか</th></tr></thead><tbody>
+<tr><td><strong>ホーム「やること」</strong></td><td>入口が5つになるぶん、<strong>ここが本当の中核</strong>になる。見積待ちの滞留、未決済の承認済み、自動起票されたもの、未確認の取引先</td></tr>
+<tr><td>購買明細台帳</td><td><strong>取得元の列</strong>（EC連携／見積／拡張／受信／自動起票）と、入口別の絞り込み</td></tr>
+<tr><td>ルール設定</td><td>リマインドの間隔と回数、見積の有効期限、<strong>承認画面に出す警告の種類</strong>（初回取引・前回価格との差・申請になかった行）、カード発行の閾値</td></tr>
+<tr><td>接続設定</td><td>カード事業者の接続が加わる。会計6製品と同じ「項目マッピング＋テスト出力」の枠に入る</td></tr>
+<tr><td>通知設定</td><td>見積待ち・未決済・自動起票の通知。既存方針どおり、対象者を絞って重複をまとめる</td></tr>
+<tr><td><strong>監査ログ</strong></td><td><strong>対象が広がる。</strong>カード発行は送金の引き金なので、発行・限度額変更・スケジュールルールの変更が追跡対象に入る</td></tr>
+<tr><td>承認画面</td><td>判断材料の表示（初回取引バッジ、法人番号での実在確認、ドメイン判定、前回価格との差、申請になかった行）</td></tr>
+</tbody></table>
+<h4>監査ログについて</h4>
+<p>既存仕様は監査ログを<strong>「会計数値の変更を追う」</strong>目的で置いています。新機能ではこれに<strong>「金が動く根拠を追う」</strong>目的が加わります。この2つは要件が違います。</p>
+<p>とくに、みなし検収について既存仕様は「監査で誰が検収したのかを聞かれたときに、人ではなくルールだと説明できる必要がある」と書いていますが、<strong>送金の文脈では「ルールです」は説明になりません</strong>。そのルールを設定した人の判断責任になるので、リードタイムや自動検収の上限金額を変更した履歴が、通常の設定変更ログより重い意味を持ちます。</p>
+
+<h2 id="s4">メニュー構成への影響</h2>
+<p>既存仕様のメニューは5群です——購買（台帳・支出分析）、モノ（検収・備品・在庫・期限・貸出・棚卸・リース）、IT・SaaS、人（メンバー・入退社）、設定。</p>
+<table><thead><tr><th>群</th><th>変化</th></tr></thead><tbody>
+<tr><td>購買</td><td><strong>厚くなる。</strong>台帳・支出分析に加えて、見積依頼・入口別分析</td></tr>
+<tr><td><strong>取引先（新設）</strong></td><td>一覧・詳細・カタログ・名寄せ・未確認キュー。<strong>設定から独立させる</strong></td></tr>
+<tr><td>モノ</td><td>変化なし</td></tr>
+<tr><td>IT・SaaS / 人</td><td>変化なし</td></tr>
+<tr><td>設定</td><td>メール、拡張、スケジュール、カードが加わる</td></tr>
+</tbody></table>
+<p>カード関連は、設定（発行ルール）と運用（発行済み一覧・照合）で置き場所が分かれます。運用側は購買群に置くのが自然です。</p>
+
+<h2 id="s5">フェーズの切り分け</h2>
+<p>全部を同時に作る必要はありません。実装の順番は<strong>メール基盤（見積の受信＋見積依頼）が1番目</strong>を推奨しています。同じ土台なので分けて作る意味が薄く、受信のほうが導入の摩擦が低いためです。</p>
+<h4>Phase-0 に要るもの</h4>
+<ul>
+<li><strong>取引先マスタ</strong>（法人番号・T番号・ドメイン）— 外部データ標準のセマンティクス層と同じ話なので、どのみち作る</li>
+<li>見積依頼の一覧・詳細</li>
+<li>見積回答の確認・確定</li>
+<li>メール設定と受信の振り分け</li>
+<li>ルール設定の拡張</li>
+</ul>
+<h4>後でよいもの</h4>
+<ul>
+<li>取引先の名寄せ・統合 — データが溜まってから。ただし<strong>法人番号を主キーにする設計だけは最初から</strong></li>
+<li>購買カタログ — 2回目以降の申請が発生してから</li>
+<li>拡張・カード・スケジュールの管理画面 — それぞれの機能を作るとき</li>
+<li>入口別分析 — 入口が複数になってから</li>
+</ul>
+
+<h2 id="s6">先に決めること</h2>
+<ol>
+<li><strong>取引先マスタを誰が作るのか。</strong>管理者が整備するのか、申請から自動で生えるのか。後者なら名寄せ・統合が必須になる</li>
+<li><strong>取引先を独立したメニュー群にするか。</strong>設定の中に置き続けると、カタログと名寄せの置き場所が苦しくなる</li>
+<li><strong>監査ログの対象範囲。</strong>カード発行とスケジュールルールの変更を追跡対象に含めるか</li>
+<li><strong>画面数の増加を許容するか。</strong>73画面 → 95前後。ワイヤーフレームの作り直しコストが発生する</li>
+</ol>
+
+<footer>1Approval 管理機能ドキュメント（追加分）／ 2026-09-21 時点 ／ 既存仕様は <a href="../../admin/spec/">仕様レビュー</a> を参照</footer>
+</div>
+</body>
+</html>
