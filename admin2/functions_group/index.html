@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>追加分の機能群の切り分けとプライシング｜1Approval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:#F6F7FB;color:#17171A;line-height:1.9}
+header.top{background:#fff;border-bottom:1px solid #E6E7EE;padding:16px 28px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
+header.top img{height:20px;width:auto}
+header.top b{font-size:14px}
+header.top span.c{font-size:11px;color:#5F6169;border:1px solid #E6E7EE;border-radius:999px;padding:3px 10px}
+header.top nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+header.top nav a{font-size:12px;color:#17171A;background:#fff;border:1px solid #D6D8E3;border-radius:8px;padding:7px 13px;text-decoration:none}
+header.top nav a:hover{background:#F6F7FB}
+header.top nav a.on{background:#17171A;color:#fff;border-color:#17171A}
+h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:0 0 6px;line-height:1.4}
+.date{font-size:12px;color:#5F6169;font-family:ui-monospace,Menlo,monospace;margin-bottom:24px}
+h2{font-size:20px;font-weight:700;margin:44px 0 12px;padding-top:20px;border-top:1px solid #E6E7EE;line-height:1.5}
+h3{font-size:15px;font-weight:700;margin:28px 0 8px}
+p{margin:0 0 14px;font-size:15px}
+ul,ol{margin:0 0 16px;padding-left:24px;font-size:15px}li{margin-bottom:6px}
+code{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:#EDEEF4;border-radius:4px;padding:2px 6px}
+table{border-collapse:collapse;width:100%;margin:6px 0 20px;background:#fff;border:1px solid #E6E7EE;border-radius:10px;overflow:hidden;font-size:13.5px}
+th{background:#F6F7FB;text-align:left;font-weight:700;padding:11px 13px;border-bottom:1px solid #E6E7EE;font-size:12px;color:#5F6169;white-space:nowrap}
+td{padding:11px 13px;border-bottom:1px solid #EDEEF4;vertical-align:top;line-height:1.75}
+tr:last-child td{border-bottom:0}
+.note{background:#fff;border:1px solid #E6E7EE;border-left:3px solid #2826FF;border-radius:0 10px 10px 0;padding:15px 19px;margin:0 0 20px;font-size:14.5px}
+.toc{background:#fff;border:1px solid #E6E7EE;border-radius:10px;padding:18px 22px;margin:0 0 32px}
+.toc b{display:block;font-size:11px;color:#5F6169;letter-spacing:.06em;margin-bottom:9px}
+.toc a{display:block;font-size:13px;color:#17171A;text-decoration:none;padding:4px 0}
+.toc a:hover{color:#2826FF}
+footer{border-top:1px solid #E6E7EE;margin-top:48px;padding-top:20px;font-size:12px;color:#5F6169}
+.wrap{max-width:860px;margin:0 auto;padding:34px 28px 90px}
+
+</style>
+</head>
+<body>
+<header class="top"><img src="../../admin/assets/1approval_logo.webp" alt="1Approval"><b>1Approval 管理機能 追加分</b><span class="c">22画面</span><nav><a href="../index.html">動くモックアップ</a><a href="../wireframe/">画面モックアップ一覧</a><a href="../spec/">仕様レビュー</a><a href="../wire_all/">画面一覧とフェーズ</a><a href="../functions_group/" class="on">機能群の切り分け</a><a href="../../admin/spec/" style="opacity:.62">既存の仕様レビュー</a></nav></header>
+<div class="wrap"><h1>追加分の機能群の切り分けとプライシング</h1><div class="date">2026-09-21</div><div class="note"><b>既存の<a href="../../functions_group/">機能群の切り分け</a>は、基本＋7オプションの構成です。</b>ここでは、購買の入口を増やす提案を採用した場合に、その22画面をどこに乗せるかだけを書きます。<b>既存の値付けには手を入れません。</b></div><div class="toc"><b>目次</b><a href="#a">結論</a><a href="#b">切り分けの原則</a><a href="#c">機能群ごとの中身</a><a href="#d">見積例</a><a href="#e">値付けの根拠とリスク</a></div><h2 id="a">結論</h2><p><strong>取引先は Core に入れ、入口は3つのオプションに分ける。</strong>取引先まわりは他のすべての土台なので切り出せません。入口はそれぞれ独立して価値が出るので、別売りにできます。</p><table><thead><tr><th>機能群</th><th>枚数</th><th>位置づけ</th><th>価格の考え方</th></tr></thead><tbody><tr><td><b>取引先</b></td><td>5画面</td><td><b>Core に統合</b></td><td>値上げなし。既存Coreの前提を強くするもの</td></tr><tr><td><b>見積依頼（メール基盤込み）</b></td><td>6画面</td><td>新オプション</td><td>月額固定。<b>テールスペンドの本丸</b></td></tr><tr><td><b>Chrome拡張</b></td><td>2画面＋拡張本体</td><td>新オプション</td><td>ユーザー課金。使う人の数に比例する</td></tr><tr><td><b>ワンタイムカード</b></td><td>3画面</td><td>新オプション</td><td>月額固定＋決済件数。カード事業者への支払いが原価</td></tr><tr><td><b>自動起票</b></td><td>4画面</td><td><b>Core に統合</b></td><td>値上げなし。既存の自動購買申請を統一するもの</td></tr><tr><td><b>分析</b></td><td>2画面</td><td>Core に統合</td><td>値上げなし。効果測定そのものなので外すと売れない</td></tr></tbody></table><h2 id="b">切り分けの原則</h2><p>既存の原則をそのまま使います。<strong>単独で価値が完結するものだけをオプションにする。</strong>そのうえで、今回は3つ足しました。</p><ol><li><b>土台はオプションにしない。</b>取引先マスタと自動起票は、他の機能が乗る前提になるので Core。取引先を外すと見積依頼もカタログも受信も成立しません</li><li><b>効果測定は売らない。</b>分析（入口別・カバレッジ）は、オプションを買ってもらうための根拠そのもの。「導入したが効果が見えない」を防ぐために Core に入れます</li><li><b>原価が変動するものは従量を混ぜる。</b>ワンタイムカードはカード事業者への支払いが発生するので、固定だけにしません</li></ol><h2 id="c">機能群ごとの中身</h2><h3>Core に統合（値上げなし）</h3><p>取引先5画面、自動起票4画面、分析2画面の<strong>計11画面</strong>。</p><p>取引先が Core に入ると、既存Coreの<strong>会計連携の精度が上がります</strong>。法人番号を主キーにするので、6製品への出力で最も失敗する取引先名の表記揺れが構造的に消える。つまりこれは新機能というより、<strong>既存機能の品質改善</strong>として売れます。</p><p>自動起票も同じです。既存仕様には時間トリガーの自動起票が3か所バラバラにあるので、統一するだけなら新しい価値ではなく整理です。</p><h3>見積依頼 — 新オプション（6画面）</h3><p>見積依頼4画面＋メール基盤2画面。<strong>これが一番大きい</strong>と思います。</p><p>訴求は「EC以外の仕入先が制度に乗る」こと。効果は立替精算の件数と、1Approvalを通った購買の割合に出ます。<strong>見積の受信だけ先に使ってもらう</strong>形にすると、導入の摩擦がさらに下がります（頼み方は今のままで、転送するだけ）。</p><div class="note"><b>値付けの注意。</b>メール基盤は送信数に比例して原価がかかります（到達率を保つための送信基盤）。中堅企業の見積依頼は月に数十〜数百件規模なので固定で吸収できますが、<b>上限は決めておく</b>べきです。</div><h3>Chrome拡張 — 新オプション（2画面＋拡張本体）</h3><p>対応サイト管理と取得モニタ。<strong>ユーザー課金が向いています</strong>。拡張を入れた人しか使わないので、全社課金にすると割高に見えます。</p><p>ただし<strong>保守コストが恒久的にかかります</strong>。個別対応したサイトはEC側の画面変更で壊れるので、対応サイト数に上限を設けるか、上位プランで対応サイトを増やす形にします。</p><h3>ワンタイムカード — 新オプション（3画面）</h3><p>発行ルール、発行済み一覧、決済照合。<strong>訴求は立替解消ではなく統制</strong>です。承認そのものが支払の上限として執行されるので、内部統制の文脈で値段がつきます。</p><p>前提として、顧客が<strong>バーチャルカードの都度発行に対応した法人カード</strong>を使っている必要があります。自前で発行すると与信と資金決済法の論点を呼び込むので、そこには踏み込まない前提です。</p><h2 id="d">見積例</h2><p>従業員300名・拠点3・EC以外の仕入先が多い製造業を想定します。</p><table><thead><tr><th>構成</th><th>内容</th></tr></thead><tbody><tr><td>Core</td><td>購買明細台帳、分類、会計出力＋<b>取引先・自動起票・分析</b></td></tr><tr><td>＋ 見積依頼</td><td>EC以外の仕入先を取り込む。本丸</td></tr><tr><td>＋ ワンタイムカード</td><td>立替精算をゼロにし、承認を支払の上限として執行する</td></tr><tr><td>（拡張は見送り）</td><td>情シスが拡張のインストールを許可しないため。先に主要ECの正規連携を調べる</td></tr></tbody></table><p>拡張を外すという判断が普通にありえます。だから<strong>入口ごとに独立して売れる形</strong>にしておくことが重要です。</p><h2 id="e">値付けの根拠とリスク</h2><h3>根拠になる数字</h3><p>顧客に示せるのは、既存Coreと同じく<strong>削減できる作業量</strong>です。</p><ul><li><b>立替精算の件数と金額</b>。これは導入前後で直接比較できる</li><li><b>取引先登録の事務</b>。1社あたりの登録工数 × 新規取引先数</li><li><b>見積取得の代行</b>。購買部が現場の代わりに見積を取っていた工数</li><li><b>突合作業</b>。支出が最初から台帳に乗るので、請求書と発注の突合が減る</li></ul><h3>リスク</h3><ul><li><b>定着しないと数字が出ない。</b>現場にとって「記録に残る」は価値ではなくコストなので、通したほうが速くなければ元のやり方に戻ります。<b>リードタイムが悪ければ、機能として正しくても失敗</b>します</li><li><b>拡張の保守が読めない。</b>EC側の画面変更は相手の都合なので、こちらで制御できません。対応サイト数に上限を設けないと原価が青天井になります</li><li><b>カードは顧客の環境に依存する。</b>対応した法人カードを使っていない顧客には売れません。請求書払いのみのBtoB ECも残るので、支払手段は複数持つ前提です</li><li><b>取引先を Core に入れると、値上げの機会を1つ失います。</b>ただし切り出すと他のオプションが全部成立しなくなるので、ここは飲む判断です</li></ul><footer>1Approval 管理機能ドキュメント（追加分）／ 2026-09-21 時点 ／ 既存の機能群は <a href="../../functions_group/">こちら</a></footer></div>
+</body>
+</html>
