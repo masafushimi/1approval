@@ -54,11 +54,11 @@ footer{border-top:1px solid #E6E7EE;margin-top:50px;padding-top:20px;font-size:1
 <nav><a href="../index.html">動くモックアップ</a><a href="../wireframe/">画面モックアップ一覧</a><a href="../spec/" class="on">仕様レビュー</a><a href="../wire_all/">画面一覧とフェーズ</a><a href="../functions_group/">機能群の切り分け</a><a href="../../admin/spec/" style="opacity:.62">既存の仕様レビュー</a></nav></header>
 <div class="wrap">
 <h1>1Approval 管理機能 追加分 画面仕様</h1>
-<div class="date">2026-09-21</div>
+<div class="date">2026-09-22</div>
 
 <div class="note"><strong>この文書は既存の<a href="../../admin/spec/">仕様レビュー</a>とは切り分けてあります。</strong>あちらは機能①〜⑬のレビューと確定事項をまとめたもので、そのまま有効です。こちらは<strong>新しい機能案（購買の入口を増やす一連の提案）を採用した場合に、追加・改修が必要になる管理画面</strong>だけを書いたものです。採用しない場合、この文書は丸ごと不要になります。</div>
 
-<div class="toc"><b>目次</b><a href="#s0">この文書の範囲</a><a href="#s1">最大の構造変化 — 取引先が主要オブジェクトになる</a><a href="#s2">新規画面</a><a href="#s3">既存画面の改修</a><a href="#s4">メニュー構成への影響</a><a href="#s5">フェーズの切り分け</a><a href="#s6">先に決めること</a></div>
+<div class="toc"><b>目次</b><a href="#s0">この文書の範囲</a><a href="#s1">最大の構造変化 — 取引先が主要オブジェクトになる</a><a href="#s2">新規画面</a><a href="#consumption">消耗品の消費ペースをどう測るか</a><a href="#s3">既存画面の改修</a><a href="#s4">メニュー構成への影響</a><a href="#s5">フェーズの切り分け</a><a href="#s6">先に決めること</a></div>
 
 <h2 id="s0">この文書の範囲</h2>
 <p>前提となるのは、購買を1Approvalに取り込む<strong>入口を5つに増やす</strong>という提案と、それに付随する2つの仕組みです。</p>
@@ -124,9 +124,9 @@ footer{border-top:1px solid #E6E7EE;margin-top:50px;padding-top:20px;font-size:1
 <h3>スケジュール起票</h3>
 <table><thead><tr><th>パス</th><th>画面</th><th>主な内容</th></tr></thead><tbody>
 <tr><td><code>/settings/schedules</code></td><td>ルール一覧</td><td>何が・いつ・誰に飛ぶか</td></tr>
-<tr><td><code>/settings/schedules/:id</code></td><td>ルール編集</td><td>トリガー（在庫／時間／外部イベント）、対象、頻度、宛先</td></tr>
+<tr><td><code>/settings/schedules/:id</code></td><td>ルール編集</td><td>トリガー（時間／<a href="#consumption">在庫</a>／外部イベント）、対象、頻度、宛先</td></tr>
 <tr><td><code>/schedules/calendar</code></td><td><strong>起票予定カレンダー</strong></td><td>今後3か月に何が自動で立つか。あると効く</td></tr>
-<tr><td><code>/schedules/history</code></td><td>起票履歴</td><td>実際に立ったもの、<strong>スキップされたもの</strong>（未完了の申請があって再起票しなかった等）</td></tr>
+<tr><td><code>/schedules/history</code></td><td>起票履歴</td><td>実際に立ったもの、<strong>スキップされたもの</strong>（未完了の申請があって再起票しなかった等）、<strong>起点</strong>（システム／人）</td></tr>
 </tbody></table>
 <p>既存仕様には<strong>時間トリガーの自動起票が3か所バラバラに存在しています</strong>——自動購買申請（在庫トリガー）、リース満了の90日前、SaaSの解約通知期限。これらを1つの機能に統一する前提で設計します。</p>
 
@@ -145,6 +145,52 @@ footer{border-top:1px solid #E6E7EE;margin-top:50px;padding-top:20px;font-size:1
 <tr><td><code>/purchases/analytics/leadtime</code></td><td>リードタイム</td><td>申請から発注、見積依頼から回答まで</td></tr>
 </tbody></table>
 <p>2つ目が本丸の指標です。<strong>分母の取り方が難しい</strong>ので、会計連携とセットで設計する必要があります。</p>
+
+<h2 id="consumption">消耗品の消費ペースをどう測るか</h2>
+<p>スケジュール起票のトリガーのひとつに<strong>在庫</strong>があります（既存仕様の自動購買申請もここに統合されます）。しかしこの方式は<strong>理論在庫が正しいこと</strong>を前提にしています。理論在庫は検収で増えて出庫で減る値なので、<strong>検収と出庫の記録が始まる Phase-1 以降でなければ存在しません</strong>。</p>
+<p>一方、消費ペースの推定には<strong>購買履歴だけで足りる方法</strong>があります。こちらは Phase-0 で成立します。</p>
+
+<h3>3つの測り方</h3>
+<table><thead><tr><th>方式</th><th>消費ペースの出所</th><th>消費と紛失</th><th>現場の手間</th><th>成立時期</th></tr></thead><tbody>
+<tr><td>継続記録法</td><td>出庫を都度記録</td><td>分離できる</td><td>出庫のたびにスキャン</td><td>Phase-1〜</td></tr>
+<tr><td>棚卸計算法</td><td>期首＋入庫−期末</td><td><strong>分離できない</strong></td><td>棚卸しのときだけ</td><td>Phase-1〜</td></tr>
+<tr><td><strong>購買間隔法</strong></td><td>購買履歴から推定</td><td>分離できない</td><td><strong>なし</strong></td><td><strong>Phase-0〜</strong></td></tr>
+</tbody></table>
+<div class="note"><strong>購買間隔法を既定に推奨します。</strong>Phase-0 は「他システムで買ったものを集めて見せるだけで、発注も検収もしない」フェーズですが、<strong>購買履歴だけは最初からあります</strong>。つまり現物管理（QR貼付・初期棚卸）をまったく始めていない段階でも、買い足しどきの提案が出せます。Phase-0 の導入負担を増やさずに機能を1つ増やせる、という点でかなり大きい。</div>
+<p>軍手やボルトのような低単価のバラ物について、出庫をいちいち記録させる運用は続きません。<a href="../functions_group/">機能群の切り分け</a>でも「高額品と期限管理品だけ先に入れ、消耗品は運用開始後の購買から自然に溜める」方針を採っており、購買間隔法はこれと整合します。</p>
+
+<h3>推定の仕方</h3>
+<p>n 回目の購買で得られるサンプルは、<strong>前回買った量を、次に買うまでの日数で割った値</strong>です。</p>
+<p><code>消費率ᵢ ＝ 数量ᵢ₋₁ ÷ ( 発注日ᵢ − 発注日ᵢ₋₁ )</code></p>
+<p>間隔だけを見てはいけません。まとめ買いした回で「消費が減った」と誤読します。</p>
+<ul>
+<li><strong>平滑化は EWMA（指数加重移動平均）。</strong>単純移動平均は窓幅を決める必要がありますが、購買頻度は品目ごとに大きく違うので、固定窓は必ずどれかで外れます。EWMA ならパラメータは α ひとつです</li>
+<li><strong>外れ値の除去は必須。</strong>価格改定前の駆け込みまとめ買いが1回混ざるだけで、単純平均は数か月壊れます</li>
+<li><strong>粒度は拠点・部署ごと。</strong>全社平均は誰の実態でもない数字になります</li>
+<li><strong>閾値の単位が変わる。</strong>実在庫を知らないので「残り◯個で起票」は指定できません。<strong>「残り◯日分で起票」</strong>になります</li>
+</ul>
+
+<h3>効かなくなる3つのケース</h3>
+<table><thead><tr><th>ケース</th><th>何が起きるか</th></tr></thead><tbody>
+<tr><td>欠品していた期間がある</td><td>切らして我慢していた分は購買に現れない。<strong>実消費を過小評価する</strong></td></tr>
+<tr><td>他拠点から融通した</td><td>買わずに済んだので間隔が伸びる。同じく過小評価</td></tr>
+<tr><td><strong>システム起票が学習データに混ざる</strong></td><td>下記。設計上いちばん厄介</td></tr>
+</tbody></table>
+<h4>自己成就を避ける</h4>
+<p>システムが予測日に起票し、承認されて発注されると、<strong>その発注間隔がそのまま次の学習データになります</strong>。放置すると推定値が自分の予測を学習し続け、実態から乖離しても誰も気づきません。</p>
+<p>対策として、<strong>起票履歴に起点（システム／人）のフラグを持たせます。</strong>人起点の実績を重く見るか、定期的に人起点の実績だけで検算します。起票履歴画面はもともとスキップ理由を残す設計なので、同じ場所に起点も残せます。</p>
+
+<h3>棚卸しの位置づけが変わる</h3>
+<p>消費ペースの主たる出所が購買履歴になるため、棚卸しは<strong>較正点</strong>になります。年1回の実測で、推定から積み上げた理論値とのズレを見て推定をリセットする。<strong>ズレの大きい品目は、融通や紛失が起きている品目</strong>として炙り出せます。</p>
+<p>既存仕様の「棚卸の差異は理由を選んでから確定する。自動上書きは差異の原因が追えなくなるため非推奨」という方針は、そのまま有効です。<strong>差異を消費として自動計上してはいけません。</strong></p>
+
+<h3>画面への影響</h3>
+<table><thead><tr><th>画面</th><th>何が変わるか</th></tr></thead><tbody>
+<tr><td><code>/settings/schedules/:id</code> ルール編集</td><td>在庫トリガーに<strong>2つの方式</strong>（実在庫／消費ペース）。閾値の単位が個数と残日数で変わる。<strong>どちらの方式で動いているかを画面に出す</strong></td></tr>
+<tr><td><code>/schedules/history</code> 起票履歴</td><td><strong>起点の列</strong>（システム／人）。自己成就の検算に使う</td></tr>
+<tr><td><code>/partners/:id/catalog</code> 購買カタログ</td><td>品目ごとの消費ペースと次回予測日。ただし下記の論点あり</td></tr>
+</tbody></table>
+<div class="note"><strong>置き場所に論点があります。</strong>消費ペースは<strong>品目×拠点</strong>で決まる値で、取引先軸の値ではありません。同じ軍手を2社から買っていれば、取引先ごとのカタログに分かれて入ってしまいます。品目を取引先横断で束ねる軸——実質的に<strong>品目マスタの名寄せ</strong>——が別途必要です。<a href="#s1">取引先で起きるのと同じ問題が、品目側にも出ます</a>。</div>
 
 <h2 id="s3">既存画面の改修</h2>
 <table><thead><tr><th>画面</th><th>何が変わるか</th></tr></thead><tbody>
@@ -180,6 +226,7 @@ footer{border-top:1px solid #E6E7EE;margin-top:50px;padding-top:20px;font-size:1
 <li>見積回答の確認・確定</li>
 <li>メール設定と受信の振り分け</li>
 <li>ルール設定の拡張</li>
+<li><strong>消費ペースの推定</strong> — 購買履歴だけで成立するため、現物管理を始める前から使える。<a href="#consumption">詳細</a></li>
 </ul>
 <h4>後でよいもの</h4>
 <ul>
@@ -195,9 +242,10 @@ footer{border-top:1px solid #E6E7EE;margin-top:50px;padding-top:20px;font-size:1
 <li><strong>取引先を独立したメニュー群にするか。</strong>設定の中に置き続けると、カタログと名寄せの置き場所が苦しくなる</li>
 <li><strong>監査ログの対象範囲。</strong>カード発行とスケジュールルールの変更を追跡対象に含めるか</li>
 <li><strong>画面数の増加を許容するか。</strong>73画面 → 95前後。ワイヤーフレームの作り直しコストが発生する</li>
+<li><strong>消費ペースを購買履歴から推定するか。</strong>採用すれば Phase-0 の段階で買い足しの提案が出せる。ただし品目マスタの名寄せが必要になる</li>
 </ol>
 
-<footer>1Approval 管理機能ドキュメント（追加分）／ 2026-09-21 時点 ／ 既存仕様は <a href="../../admin/spec/">仕様レビュー</a> を参照</footer>
+<footer>1Approval 管理機能ドキュメント（追加分）／ 2026-09-22 時点 ／ 既存仕様は <a href="../../admin/spec/">仕様レビュー</a> を参照</footer>
 </div>
 </body>
 </html>
