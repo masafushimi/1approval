@@ -226,31 +226,76 @@
         </section>
 
         <!-- Part 2 -->
-        <section id="talk" class="scroll-mt-28 space-y-8">
+        <section id="talk" class="scroll-mt-28 space-y-10">
             <div>
                 <h2 class="text-xs font-black tracking-widest text-brand-yellow">PART 2</h2>
                 <p class="text-2xl font-extrabold text-slate-900 mt-1">ユーザー事例対談：ユーグレナ様の導入前後</p>
             </div>
 
-            <figure class="rounded-2xl overflow-hidden border border-slate-200">
-                <img src="../../google/interview.jpg" alt="株式会社ユーグレナ 楠美様" class="w-full max-h-[420px] object-cover" onerror="this.closest('figure').style.display='none'">
-                <figcaption class="text-[11px] text-slate-400 px-4 py-2 bg-slate-50">株式会社ユーグレナ IT推進部 部長 楠美 裕介 氏</figcaption>
-            </figure>
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-6 items-center">
+                <figure class="sm:col-span-3 rounded-2xl overflow-hidden border border-slate-200">
+                    <img src="../../google/interview.jpg" alt="株式会社ユーグレナ 楠美様" class="w-full max-h-[360px] object-cover" onerror="this.closest('figure').style.display='none'">
+                </figure>
+                <div class="sm:col-span-2 space-y-3">
+                    <p class="text-[10px] font-black tracking-widest text-brand-primary">GUEST PROFILE</p>
+                    <p class="text-xl font-extrabold text-slate-900">楠美 裕介 氏</p>
+                    <p class="text-xs text-slate-500">株式会社ユーグレナ IT推進部 部長</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        グループ共通の業務基盤として kintone を運用するユーグレナで、IT 推進を統括。他社の出張管理システム（BTM）の運用経験を踏まえて 1Approval の PoC を主導し、グループ全社への展開を決めました。
+                    </p>
+                </div>
+            </div>
 
             <!-- Topic 1 -->
-            <div class="space-y-4">
-                <h3 class="text-lg font-extrabold text-slate-900 border-l-4 border-brand-yellow pl-3">導入前の課題：立替精算と、承認待ちの価格高騰</h3>
+            <div class="space-y-5">
+                <h3 class="text-lg font-extrabold text-slate-900 border-l-4 border-brand-yellow pl-3">導入前の課題：立替精算、承認待ちの価格高騰、定着しなかった BTM</h3>
+                <p class="text-[15px] leading-loose text-slate-700">
+                    対談の冒頭、伏見から「導入前にどんな課題があったか」を尋ねると、楠美氏はまず、グループ会社ならではの<b>立替精算</b>の問題を挙げました。
+                </p>
                 <div class="speaker-line text-[15px] leading-loose">
                     <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
-                    <p class="text-slate-700">一番の課題は立替精算でした。グループ会社は小規模な組織が多く、経理担当が全員分を事前に立て替えるのが難しいため、社員が自分のカードで決済していました。また、上長が多忙で承認が遅れ、その間に予約が取れなくなったり、会社指定のホテルや上限金額を守らずに予約してしまうケースもありました。</p>
+                    <p class="text-slate-700">一番の課題は立替精算でした。グループ会社は小規模な組織が多く、経理担当が全員分のお金を事前に立て替えるのが難しい。そのため、社員が自分のカードで決済していました。</p>
                 </div>
                 <div class="speaker-line text-[15px] leading-loose">
                     <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
-                    <p class="text-slate-700">親会社では別の出張管理システムを入れていましたが、検索に時間がかかることや、事前承認アプリと予約システムが別々で「どちらから操作すべきか分からなくなる」という課題があり、運用が定着していませんでした。</p>
+                    <p class="text-slate-700">また、上長が多忙で承認が遅れ、その間に予約が取れなくなることもありました。逆に、会社指定のホテルや上限金額を守らずに予約してしまうケースもあり、規定を守らせる仕組みも必要でした。</p>
                 </div>
+                <p class="text-[15px] leading-loose text-slate-700">
+                    実は親会社のユーグレナでは、すでに他社の出張管理システムを導入していました。それでも課題が解消しなかった理由を、楠美氏は次のように振り返ります。
+                </p>
                 <div class="speaker-line text-[15px] leading-loose">
                     <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
-                    <p class="text-slate-700">最近はダイナミックプライシングの影響が強く、同じ日の航空券でも、1人目は18,000円で取れたのに、5人目・6人目になると2倍・3倍に跳ね上がることがよくあります。3ヶ月前から準備する社員もいますが、個人カードで決済して出張後まで精算されないため、立替期間が長くなる問題もありました。</p>
+                    <p class="text-slate-700">検索に時間がかかるうえ、事前承認のアプリと予約システムが別々だったので、「どちらから操作すればいいのか分からない」という声が出て、運用が定着しませんでした。承認を待っているうちに価格が変わったり満席になったりして、また最初からやり直しになる。これが社内の大きなストレスでした。予約システムと精算の費用が別々に見えるので、出張にかかる総額が分からないまま、いわば「ブラックボックス状態」で承認せざるを得ない点も課題でした。</p>
+                </div>
+
+                <div class="bg-brand-slatebg border border-slate-200 rounded-2xl p-5 sm:p-6">
+                    <p class="text-xs font-black text-slate-500 mb-3">楠美氏が挙げた導入前の課題</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                        <div class="bg-white border border-slate-200 rounded-xl p-4">
+                            <p class="font-bold text-slate-900"><i class="fa-solid fa-credit-card text-brand-primary mr-1.5"></i>立替の負担</p>
+                            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">小規模なグループ会社では会社側が立て替えられず、社員が個人カードで決済</p>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-4">
+                            <p class="font-bold text-slate-900"><i class="fa-solid fa-hourglass-half text-brand-primary mr-1.5"></i>承認待ち</p>
+                            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">承認の遅れで価格変更・満席となり、申請をやり直し</p>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-4">
+                            <p class="font-bold text-slate-900"><i class="fa-solid fa-eye-slash text-brand-primary mr-1.5"></i>総額が見えない</p>
+                            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">承認と予約のシステムが別々で、出張の総額が分からないまま承認</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-[15px] leading-loose text-slate-700">
+                    話題は、近年の航空券価格の変動にも及びました。
+                </p>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">最近はダイナミックプライシングの影響が強いですね。同じ日の航空券でも、1人目は18,000円で取れたのに、5人目・6人目になると需要予測でシステム側が自動的に価格を上げてしまい、2倍・3倍に跳ね上がることがよくあります。それを避けるために3ヶ月前から準備する社員もいるのですが、従来の仕組みでは個人カードで決済してから出張が終わるまで精算されないので、立替期間がどうしても長くなってしまうんです。</p>
+                </div>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-yellow pt-1.5">伏見</p>
+                    <p class="text-slate-700">承認をスピードアップさせることが、価格高騰を防ぎ、直接的なコスト削減につながる。私たちもユーグレナ様とのお取り組みの中で気づかされました。</p>
                 </div>
                 <div class="speaker-line text-[15px] leading-loose">
                     <p class="text-xs font-black text-brand-success pt-1.5">綿引 氏</p>
@@ -259,11 +304,15 @@
             </div>
 
             <!-- Topic 2 -->
-            <div class="space-y-4">
+            <div class="space-y-5">
                 <h3 class="text-lg font-extrabold text-slate-900 border-l-4 border-brand-yellow pl-3">選定の決め手：グループ共通の kintone をそのまま使える</h3>
                 <div class="speaker-line text-[15px] leading-loose">
                     <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
-                    <p class="text-slate-700">土台として、グループ共通で kintone を導入していたことが大きいです。グループ会社ごとに個別のシステムを入れると費用負担や管理工数が大きく、経理担当が導入を諦めてしまうことがよくあります。共通基盤の kintone 上で動く 1Approval なら、契約や費用の面を親会社側でクリアできます。申請・購買・精算が一連で可視化され、コピペの手間もなく、検索から申請までの時間を大幅に短縮できる点が決め手になりました。</p>
+                    <p class="text-slate-700">土台として、グループ共通で kintone を導入していたことが大きいです。グループ会社ごとに個別のシステムを入れようとすると、費用負担や管理工数が大きく、経理担当が導入自体を諦めてしまうことがよくあります。共通基盤の kintone 上で動く 1Approval なら、契約や費用の面を親会社側でクリアできます。</p>
+                </div>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">そのうえで、申請・購買・精算の一連のプロセスが可視化されること、コピペの手間がないこと、検索から申請までの時間を大幅に短縮できることが決め手になりました。実際に PoC で試してみると、承認から購買完了までのスピードは、それまで使っていたシステムより圧倒的に速いと実感しました。</p>
                 </div>
                 <div class="speaker-line text-[15px] leading-loose">
                     <p class="text-xs font-black text-brand-success pt-1.5">綿引 氏</p>
@@ -272,12 +321,29 @@
             </div>
 
             <!-- Topic 3 -->
-            <div class="space-y-4">
-                <h3 class="text-lg font-extrabold text-slate-900 border-l-4 border-brand-yellow pl-3">導入効果：出張前の調整が1/4に、精算は確認と突合だけ</h3>
+            <div class="space-y-5">
+                <h3 class="text-lg font-extrabold text-slate-900 border-l-4 border-brand-yellow pl-3">導入効果：出張前の調整は1/4に、精算は5分以内</h3>
+                <p class="text-[15px] leading-loose text-slate-700">
+                    導入後に一番変わったこととして楠美氏が挙げたのは、出張前の「アジャスト作業」でした。
+                </p>
                 <div class="speaker-line text-[15px] leading-loose">
                     <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
-                    <p class="text-slate-700">出張前のアジャスト作業が非常に楽になりました。複数人で出張する場合、移動時間や航空便の調整、座席の空き確認などのやり直しで以前は1時間以上かかっていました。それが打ち合わせをしながら短時間で確定できるようになり、所要時間は1/4程度（15〜20分）になりました。出張後の精算もプロセスに組み込まれているため、経理側は確認と突合だけで済み、かなりの工数削減になっています。</p>
+                    <p class="text-slate-700">複数人で出張する場合、移動時間や航空便の調整、座席の空き確認などをやり直していると、以前は1時間以上かかっていました。今は打ち合わせをしながらその場で確定できるので、所要時間は1/4程度、15〜20分ほどになりました。</p>
                 </div>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">出張1件あたりで見ても、以前は手続き全体で約1.5時間かかっていたのが、同じ工程が15〜30分で終わるようになりました。承認と予約が同時に完了するので、「承認されたあと、また別のサイトで予約する」という二度手間がなくなったのが大きいですね。</p>
+                </div>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">出張後の精算もプロセスに組み込まれているので、経費精算は5分以内に収まっています。経理側は確認と突合をするだけで済み、かなりの工数削減になっています。</p>
+                </div>
+
+                <blockquote class="relative bg-brand-yellowlight border border-brand-yellow/30 rounded-2xl p-6 sm:p-8">
+                    <i class="fa-solid fa-quote-left text-3xl text-brand-yellow/40 absolute top-4 left-5"></i>
+                    <p class="relative text-lg sm:text-xl font-extrabold text-slate-900 leading-relaxed pl-8">他部署やグループ会社全体にも、ぜひ勧めたいと思います。承認と手配予約が直結するので、タイムラグによる“手配し直し”の負担が消えました。</p>
+                    <p class="text-xs text-slate-500 mt-3 pl-8">― 株式会社ユーグレナ 楠美 裕介 氏（「他部署・グループ会社に勧めたいか」10段階評価で10）</p>
+                </blockquote>
             </div>
 
             <!-- Before / After -->
@@ -286,33 +352,45 @@
                     <p class="text-[11px] font-black tracking-widest text-slate-400">BEFORE</p>
                     <ul class="mt-3 space-y-2 text-sm text-slate-600">
                         <li><i class="fa-solid fa-xmark text-slate-400 mr-2"></i>手続きに1件あたり約1.5時間</li>
+                        <li><i class="fa-solid fa-xmark text-slate-400 mr-2"></i>複数人出張の調整に1時間以上</li>
                         <li><i class="fa-solid fa-xmark text-slate-400 mr-2"></i>検索速度が遅く、大きなストレス</li>
-                        <li><i class="fa-solid fa-xmark text-slate-400 mr-2"></i>価格変更による後戻り・二度手間</li>
+                        <li><i class="fa-solid fa-xmark text-slate-400 mr-2"></i>価格変更・満席による申請のやり直し</li>
                         <li><i class="fa-solid fa-xmark text-slate-400 mr-2"></i>社員の個人カードでの立替</li>
                     </ul>
                 </div>
                 <div class="rounded-2xl border border-brand-yellow/40 bg-brand-yellowlight p-6">
                     <p class="text-[11px] font-black tracking-widest text-brand-yellow">AFTER</p>
                     <ul class="mt-3 space-y-2 text-sm text-slate-700">
-                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>同じ工程が15〜30分に短縮</li>
+                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>同じ工程が15〜30分に短縮（最大約83%削減）</li>
+                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>複数人出張の調整は15〜20分</li>
                         <li><i class="fa-solid fa-check text-brand-success mr-2"></i>承認と予約が同時完了、二度手間ゼロ</li>
-                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>経費精算も5分以内</li>
-                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>工数を最大約83%削減し、グループ全社へ展開</li>
+                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>経費精算は5分以内、経理は確認と突合のみ</li>
+                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>法人請求で立替が発生せず、グループ全社へ展開</li>
                     </ul>
                 </div>
             </div>
 
             <!-- Topic 4 -->
-            <div class="space-y-4">
+            <div class="space-y-5">
                 <h3 class="text-lg font-extrabold text-slate-900 border-l-4 border-brand-yellow pl-3">今後への期待：「タイマー自動承認」とマルチプラットフォーム</h3>
+                <p class="text-[15px] leading-loose text-slate-700">
+                    最後に今後の要望を尋ねると、楠美氏は「承認者側の視点として」と前置きし、笑いを交えながら具体的な機能を提案しました。
+                </p>
                 <div class="speaker-line text-[15px] leading-loose">
                     <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
-                    <p class="text-slate-700">承認者側の視点として「タイマー自動承認（スキップ）機能」をぜひつけてほしいですね。上長が申請を2日間放置しているなら、システム側で自動承認するか、上の役職へ自動で回す仕組みです。申請者は早めに出しているのに、上長の放置で価格が上がったり事後申請になったりするのはかわいそうですから。また、Microsoft 365（Teams）連携など、小規模なチームでも手軽に始められるマルチプラットフォーム展開にも期待しています。</p>
+                    <p class="text-slate-700">「タイマー自動承認（スキップ）機能」をぜひつけてほしいですね。たとえば上長が申請を2日間放置していたら、システム側で自動承認するか、上の役職へ自動で回す仕組みです。申請者は早めに出しているのに、上長が放置したせいで価格が上がったり、事後申請になって怒られたりするのはかわいそうですから。出張の意思決定のスピードを上げるためにも、ぜひ検討していただきたいです。</p>
+                </div>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">それから、今は kintone を中心に使っていますが、Microsoft 365（Teams）連携のように、より小規模なチームでも手軽に始められるマルチプラットフォーム展開にも期待しています。</p>
                 </div>
                 <div class="speaker-line text-[15px] leading-loose">
                     <p class="text-xs font-black text-brand-yellow pt-1.5">伏見</p>
                     <p class="text-slate-700">貴重なご意見ありがとうございます。タイマー機能や他ツールとの連携強化も、前向きに開発を進めてまいります。</p>
                 </div>
+                <p class="text-sm leading-relaxed text-slate-500 bg-brand-slatebg border border-slate-200 rounded-xl p-4">
+                    このほかウェビナーでは、秘書やアシスタントによる代理予約の拡充、パッケージツアー・EX・レンタカーへの対応、消耗品・工具や会議室・備品、会食の手配など間接購買全般への連携拡大にも期待が寄せられました。
+                </p>
             </div>
         </section>
 
