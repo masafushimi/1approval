@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【ウェビナーレポート】手配時間を1.5時間から15分へ。ユーグレナが断行した「1Approval」活用の全貌 | 1Approval</title>
+    <meta name="description" content="2026年9月16日開催ウェビナーのレポート。承認タイムラグと価格変動による二度手間をなくす1Approvalと、ピカパカ出張DXの連携、株式会社ユーグレナ様の導入事例対談・質疑応答をまとめました。">
+    <meta property="og:title" content="【ウェビナーレポート】ユーグレナが断行した「1Approval」活用の全貌">
+    <meta property="og:description" content="承認と購買を統合し、出張手配を約90分から15〜30分へ。ユーグレナ様・ピカパカ様をお迎えしたウェビナーのレポートです。">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://masafushimi.github.io/1approval/google/interview.jpg">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            yellow: '#FFB800',       /* 1Approval公式イエロー */
+                            yellowlight: '#FFFDF0',  /* ライトテーマ背景 */
+                            dark: '#0F172A',         /* ディープスレート */
+                            primary: '#2563EB',      /* 信頼のブルー */
+                            success: '#10B981',      /* 適合グリーン */
+                            logoBlue: '#38BDF8',
+                            logoGreen: '#4ADE80',
+                            logoPink: '#F472B6',
+                            slatebg: '#F8FAFC',      /* 薄グレー背景 */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .speaker-line { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1rem; }
+        @media (max-width: 640px) { .speaker-line { grid-template-columns: 1fr; gap: .25rem; } }
+    </style>
+</head>
+<body class="bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <a href="../../" class="flex items-center gap-2 shrink-0">
+                <img src="../../logo11.png" alt="1Approval Logo" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
+                <span id="logo-fallback" class="hidden text-xl font-black text-brand-dark">1Approval</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-6 text-xs font-bold text-slate-600">
+                <a href="#program" class="hover:text-brand-yellow transition-colors">プログラム</a>
+                <a href="#part1" class="hover:text-brand-yellow transition-colors">サービス紹介</a>
+                <a href="#talk" class="hover:text-brand-yellow transition-colors">ユーザー事例対談</a>
+                <a href="#qa" class="hover:text-brand-yellow transition-colors">質疑応答</a>
+            </nav>
+            <a href="../../#contact" class="inline-flex items-center justify-center bg-brand-yellow text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300 font-extrabold px-5 py-3 rounded-full text-xs shadow-md shadow-brand-yellow/10 shrink-0">
+                無償PoC・資料請求
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="relative pt-32 pb-16 md:pt-36 md:pb-20 overflow-hidden bg-gradient-to-b from-brand-yellowlight/60 via-white to-white">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
+            <nav class="text-[11px] text-slate-400 font-bold">
+                <a href="../../" class="hover:text-brand-yellow">1Approval</a>
+                <span class="mx-1">/</span>
+                <a href="../" class="hover:text-brand-yellow">ウェビナーアーカイブ</a>
+                <span class="mx-1">/</span>
+                <span class="text-slate-500">2026.09.16 開催レポート</span>
+            </nav>
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 bg-brand-yellow/15 border border-brand-yellow/40 rounded-full py-1 px-3 text-[11px] font-black text-slate-700">
+                    <i class="fa-solid fa-video text-brand-yellow"></i> WEBINAR REPORT
+                </span>
+                <span class="text-xs text-slate-500 font-bold">2026年9月16日（水）11:00〜12:00 ／ オンライン開催</span>
+            </div>
+            <h1 class="text-2xl sm:text-4xl font-black leading-[1.35] text-slate-900 tracking-tight">
+                実録：手配時間を1.5時間から15分へ。<br>
+                <span class="text-brand-yellow">ユーグレナが断行した「1Approval」活用の全貌</span>
+            </h1>
+            <p class="text-sm sm:text-base text-slate-500 leading-relaxed">
+                承認タイムラグと価格変動による二度手間を、どうなくすか。株式会社ユーグレナ様、株式会社ピカパカ様をお迎えし、kintone 上で「承認したら購買まで完了」する出張手配の仕組みと、実際の導入効果を語っていただきました。本ページではその内容をレポートします。
+            </p>
+
+            <!-- Speakers -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                    <p class="text-[10px] font-black text-brand-primary tracking-widest">GUEST</p>
+                    <p class="font-extrabold text-slate-900 mt-1">楠美 裕介 氏</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">株式会社ユーグレナ<br>IT推進部 部長</p>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                    <p class="text-[10px] font-black text-brand-success tracking-widest">GUEST</p>
+                    <p class="font-extrabold text-slate-900 mt-1">綿引 浩之 氏</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">株式会社ピカパカ<br>法人DX推進事業部 マネージャー</p>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                    <p class="text-[10px] font-black text-brand-yellow tracking-widest">MODERATOR</p>
+                    <p class="font-extrabold text-slate-900 mt-1">伏見 匡矩</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">株式会社エイチ<br>代表取締役</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key numbers -->
+    <section class="py-12 bg-brand-dark text-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-xs font-black tracking-widest text-brand-yellow">KEY TAKEAWAYS</p>
+            <p class="text-center text-xl sm:text-2xl font-extrabold mt-1">ウェビナーで語られた導入効果</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
+                    <p class="text-3xl sm:text-4xl font-black text-brand-yellow">85<span class="text-lg">%</span></p>
+                    <p class="text-[11px] text-slate-300 mt-2 leading-relaxed">出張業務工数の<br>最大削減率</p>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
+                    <p class="text-2xl sm:text-3xl font-black text-white">90<span class="text-sm">分</span><i class="fa-solid fa-arrow-right text-brand-yellow text-base mx-1"></i>15<span class="text-sm">分〜</span></p>
+                    <p class="text-[11px] text-slate-300 mt-2 leading-relaxed">ユーグレナ様の<br>1件あたり手続き時間</p>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
+                    <p class="text-3xl sm:text-4xl font-black text-brand-yellow">5<span class="text-lg">分</span></p>
+                    <p class="text-[11px] text-slate-300 mt-2 leading-relaxed">以内で完了する<br>出張後の経費精算</p>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
+                    <p class="text-3xl sm:text-4xl font-black text-white">10<span class="text-lg">/10</span></p>
+                    <p class="text-[11px] text-slate-300 mt-2 leading-relaxed">「他部署・グループ会社に<br>勧めたいか」の評価</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+
+        <!-- Archive video placeholder: 動画URLが決まったら iframe の src を差し替え、hidden を外してください -->
+        <section id="video" class="hidden">
+            <div class="aspect-video w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
+                <iframe class="w-full h-full" src="" title="ウェビナーアーカイブ動画" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <!-- Program -->
+        <section id="program" class="scroll-mt-28">
+            <h2 class="text-xs font-black tracking-widest text-brand-yellow">PROGRAM</h2>
+            <p class="text-2xl font-extrabold text-slate-900 mt-1">当日のプログラム</p>
+            <ol class="mt-6 border-l-2 border-brand-yellow/40 space-y-6 pl-6">
+                <li class="relative">
+                    <span class="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-brand-yellow"></span>
+                    <p class="text-[11px] font-black text-slate-400">11:00 - 11:05</p>
+                    <p class="font-bold text-slate-900">オープニング</p>
+                </li>
+                <li class="relative">
+                    <span class="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-brand-yellow"></span>
+                    <p class="text-[11px] font-black text-slate-400">11:05 - 11:20</p>
+                    <p class="font-bold text-slate-900">第1部：サービスのご紹介</p>
+                    <p class="text-sm text-slate-500 mt-1">「出張業務工数85%削減」を実現する、承認と購買を統合する次世代ワークフロー 1Approval 構想（株式会社エイチ 伏見）<br>出張管理システムとは？「ピカパカ出張DX」で変わる出張業務（株式会社ピカパカ 綿引氏）</p>
+                </li>
+                <li class="relative">
+                    <span class="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-brand-yellow"></span>
+                    <p class="text-[11px] font-black text-slate-400">11:20 - 11:50</p>
+                    <p class="font-bold text-slate-900">第2部：ユーザー事例対談</p>
+                    <p class="text-sm text-slate-500 mt-1">実録：手配時間を1.5時間から15分へ。ユーグレナが断行した「1Approval」活用の全貌</p>
+                </li>
+                <li class="relative">
+                    <span class="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-brand-yellow"></span>
+                    <p class="text-[11px] font-black text-slate-400">11:50 - 12:00</p>
+                    <p class="font-bold text-slate-900">質疑応答（Q&amp;A）</p>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Part 1 -->
+        <section id="part1" class="scroll-mt-28 space-y-8">
+            <div>
+                <h2 class="text-xs font-black tracking-widest text-brand-yellow">PART 1</h2>
+                <p class="text-2xl font-extrabold text-slate-900 mt-1">承認したら購買まで完了。「1Approval」とは</p>
+            </div>
+
+            <div class="space-y-4 text-[15px] leading-loose text-slate-700">
+                <p>
+                    出張のたびに発生する事前承認・手配・経費精算。多い会社では1回の出張手続きに210分、少ない会社でも90分ほどが費やされています。たった1泊の出張でも、間接工数はおよそ9,000円分にのぼります。
+                </p>
+                <p>
+                    原因のひとつが、承認ワークフロー・予約サイト・経費精算・会計がそれぞれ独立した「ツギハギ連携」です。たとえば、予約サイトで価格を調べて申請しても、承認が下りるまでの2〜3日でダイナミックプライシングにより航空券やホテルの価格が上がってしまう。上長は否認せざるを得ず、再申請や日程変更が発生します。出張後も領収書を集めて入力し直し、経理担当者が目視で照合する作業が続きます。
+                </p>
+            </div>
+
+            <div class="bg-brand-slatebg border border-slate-200 rounded-2xl p-6 sm:p-8">
+                <p class="font-extrabold text-slate-900"><i class="fa-solid fa-diagram-project text-brand-yellow mr-2"></i>1Approval の仕組み</p>
+                <p class="text-sm text-slate-600 leading-relaxed mt-3">
+                    1Approval は、ワークフロー（申請・承認）と各種購買サービスをつなぐ「中間統合ミドルウェア」です。kintone や Microsoft 365 / Teams など、普段お使いの基盤のまま、承認と同時に外部サービスでの手配・購買までが完了します。
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
+                    <div class="bg-white rounded-xl border border-slate-200 p-4 text-sm"><i class="fa-solid fa-check text-brand-success mr-2"></i>承認と同時に購買完了。承認待ちの価格高騰を防ぐ</div>
+                    <div class="bg-white rounded-xl border border-slate-200 p-4 text-sm"><i class="fa-solid fa-check text-brand-success mr-2"></i>許容範囲内の価格変動は自動承認し、差し戻しをなくす</div>
+                    <div class="bg-white rounded-xl border border-slate-200 p-4 text-sm"><i class="fa-solid fa-check text-brand-success mr-2"></i>予約サイトの情報は申請書へ自動反映。転記・コピペ不要</div>
+                    <div class="bg-white rounded-xl border border-slate-200 p-4 text-sm"><i class="fa-solid fa-check text-brand-success mr-2"></i>法人請求のため個人の立替・経費精算が発生しない</div>
+                    <div class="bg-white rounded-xl border border-slate-200 p-4 text-sm"><i class="fa-solid fa-check text-brand-success mr-2"></i>ホテル・航空券・立替経費・目的を1枚の申請で確認</div>
+                    <div class="bg-white rounded-xl border border-slate-200 p-4 text-sm"><i class="fa-solid fa-check text-brand-success mr-2"></i>経費精算・会計システムへデータ連携し、手入力の不正余地をなくす</div>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed mt-5">
+                    当日は kintone 版のデモをご紹介しました。Microsoft 365（Teams）版はリリース済み、Google Workspace 版も順次展開予定です。出張に加え、会議室予約や工具・消耗品の購買など、間接購買全般への連携拡大も進めています。
+                </p>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8">
+                <p class="font-extrabold text-slate-900"><i class="fa-solid fa-plane text-brand-primary mr-2"></i>連携先：ピカパカ出張DX（株式会社ピカパカ 綿引氏）</p>
+                <p class="text-sm text-slate-600 leading-relaxed mt-3">
+                    株式会社ピカパカは、東証プライム上場の株式会社エアトリの法人部門が分社化して設立された、BtoB 出張に特化した企業です。「ピカパカ出張DX」の強みとして、次の3点が紹介されました。
+                </p>
+                <ul class="mt-4 space-y-3 text-sm text-slate-700">
+                    <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-brand-primary/10 text-brand-primary font-black text-xs flex items-center justify-center shrink-0">1</span><span><b>豊富な出張メニュー</b>：航空会社132社、ホテル64万軒、新幹線・レンタカーなどを一元管理。国内航空12社を一括で横断検索できます。</span></li>
+                    <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-brand-primary/10 text-brand-primary font-black text-xs flex items-center justify-center shrink-0">2</span><span><b>直感的な操作性</b>：エアトリで培った UI を踏襲し、マニュアルなしでも操作可能。代理予約にも対応しています。</span></li>
+                    <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-brand-primary/10 text-brand-primary font-black text-xs flex items-center justify-center shrink-0">3</span><span><b>出張情報の可視化</b>：稟議番号・部門コード・プロジェクトコードなどを紐づけ、請求明細を Excel で出力。経理の振り分けが簡単になります。</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Part 2 -->
+        <section id="talk" class="scroll-mt-28 space-y-8">
+            <div>
+                <h2 class="text-xs font-black tracking-widest text-brand-yellow">PART 2</h2>
+                <p class="text-2xl font-extrabold text-slate-900 mt-1">ユーザー事例対談：ユーグレナ様の導入前後</p>
+            </div>
+
+            <figure class="rounded-2xl overflow-hidden border border-slate-200">
+                <img src="../../google/interview.jpg" alt="株式会社ユーグレナ 楠美様" class="w-full max-h-[420px] object-cover" onerror="this.closest('figure').style.display='none'">
+                <figcaption class="text-[11px] text-slate-400 px-4 py-2 bg-slate-50">株式会社ユーグレナ IT推進部 部長 楠美 裕介 氏</figcaption>
+            </figure>
+
+            <!-- Topic 1 -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-extrabold text-slate-900 border-l-4 border-brand-yellow pl-3">導入前の課題：立替精算と、承認待ちの価格高騰</h3>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">一番の課題は立替精算でした。グループ会社は小規模な組織が多く、経理担当が全員分を事前に立て替えるのが難しいため、社員が自分のカードで決済していました。また、上長が多忙で承認が遅れ、その間に予約が取れなくなったり、会社指定のホテルや上限金額を守らずに予約してしまうケースもありました。</p>
+                </div>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">親会社では別の出張管理システムを入れていましたが、検索に時間がかかることや、事前承認アプリと予約システムが別々で「どちらから操作すべきか分からなくなる」という課題があり、運用が定着していませんでした。</p>
+                </div>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">最近はダイナミックプライシングの影響が強く、同じ日の航空券でも、1人目は18,000円で取れたのに、5人目・6人目になると2倍・3倍に跳ね上がることがよくあります。3ヶ月前から準備する社員もいますが、個人カードで決済して出張後まで精算されないため、立替期間が長くなる問題もありました。</p>
+                </div>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-success pt-1.5">綿引 氏</p>
+                    <p class="text-slate-700">3,500社以上の導入企業様とお話しする中でも、まったく同じご相談をよくいただきます。承認待ちの間に価格が上がって再申請になったり、出発間際に承認されて申請時の3〜4倍の金額で買うことになったりというお悩みは非常に多いです。</p>
+                </div>
+            </div>
+
+            <!-- Topic 2 -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-extrabold text-slate-900 border-l-4 border-brand-yellow pl-3">選定の決め手：グループ共通の kintone をそのまま使える</h3>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">土台として、グループ共通で kintone を導入していたことが大きいです。グループ会社ごとに個別のシステムを入れると費用負担や管理工数が大きく、経理担当が導入を諦めてしまうことがよくあります。共通基盤の kintone 上で動く 1Approval なら、契約や費用の面を親会社側でクリアできます。申請・購買・精算が一連で可視化され、コピペの手間もなく、検索から申請までの時間を大幅に短縮できる点が決め手になりました。</p>
+                </div>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-success pt-1.5">綿引 氏</p>
+                    <p class="text-slate-700">企業様がすでに導入されている基盤をそのまま活かし、自社のインフラ上で手配・承認まで完結できる。その利便性は企業様にとって非常に大きいと考え、連携いたしました。</p>
+                </div>
+            </div>
+
+            <!-- Topic 3 -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-extrabold text-slate-900 border-l-4 border-brand-yellow pl-3">導入効果：出張前の調整が1/4に、精算は確認と突合だけ</h3>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">出張前のアジャスト作業が非常に楽になりました。複数人で出張する場合、移動時間や航空便の調整、座席の空き確認などのやり直しで以前は1時間以上かかっていました。それが打ち合わせをしながら短時間で確定できるようになり、所要時間は1/4程度（15〜20分）になりました。出張後の精算もプロセスに組み込まれているため、経理側は確認と突合だけで済み、かなりの工数削減になっています。</p>
+                </div>
+            </div>
+
+            <!-- Before / After -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                    <p class="text-[11px] font-black tracking-widest text-slate-400">BEFORE</p>
+                    <ul class="mt-3 space-y-2 text-sm text-slate-600">
+                        <li><i class="fa-solid fa-xmark text-slate-400 mr-2"></i>手続きに1件あたり約1.5時間</li>
+                        <li><i class="fa-solid fa-xmark text-slate-400 mr-2"></i>検索速度が遅く、大きなストレス</li>
+                        <li><i class="fa-solid fa-xmark text-slate-400 mr-2"></i>価格変更による後戻り・二度手間</li>
+                        <li><i class="fa-solid fa-xmark text-slate-400 mr-2"></i>社員の個人カードでの立替</li>
+                    </ul>
+                </div>
+                <div class="rounded-2xl border border-brand-yellow/40 bg-brand-yellowlight p-6">
+                    <p class="text-[11px] font-black tracking-widest text-brand-yellow">AFTER</p>
+                    <ul class="mt-3 space-y-2 text-sm text-slate-700">
+                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>同じ工程が15〜30分に短縮</li>
+                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>承認と予約が同時完了、二度手間ゼロ</li>
+                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>経費精算も5分以内</li>
+                        <li><i class="fa-solid fa-check text-brand-success mr-2"></i>工数を最大約83%削減し、グループ全社へ展開</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Topic 4 -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-extrabold text-slate-900 border-l-4 border-brand-yellow pl-3">今後への期待：「タイマー自動承認」とマルチプラットフォーム</h3>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-primary pt-1.5">楠美 氏</p>
+                    <p class="text-slate-700">承認者側の視点として「タイマー自動承認（スキップ）機能」をぜひつけてほしいですね。上長が申請を2日間放置しているなら、システム側で自動承認するか、上の役職へ自動で回す仕組みです。申請者は早めに出しているのに、上長の放置で価格が上がったり事後申請になったりするのはかわいそうですから。また、Microsoft 365（Teams）連携など、小規模なチームでも手軽に始められるマルチプラットフォーム展開にも期待しています。</p>
+                </div>
+                <div class="speaker-line text-[15px] leading-loose">
+                    <p class="text-xs font-black text-brand-yellow pt-1.5">伏見</p>
+                    <p class="text-slate-700">貴重なご意見ありがとうございます。タイマー機能や他ツールとの連携強化も、前向きに開発を進めてまいります。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Q&A -->
+        <section id="qa" class="scroll-mt-28 space-y-6">
+            <div>
+                <h2 class="text-xs font-black tracking-widest text-brand-yellow">Q&amp;A</h2>
+                <p class="text-2xl font-extrabold text-slate-900 mt-1">参加者からの質問</p>
+            </div>
+            <div class="space-y-4">
+                <details class="group bg-brand-slatebg border border-slate-200 rounded-2xl p-5" open>
+                    <summary class="flex items-start gap-3 cursor-pointer list-none font-bold text-slate-900">
+                        <span class="text-brand-yellow font-black">Q</span>
+                        <span class="flex-1">プラグインのインストールや初期設定には、どのくらい時間がかかりますか？</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 mt-1.5 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-3 pl-6 text-sm text-slate-600 leading-relaxed"><b class="text-brand-primary">楠美 氏：</b>マニュアルが非常に分かりやすく、API キーの取得手順なども画面キャプチャ付きで解説されているので、IT に詳しくない担当者でも設定できます。スムーズにいけば1時間程度、かかっても2時間ほどです。</p>
+                </details>
+                <details class="group bg-brand-slatebg border border-slate-200 rounded-2xl p-5" open>
+                    <summary class="flex items-start gap-3 cursor-pointer list-none font-bold text-slate-900">
+                        <span class="text-brand-yellow font-black">Q</span>
+                        <span class="flex-1">出張者本人ではなく、管理部門やアシスタントが代理で予約することは可能ですか？</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 mt-1.5 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-3 pl-6 text-sm text-slate-600 leading-relaxed"><b class="text-brand-yellow">伏見：</b>ピカパカ出張DX側ではすでに代理予約に対応しています。1Approval 側でも代理申請権限の機能を順次強化しています。</p>
+                </details>
+                <details class="group bg-brand-slatebg border border-slate-200 rounded-2xl p-5" open>
+                    <summary class="flex items-start gap-3 cursor-pointer list-none font-bold text-slate-900">
+                        <span class="text-brand-yellow font-black">Q</span>
+                        <span class="flex-1">PoC（実証実験）では、どこまで試すことができますか？</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 mt-1.5 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-3 pl-6 text-sm text-slate-600 leading-relaxed"><b class="text-brand-yellow">伏見：</b>1ヶ月間の PoC では、本番環境とまったく同じ機能を体験いただけます。実際の予約手配まで一通りお試しいただけます。</p>
+                </details>
+            </div>
+        </section>
+
+        <!-- Summary -->
+        <section class="bg-brand-yellowlight border border-brand-yellow/30 rounded-3xl p-6 sm:p-10 space-y-4">
+            <p class="text-xs font-black tracking-widest text-brand-yellow">SUMMARY</p>
+            <p class="text-xl font-extrabold text-slate-900">承認のスピードが、そのままコスト削減になる</p>
+            <p class="text-sm text-slate-700 leading-loose">
+                ダイナミックプライシングが当たり前になった今、承認待ちのタイムラグはそのまま出張費の上昇につながります。1Approval は、いま使っているワークフロー基盤を変えずに「申請・承認・手配・精算・法人請求」を一本につなぎ、直接コスト（旅費）と間接コスト（手続き工数）の両方を削減します。グループ各社で基盤が異なっていても、それぞれの基盤のまま裏側のプロセスだけを統合できる点も、ユーグレナ様のケースで評価いただいたポイントです。
+            </p>
+        </section>
+
+        <!-- CTA -->
+        <section class="bg-brand-dark text-white rounded-3xl p-8 sm:p-12 text-center space-y-5 relative overflow-hidden">
+            <div class="absolute -top-20 -right-20 w-72 h-72 bg-brand-yellow/20 rounded-full blur-[80px] pointer-events-none"></div>
+            <p class="text-xs font-black tracking-widest text-brand-yellow relative">FREE PoC</p>
+            <p class="text-2xl sm:text-3xl font-black relative">1ヶ月間の無償PoCを実施中</p>
+            <p class="text-sm text-slate-300 leading-relaxed max-w-2xl mx-auto relative">
+                本番と同じ機能で、実際の予約手配までお試しいただけます。導入効果を試算できる削減シミュレーター（Excel）もご用意しています。
+            </p>
+            <a href="../../#contact" class="relative inline-flex items-center gap-2 bg-brand-yellow text-brand-dark hover:bg-white transition-colors font-extrabold px-8 py-4 rounded-full text-sm">
+                無償PoC・資料請求はこちら <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </section>
+
+        <div class="text-center">
+            <a href="../" class="text-sm font-bold text-slate-500 hover:text-brand-yellow"><i class="fa-solid fa-arrow-left mr-2"></i>ウェビナーアーカイブ一覧へ戻る</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white py-12 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="flex items-center gap-2">
+                <img src="../../logo11.png" alt="1Approval" class="h-9 w-auto" onerror="this.style.display='none'; document.getElementById('footer-logo-fallback').style.display='block'">
+                <span id="footer-logo-fallback" class="hidden text-base font-black tracking-tight text-slate-800">1Approval</span>
+            </div>
+            <div class="text-center md:text-right space-y-2">
+                <p class="text-xs text-slate-500">叡知を統合して、ビジネスのつながりをなめらかに。</p>
+                <p class="text-[11px] text-slate-400 font-bold">株式会社エイチ</p>
+                <p class="text-[9px] text-slate-400">© 2026 1Approval (H1Approval) Portal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ウェビナーアーカイブ | 1Approval</title>
+    <meta name="description" content="1Approval（株式会社エイチ）が開催したウェビナーのレポート・アーカイブ一覧です。">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            yellow: '#FFB800',       /* 1Approval公式イエロー */
+                            yellowlight: '#FFFDF0',  /* ライトテーマ背景 */
+                            dark: '#0F172A',         /* ディープスレート */
+                            primary: '#2563EB',      /* 信頼のブルー */
+                            success: '#10B981',      /* 適合グリーン */
+                            logoBlue: '#38BDF8',
+                            logoGreen: '#4ADE80',
+                            logoPink: '#F472B6',
+                            slatebg: '#F8FAFC',      /* 薄グレー背景 */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .speaker-line { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1rem; }
+        @media (max-width: 640px) { .speaker-line { grid-template-columns: 1fr; gap: .25rem; } }
+    </style>
+</head>
+<body class="bg-white text-slate-800 font-sans antialiased overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <a href="../" class="flex items-center gap-2 shrink-0">
+                <img src="../logo11.png" alt="1Approval Logo" class="h-9 sm:h-11 w-auto" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
+                <span id="logo-fallback" class="hidden text-xl font-black text-brand-dark">1Approval</span>
+            </a>
+            <a href="../#contact" class="inline-flex items-center justify-center bg-brand-yellow text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300 font-extrabold px-5 py-3 rounded-full text-xs shadow-md shadow-brand-yellow/10 shrink-0">
+                無償PoC・資料請求
+            </a>
+        </div>
+    </header>
+
+    <section class="pt-32 pb-12 md:pt-36 bg-gradient-to-b from-brand-yellowlight/60 to-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+            <p class="text-xs font-black tracking-widest text-brand-yellow">WEBINAR ARCHIVE</p>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900">ウェビナーアーカイブ</h1>
+            <p class="text-sm text-slate-500">これまでに開催したウェビナーの内容をレポートでご紹介します。</p>
+        </div>
+    </section>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 新しいウェビナーはこのカードを複製して先頭に追加 -->
+            <a href="20260916/" class="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all">
+                <div class="aspect-[16/9] bg-slate-100 overflow-hidden">
+                    <img src="../google/interview.jpg" alt="株式会社ユーグレナ 楠美様" class="w-full h-full object-cover group-hover:scale-105 transition-transform" onerror="this.style.display='none'">
+                </div>
+                <div class="p-5 space-y-2">
+                    <div class="flex items-center gap-2 text-[11px] font-bold">
+                        <span class="bg-brand-yellow/15 text-slate-700 rounded-full px-2 py-0.5">レポート</span>
+                        <span class="text-slate-400">2026.09.16 開催</span>
+                    </div>
+                    <p class="font-extrabold text-slate-900 leading-snug group-hover:text-brand-primary">実録：手配時間を1.5時間から15分へ。ユーグレナが断行した「1Approval」活用の全貌</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">ゲスト：株式会社ユーグレナ 楠美 裕介 氏／株式会社ピカパカ 綿引 浩之 氏</p>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white py-12 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="flex items-center gap-2">
+                <img src="../logo11.png" alt="1Approval" class="h-9 w-auto" onerror="this.style.display='none'; document.getElementById('footer-logo-fallback').style.display='block'">
+                <span id="footer-logo-fallback" class="hidden text-base font-black tracking-tight text-slate-800">1Approval</span>
+            </div>
+            <div class="text-center md:text-right space-y-2">
+                <p class="text-xs text-slate-500">叡知を統合して、ビジネスのつながりをなめらかに。</p>
+                <p class="text-[11px] text-slate-400 font-bold">株式会社エイチ</p>
+                <p class="text-[9px] text-slate-400">© 2026 1Approval (H1Approval) Portal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
