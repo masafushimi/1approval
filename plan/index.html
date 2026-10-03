@@ -183,7 +183,7 @@ const DEFAULTS = {
   migration3y: 0.20,
   entPerYear: 5, entStart: "2027-01",
   initCapture: 0.5,
-  ecTake: 0.03,
+  ecTake: 0.03, ecTakeEnd: 0.06, ecTakeFrom: "2025-12", ecTakeTo: "2028-11",
   per: 40, taxRate: 0.30,
   deptShare: 0.267, coreRateCompany: 0.70, coreLargeShare: 0.17,
   closeRate: 0.2, dealShare: 0.5, dealsPerSales: 40, salesUnit: 700000,
@@ -220,7 +220,7 @@ const SCALARS = [
   {card:"チャネル（社外秘）", items:[["sbcsShare","SBC&S経由の売上比率","pct","%"],["wholesale","エイチ→SBC&S 仕切率","pct","%"],["initCapture","初期費用のエイチ実施率","pct","%"]]},
   {card:"顧客の増減", items:[["churnAnnual","解約率（年・契約1年経過後）","pct","%"],["lockMonths","年間契約の縛り","int","か月"],["migration3y","Connect→Core 移行率（3年累計）","pct","%"],["entPerYear","Enterprise 新規（年）","num","社"],["entStart","Enterprise 開始月","ym",""]]},
   {card:"新規成約の構成（Enterprise除く）", items:[["deptShare","kintone部門導入の比率","pct","%"],["coreRateCompany","全社導入（kintone全社・M365・GWS）のCore比率","pct","%"],["coreLargeShare","Coreのうち大規模（4拠点以上）の比率","pct","%"]]},
-  {card:"EC送客手数料（SaaSとは別建て）", items:[["ecTake","手数料率（サプライヤー負担）","pct","%"]]},
+  {card:"EC送客手数料（SaaSとは別建て）", items:[["ecTake","手数料率・開始時（サプライヤー負担）","pct","%"],["ecTakeEnd","手数料率・到達時","pct","%"],["ecTakeFrom","上げ始める月","ym",""],["ecTakeTo","到達する月","ym",""]]},
   {card:"企業価値（参考）", items:[["per","想定PER","num","倍"],["taxRate","法人税等の実効税率（仮）","pct","%"]]},
   {card:"人件費・一般管理費", items:[["closeRate","成約率","pct","%"],["dealShare","エイチが対応する商談の比率","pct","%"],["dealsPerSales","営業1人あたり月間商談数","num","件"],["salesUnit","営業 1人月単価","yen","円"],["csPerCompanies","CS1人あたり担当社数","num","社"],["csUnit","CS 1人月単価","yen","円"],["gaBase","事業部一般管理費（固定）","yen","円"],["gaPerHead","事業部一般管理費（1人あたり）","yen","円"]]}
 ];
@@ -281,7 +281,9 @@ function compute(){
   // EC
   R.gmvPer = [...Array(N)].map((_,t)=>+C.gmvPerCompany[t]||0);
   R.gmv = R.activeTotal.map((a,t)=>a*R.gmvPer[t]);
-  R.ec = R.gmv.map(g=>g*C.ecTake);
+  const tf=ymIdx(C.ecTakeFrom), tt=ymIdx(C.ecTakeTo);
+  R.take = [...Array(N)].map((_,t)=> t<=tf ? +C.ecTake : t>=tt ? +C.ecTakeEnd : +C.ecTake + (C.ecTakeEnd-C.ecTake)*(t-tf)/Math.max(1,tt-tf));
+  R.ec = R.gmv.map((g,t)=>g*R.take[t]);
   // costs
   R.deals = newTotal.map(n=>n/C.closeRate*C.dealShare);
   R.salesHead = R.deals.map(d=>d>0?Math.ceil(d/C.dealsPerSales*2)/2:0);
@@ -350,7 +352,8 @@ function rowsDef(R){
   G("EC送客手数料（SaaSとは別建て）",{ec:1});
   P("1社あたりGMV（月）",R.gmvPer,{ec:1,inp:1,avg:1,fx:"係数タブ 月次入力（時間とともに伸びる）"});
   P("GMV（流通額）",R.gmv,{ec:1,fx:"契約中社数 × 1社あたりGMV"});
-  P("EC送客手数料",R.ec,{ec:1,em:1,fx:"GMV × 手数料率"});
+  P("EC手数料率",R.take,{ec:1,pct:1,ratio:[R.ec,R.gmv],fx:"開始率→到達率へ月ごとに直線で上昇（係数タブ）"});
+  P("EC送客手数料",R.ec,{ec:1,em:1,fx:"GMV × EC手数料率"});
   G("人員・効率");
   P("エイチ対応商談数",R.deals,{n:1,fx:"新規成約 ÷ 成約率 × エイチ対応比率"});
   P("営業人員",R.salesHead,{n:1,stock:1,fx:"商談数 ÷ 1人あたり商談数（0.5人単位で切上げ）"});
@@ -477,7 +480,7 @@ function updateMix(){
 document.getElementById("p-coef").addEventListener("input",e=>{
   const el=e.target; if(!el.classList.contains("cin")) return;
   const v=parseVal(el); const id=el.id;
-  if(v===null || (el.dataset.kind===undefined && id.endsWith("start") && !/^\d{4}-\d{2}$/.test(v)) || (id==="s-start"||id==="s-entStart") && !/^\d{4}-\d{2}$/.test(v)) return;
+  if(v===null || (el.dataset.kind===undefined && id.endsWith("start") && !/^\d{4}-\d{2}$/.test(v)) || (id==="s-start"||id==="s-entStart"||id==="s-ecTakeFrom"||id==="s-ecTakeTo") && !/^\d{4}-\d{2}$/.test(v)) return;
   let m;
   if((m=id.match(/^s-(.+)$/))){ C[m[1]]=v; if(m[1]==="months"||m[1]==="start") renderMonthly(); }
   else if((m=id.match(/^g-(\d+)-(.+)$/))){ C.segs[+m[1]][m[2]]=v; }
@@ -546,11 +549,11 @@ function renderStrategy(R){
      eff:[["販売手数料率",fmtPct(feeRate)],["年間 販売手数料",man(ysum(R.margin,y))]],
      sens:["仕切率を5pt上げると（70%→75%）",c=>{c.wholesale=Math.min(1,c.wholesale+0.05);}],
      risk:"仕切率と、SBC&S からパートナーへの価格は SBC&S とパートナーが決める部分です。社外資料に70%を載せないこと。"},
-    {t:"EC送客手数料を第2の収益の柱にする", why:"連携するECサイトの利用はユーザー無料のまま、サプライヤーから流通額に応じた手数料を受け取ります。SBC&S の契約の外にあり、販売店への還元はありません。売上は SaaS と別の行で管理し、営業利益には含めます。",
-     chips:[["m-gmvPerCompany-"+last,"1社あたりGMV（年度末月）",fmtYen(C.gmvPerCompany[last])],["s-ecTake","手数料率",fmtPct(C.ecTake)]],
+    {t:"EC送客手数料を第2の収益の柱にする", why:"連携するECサイトの利用はユーザー無料のまま、サプライヤーから流通額に応じた手数料を受け取ります。SBC&S の契約の外にあり、販売店への還元はありません。売上は SaaS と別の行で管理し、営業利益には含めます。手数料率は3%から始め、3年かけて6%まで引き上げます。根拠は3つです。①送客量が増えることでECサイトへの交渉力が高まる。②出張・物品に加えて手数料率の高いカテゴリが増える。③カードイシュア手数料（1.7%）を獲得する。",
+     chips:[["m-gmvPerCompany-"+last,"1社あたりGMV（年度末月）",fmtYen(C.gmvPerCompany[last])],["s-ecTake","手数料率・開始",fmtPct(C.ecTake)],["s-ecTakeEnd","手数料率・到達",fmtPct(C.ecTakeEnd)+"（"+C.ecTakeTo.replace("-","/")+"）"]],
      eff:[["純売上に占めるEC",fmtPct(ecShare)],["年間 EC送客手数料",man(ysum(R.ec,y))],["GMV（年度末月）",man(R.gmv[last])]],
-     sens:["手数料率を1pt上げると",c=>{c.ecTake=c.ecTake+0.01;}], ec:1,
-     risk:"1社あたりGMVは元の計画シートの右肩上がりの前提です。GMVの伸びを実際の購買データで確かめることと、サプライヤーとの料率の交渉が鍵です。"},
+     sens:["手数料率を全期間で1pt上げると",c=>{c.ecTake+=0.01;c.ecTakeEnd+=0.01;}], ec:1,
+     risk:"6%への引き上げは、交渉の進み具合・高料率カテゴリの追加・カード発行の開始時期に左右されます。1社あたりGMVは元の計画シートの右肩上がりの前提です。GMVの伸びを実際の購買データで確かめることと、サプライヤーとの料率の交渉が鍵です。"},
     {t:"年間契約で解約を抑える", why:"SBC&S 経由は年間契約・前払いです。契約から1年間は解約が出ない前提で、その後は年5%の解約を見込んでいます。",
      chips:[["s-churnAnnual","年間解約率",fmtPct(C.churnAnnual)],["s-lockMonths","年間契約の縛り",C.lockMonths+"か月"]],
      eff:[["年度末 契約中社数",Math.round(R.activeTotal[last]).toLocaleString()+"社"],["累計成約社数",Math.round(R.cumNew[last]).toLocaleString()+"社"]],
