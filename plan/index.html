@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>1Approval 事業計画表</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap">
+<style>
+/* Layout: ledger workbook — sheet tabs on top, frozen label columns, monthly columns scroll sideways inside the table only */
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --fg:#1b2230; --muted:#5f6878; --line:#dfe3ea; --line-strong:#c5ccd8;
+  --accent:#23408e; --accent-soft:#e7ecf8; --input:#1749c4; --input-bg:#fffbe6;
+  --ec:#0f7a6c; --ec-soft:#e3f3f0; --neg:#b42318; --pos:#1f7a3a; --warn-bg:#fff1f0; --warn-fg:#a8071a;
+  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12151b; --panel:#1a1f28; --fg:#e6e9ef; --muted:#9aa3b2; --line:#2b3240; --line-strong:#3a4354;
+  --accent:#8fa8f0; --accent-soft:#232c44; --input:#86b0ff; --input-bg:#2a2717;
+  --ec:#4cc3b0; --ec-soft:#16312d; --neg:#ff8a80; --pos:#6fd08c; --warn-bg:#3a1d1d; --warn-fg:#ffb3ab; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12151b; --panel:#1a1f28; --fg:#e6e9ef; --muted:#9aa3b2; --line:#2b3240; --line-strong:#3a4354;
+  --accent:#8fa8f0; --accent-soft:#232c44; --input:#86b0ff; --input-bg:#2a2717;
+  --ec:#4cc3b0; --ec-soft:#16312d; --neg:#ff8a80; --pos:#6fd08c; --warn-bg:#3a1d1d; --warn-fg:#ffb3ab; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:13px;line-height:1.6}
+.wrap{max-width:1400px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:16px}
+header{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+h1{font-family:var(--font-display);font-size:22px;margin:0;text-wrap:balance}
+h2{font-family:var(--font-display);font-size:16px;margin:0 0 8px;text-wrap:balance}
+.secret{background:var(--warn-bg);color:var(--warn-fg);font-weight:700;padding:2px 10px;border-radius:4px;font-size:12px;letter-spacing:.05em}
+.sub{color:var(--muted);font-size:12px}
+nav.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line-strong);overflow-x:auto}
+nav.tabs button{font:inherit;font-weight:700;background:transparent;color:var(--muted);border:1px solid transparent;border-bottom:none;padding:8px 16px;border-radius:6px 6px 0 0;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{background:var(--panel);color:var(--accent);border-color:var(--line-strong);margin-bottom:-1px}
+nav.tabs button:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted)}
+.legend span b{font-weight:700}
+.in-sample{color:var(--input);background:var(--input-bg);padding:0 6px;border-radius:3px;font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.year{border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.year h3{margin:0;font-family:var(--font-display);font-size:14px}
+.year dl{display:grid;grid-template-columns:1fr auto;gap:2px 12px;margin:0}
+.year dt{color:var(--muted)} .year dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.year dd.ec{color:var(--ec)}
+.year dt.cst{padding-left:12px;font-size:12px}
+.year dt.cst+dd{font-weight:400}
+.year dt.sub-t,.year dt.sub-t+dd{border-top:1px dashed var(--line-strong)}
+.year dt.opl,.year dt.opl+dd{border-top:1px solid var(--line-strong);padding-top:2px}
+.note{font-size:12px;color:var(--muted);max-width:75ch}
+.strats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,540px),1fr));gap:14px}
+.strat{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.strat.ecs{border-left-color:var(--ec)}
+.strat .no{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.06em}
+.strat h3{margin:0;font-family:var(--font-display);font-size:16px;text-wrap:balance}
+.strat p{margin:0;line-height:1.7}
+.strat .lbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;margin-bottom:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:12px;color:var(--input);background:var(--input-bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px;cursor:pointer;font-weight:700}
+.eff{display:grid;grid-template-columns:1fr auto;gap:2px 12px;margin:0;font-variant-numeric:tabular-nums}
+.eff dt{color:var(--muted)} .eff dd{margin:0;text-align:right;font-weight:700}
+.sens{background:var(--accent-soft);border-radius:6px;padding:8px 10px;font-size:12px;line-height:1.7}
+.risk{font-size:12px;color:var(--muted)}
+.sens{display:flex;flex-direction:column;gap:6px;overflow-x:auto}
+.senst{width:100%;font-size:12px}
+.senst th,.senst td{background:transparent;padding:3px 6px;text-align:right;border-bottom:1px solid var(--line-strong)}
+.senst th{font-weight:700;color:var(--muted)}
+.senst .l{text-align:left;white-space:normal}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;max-height:75vh}
+table{border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums;font-size:12px}
+th,td{padding:4px 8px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--panel)}
+thead th{position:sticky;top:0;z-index:2;background:var(--accent-soft);color:var(--fg);font-weight:700;text-align:right}
+thead th.l{text-align:left}
+td.num{text-align:right}
+.plan th.lab,.plan td.lab{position:sticky;left:0;z-index:1;min-width:210px;max-width:260px;text-align:left;border-right:1px solid var(--line)}
+.plan thead th.lab{z-index:3}
+.plan td.fx{color:var(--muted);font-size:11px;white-space:normal;min-width:260px;max-width:320px}
+.plan tr.grp td{background:var(--accent-soft);font-weight:700;font-family:var(--font-display)}
+.plan tr.grp.ecg td{background:var(--ec-soft)}
+.plan tr.em td{font-weight:700;border-top:1px solid var(--line-strong)}
+.plan tr.ec td.num{color:var(--ec)}
+.plan td.yr,.plan th.yr{border-left:2px solid var(--line-strong);background:var(--accent-soft)}
+.plan tr.grp td.yr{background:var(--accent-soft)}
+.neg{color:var(--neg)!important}
+.i1{padding-left:20px!important}.i2{padding-left:34px!important}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font:inherit;font-weight:700;border:1px solid var(--line-strong);background:var(--panel);color:var(--fg);padding:6px 12px;border-radius:6px;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--panel);border-color:var(--accent)}
+.status{font-size:12px;color:var(--muted)}
+.coef-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.coef-card{border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.coef-card h3{margin:0;font-family:var(--font-display);font-size:14px}
+.kv{display:grid;grid-template-columns:1fr 130px 40px;gap:4px 8px;align-items:center}
+.kv label{color:var(--fg)} .kv .u{color:var(--muted);font-size:11px}
+input.cin{font:inherit;font-variant-numeric:tabular-nums;width:100%;text-align:right;color:var(--input);background:var(--input-bg);border:1px solid var(--line);border-radius:4px;padding:3px 6px;font-weight:700}
+input.cin.txt{text-align:left}
+.coef table input.cin{min-width:84px}
+.coef td,.coef th{border-right:1px solid var(--line)}
+.coef th.l,.coef td.l{text-align:left}
+textarea{width:100%;min-height:90px;font:12px ui-monospace,monospace;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:8px}
+.chart svg{width:100%;height:auto;display:block}
+.chart .ax{stroke:var(--line);stroke-width:1}
+.chart text{fill:var(--muted);font-size:11px;font-family:var(--font-body)}
+.keys{display:flex;flex-wrap:wrap;gap:12px;font-size:12px}
+.keys i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:6px;border-radius:2px}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>1Approval 事業計画表</h1>
+      <div class="sub">新価格体系（Connect / Core / Enterprise）ベース・月次 48か月・税抜</div>
+    </div>
+    <span class="secret">社外秘：SBC&amp;S仕切率を含む</span>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" id="tab-sum" aria-selected="true" data-t="sum">サマリー</button>
+    <button role="tab" id="tab-strat" aria-selected="false" data-t="strat">戦略</button>
+    <button role="tab" id="tab-plan" aria-selected="false" data-t="plan">月次計画（PL）</button>
+    <button role="tab" id="tab-coef" aria-selected="false" data-t="coef">係数</button>
+  </nav>
+
+  <section class="panel" id="p-sum">
+    <div class="kpis" id="kpis"></div>
+    <div class="chart">
+      <h2>月次推移</h2>
+      <div class="keys">
+        <span><i style="background:var(--accent)"></i>SaaS純売上（販売手数料控除後）</span>
+        <span><i style="background:var(--ec)"></i>EC送客手数料（別建て）</span>
+        <span><i style="background:var(--neg)"></i>費用合計</span>
+      </div>
+      <div id="chart"></div>
+    </div>
+    <p class="note">SaaS純売上と EC送客手数料は別の行で計算し、両方を足した純売上から費用を引いて営業利益を出しています。係数タブの数値を変えると、すべてのタブに即時反映されます。</p>
+  </section>
+
+  <section class="panel" id="p-strat" hidden>
+    <div>
+      <h2>係数の裏にある戦略</h2>
+      <p class="note">計画の数字を動かしている主な戦略です。各カードの「いまの係数」は係数タブの値、「計画への効果」と「感度」はその値で計算した結果で、係数を変えるとここも変わります。感度は、その係数だけを変えたときに<b id="sens-year">3年目</b>の年間純売上・年間営業利益（SaaS+EC送客手数料）・年度末ARRがどう変わるかを、元の計画と並べて示します。</p>
+    </div>
+    <div class="strats" id="strats"></div>
+  </section>
+
+  <section class="panel" id="p-plan" hidden>
+    <div class="legend">
+      <span><b class="in-sample">青字</b> = 係数タブの入力値</span>
+      <span>黒字 = 計算式で算出（右の「計算式」列に式を表示）</span>
+      <span>年計 = フロー項目は12か月合計、ストック項目は年度末値</span>
+    </div>
+    <div class="scroll"><table class="plan" id="plan"></table></div>
+  </section>
+
+  <section class="panel coef" id="p-coef" hidden>
+    <div class="toolbar">
+      <button class="btn" id="reset">初期値に戻す</button>
+      <button class="btn" id="copy">係数をJSONでコピー</button>
+      <button class="btn" id="import">貼り付けたJSONを読み込む</button>
+      <span class="status" id="status">入力値はこのブラウザに保存されます。</span>
+    </div>
+    <textarea id="json" placeholder="係数のJSONをここに貼り付けて「読み込む」を押すと反映されます" aria-label="係数JSON"></textarea>
+    <div class="coef-grid" id="scalars"></div>
+    <div><h2>顧客セグメント（月額は定価）</h2><div class="scroll"><table id="segs"></table></div>
+      <p class="note">新規配分は「新規成約の構成」の3つの係数から自動計算します（kintone部門導入はConnect、全社導入はCore比率でCoreとConnectに分ける）。初期費用はエイチが実施する分のみ売上計上（パートナー実施分はパートナー収益）。</p></div>
+    <div><h2>オプション（月額・定価）</h2><div class="scroll"><table id="opts"></table></div>
+      <p class="note">「—」は対象外（Core以上限定オプション）。装着率 × 契約中社数 × 単価で計上。開始月より前は0。</p></div>
+    <div><h2>月次入力（新規成約・1社あたりGMV・マーケ費用・開発費）</h2><div class="scroll"><table id="monthly"></table></div>
+      <p class="note">初期値は参照シート「Mktg_Calender(HIGH)」の成約社数・1社あたりGMV・マーケ費用を転記し、2028/12以降は傾向で延長（GMVは月+10万円）。開発費は2025/12〜2029/11の指定値。新規成約社数は Enterprise を含む総数です。</p></div>
+  </section>
+</div>
+
+<script>
+const DEFAULTS = {
+  start: "2025-12", months: 48,
+  sbcsShare: 0.9, wholesale: 0.7,
+  churnAnnual: 0.05, lockMonths: 12,
+  migration3y: 0.20,
+  entPerYear: 5, entStart: "2027-01",
+  initCapture: 0.5,
+  ecTake: 0.03,
+  per: 40, taxRate: 0.30,
+  deptShare: 0.267, coreRateCompany: 0.70, coreLargeShare: 0.17,
+  closeRate: 0.2, dealShare: 0.5, dealsPerSales: 40, salesUnit: 700000,
+  csPerCompanies: 50, csUnit: 700000, gaBase: 60000, gaPerHead: 120000,
+  segs: [
+    {key:"A", name:"Connect 部門導入（kintone・〜100人）", connect:20000, core:0, init:0, isCore:false},
+    {key:"B", name:"Connect 全社導入（〜300人）", connect:50000, core:0, init:50000, isCore:false},
+    {key:"C1", name:"Core 標準（〜300人・1〜3拠点）", connect:50000, core:78000, init:250000, isCore:true},
+    {key:"C2", name:"Core 大規模（〜600人・4〜10拠点）", connect:90000, core:109200, init:300000, isCore:true},
+    {key:"D", name:"Enterprise（グループ5社・計3,000人）", connect:380000, core:300000, init:1000000, isCore:true}
+  ],
+  opts: [
+    {name:"チャット承認（Teams/Slack）", start:"2026-10", attach:0.20, price:[10000,20000,20000,30000,40000]},
+    {name:"両カテゴリ利用（Connect×1.5）", start:"2026-12", attach:0.20, price:[10000,25000,25000,45000,190000]},
+    {name:"規程・標準品（Chatbot Helpdesk）", start:"2027-02", attach:0.15, price:[null,null,88000,123200,123200]},
+    {name:"BI分析", start:"2027-04", attach:0.15, price:[null,null,50000,70000,70000]},
+    {name:"Agent Purchase（購買レコメンド）", start:"2027-06", attach:0.20, price:[null,null,98000,98000,120000]},
+    {name:"RFP・相見積もり", start:"2027-09", attach:0.20, price:[null,null,50000,70000,70000]},
+    {name:"会計・経費のAPI連携", start:"2027-04", attach:0.00, price:[10000,20000,20000,30000,40000]}
+  ],
+  newContracts:[0,0,0,0,0,0,0,0,1,1,2,5,7,10,14,16,18,22,24,27,31,33,36,40,42,45,49,51,54,58,60,63,67,69,72,75,78,81,84,87,90,93,96,99,102,105,108,111],
+  marketing:[0,0,0,0,0,0,0,0,300000,900000,1500000,3000000,2300000,2700000,4300000,2200000,2200000,3500000,1200000,1200000,2700000,1200000,1200000,2700000,1200000,1200000,2700000,1200000,1200000,2700000,1200000,1200000,2700000,1200000,1200000,1200000,2700000,1200000,1200000,2700000,1200000,1200000,2700000,1200000,2700000,1200000,1200000,2700000],
+  gmvPerCompany:[0,0,0,0,0,0,0,0,200000,200000,250000,300000,400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,1300000,1400000,1500000,1600000,1700000,1800000,1900000,2000000,2100000,2200000,2300000,2400000,2500000,2600000,2700000,2800000,2900000,3000000,3100000,3200000,3300000,3400000,3500000,3600000,3700000,3800000,3900000],
+  dev:[1232195,897000,1497000,1125000,1125000,1125000,1245000,960000,1200000,2760000,3720000,3720000,3120000,3120000,3120000,3120000,3120000,3120000,3120000,3120000,3120000,5120000,5120000,7120000,7120000,9120000,9120000,11120000,11120000,13120000,13120000,15120000,15120000,17120000,17120000,19120000,19120000,21120000,21120000,23120000,23120000,25120000,25120000,27120000,27120000,29120000,29120000,31120000]
+};
+const KEY = "1approval-plan-coef-v3";
+const clone = o => JSON.parse(JSON.stringify(o));
+let C = clone(DEFAULTS);
+try { const s = localStorage.getItem(KEY); if (s) C = Object.assign(clone(DEFAULTS), JSON.parse(s)); } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(C)); } catch(e) {} }
+
+const SCALARS = [
+  {card:"期間", items:[["start","開始月","ym",""],["months","計画月数","int","か月"]]},
+  {card:"チャネル（社外秘）", items:[["sbcsShare","SBC&S経由の売上比率","pct","%"],["wholesale","エイチ→SBC&S 仕切率","pct","%"],["initCapture","初期費用のエイチ実施率","pct","%"]]},
+  {card:"顧客の増減", items:[["churnAnnual","解約率（年・契約1年経過後）","pct","%"],["lockMonths","年間契約の縛り","int","か月"],["migration3y","Connect→Core 移行率（3年累計）","pct","%"],["entPerYear","Enterprise 新規（年）","num","社"],["entStart","Enterprise 開始月","ym",""]]},
+  {card:"新規成約の構成（Enterprise除く）", items:[["deptShare","kintone部門導入の比率","pct","%"],["coreRateCompany","全社導入（kintone全社・M365・GWS）のCore比率","pct","%"],["coreLargeShare","Coreのうち大規模（4拠点以上）の比率","pct","%"]]},
+  {card:"EC送客手数料（SaaSとは別建て）", items:[["ecTake","手数料率（サプライヤー負担）","pct","%"]]},
+  {card:"企業価値（参考）", items:[["per","想定PER","num","倍"],["taxRate","法人税等の実効税率（仮）","pct","%"]]},
+  {card:"人件費・一般管理費", items:[["closeRate","成約率","pct","%"],["dealShare","エイチが対応する商談の比率","pct","%"],["dealsPerSales","営業1人あたり月間商談数","num","件"],["salesUnit","営業 1人月単価","yen","円"],["csPerCompanies","CS1人あたり担当社数","num","社"],["csUnit","CS 1人月単価","yen","円"],["gaBase","事業部一般管理費（固定）","yen","円"],["gaPerHead","事業部一般管理費（1人あたり）","yen","円"]]}
+];
+
+/* ---------- model ---------- */
+function ymAdd(ym, n){ const [y,m] = ym.split("-").map(Number); const d = new Date(y, m-1+n, 1); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"); }
+function ymIdx(ym){ const [y0,m0]=C.start.split("-").map(Number); const [y,m]=String(ym).split("-").map(Number); return (y-y0)*12+(m-m0); }
+const arr = (n,v=0) => Array(n).fill(v);
+function mixOf(s){ const d=+C.deptShare||0, c=+C.coreRateCompany||0, l=+C.coreLargeShare||0;
+  return {A:d, B:(1-d)*(1-c), C1:(1-d)*c*(1-l), C2:(1-d)*c*l}[s.key] ?? 0; }
+
+function compute(){
+  const N = Math.max(1, Math.min(60, C.months|0));
+  const S = C.segs, NS = S.length;
+  const labels = [...Array(N)].map((_,t)=>{const ym=ymAdd(C.start,t);const [y,m]=ym.split("-");return y+"/"+Number(m);});
+  const R = {}; const z = () => arr(N);
+  const active = S.map(()=>z()), news = S.map(()=>z()), churn = S.map(()=>z()), migOut = S.map(()=>z()), migIn = z();
+  const entStart = ymIdx(C.entStart), migM = C.migration3y/36;
+  const newTotal = z(), entNew = z(), nonEnt = z();
+  for(let t=0;t<N;t++){
+    newTotal[t] = +C.newContracts[t] || 0;
+    entNew[t] = t>=entStart ? Math.min(newTotal[t], C.entPerYear/12) : 0;
+    nonEnt[t] = Math.max(0, newTotal[t]-entNew[t]);
+    S.forEach((s,i)=>{
+      const prev = t>0 ? active[i][t-1] : 0;
+      news[i][t] = s.key==="D" ? entNew[t] : nonEnt[t]*mixOf(s);
+      churn[i][t] = t>=C.lockMonths ? active[i][t-C.lockMonths]*C.churnAnnual/12 : 0;
+      migOut[i][t] = s.isCore ? 0 : prev*migM;
+    });
+    migIn[t] = S.reduce((a,s,i)=>a+migOut[i][t],0);
+    const c1 = S.findIndex(s=>s.key==="C1");
+    S.forEach((s,i)=>{
+      const prev = t>0 ? active[i][t-1] : 0;
+      active[i][t] = Math.max(0, prev + news[i][t] - churn[i][t] - migOut[i][t] + (i===c1?migIn[t]:0));
+    });
+  }
+  const sumSeg = (m) => [...Array(N)].map((_,t)=>m.reduce((a,row)=>a+row[t],0));
+  R.labels = labels; R.N = N;
+  R.newTotal=newTotal; R.entNew=entNew;
+  R.news = news; R.active = active;
+  R.churn = sumSeg(churn); R.mig = migIn;
+  R.activeTotal = sumSeg(active);
+  R.cumNew = newTotal.reduce((a,v,i)=>(a.push((a[i-1]||0)+v),a),[]);
+  R.coreActive = [...Array(N)].map((_,t)=>S.reduce((a,s,i)=>a+(s.isCore?active[i][t]:0),0));
+  R.coreShare = R.coreActive.map((v,t)=>R.activeTotal[t]?v/R.activeTotal[t]:0);
+  // base fees
+  R.connectRev = [...Array(N)].map((_,t)=>S.reduce((a,s,i)=>a+active[i][t]*s.connect,0));
+  R.coreRev = [...Array(N)].map((_,t)=>S.reduce((a,s,i)=>a+active[i][t]*s.core,0));
+  R.optRev = C.opts.map(o=>{const st=ymIdx(o.start);return [...Array(N)].map((_,t)=> t<st?0:S.reduce((a,s,i)=>a+(o.price[i]==null?0:active[i][t]*o.attach*o.price[i]),0));});
+  R.optTotal = sumSeg(R.optRev);
+  R.saas = [...Array(N)].map((_,t)=>R.connectRev[t]+R.coreRev[t]+R.optTotal[t]);
+  R.init = [...Array(N)].map((_,t)=>S.reduce((a,s,i)=>a+news[i][t]*s.init,0)*C.initCapture);
+  R.gross = R.saas.map((v,t)=>v+R.init[t]);
+  R.margin = R.gross.map(v=>-v*C.sbcsShare*(1-C.wholesale));
+  R.net = R.gross.map((v,t)=>v+R.margin[t]);
+  R.arpu = R.saas.map((v,t)=>R.activeTotal[t]?v/R.activeTotal[t]:0);
+  R.arr = R.saas.map(v=>v*12);
+  // EC
+  R.gmvPer = [...Array(N)].map((_,t)=>+C.gmvPerCompany[t]||0);
+  R.gmv = R.activeTotal.map((a,t)=>a*R.gmvPer[t]);
+  R.ec = R.gmv.map(g=>g*C.ecTake);
+  // costs
+  R.deals = newTotal.map(n=>n/C.closeRate*C.dealShare);
+  R.salesHead = R.deals.map(d=>d>0?Math.ceil(d/C.dealsPerSales*2)/2:0);
+  R.csHead = R.activeTotal.map(a=>Math.round(a/C.csPerCompanies));
+  R.salesCost = R.salesHead.map(h=>-h*C.salesUnit);
+  R.csCost = R.csHead.map(h=>-h*C.csUnit);
+  R.ga = R.salesHead.map((h,t)=>-(C.gaBase + (h+R.csHead[t])*C.gaPerHead));
+  R.mkt = [...Array(N)].map((_,t)=>-(+C.marketing[t]||0));
+  R.dev = [...Array(N)].map((_,t)=>-(+C.dev[t]||0));
+  R.sell = R.salesCost.map((v,t)=>v+R.csCost[t]+R.mkt[t]);
+  R.cost = [...Array(N)].map((_,t)=>R.salesCost[t]+R.csCost[t]+R.ga[t]+R.mkt[t]+R.dev[t]);
+  R.revenue = R.net.map((v,t)=>v+R.ec[t]);
+  R.salesAll = R.gross.map((v,t)=>v+R.ec[t]);
+  R.op = R.revenue.map((v,t)=>v+R.cost[t]);
+  R.cumOp = R.op.reduce((a,v,i)=>(a.push((a[i-1]||0)+v),a),[]);
+  R.cac = [...Array(N)].map((_,t)=>newTotal[t]?-(R.mkt[t]+R.salesCost[t])/newTotal[t]:null);
+  return R;
+}
+
+/* ---------- formatting ---------- */
+const fmtYen = v => v==null||isNaN(v)?"—":(v<0?"(¥"+Math.round(-v).toLocaleString()+")":"¥"+Math.round(v).toLocaleString());
+const fmtNum1 = v => v==null?"—":(Math.round(v*10)/10).toLocaleString(undefined,{maximumFractionDigits:1});
+const fmtPct = v => (Math.round(v*1000)/10)+"%";
+const man = v => { const s=v<0?"-":""; v=Math.abs(v); return v>=1e8? s+(v/1e8).toFixed(2)+"億円" : s+Math.round(v/1e4).toLocaleString()+"万円"; };
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- plan table ---------- */
+function rowsDef(R){
+  const S=C.segs, rows=[];
+  const P=(label,data,o={})=>rows.push(Object.assign({label,data},o));
+  const G=(label,o={})=>rows.push(Object.assign({label,group:true},o));
+  G("PL");
+  P("売上（定価ベース）",R.gross,{em:1,fx:"SaaS月額 + 初期費用"});
+  P("販売手数料（SBC&S）",R.margin,{i:1,fx:"−売上 × SBC&S経由比率 × (1 − 仕切率)"});
+  P("SaaS純売上",R.net,{em:1,fx:"売上 + 販売手数料"});
+  P("EC送客手数料",R.ec,{em:1,ec:1,fx:"GMV × 手数料率（下のEC送客手数料ブロック）"});
+  P("純売上",R.revenue,{em:1,fx:"SaaS純売上 + EC送客手数料"});
+  P("純売上率",R.revenue.map((v,t)=>R.salesAll[t]?v/R.salesAll[t]:0),{pct:1,ratio:[R.revenue,R.salesAll],fx:"純売上 ÷ (売上（定価ベース）+ EC送客手数料)"});
+  P("販売費（手数料除く）",R.sell,{i:1,fx:"営業CS人件費 + マーケ費用"});
+  P("営業CS人件費",R.salesCost.map((v,t)=>v+R.csCost[t]),{i:2,fx:"−(営業人員 × 単価 + CS人員 × 単価)"});
+  P("マーケ（顧客獲得）費用",R.mkt,{i:2,fx:"係数タブ 月次入力"});
+  P("一般管理費",R.ga,{i:1,fx:"−(固定 + 人員数 × 1人あたり)"});
+  P("開発費",R.dev,{i:1,fx:"係数タブ 月次入力"});
+  P("販売および一般管理費",R.cost,{em:1,fx:"販売費（手数料除く）+ 一般管理費 + 開発費"});
+  P("販売および一般管理費率",R.cost.map((v,t)=>R.salesAll[t]?-v/R.salesAll[t]:0),{pct:1,ratio:[R.cost.map(v=>-v),R.salesAll],fx:"販売および一般管理費 ÷ (売上（定価ベース）+ EC送客手数料)"});
+  P("営業利益（SaaS+EC送客手数料）",R.op,{em:1,fx:"純売上 + 販売および一般管理費"});
+  P("営業利益率",R.op.map((v,t)=>R.salesAll[t]?v/R.salesAll[t]:0),{pct:1,ratio:[R.op,R.salesAll],fx:"営業利益 ÷ (売上（定価ベース）+ EC送客手数料)"});
+  P("累計営業利益",R.cumOp,{stock:1,fx:"前月累計 + 当月営業利益"});
+  G("顧客数");
+  P("新規成約社数",R.newTotal,{n:1,inp:1,fx:"係数タブ 月次入力（Enterprise含む）"});
+  P("累計成約社数",R.cumNew,{n:1,stock:1,fx:"前月 + 新規成約"});
+  P("解約社数",R.churn,{n:1,fx:"12か月前の契約中 × 年解約率 ÷ 12（セグメント別）"});
+  P("Connect→Core 移行社数",R.mig,{n:1,fx:"Connect契約中 × 3年移行率 ÷ 36"});
+  P("契約中社数",R.activeTotal,{n:1,em:1,stock:1,fx:"前月 + 新規 − 解約（セグメント合計）"});
+  S.forEach((s,i)=>P(s.name,R.active[i],{n:1,i:1,stock:1,fx:s.key==="D"?"前月 + Enterprise新規(年÷12) − 解約":"前月 + 新規×配分"+fmtPct(mixOf(s))+" − 解約"+(s.isCore?(s.key==="C1"?" + 移行":""):" − 移行")}));
+  P("Core以上の比率",R.coreShare,{pct:1,stock:1,fx:"Core標準+大規模+Enterprise ÷ 契約中"});
+  G("SaaS 売上内訳（定価）");
+  P("SaaS 月額合計",R.saas,{em:1,fx:"Connect + Core上乗せ + オプション"});
+  P("Connect 月額",R.connectRev,{i:1,fx:"Σ セグメント契約中 × Connect月額"});
+  P("Core上乗せ / グループ統合基盤",R.coreRev,{i:1,fx:"Σ セグメント契約中 × Core月額"});
+  P("オプション合計",R.optTotal,{i:1,fx:"Σ 各オプション"});
+  C.opts.forEach((o,k)=>P(o.name+"（"+fmtPct(o.attach)+"）",R.optRev[k],{i:2,fx:o.start.replace("-","/")+"〜 Σ 契約中 × 装着率 × 単価"}));
+  P("初期費用",R.init,{fx:"Σ 新規 × 初期費用 × エイチ実施率"});
+  P("ARPU（SaaS月額/社）",R.arpu,{stock:1,fx:"SaaS月額 ÷ 契約中"});
+  P("ARR（定価）",R.arr,{stock:1,fx:"SaaS月額 × 12"});
+  G("EC送客手数料（SaaSとは別建て）",{ec:1});
+  P("1社あたりGMV（月）",R.gmvPer,{ec:1,inp:1,avg:1,fx:"係数タブ 月次入力（時間とともに伸びる）"});
+  P("GMV（流通額）",R.gmv,{ec:1,fx:"契約中社数 × 1社あたりGMV"});
+  P("EC送客手数料",R.ec,{ec:1,em:1,fx:"GMV × 手数料率"});
+  G("人員・効率");
+  P("エイチ対応商談数",R.deals,{n:1,fx:"新規成約 ÷ 成約率 × エイチ対応比率"});
+  P("営業人員",R.salesHead,{n:1,stock:1,fx:"商談数 ÷ 1人あたり商談数（0.5人単位で切上げ）"});
+  P("CS人員",R.csHead,{n:1,stock:1,fx:"契約中 ÷ 1人あたり担当社数（四捨五入）"});
+  P("CAC（獲得単価）",R.cac,{avg:1,fx:"(マーケ費用 + 営業人件費) ÷ 新規成約"});
+  return rows;
+}
+function years(R){ const ys=[]; for(let s=0;s<R.N;s+=12){ const e=Math.min(R.N,s+12)-1; ys.push({s,e,label:(Math.floor(s/12)+1)+"年目"}); } return ys; }
+function yearVal(r,y){
+  if(r.ratio){ const sm=a=>a.slice(y.s,y.e+1).reduce((p,c)=>p+c,0); const d=sm(r.ratio[1]); return d?sm(r.ratio[0])/d:0; }
+  const d=r.data.slice(y.s,y.e+1);
+  if(r.stock) return d[d.length-1];
+  if(r.avg){ const f=d.filter(v=>v!=null); return f.length?f.reduce((a,b)=>a+b,0)/f.length:null; }
+  return d.reduce((a,b)=>a+(b||0),0);
+}
+function cell(r,v){
+  const txt = r.pct? fmtPct(v) : r.n? fmtNum1(v) : fmtYen(v);
+  const cls = "num"+(v<0?" neg":"");
+  return `<td class="${cls}"${r.inp?' style="color:var(--input)"':''}>${txt}</td>`;
+}
+function renderPlan(R){
+  const ys=years(R), rows=rowsDef(R);
+  let h=`<thead><tr><th class="lab l">項目</th><th class="l">計算式</th>`;
+  ys.forEach(y=>h+=`<th class="yr">${y.label}<br><span class="sub">${R.labels[y.s]}–${R.labels[y.e]}</span></th>`);
+  R.labels.forEach(l=>h+=`<th>${l}</th>`);
+  h+=`</tr></thead><tbody>`;
+  rows.forEach(r=>{
+    if(r.group){ h+=`<tr class="grp${r.ec?' ecg':''}"><td class="lab">${esc(r.label)}</td><td></td>${ys.map(()=>'<td class="yr"></td>').join("")}<td colspan="${R.N}"></td></tr>`; return; }
+    h+=`<tr class="${r.em?'em':''}${r.ec?' ec':''}"><td class="lab ${r.i===1?'i1':r.i===2?'i2':''}">${esc(r.label)}</td><td class="fx">${esc(r.fx||"")}</td>`;
+    ys.forEach(y=>{ const v=yearVal(r,y); h+=cell(r,v).replace('<td class="','<td class="yr '); });
+    r.data.forEach(v=>h+=cell(r,v));
+    h+=`</tr>`;
+  });
+  document.getElementById("plan").innerHTML=h+"</tbody>";
+}
+
+/* ---------- summary ---------- */
+const netIncome = op => op>0 ? op*(1-(+C.taxRate||0)) : op;
+function renderSummary(R){
+  const ys=years(R); const sum=(a,y)=>a.slice(y.s,y.e+1).reduce((p,c)=>p+c,0);
+  const be = R.op.findIndex(v=>v>0);
+  document.getElementById("kpis").innerHTML = ys.map(y=>`
+    <div class="year"><h3>${y.label}<span class="sub">（${R.labels[y.s]}–${R.labels[y.e]}）</span></h3>
+    <dl>
+      <dt>年度末 契約中社数</dt><dd>${Math.round(R.activeTotal[y.e]).toLocaleString()}社</dd>
+      <dt>うち Core以上</dt><dd>${fmtPct(R.coreShare[y.e])}</dd>
+      <dt>年度末 ARR（定価）</dt><dd>${man(R.arr[y.e])}</dd>
+      <dt>年間 売上（SaaS・定価）</dt><dd>${man(sum(R.gross,y))}</dd>
+      <dt class="cst">販売手数料（SBC&amp;S）</dt><dd class="neg">${man(sum(R.margin,y))}</dd>
+      <dt class="cst">販売手数料率</dt><dd>${sum(R.gross,y)?fmtPct(-sum(R.margin,y)/sum(R.gross,y)):"—"}</dd>
+      <dt>年間 SaaS純売上</dt><dd>${man(sum(R.net,y))}</dd>
+      <dt>年間 EC送客手数料</dt><dd class="ec">${man(sum(R.ec,y))}</dd>
+      <dt class="opl">年間 純売上</dt><dd>${man(sum(R.revenue,y))}</dd>
+      <dt class="cst">純売上率</dt><dd>${sum(R.salesAll,y)?fmtPct(sum(R.revenue,y)/sum(R.salesAll,y)):"—"}</dd>
+      <dt class="cst">販売費（手数料除く）</dt><dd class="neg">${man(sum(R.sell,y))}</dd>
+      <dt class="cst">一般管理費</dt><dd class="neg">${man(sum(R.ga,y))}</dd>
+      <dt class="cst">開発費</dt><dd class="neg">${man(sum(R.dev,y))}</dd>
+      <dt class="sub-t">販売および一般管理費</dt><dd class="neg">${man(sum(R.cost,y))}</dd>
+      <dt class="cst">販売および一般管理費率</dt><dd>${sum(R.salesAll,y)?fmtPct(-sum(R.cost,y)/sum(R.salesAll,y)):"—"}</dd>
+      <dt class="opl">年間 営業利益（SaaS+EC送客手数料）</dt><dd class="${sum(R.op,y)<0?'neg':''}">${man(sum(R.op,y))}</dd>
+      <dt class="cst">営業利益率</dt><dd class="${sum(R.op,y)<0?'neg':''}">${sum(R.salesAll,y)?fmtPct(sum(R.op,y)/sum(R.salesAll,y)):"—"}</dd>
+      <dt class="opl">想定 当期純利益</dt><dd class="${sum(R.op,y)<0?'neg':''}">${man(netIncome(sum(R.op,y)))}</dd>
+      <dt>時価総額（参考・PER ${C.per}倍）</dt><dd>${sum(R.op,y)>0?man(netIncome(sum(R.op,y))*C.per):"—（赤字）"}</dd>
+    </dl></div>`).join("") + `
+    <div class="year"><h3>通期</h3><dl>
+      <dt>単月黒字化</dt><dd>${be<0?"期間内なし":R.labels[be]}</dd>
+      <dt>累計営業利益の底</dt><dd class="neg">${man(Math.min(0,...R.cumOp))}</dd>
+      <dt>期末 累計営業利益</dt><dd class="${R.cumOp[R.N-1]<0?'neg':''}">${man(R.cumOp[R.N-1])}</dd>
+      <dt>期末 ARPU（SaaS）</dt><dd>${fmtYen(R.arpu[R.N-1])}</dd>
+    </dl></div>`;
+  // chart
+  const W=1000,H=300,pl=70,pr=16,pt=12,pb=28;
+  const series=[{d:R.net,c:"var(--accent)"},{d:R.ec,c:"var(--ec)"},{d:R.cost.map(v=>-v),c:"var(--neg)"}];
+  const mx=Math.max(1,...series.flatMap(s=>s.d));
+  const step=niceStep(mx/4), top=Math.ceil(mx/step)*step;
+  const x=t=>pl+(R.N<=1?0:t*(W-pl-pr)/(R.N-1)), y=v=>pt+(H-pt-pb)*(1-v/top);
+  let g="";
+  for(let v=0;v<=top+1;v+=step){ g+=`<line class="ax" x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end">${man(v)}</text>`; }
+  R.labels.forEach((l,t)=>{ if(t%6===0||t===R.N-1) g+=`<text x="${x(t)}" y="${H-8}" text-anchor="${t===R.N-1?'end':t===0?'start':'middle'}">${l}</text>`; });
+  series.forEach(s=>{ g+=`<polyline fill="none" stroke="${s.c}" stroke-width="2.2" points="${s.d.map((v,t)=>x(t)+","+y(Math.max(0,v))).join(" ")}"/>`;
+    const t=R.N-1; g+=`<circle cx="${x(t)}" cy="${y(Math.max(0,s.d[t]))}" r="3.5" fill="${s.c}"/>`; });
+  document.getElementById("chart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="月次推移チャート">${g}</svg>`;
+}
+function niceStep(v){ const p=Math.pow(10,Math.floor(Math.log10(v))); const n=v/p; return (n<=1?1:n<=2?2:n<=5?5:10)*p; }
+
+/* ---------- coefficients UI ---------- */
+function inputHTML(id,val,kind){
+  if(kind==="ym") return `<input class="cin txt" id="${id}" value="${esc(val)}" inputmode="numeric" pattern="\\d{4}-\\d{2}">`;
+  const shown = val==null?"":kind==="pct"? +(val*100).toFixed(4) : val;
+  return `<input class="cin" id="${id}" value="${kind==="yen"&&val!=null?Number(shown).toLocaleString():shown}" inputmode="decimal" data-kind="${kind}">`;
+}
+function parseVal(el){
+  const k=el.dataset.kind; if(!k) return el.value.trim();
+  const n=parseFloat(el.value.replace(/[,¥%\s]/g,"")); if(isNaN(n)) return null;
+  return k==="pct"? n/100 : n;
+}
+function renderCoef(){
+  document.getElementById("scalars").innerHTML = SCALARS.map(c=>`<div class="coef-card"><h3>${esc(c.card)}</h3><div class="kv">${
+    c.items.map(([k,l,kind,u])=>`<label for="s-${k}">${esc(l)}</label>${inputHTML("s-"+k,C[k],kind)}<span class="u">${u}</span>`).join("")}</div></div>`).join("");
+  const segCols=[["mix","新規配分","pct"],["connect","Connect月額","yen"],["core","Core上乗せ/統合基盤","yen"],["init","初期費用","yen"]];
+  document.getElementById("segs").innerHTML = `<thead><tr><th class="l">セグメント</th>${segCols.map(c=>`<th>${c[1]}</th>`).join("")}<th>定価 月額計</th></tr></thead><tbody>${
+    C.segs.map((s,i)=>`<tr><td class="l">${inputHTML(`g-${i}-name`,s.name,"ym").replace('pattern="\\d{4}-\\d{2}"','')}</td>${segCols.map(([k,,kind])=>`<td>${k==="mix"?(s.key==="D"?'<span class="sub">年社数で指定</span>':`<span class="num" id="segmix-${i}">${fmtPct(mixOf(s))}</span>`):inputHTML(`g-${i}-${k}`,s[k],kind)}</td>`).join("")}<td class="num" id="segsum-${i}">${fmtYen(s.connect+s.core)}</td></tr>`).join("")
+  }<tr><td class="l sub">配分合計（Enterprise除く）</td><td class="num" id="mixsum"></td><td colspan="4"></td></tr></tbody>`;
+  document.getElementById("opts").innerHTML = `<thead><tr><th class="l">オプション</th><th>開始月</th><th>装着率</th>${C.segs.map(s=>`<th>${esc(s.key)}</th>`).join("")}</tr></thead><tbody>${
+    C.opts.map((o,k)=>`<tr><td class="l">${esc(o.name)}</td><td>${inputHTML(`o-${k}-start`,o.start,"ym")}</td><td>${inputHTML(`o-${k}-attach`,o.attach,"pct")}</td>${
+      o.price.map((p,i)=>`<td>${p==null?'<span class="sub">—</span>':inputHTML(`o-${k}-p${i}`,p,"yen")}</td>`).join("")}</tr>`).join("")}</tbody>`;
+  renderMonthly();
+  updateMix();
+}
+function renderMonthly(){
+  const N=Math.max(1,Math.min(60,C.months|0));
+  ["newContracts","marketing","dev","gmvPerCompany"].forEach(k=>{ while(C[k].length<N) C[k].push(C[k][C[k].length-1]||0); });
+  const lab=[...Array(N)].map((_,t)=>{const ym=ymAdd(C.start,t);const [y,m]=ym.split("-");return y+"/"+Number(m);});
+  const rows=[["newContracts","新規成約社数","num"],["gmvPerCompany","1社あたりGMV（EC）","yen"],["marketing","マーケ費用","yen"],["dev","開発費","yen"]];
+  document.getElementById("monthly").innerHTML=`<thead><tr><th class="l">項目</th>${lab.map(l=>`<th>${l}</th>`).join("")}</tr></thead><tbody>${
+    rows.map(([k,l,kind])=>`<tr><td class="l">${l}</td>${lab.map((_,t)=>`<td>${inputHTML(`m-${k}-${t}`,C[k][t],kind)}</td>`).join("")}</tr>`).join("")}</tbody>`;
+}
+function updateMix(){
+  const s=C.segs.filter(x=>x.key!=="D").reduce((a,x)=>a+mixOf(x),0);
+  C.segs.forEach((x,i)=>{const e=document.getElementById("segmix-"+i); if(e) e.textContent=fmtPct(mixOf(x));});
+  const el=document.getElementById("mixsum"); if(el){ el.textContent=fmtPct(s); el.className="num"+(Math.abs(s-1)>0.001?" neg":""); }
+  C.segs.forEach((x,i)=>{const e=document.getElementById("segsum-"+i); if(e) e.textContent=fmtYen((+x.connect||0)+(+x.core||0));});
+}
+document.getElementById("p-coef").addEventListener("input",e=>{
+  const el=e.target; if(!el.classList.contains("cin")) return;
+  const v=parseVal(el); const id=el.id;
+  if(v===null || (el.dataset.kind===undefined && id.endsWith("start") && !/^\d{4}-\d{2}$/.test(v)) || (id==="s-start"||id==="s-entStart") && !/^\d{4}-\d{2}$/.test(v)) return;
+  let m;
+  if((m=id.match(/^s-(.+)$/))){ C[m[1]]=v; if(m[1]==="months"||m[1]==="start") renderMonthly(); }
+  else if((m=id.match(/^g-(\d+)-(.+)$/))){ C.segs[+m[1]][m[2]]=v; }
+  else if((m=id.match(/^o-(\d+)-start$/))){ C.opts[+m[1]].start=v; }
+  else if((m=id.match(/^o-(\d+)-attach$/))){ C.opts[+m[1]].attach=v; }
+  else if((m=id.match(/^o-(\d+)-p(\d+)$/))){ C.opts[+m[1]].price[+m[2]]=v; }
+  else if((m=id.match(/^m-(\w+)-(\d+)$/))){ C[m[1]][+m[2]]=v; }
+  updateMix(); save(); refresh();
+});
+document.getElementById("reset").onclick=()=>{ C=clone(DEFAULTS); save(); renderCoef(); refresh(); status("初期値に戻しました。"); };
+document.getElementById("copy").onclick=()=>{ const t=JSON.stringify(C); const ta=document.getElementById("json"); ta.value=t;
+  navigator.clipboard.writeText(t).then(()=>status("係数をコピーしました。"),()=>{ ta.select(); status("下の欄を選択しました。手動でコピーしてください。"); }); };
+document.getElementById("import").onclick=()=>{ try{ const o=JSON.parse(document.getElementById("json").value); C=Object.assign(clone(DEFAULTS),o); save(); renderCoef(); refresh(); status("読み込みました。"); }catch(e){ status("JSONを読み込めませんでした。コピーした内容をそのまま貼り付けてください。"); } };
+function status(t){ document.getElementById("status").textContent=t; }
+
+/* ---------- tabs ---------- */
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>show(b.dataset.t));
+function show(t){
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===t));
+  ["sum","strat","plan","coef"].forEach(k=>document.getElementById("p-"+k).hidden = k!==t);
+  try{ localStorage.setItem(KEY+"-tab",t); }catch(e){}
+}
+function refresh(){ const R=compute(); renderSummary(R); renderStrategy(R); renderPlan(R); }
+
+/* ---------- strategy ---------- */
+function withC(mut){ const saved=JSON.stringify(C); try{ mut(C); return compute(); } finally { C=JSON.parse(saved); } }
+function yr(R){ const ys=years(R); return ys[Math.min(2,ys.length-1)]; }
+const ysum=(a,y)=>a.slice(y.s,y.e+1).reduce((p,c)=>p+c,0);
+function delta(R,mut,y){
+  y=y||yr(R); const R2=withC(mut);
+  const rows=[
+    ["年間 純売上", ysum(R.revenue,y), ysum(R2.revenue,y)],
+    ["年間 営業利益", ysum(R.op,y), ysum(R2.op,y)],
+    ["年度末 ARR", R.arr[y.e], R2.arr[y.e]]
+  ];
+  const sg=v=>(v>0?"+":"")+man(v);
+  return `<table class="senst"><thead><tr><th class="l">項目</th><th>元の計画</th><th>感度後の計画</th><th>差分</th><th>差分%</th></tr></thead><tbody>${
+    rows.map(([k,a,b])=>{ const d=b-a, pc=a?d/Math.abs(a):null;
+      return `<tr><td class="l">${k}</td><td>${man(a)}</td><td>${man(b)}</td><td class="${d<0?'neg':''}">${sg(d)}</td><td class="${d<0?'neg':''}">${pc==null?"—":(pc>0?"+":"")+fmtPct(pc)}</td></tr>`; }).join("")
+  }</tbody></table>`;
+}
+function chip(id,label,val){ return `<button class="chip" data-go="${id}">${esc(label)}：${esc(val)}</button>`; }
+function renderStrategy(R){
+  const y=yr(R), last=y.e;
+  document.getElementById("sens-year").textContent=y.label;
+  const S=C.segs, opt=C.opts;
+  const coreArr = R.coreRev[last]*12, optShare = R.saas[last]?R.optTotal[last]/R.saas[last]:0;
+  const ecShare = ysum(R.revenue,y)?ysum(R.ec,y)/ysum(R.revenue,y):0;
+  const feeRate = ysum(R.gross,y)?-ysum(R.margin,y)/ysum(R.gross,y):0;
+  const be=R.op.findIndex(v=>v>0);
+  const migTotal = R.mig.slice(0,last+1).reduce((a,b)=>a+b,0);
+  const entIdx=S.findIndex(s=>s.key==="D");
+  const cards=[
+    {t:"Core を標準プランとして売る", why:"Connect は kintone の部門導入向けのライトプランと位置づけ、全社導入（kintone全社・M365・GWS）は最初から Core で提案します。M365・GWS 向けの価格表では Connect を単体で見せず、Core の中の「Connect 部分」として見せます。",
+     chips:[["s-coreRateCompany","全社導入のCore比率",fmtPct(C.coreRateCompany)],["s-deptShare","kintone部門導入の比率",fmtPct(C.deptShare)],["s-coreLargeShare","Core大規模の比率",fmtPct(C.coreLargeShare)]],
+     eff:[["Core以上の比率（年度末）",fmtPct(R.coreShare[last])],["ARPU（SaaS・年度末）",fmtYen(R.arpu[last])],["Core上乗せ分のARR",man(coreArr)]],
+     sens:["全社導入のCore比率を10pt上げると",c=>{c.coreRateCompany=Math.min(1,c.coreRateCompany+0.1);}],
+     risk:"パートナーが売りやすい Connect に流れると単価が下がります。Core の初期設定（¥200,000）が導入の壁にならないかも確認が必要です。"},
+    {t:"上乗せ型のオプションで単価を積み上げる", why:"料金を Connect・Core・オプションの積み上げにし、必要な機能だけ追加できるようにしています。規程・BI・Agent Purchase・RFP などの上位オプションは Core 以上に限定し、Core を選ぶ理由にしています。",
+     chips:opt.filter(o=>o.attach>0).map((o,k)=>[`o-${opt.indexOf(o)}-attach`,o.name.replace(/（.*?）/g,""),fmtPct(o.attach)]),
+     eff:[["SaaS月額に占めるオプション",fmtPct(optShare)],["オプション月額（年度末）",man(R.optTotal[last])]],
+     sens:["装着率をすべて1.5倍にすると",c=>{c.opts.forEach(o=>o.attach=Math.min(1,o.attach*1.5));}],
+     risk:"開始月は開発ロードマップに連動しています。リリースが遅れると、そのまま売上が後ろにずれます。"},
+    {t:"SBC&S とパートナー経由で広く売る", why:"自社の営業だけでは届かない会社に、SBC&S と認定パートナー経由で売ります。エイチから SBC&S への仕切率は70%で、これはパートナーに対しての機密事項です。初期設定はパートナーにも任せ、その収益はパートナーのものにします。",
+     chips:[["s-sbcsShare","SBC&S経由の比率",fmtPct(C.sbcsShare)],["s-wholesale","仕切率",fmtPct(C.wholesale)],["s-initCapture","初期費用のエイチ実施率",fmtPct(C.initCapture)]],
+     eff:[["販売手数料率",fmtPct(feeRate)],["年間 販売手数料",man(ysum(R.margin,y))]],
+     sens:["仕切率を5pt上げると（70%→75%）",c=>{c.wholesale=Math.min(1,c.wholesale+0.05);}],
+     risk:"仕切率と、SBC&S からパートナーへの価格は SBC&S とパートナーが決める部分です。社外資料に70%を載せないこと。"},
+    {t:"EC送客手数料を第2の収益の柱にする", why:"連携するECサイトの利用はユーザー無料のまま、サプライヤーから流通額に応じた手数料を受け取ります。SBC&S の契約の外にあり、販売店への還元はありません。売上は SaaS と別の行で管理し、営業利益には含めます。",
+     chips:[["m-gmvPerCompany-"+last,"1社あたりGMV（年度末月）",fmtYen(C.gmvPerCompany[last])],["s-ecTake","手数料率",fmtPct(C.ecTake)]],
+     eff:[["純売上に占めるEC",fmtPct(ecShare)],["年間 EC送客手数料",man(ysum(R.ec,y))],["GMV（年度末月）",man(R.gmv[last])]],
+     sens:["手数料率を1pt上げると",c=>{c.ecTake=c.ecTake+0.01;}], ec:1,
+     risk:"1社あたりGMVは元の計画シートの右肩上がりの前提です。GMVの伸びを実際の購買データで確かめることと、サプライヤーとの料率の交渉が鍵です。"},
+    {t:"年間契約で解約を抑える", why:"SBC&S 経由は年間契約・前払いです。契約から1年間は解約が出ない前提で、その後は年5%の解約を見込んでいます。",
+     chips:[["s-churnAnnual","年間解約率",fmtPct(C.churnAnnual)],["s-lockMonths","年間契約の縛り",C.lockMonths+"か月"]],
+     eff:[["年度末 契約中社数",Math.round(R.activeTotal[last]).toLocaleString()+"社"],["累計成約社数",Math.round(R.cumNew[last]).toLocaleString()+"社"]],
+     sens:["年間解約率を3%に抑えると",c=>{c.churnAnnual=Math.min(c.churnAnnual,0.03);}],
+     risk:"部門導入の Connect は解約しやすい層です。Core への切り替えと定着支援（CS）で抑えます。"},
+    {t:"Connect から Core へのアップセル", why:"部門で Connect から始めた会社を、購買の管理や予算管理が必要になった段階で Core に切り替えます。基本料はそのままで管理料が加わるので、切り替えの判断が軽くなります。",
+     chips:[["s-migration3y","3年間の移行率",fmtPct(C.migration3y)]],
+     eff:[["年度末までの累計移行社数",Math.round(migTotal).toLocaleString()+"社"]],
+     sens:["移行率を2倍にすると",c=>{c.migration3y=Math.min(1,c.migration3y*2);}],
+     risk:"移行の計画値は控えめです。CS の働きかけ（利用状況からの提案）で上振れを狙えます。"},
+    {t:"Enterprise でグループ案件を取る", why:"グループ会社をまとめる大型案件は Enterprise で受けます。4社以上なら各社で Core を契約するより割安になるようにし、グループ全体の導入を後押しします。",
+     chips:[["s-entPerYear","年間の新規社数",C.entPerYear+"社"],["s-entStart","開始月",C.entStart]],
+     eff:[["Enterprise 契約中（年度末）",(Math.round((R.active[entIdx]||[])[last]*10)/10||0)+"社"],["Enterprise 月額（定価）",fmtYen(S[entIdx].connect+S[entIdx].core)]],
+     sens:["Enterprise を年2倍の社数にすると",c=>{c.entPerYear=c.entPerYear*2;}],
+     risk:"SLA 99.9% と専用窓口は仮置きです。初期費用は個別見積もりのため、計画では仮に¥100万としています。"},
+    {t:"開発を先に投資して機能で差をつける", why:"2025/12から開発を先行させ、チャット承認・Chatbot・BI・レコメンド・RFP と順に機能を出していきます。2029年に向けて開発費を段階的に増やす計画です。",
+     chips:[["m-dev-0","開発費（初月）",fmtYen(C.dev[0])],["m-dev-"+(R.N-1),"開発費（最終月）",fmtYen(C.dev[R.N-1])]],
+     eff:[["単月黒字化",be<0?"期間内なし":R.labels[be]],["累計営業利益の底",man(Math.min(0,...R.cumOp))],["年間 開発費",man(ysum(R.dev,y))]],
+     sens:["オプションのリリースを3か月前倒しすると",c=>{c.opts.forEach(o=>o.start=ymAdd(o.start,-3));}], yi:1,
+     risk:"開発費の伸びに見合う機能のリリースと、オプションの開始月がずれないことが前提です。"}
+  ];
+  document.getElementById("strats").innerHTML = cards.map((c,i)=>`
+    <article class="strat${c.ec?' ecs':''}">
+      <div class="no">戦略 ${i+1}</div>
+      <h3>${esc(c.t)}</h3>
+      <p>${esc(c.why)}</p>
+      <div><div class="lbl">いまの係数</div><div class="chips">${c.chips.map(x=>chip(...x)).join("")}</div></div>
+      <div><div class="lbl">計画への効果（${y.label}）</div><dl class="eff">${c.eff.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${v}</dd>`).join("")}</dl></div>
+      ${(()=>{ const ys=years(R), sy=c.yi!=null?ys[Math.min(c.yi,ys.length-1)]:y; return `<div class="sens"><div class="lbl">感度（${sy.label}：${R.labels[sy.s]}–${R.labels[sy.e]}）</div><p><b>${esc(c.sens[0])}</b>${c.yi!=null?"（オプションが出そろう前の年で比較）":""}</p>${delta(R,c.sens[1],sy)}</div>`; })()}
+      <p class="risk">確認点：${esc(c.risk)}</p>
+    </article>`).join("");
+}
+document.getElementById("strats").addEventListener("click",e=>{
+  const b=e.target.closest(".chip"); if(!b) return;
+  show("coef"); const el=document.getElementById(b.dataset.go);
+  if(el){ el.scrollIntoView({block:"center"}); el.focus(); }
+});
+renderCoef(); refresh();
+const hash=location.hash.slice(1); let tab=["sum","strat","plan","coef"].includes(hash)?hash:null;
+if(!tab){ try{ tab=localStorage.getItem(KEY+"-tab"); }catch(e){} }
+if(tab) show(tab);
+</script>
+
+</html>
