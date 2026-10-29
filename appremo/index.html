@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1Approval for AppRemo 操作デモ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: LPの「操作イメージ」と同じ二段組。左に4ステップ、右にAppRemo画面のシミュレーター。単一のライトテーマで固定（実製品のUIを再現するため） */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --faint: #94a3b8;
+  --line: #e2e8f0;
+  --accent: #d99a00;
+  --yellow: #ffb800;
+  --yellow-soft: #fff4cc;
+  --ar-blue: #337ab7;
+  --ar-green: #5cb85c;
+  --ar-sheet: #548235;
+  --ar-label: #a9d08e;
+  --pk-blue: #1d4f91;
+  --ok: #059669;
+  --font: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--ink); font-family: var(--font); }
+.wrap {
+  max-width: 1200px; margin: 0 auto;
+  padding-block: 56px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.eyebrow { margin: 0; font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .04em; }
+h2 { margin: 12px 0 0; font-size: clamp(24px, 3.6vw, 36px); line-height: 1.4; font-weight: 700; text-wrap: balance; }
+.grid { margin-top: 40px; display: grid; grid-template-columns: 5fr 7fr; gap: 32px 48px; align-items: center; }
+.grid > * { min-width: 0; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+
+/* ステップ */
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.steps button {
+  width: 100%; text-align: left; background: none; border: 0; border-left: 2px solid transparent;
+  padding: 12px 0 12px 16px; cursor: pointer; font: inherit; color: inherit;
+}
+.steps button:hover { border-left-color: #cbd5e1; }
+.steps button[aria-current="step"] { border-left-color: var(--accent); }
+.steps button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.steps .t { display: block; font-size: 19px; font-weight: 700; color: var(--faint); }
+.steps button[aria-current="step"] .t { color: var(--ink); }
+.steps .d { display: block; margin-top: 8px; font-size: 14px; line-height: 1.8; color: var(--muted); }
+.note { margin: 20px 0 0; font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+/* 画面ウィンドウ */
+.cap { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); margin: 0 4px 8px; }
+.cap b { color: var(--muted); }
+.win {
+  position: relative; height: 480px; background: #fff; border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15,23,42,.06); overflow: hidden; user-select: none;
+  font-size: 11px; color: #334155; line-height: 1.5;
+}
+@media (max-width: 600px) { .win { height: 640px; } }
+.view { position: absolute; inset: 0; display: flex; flex-direction: column; transition: opacity .25s; }
+
+/* AppRemo の画面部品 */
+.ar-top { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #e5e7eb; flex-shrink: 0; }
+.ar-logo { font-weight: 900; font-size: 14px; letter-spacing: -.02em; }
+.ar-logo .a { color: #8bc48a; } .ar-logo .r { color: #f5a623; }
+.ar-user { font-weight: 700; color: #334155; margin-left: 10px; }
+.ar-top .right { color: var(--muted); }
+.crumb { padding: 4px 12px; color: var(--ar-blue); flex-shrink: 0; }
+.crumb span { color: var(--muted); }
+.ar-title { padding: 2px 12px 6px; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.bar { display: flex; align-items: center; gap: 6px; padding: 0 12px 8px; flex-shrink: 0; flex-wrap: wrap; }
+.btn { display: inline-block; color: #fff; font-weight: 700; border-radius: 3px; padding: 3px 10px; white-space: nowrap; transition: filter .2s; }
+.b-blue { background: var(--ar-blue); } .b-green { background: var(--ar-green); } .b-red { background: #d9534f; }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 3px; font-weight: 700; font-size: 10px; white-space: nowrap; }
+.st-draft { background: #e5e7eb; color: #374151; } .st-pending { background: #f0ad4e; color: #1f2937; } .st-done { background: var(--ok); color: #fff; }
+.body { flex: 1; min-height: 0; display: grid; grid-template-columns: 42% 1fr; gap: 10px; padding: 0 12px 10px; }
+@media (max-width: 600px) { .body { grid-template-columns: 1fr; } }
+.col { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.field { display: grid; grid-template-columns: 74px 1fr; gap: 6px; align-items: center; }
+.field .l { text-align: right; color: #475569; }
+.field .v { min-height: 22px; border: 1px solid #ccc; border-radius: 3px; padding: 2px 6px; background: #fff; display: flex; align-items: center; overflow: hidden; white-space: nowrap; }
+.field .v.ro { background: #eee; color: #555; }
+.oneap { border: 1px dashed var(--accent); border-radius: 4px; padding: 6px; background: #fffdf5; display: flex; flex-direction: column; gap: 5px; }
+.oneap .h { font-weight: 700; color: #92400e; font-size: 10px; }
+.oneap .row { display: flex; gap: 5px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--yellow); background: #fff; color: var(--ink); border-radius: 3px; padding: 2px 10px; font-weight: 700; transition: filter .2s; }
+.chip.dim { border-color: #e5e7eb; color: var(--faint); }
+.booked { display: flex; justify-content: space-between; gap: 6px; background: #fff; border: 1px solid #f3e1a3; border-radius: 3px; padding: 3px 6px; }
+.tag { padding: 0 4px; border-radius: 3px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.tag-wait { background: #fef3c7; color: #b45309; } .tag-ok { background: #d1fae5; color: #047857; }
+.route { border: 1px solid #ddd; }
+.route .rh { background: #f5f5f5; color: var(--ar-blue); padding: 2px 6px; border-bottom: 1px solid #ddd; }
+.route table { width: 100%; border-collapse: collapse; }
+.route td { padding: 2px 6px; border-top: 1px solid #eee; }
+.route tr.now { background: #eaf2fa; }
+.prev { min-width: 0; display: flex; flex-direction: column; border: 1px solid #ddd; border-radius: 3px; overflow: hidden; }
+.prev .fbar { display: flex; justify-content: space-between; align-items: center; gap: 6px; background: #d9edf7; color: #31708f; padding: 3px 6px; }
+.prev .fbar span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.prev .tool { background: #3c4043; color: #e5e7eb; padding: 3px 8px; font-size: 10px; flex-shrink: 0; }
+.sheet { flex: 1; background: #fff; padding: 8px 10px; display: flex; flex-direction: column; gap: 0; overflow: hidden; }
+.sheet .ttl { background: var(--ar-sheet); color: #fff; text-align: center; font-size: 13px; padding: 3px; margin-bottom: 6px; }
+.sheet .sec { background: var(--ar-sheet); color: #fff; font-weight: 700; padding: 1px 6px; width: 60%; font-size: 10px; margin-top: 4px; }
+.sheet .tr { display: grid; grid-template-columns: 62px 1fr; border: 1px solid var(--ar-sheet); border-top: 0; }
+.sheet .tr:first-of-type { border-top: 1px solid var(--ar-sheet); }
+.sheet .th { background: var(--ar-label); text-align: center; padding: 3px 2px; border-right: 1px solid var(--ar-sheet); }
+.sheet .td { padding: 3px 6px; min-height: 22px; transition: background-color .6s; overflow: hidden; }
+.sheet .td.fill { background: var(--yellow-soft); }
+.sheet .td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.banner { display: flex; gap: 6px; align-items: center; background: var(--yellow-soft); border: 1px solid var(--yellow); border-radius: 4px; padding: 4px 6px; }
+.banner b { background: var(--yellow); border-radius: 999px; padding: 0 6px; font-size: 10px; white-space: nowrap; }
+/* ホーム（要確認一覧） */
+.home { flex: 1; display: grid; grid-template-columns: 120px 1fr; gap: 10px; padding: 8px 12px; min-height: 0; }
+.nav { display: flex; gap: 4px; padding: 6px 12px 0; flex-shrink: 0; flex-wrap: wrap; }
+.nav span { background: #7ba05b; color: #fff; border-radius: 3px; padding: 2px 8px; font-weight: 700; }
+.menu { border: 1px solid #e5e7eb; }
+.menu div { display: flex; justify-content: space-between; padding: 4px 6px; border-top: 1px solid #f1f5f9; }
+.menu div:first-child { border-top: 0; background: #f8fafc; font-weight: 700; }
+.menu a { color: var(--ar-blue); text-decoration: underline; }
+.info { background: #d9edf7; color: #31708f; padding: 4px 6px; border-radius: 3px; }
+.list { width: 100%; border-collapse: collapse; margin-top: 6px; }
+.list th { text-align: left; border-bottom: 2px solid #ddd; padding: 3px 6px; }
+.list td { border-bottom: 1px solid #eee; padding: 4px 6px; }
+.list td a { color: var(--ar-blue); }
+
+/* 予約サイトのパネル */
+.panel {
+  position: absolute; top: 0; right: 0; height: 100%; width: 62%; background: #fff; border-left: 1px solid var(--line);
+  box-shadow: -8px 0 24px rgba(15,23,42,.15); transform: translateX(100%); transition: transform .5s; display: flex; flex-direction: column; z-index: 10;
+}
+@media (max-width: 600px) { .panel { width: 86%; } }
+.panel.on { transform: translateX(0); }
+.panel .ph { background: var(--pk-blue); color: #fff; padding: 8px 10px; display: flex; gap: 6px; align-items: center; font-weight: 700; flex-shrink: 0; }
+.panel .ph i { font-style: italic; background: #fff; color: #059669; font-weight: 900; padding: 0 5px; border-radius: 3px; font-size: 10px; }
+.panel .cond { background: #ecfdf5; color: #065f46; padding: 6px 10px; border-bottom: 1px solid #d1fae5; flex-shrink: 0; }
+.panel .hotels { padding: 10px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.hotel { border: 1px solid #e2e8f0; border-radius: 4px; padding: 7px 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; transition: background .2s, border-color .2s; }
+.hotel .n { font-weight: 700; color: #1e293b; } .hotel .s { color: var(--faint); } .hotel .p { font-weight: 900; color: #c0392b; white-space: nowrap; }
+.hotel.pick { border-color: var(--pk-blue); background: #f0f9ff; }
+.panel .pf { padding: 8px 10px; border-top: 1px solid var(--line); background: #f8fafc; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-shrink: 0; }
+.panel .pf .btn { background: var(--pk-blue); padding: 5px 10px; }
+
+/* トーストとカーソル */
+.toast {
+  position: absolute; left: 50%; bottom: 12px; transform: translate(-50%, 8px); max-width: 90%; z-index: 30;
+  background: #0f172a; color: #fff; font-weight: 700; padding: 8px 12px; border-radius: 8px; box-shadow: 0 8px 20px rgba(15,23,42,.3);
+  opacity: 0; transition: opacity .3s, transform .3s; font-size: 12px;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+.cursor { position: absolute; left: 72%; top: 78%; width: 20px; height: 20px; z-index: 40; transition: left .7s ease-in-out, top .7s ease-in-out; pointer-events: none; }
+.cursor svg { width: 20px; height: 20px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.35)); }
+.ripple { position: absolute; left: -8px; top: -8px; width: 24px; height: 24px; border-radius: 50%; background: rgba(100,116,139,.45); transform: scale(0); opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .view, .panel, .toast, .cursor, .sheet .td { transition: none; } }
+</style>
+<style>body{margin:0}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <p class="eyebrow">1Approval for AppRemo のある出張</p>
+  <h2>申請から購買まで、<br>AppRemoの承認ひとつで終わる。</h2>
+
+  <div class="grid">
+    <div>
+      <ol class="steps" id="flowSteps"></ol>
+      <p class="note">操作イメージです。AppRemoの実際の画面をもとに作成しています。ホテル名・金額はサンプルです。</p>
+    </div>
+    <div>
+      <div class="cap"><b id="flowCaption"></b><span>操作イメージ</span></div>
+      <div class="win" id="flowWin" aria-hidden="true">
+        <div class="view" id="flowView"></div>
+        <div class="panel" id="flowPanel">
+          <div class="ph"><i>ピカパカ</i>出張DX ／ ホテル</div>
+          <div class="cond">札幌・大通 ／ 11/12 チェックイン 1泊 <b>（AppRemoから引き継ぎ）</b></div>
+          <div class="hotels">
+            <div class="hotel"><div><div class="n">札幌ステーションホテル北口</div><div class="s">JR札幌駅 徒歩3分</div></div><div class="p">¥9,800</div></div>
+            <div class="hotel" id="fxPick"><div><div class="n">札幌グランドイン大通</div><div class="s">大通駅 徒歩2分・朝食付き</div></div><div class="p">¥11,200</div></div>
+            <div class="hotel"><div><div class="n">すすきのシティホテル</div><div class="s">すすきの駅 徒歩4分</div></div><div class="p">¥12,400</div></div>
+          </div>
+          <div class="pf"><span>予約は承認後に確定します</span><span class="btn" id="fxPanelOk">申請に取り込む</span></div>
+        </div>
+        <div class="toast" id="flowToast"></div>
+        <div class="cursor" id="flowCursor">
+          <svg viewBox="0 0 24 24"><path d="M4 2l15 9.5-6.4 1.3 3.7 7.4-2.7 1.3-3.7-7.4L4 18z" fill="#111827" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span class="ripple" id="flowRipple"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var win = document.getElementById('flowWin');
+  var view = document.getElementById('flowView');
+  var panel = document.getElementById('flowPanel');
+  var toastEl = document.getElementById('flowToast');
+  var stepsEl = document.getElementById('flowSteps');
+  var cursor = document.getElementById('flowCursor');
+  var ripple = document.getElementById('flowRipple');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var STEPS = [
+    ['AppRemoで稟議書を作る', 'いつもの申請画面でタイトルと完了希望日を入れると、1Approvalの手配ボタンが表示されます。'],
+    ['予約サイトで選んで取り込む', '日程を引き継いだ予約サイトでホテルを選ぶと、件名と金額の入った稟議書（Excel）ができあがります。Excelのダウンロードも手入力も不要です。'],
+    ['いつも通り申請する', '「申請」を押すと、承認ルートはAppRemoが自動で選びます。操作は今までと同じです。'],
+    ['承認と同時に購買', '承認者が「承認」を押すと、そのまま購買まで完了します。申請時からの軽微な価格変動は自動で許容されます。']
+  ];
+  var FIELDS = [['fxF1', '稟議書_札幌への出張'], ['fxF2', '2026/11/10']];
+  var TEXT = {
+    saved: '1Approvalの手配ボタンが表示されています',
+    imported: '件名と金額の入った稟議書（Excel）ができあがりました',
+    requested: '申請しました。承認ルートは自動で選ばれています',
+    arrived: '承認者の画面：山田部長が稟議書を開きました',
+    running: '予約サイトで在庫と最新価格を確認し、購買を実行しています',
+    done: '承認と同時に購買が完了しました（会社一括請求）'
+  };
+  var ST = { draft: ['下書き', 'st-draft'], pending: ['承認待ち', 'st-pending'], approved: ['承認完了・購買完了', 'st-done'] };
+
+  function top(S) {
+    return '<div class="ar-top"><div><span class="ar-logo"><span class="a">App</span><span class="r">Remo</span></span>' +
+      '<span class="ar-user">' + (S.approver ? '営業部　山田 部長' : '営業一課　社員A') + '</span></div><span class="right">ログアウト</span></div>';
+  }
+  function field(label, id, val, ro) {
+    return '<div class="field"><span class="l">' + label + '</span><span class="v' + (ro ? ' ro' : '') + '"' + (id ? ' id="' + id + '"' : '') + '>' + (val || '') + '</span></div>';
+  }
+  function render(S) {
+    if (S.view === 'home') {
+      return top(S) +
+        '<div class="nav"><span>申請・承認 ▾</span><span>申請書検索 ▾</span><span>個人設定 ▾</span></div>' +
+        '<div class="home"><div class="menu"><div>申請・承認</div><div>下書き件数<a>0件</a></div><div>要確認件数<a>2件</a></div><div>申請中件数<a>0件</a></div><div>回覧件数<a>0件</a></div></div>' +
+        '<div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><b style="font-size:12px">インフォメーション</b><span class="btn b-blue" id="fxNew">＋ 新規申請</span></div>' +
+        '<div class="info">新しいお知らせはありません。</div>' +
+        '<b style="display:block;margin-top:10px">要確認一覧</b><table class="list"><tr><th>申請番号</th><th>タイトル</th><th>進捗</th></tr>' +
+        '<tr><td>86</td><td><a>稟議書_PC購入の件</a></td><td>1 / 2</td></tr><tr><td>84</td><td><a>交通費申請 10月分</a></td><td>0 / 3</td></tr></table></div></div>';
+    }
+    var title = S.title ? '稟議書_札幌への出張_社員A' : '新規申請';
+    var bar;
+    if (S.approver) {
+      bar = '<span class="btn b-blue">差戻し</span>' + (S.status === 'pending' ? '<span class="btn b-blue" id="fxApprove">承認</span>' : '') + '<span class="btn b-green">チャット</span>';
+    } else {
+      bar = (S.status === 'draft' ? '<span class="btn b-blue" id="fxSubmit">申請</span><span class="btn b-green">下書き保存</span>' : '') + '<span class="btn b-green">チャット</span>';
+    }
+    bar += '<span style="margin-left:auto">ステータス <span class="pill ' + ST[S.status][1] + '">' + ST[S.status][0] + '</span></span>';
+
+    var left = field('申請番号', '', '89', true) + field('申請書雛形', '', '稟議書2026年度版(共通)', true) +
+      field('申請タイトル', 'fxF1', S.title ? FIELDS[0][1] : '') + field('完了希望日', 'fxF2', S.title ? FIELDS[1][1] : '');
+    if (!S.approver) {
+      left += '<div class="oneap"><span class="h">1Approvalで手配</span>' +
+        (S.orders
+          ? '<div class="booked"><span>札幌グランドイン大通 1泊</span><span class="tag ' + (S.status === 'approved' ? 'tag-ok">予約確定' : 'tag-wait">仮キープ中') + '</span></div>'
+          : '<div class="row"><span class="chip" id="fxHotel">ホテル</span><span class="chip dim">新幹線</span><span class="chip dim">飛行機</span></div>') +
+        '</div>';
+    } else if (S.status === 'pending') {
+      left += '<div class="banner"><b>1Approval</b><span>最終承認で、明細どおりに手配が確定します</span></div>';
+    } else {
+      left += '<div class="banner"><b>1Approval</b><span>予約確定・会社一括請求。仕訳まで自動で連携済み</span></div>';
+    }
+    if (S.status !== 'draft') {
+      var done = S.status === 'approved';
+      left += '<div class="route"><div class="rh">承認ルート</div><table>' +
+        '<tr><td>1</td><td>申請者</td><td>社員A</td><td>申請</td></tr>' +
+        '<tr><td>2</td><td>課・責任者</td><td>佐藤 課長</td><td>' + (S.approver || done ? '承認' : '★') + '</td></tr>' +
+        '<tr' + (S.approver && !done ? ' class="now"' : '') + '><td>3</td><td>部・責任者</td><td>山田 部長</td><td>' + (done ? '決裁' : (S.approver ? '★' : '')) + '</td></tr>' +
+        '</table></div>';
+    }
+
+    var price = S.status === 'approved' ? '¥11,500（+¥300 自動許容）' : '¥11,200';
+    var f = S.orders ? ' fill' : '';
+    var right = '<div class="prev"><div class="fbar"><span>' + (S.orders ? '稟議書_札幌への出張.xlsx' : '申請書フォーム（未作成）') + '</span><span class="btn b-green">申請書(Excel)DL</span></div>' +
+      '<div class="tool">≡　1 / 1　—　98%　＋</div>' +
+      '<div class="sheet"><div class="ttl">稟議申請書</div>' +
+      '<div class="sec">■申請者情報</div>' +
+      '<div class="tr"><div class="th">部署</div><div class="td">営業一課　社員A</div></div>' +
+      '<div class="sec">■申請内容</div>' +
+      '<div class="tr"><div class="th">件名</div><div class="td' + f + '">' + (S.orders ? '札幌出張 宿泊手配（11/12〜11/13）' : '') + '</div></div>' +
+      '<div class="tr"><div class="th">内容</div><div class="td' + f + '">' + (S.orders ? '札幌グランドイン大通 1泊・朝食付き' : '') + '</div></div>' +
+      '<div class="tr"><div class="th">予算金額</div><div class="td num' + f + '">' + (S.orders ? price : '') + '</div></div>' +
+      '<div class="tr"><div class="th">備考</div><div class="td' + f + '">' + (S.orders ? (S.status === 'approved' ? '1Approval：予約確定・会社一括請求' : '1Approval：仮キープ中（承認で確定）') : '') + '</div></div>' +
+      '</div></div>';
+
+    return top(S) +
+      '<div class="crumb">ホーム <span>＞</span> ' + (S.approver ? '要確認一覧 <span>＞</span> 承認' : '申請書編集') + '</div>' +
+      '<div class="ar-title">' + title + '</div>' +
+      '<div class="bar">' + bar + '</div>' +
+      '<div class="body"><div class="col">' + left + '</div>' + right + '</div>';
+  }
+
+  var current = 0, run = 0, visible = false, started = false, S = {};
+  var HOLD = 2600;
+
+  function sleep(ms, id) {
+    return new Promise(function (resolve, reject) {
+      var waited = 0;
+      (function tick() {
+        if (id !== run) return reject('cancel');
+        if (!visible) return setTimeout(tick, 200);
+        if (waited >= ms) return resolve();
+        waited += 50; setTimeout(tick, 50);
+      })();
+    });
+  }
+  function $(id) { return document.getElementById(id); }
+  function draw() { view.innerHTML = render(S); }
+  function moveTo(el, id) {
+    var w = win.getBoundingClientRect(), r = el.getBoundingClientRect();
+    cursor.style.left = (r.left - w.left + r.width * 0.55) + 'px';
+    cursor.style.top = (r.top - w.top + r.height * 0.55) + 'px';
+    return sleep(800, id);
+  }
+  function click(elId, id) {
+    var el = $(elId);
+    return moveTo(el, id).then(function () {
+      ripple.style.transition = 'none'; ripple.style.transform = 'scale(0)'; ripple.style.opacity = '1';
+      setTimeout(function () {
+        ripple.style.transition = 'transform .45s ease-out, opacity .45s ease-out';
+        ripple.style.transform = 'scale(1.8)'; ripple.style.opacity = '0';
+      }, 20);
+      el.style.filter = 'brightness(0.9)';
+      return sleep(300, id);
+    });
+  }
+  function type(elId, text, id) {
+    var el = $(elId), i = 0;
+    return moveTo(el, id).then(function () {
+      return new Promise(function (resolve, reject) {
+        (function next() {
+          if (id !== run) return reject('cancel');
+          if (i > text.length) return resolve();
+          el.textContent = text.slice(0, i++);
+          setTimeout(next, 60);
+        })();
+      });
+    });
+  }
+  function toast(text, id) {
+    toastEl.textContent = text;
+    toastEl.classList.add('on');
+    return sleep(1800, id).then(function () { toastEl.classList.remove('on'); });
+  }
+  function slide(on) { panel.classList.toggle('on', on); }
+  function swap(id) {
+    view.style.opacity = '0';
+    return sleep(250, id).then(function () { draw(); view.style.opacity = '1'; return sleep(250, id); });
+  }
+
+  var SCENES = [
+    async function (id) {
+      await sleep(700, id);
+      await click('fxNew', id);
+      S.view = 'form'; await swap(id);
+      for (var i = 0; i < FIELDS.length; i++) await type(FIELDS[i][0], FIELDS[i][1], id);
+      S.title = true; draw();
+      await toast(TEXT.saved, id);
+    },
+    async function (id) {
+      await sleep(500, id);
+      await click('fxHotel', id);
+      slide(true); await sleep(900, id);
+      await click('fxPick', id);
+      $('fxPick').classList.add('pick');
+      await sleep(300, id);
+      await click('fxPanelOk', id);
+      slide(false); await sleep(400, id);
+      S.orders = true; draw();
+      await toast(TEXT.imported, id);
+    },
+    async function (id) {
+      await sleep(500, id);
+      await click('fxSubmit', id);
+      S.status = 'pending'; draw();
+      await toast(TEXT.requested, id);
+    },
+    async function (id) {
+      await sleep(400, id);
+      S.approver = true; await swap(id);
+      await toast(TEXT.arrived, id);
+      await click('fxApprove', id);
+      await toast(TEXT.running, id);
+      S.status = 'approved'; await swap(id);
+      await toast(TEXT.done, id);
+    }
+  ];
+  var BASE = [
+    { view: 'home', status: 'draft' },
+    { view: 'form', status: 'draft', title: true },
+    { view: 'form', status: 'draft', title: true, orders: true },
+    { view: 'form', status: 'pending', title: true, orders: true }
+  ];
+
+  function renderSteps() {
+    document.getElementById('flowCaption').textContent = 'STEP ' + (current + 1) + '/' + STEPS.length + '　' + STEPS[current][0];
+    stepsEl.innerHTML = STEPS.map(function (s, i) {
+      var on = i === current;
+      return '<li><button type="button" data-step="' + i + '"' + (on ? ' aria-current="step"' : '') + '>' +
+        '<span class="t">' + s[0] + '</span>' + (on ? '<span class="d">' + s[1] + '</span>' : '') + '</button></li>';
+    }).join('');
+  }
+  function reset(i) {
+    S = Object.assign({ approver: false, orders: false, title: false }, BASE[i]);
+    slide(false); toastEl.classList.remove('on');
+    $('fxPick').classList.remove('pick');
+    draw(); view.style.opacity = '1';
+    cursor.style.left = '72%'; cursor.style.top = '78%';
+  }
+  function play(i, keep) {
+    current = i; run++;
+    var id = run;
+    renderSteps();
+    if (!keep) reset(i);
+    if (reduce) return;
+    SCENES[i](id).then(function () { return sleep(HOLD, id); })
+      .then(function () { var n = (i + 1) % STEPS.length; play(n, n !== 0); })
+      .catch(function () {});
+  }
+  stepsEl.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-step]');
+    if (b) { started = true; visible = true; play(+b.getAttribute('data-step')); }
+  });
+
+  renderSteps();
+  reset(0);
+  if (reduce) { current = 3; renderSteps(); reset(3); S.status = 'approved'; S.approver = true; draw(); return; }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      visible = es[0].isIntersecting;
+      if (visible && !started) { started = true; play(0); }
+    }, { threshold: 0.35 }).observe(win);
+  } else {
+    visible = true; started = true; play(0);
+  }
+})();
+</script>
+</body>
+</html>
