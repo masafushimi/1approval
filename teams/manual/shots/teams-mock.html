@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Teams 画面モック（マニュアル撮影用）</title>
+<!-- マニュアルの Teams 画面キャプチャ撮影用モック。shots/capture.js が #シーン名 ごとに撮影する -->
+<style>
+  :root {
+    --rail: #ebebeb; --bar: #ebebeb; --bg: #f5f5f5; --paper: #fff; --ink: #242424; --soft: #616161;
+    --line: #e0e0e0; --brand: #5b5fc7; --brand-tint: #e8ebfa; --green: #1a7f37; --red: #c4314b; --amber: #9a6700;
+    --mark: #d32f2f;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif; color: var(--ink); font-size: 14px; background: var(--bg); }
+  .app { display: grid; grid-template-columns: 68px 1fr; grid-template-rows: 48px 1fr; width: 1200px; height: 788px; overflow: hidden; }
+  .topbar { grid-column: 1 / 3; background: var(--bar); border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 16px; gap: 16px; }
+  .topbar .search { flex: 0 1 520px; margin: 0 auto; height: 30px; background: #fff; border-radius: 4px; color: #888; display: flex; align-items: center; padding: 0 12px; font-size: 13px; }
+  .me { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: #c8c6f0; color: #33358f; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex: none; }
+  .avatar.bot { background: var(--brand); color: #fff; border-radius: 8px; }
+  .rail { background: var(--rail); display: flex; flex-direction: column; align-items: center; padding-top: 8px; gap: 4px; }
+  .rail div { width: 56px; height: 52px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: var(--soft); }
+  .rail div b { font-size: 18px; line-height: 1.2; }
+  .rail div.on { color: var(--brand); background: #fff; }
+  .main { display: grid; grid-template-rows: 56px 1fr 64px; background: var(--bg); min-height: 0; }
+  .chathead { background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 10px; padding: 0 20px; }
+  .chathead .name { font-weight: 700; font-size: 15px; }
+  .chathead .tabs { display: flex; gap: 18px; margin-left: 18px; font-size: 13px; color: var(--soft); }
+  .chathead .tabs span.on { color: var(--ink); font-weight: 700; border-bottom: 2px solid var(--brand); padding-bottom: 14px; margin-bottom: -16px; }
+  .msgs { overflow: hidden; padding: 18px 40px 8px; display: flex; flex-direction: column; gap: 14px; justify-content: flex-end; }
+  .msg { display: flex; gap: 10px; align-items: flex-start; max-width: 760px; }
+  .msg .meta { font-size: 11.5px; color: var(--soft); margin-bottom: 3px; }
+  .bubble { background: #fff; border-radius: 6px; padding: 10px 14px; box-shadow: 0 1px 2px rgba(0,0,0,.08); line-height: 1.65; }
+  .msg.me { align-self: flex-end; flex-direction: row-reverse; }
+  .msg.me .bubble { background: var(--brand-tint); }
+  .msg.me .meta { text-align: right; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; min-width: 520px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .card h4 { margin: 0 0 8px; font-size: 14.5px; display: flex; justify-content: space-between; align-items: center; }
+  .card h4 small { font-weight: 400; color: var(--soft); font-size: 12px; }
+  .card .kv { font-size: 13px; line-height: 1.75; color: #333; }
+  .card .kv b { display: inline-block; width: 5.5em; color: var(--soft); font-weight: 400; }
+  .rows { border: 1px solid var(--line); border-radius: 6px; margin: 10px 0; font-size: 12.5px; }
+  .rows .r { display: grid; grid-template-columns: 7.5em 1fr 6.5em 7.5em 7em; gap: 8px; padding: 7px 10px; border-top: 1px solid var(--line); align-items: center; }
+  .rows .r:first-child { border-top: none; background: #fafafa; color: var(--soft); font-size: 11.5px; }
+  .rows .r .amt { text-align: right; }
+  .btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .btn { border: 1px solid #d1d1d1; background: #fff; border-radius: 4px; padding: 6px 14px; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .btn.big { padding: 9px 18px; font-size: 14px; }
+  .link { color: var(--brand); text-decoration: underline; }
+  .total { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 8px; margin-top: 6px; font-size: 13px; }
+  .total b { font-size: 16px; }
+  .badge { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 0 9px; border-radius: 999px; border: 1.5px solid; white-space: nowrap; }
+  .badge.gray { color: #5b6770; background: #eef0f2; }
+  .badge.green { color: var(--green); background: #e9f5ec; }
+  .badge.red { color: #b42318; background: #fdecea; }
+  .notice { border-left: 4px solid var(--red); background: #fdf3f4; color: #8a1c2e; }
+  .notice.ok { border-left-color: var(--green); background: #f1faf3; color: #14532d; }
+  .notice.err { border-left-color: var(--red); }
+  .compose { margin: 0 40px 14px; background: #fff; border: 1px solid var(--line); border-radius: 6px; display: flex; align-items: center; padding: 0 14px; color: #999; font-size: 13px; justify-content: space-between; }
+  .compose span:last-child { color: var(--soft); letter-spacing: 6px; }
+  .done { color: var(--green); font-weight: 700; font-size: 13px; margin-top: 10px; }
+  .divider { text-align: center; font-size: 11.5px; color: var(--soft); }
+  /* 赤枠と番号（kintone 版のキャプチャと同じ表現） */
+  .mk { position: relative; outline: 3px solid var(--mark); outline-offset: 3px; border-radius: 6px; }
+  .mk::before { content: attr(data-n); position: absolute; left: -16px; top: -18px; width: 26px; height: 26px; border-radius: 50%; background: var(--mark); color: #fff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; z-index: 2; font-family: Arial, sans-serif; }
+  /* モーダル（申請フォーム） */
+  .overlay { position: absolute; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; }
+  .modal { width: 620px; background: #fff; border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,.25); padding: 20px 24px; }
+  .modal h3 { margin: 0 0 4px; font-size: 17px; }
+  .modal .desc { font-size: 12px; color: var(--soft); margin-bottom: 12px; }
+  .f { margin-bottom: 9px; font-size: 12.5px; }
+  .f label { display: block; font-weight: 700; margin-bottom: 3px; }
+  .f label i { color: var(--red); font-style: normal; }
+  .in { border: 1px solid #d1d1d1; border-radius: 4px; padding: 5px 10px; background: #fff; min-height: 30px; font-size: 13px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .chip { display: inline-flex; gap: 6px; align-items: center; background: #f0f0f0; border-radius: 999px; padding: 1px 10px 1px 2px; font-size: 12.5px; }
+  .chip .avatar { width: 22px; height: 22px; font-size: 10px; }
+  table.sch { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.sch th { background: var(--brand-tint); text-align: left; padding: 4px 8px; font-weight: 700; }
+  table.sch td { border: 1px solid var(--line); padding: 4px 8px; height: 26px; }
+  .popup { position: absolute; background: #fff; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.18); padding: 14px 16px; width: 300px; font-size: 13px; }
+  .popup p { margin: 0 0 12px; }
+  .toast { position: absolute; top: 60px; left: 50%; transform: translateX(-50%); background: #d13438; color: #fff; border-radius: 6px; padding: 10px 18px; font-size: 13.5px; font-weight: 700; box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+</style>
+</head>
+<body>
+<div class="app" id="app" style="position:relative">
+  <div class="topbar"><b style="font-size:13px;color:#444">Teams</b><div class="search">検索</div><div class="me"><span id="meName"></span><div class="avatar" id="meAv"></div></div></div>
+  <div class="rail"><div><b>🔔</b>通知</div><div class="on"><b>💬</b>チャット</div><div><b>👥</b>チーム</div><div><b>📅</b>予定表</div><div><b>⊞</b>アプリ</div></div>
+  <div class="main">
+    <div class="chathead"><div class="avatar bot">✦</div><div class="name">1Approval AI Bot</div><span style="font-size:11px;font-weight:700;color:#1a7f37;border:1px solid #1a7f37;border-radius:999px;padding:0 8px">AIが自動作成</span><div class="tabs"><span class="on">チャット</span><span>申請</span><span>情報</span></div></div>
+    <div class="msgs" id="msgs"></div>
+    <div class="compose"><span>新しいメッセージの入力</span><span>📎 😊 ➤</span></div>
+  </div>
+</div>
+<script>
+const APPLICANT = { name: '鈴木 花子', av: '鈴' }, APPROVER = { name: '山田 太郎', av: '山' };
+const APPNO = 'TR-2026-0013';
+const bot = (html, t = '10:02') => `<div class="msg"><div class="avatar bot">✦</div><div><div class="meta">1Approval AI Bot　${t}</div>${html}</div></div>`;
+const me = (text, t = '10:01') => `<div class="msg me"><div class="avatar">${who.av}</div><div><div class="meta">${t}</div><div class="bubble">${text}</div></div></div>`;
+const mk = (n, html, extra = '') => `<span class="mk" data-n="${n}" style="display:inline-flex;vertical-align:middle;${extra}">${html}</span>`;
+const head = '<div class="r"><span>予約番号</span><span>手配内容</span><span>ステータス</span><span>金額</span><span>リンク</span></div>';
+const hotel = (st, amt = '12,200 円', link = '') => `<div class="r"><span>RES-DH-12149327</span><span>🏨 ランドーホテル福岡<br><small style="color:#616161">10/21 チェックイン・1 泊</small></span><span>${st}</span><span class="amt">${amt}</span><span>${link}</span></div>`;
+const train = (st, link = '') => `<div class="r"><span>RES-DT-30418211</span><span>🚅 のぞみ 15 号 東京→博多<br><small style="color:#616161">10/21 普通車指定席</small></span><span>${st}</span><span class="amt">22,950 円</span><span>${link}</span></div>`;
+const B = { none: '<span class="badge gray">未予約</span>', ok: '<span class="badge green">予約済</span>', ng: '<span class="badge red">予約失敗</span>', cx: '<span class="badge gray">キャンセル済</span>' };
+const cancelLink = '<span class="link">詳細・キャンセル</span>';
+const kv = `<div class="kv"><b>件名</b>福岡出張（顧客訪問）<br><b>出張者</b>鈴木 花子　<b>承認者</b>山田 太郎<br><b>出張先</b>福岡市　<b>日程</b>2026/10/21 〜 2026/10/22</div>`;
+const arrangeBtns = (m) => `<div class="btns">${m ? mk(1, '<span class="btn big">🏨 ホテル</span>') : '<span class="btn big">🏨 ホテル</span>'}<span class="btn big">🚅 新幹線</span><span class="btn big">✈️ 航空券</span></div>`;
+const arrangeCard = (m) => `<div class="card"><h4>🧳 手配 <small>申請番号 ${APPNO}</small></h4><div class="kv"><b>出張先</b>福岡市<br><b>日程</b>2026/10/21 〜 2026/10/22（予約サイトに引き継ぎます）</div>${arrangeBtns(m)}</div>`;
+const reviewCard = (reqBtn) => `<div class="card"><h4>📄 申請内容の確認 <small>申請番号 ${APPNO}・未処理</small></h4>${kv}<div class="rows">${head}${hotel(B.none)}</div><div class="total"><span>手配金額（1 件）</span><b>12,200 円</b></div><div class="btns">${reqBtn}<span class="btn">➕ 手配を追加する</span><span class="btn">カートを空にする</span><span class="btn">申請書を開く</span></div></div>`;
+let who = APPLICANT;
+
+const S = {
+  'T01-apply-form': () => [bot(`<div class="bubble">こんにちは！出張の申請・手配・領収書回収をサポートします ✈️🧾<div class="btns"><span class="btn primary">出張申請フォームを開く</span></div></div>`, '10:00')],
+  'T02-arrange-card': () => [me('出張申請フォームを保存しました'), bot(`<div class="bubble notice ok" style="margin-bottom:8px">✅ 申請番号 <b>${APPNO}</b> を発行しました<br>入力内容を連携先ワークフローへ「未処理」として保存しました。続けて手配に進めます。</div>${arrangeCard(false)}`)],
+  'T03-arrange-hotel': () => [bot(`<div class="bubble notice ok" style="margin-bottom:8px">✅ 申請番号 <b>${APPNO}</b> を発行しました</div>${arrangeCard(true)}`)],
+  'T04-imported': () => [me('🛒 ピカパカで申し込みを確定しました（ホテル）', '10:08'), bot(`${mk(1, `<div class="bubble notice ok">✅ 予約内容を申請に取り込みました<br>・[ホテル] RES-DH-12149327　ランドーホテル福岡　12,200 円</div>`, 'display:block;margin-bottom:10px')}${reviewCard('<span class="btn primary">事前承認依頼</span>')}`, '10:08')],
+  'T05-request': () => [bot(reviewCard(mk(1, '<span class="btn primary">事前承認依頼</span>')), '10:08')],
+  'T05b-requested': () => [me('📨 事前承認依頼', '10:10'), bot(`<div class="bubble notice ok">✅ ステータスが「<b>事前承認依頼中</b>」に変わりました<br>現在の作業者: <b>山田 太郎</b><br>山田 太郎 さんの Teams に承認依頼カードを送りました。承認と同時に、取り込んだ手配（12,200 円）の購買が実行されます。</div>`, '10:10')],
+  'T06-approver-card': () => { who = APPROVER; return [bot(`<div class="card"><h4>📨 出張承認依頼　東京－福岡 <small>申請番号 ${APPNO}</small></h4><div class="kv"><b>申請者</b>鈴木 花子<br><b>出張先</b>福岡市　<b>日程</b>2026/10/21 〜 2026/10/22<br><b>目的</b>顧客訪問・打ち合わせ</div><div class="rows">${head}${hotel(B.none)}</div><div class="total"><span style="color:#1a7f37;font-weight:700">規定内・最安値</span><b>12,200 円</b></div><div class="btns">${mk(1, '<span class="btn big" style="background:#1f9d55;border-color:#1f9d55;color:#fff">✓ 承認して即発券</span>')}${mk(2, '<span class="btn big">差戻し</span>', 'margin-left:14px')}<span class="btn big">申請書を開く</span></div></div>`, '10:11')]; },
+  'T07-approved': () => { who = APPROVER; return [bot(`<div class="bubble notice ok">✅ 【上長承認完了 ＆ 自動購買成功】<br>山田 太郎 さんの承認により、ピカパカ出張DX 経由で手配の予約・購買が完了しました。ステータス: <b>事前承認済</b></div>`, '10:12'), bot(`<div class="card"><h4>📄 予約状況 <small>申請番号 ${APPNO}・事前承認済</small></h4><div class="rows">${head}${mk(1, hotel(B.ok, '12,200 円', cancelLink), 'display:block')}</div><div class="done">承認しました（山田 太郎・10:12）</div></div>`, '10:12')]; },
+  'T08-final-request': () => [bot(`<div class="card"><h4>📄 予約状況 <small>申請番号 ${APPNO}・事前承認済</small></h4>${kv}<div class="rows">${head}${hotel(B.ok, '12,200 円', cancelLink)}</div><div class="total"><span>会社請求金額</span><b>12,200 円</b></div><div class="btns">${mk(1, '<span class="btn primary">完了承認依頼</span>')}<span class="btn">取り下げ</span><span class="btn">申請書を開く</span></div></div>`, '18:20')],
+  'T09-final-approve': () => { who = APPROVER; return [bot(`<div class="card"><h4>📨 完了承認依頼 <small>申請番号 ${APPNO}・完了承認依頼中</small></h4><div class="kv"><b>申請者</b>鈴木 花子<br><b>出張先</b>福岡市　<b>日程</b>2026/10/21 〜 2026/10/22</div><div class="rows">${head}${hotel(B.ok, '12,200 円')}</div><div class="total"><span>会社請求金額</span><b>12,200 円</b></div><div class="btns">${mk(1, '<span class="btn primary big">完了承認</span>')}<span class="btn big" style="margin-left:6px">差戻し</span><span class="btn big">申請書を開く</span></div></div>`, '18:25')]; },
+  'T09b-final-done': () => [bot(`${mk(1, `<div class="bubble notice ok">✅ ステータスが「<b>完了承認済</b>」になりました<br>申請番号 ${APPNO} の手続きは完了です（山田 太郎 さんが完了承認）。</div>`, 'display:block')}`, '18:26')],
+  'T10-failed': () => [bot(`${mk(1, `<div class="bubble notice err">⚠️ 新幹線の予約に失敗しました。追加申請を行ってください。<br>新幹線：価格が+28.57%変動しました。再承認が必要です。<br>ステータス: <b>事前承認済（予約失敗）</b></div>`, 'display:block;margin-bottom:10px')}<div class="card"><h4>📄 予約状況 <small>申請番号 TR-2026-0023</small></h4><div class="btns" style="margin-top:0">${mk(2, '<span class="btn primary">追加承認依頼</span>')}<span class="btn" style="margin-left:6px">取り下げ</span><span class="btn">申請書を開く</span></div></div>`, '10:15')],
+  'T10b-failed-rearrange': () => [bot(`<div class="card"><h4>📄 予約状況 <small>申請番号 TR-2026-0023・事前承認済（予約失敗）</small></h4><div class="rows">${head}${hotel(B.ok, '12,200 円', cancelLink)}${train(mk(2, B.ng))}</div><div class="kv" style="font-size:12px"><span style="color:#616161">手配失敗サービス：</span>Train: 価格が+28.57%変動しました。再承認が必要です。</div><div class="btns">${mk(1, '<span class="btn big">🚅 新幹線</span>')}</div><div class="btns"><span class="btn primary">追加承認依頼</span><span class="btn">取り下げ</span></div></div>`, '10:15')],
+  'T11-additional-approve': () => { who = APPROVER; return [bot(`<div class="card"><h4>📨 追加承認依頼 <small>申請番号 TR-2026-0023・追加承認依頼中</small></h4><div class="bubble notice err" style="box-shadow:none;margin-bottom:8px">新幹線：価格が+28.57%変動しました。再承認が必要です。</div><div class="rows">${head}${hotel(B.ok)}${train(B.none)}</div><div class="btns">${mk(1, '<span class="btn primary big">追加承認</span>')}<span class="btn big" style="margin-left:6px">差戻し</span>${mk(2, '<span class="btn big">追加承認却下</span>', 'margin-left:10px')}</div></div>`, '10:30')]; },
+  'T12-cancelled': () => [bot(`<div class="bubble notice ok">予約サイトでの取り消しを反映しました（ホテル：キャンセル済・0 円）</div>`, '11:40'), bot(`<div class="card"><h4>📄 予約状況 <small>申請番号 ${APPNO}</small></h4><div class="rows">${head}${mk(1, hotel(B.cx, '0 円', cancelLink), 'display:block')}</div><div class="total"><span>会社請求金額</span><b>0 円</b></div></div>`, '11:40')],
+  'T13-withdraw': () => [bot(`<div class="card"><h4>📄 予約状況 <small>申請番号 TR-2026-0023・事前承認済（予約失敗）</small></h4><div class="rows">${head}${hotel(B.ok, '12,200 円', cancelLink)}${train(B.ng)}</div><div class="btns"><span class="btn primary">追加承認依頼</span>${mk(1, '<span class="btn">取り下げ</span>', 'margin-left:14px')}<span class="btn">申請書を開く</span></div></div>`, '10:40')],
+  'T13b-withdraw-error': () => [me('取り下げ', '10:41'), bot(`${mk(1, `<div class="bubble notice err">⚠️ 取り下げできませんでした<br>予約済の明細があります。予約サイトでキャンセルしてから取り下げてください。<br>ステータス: <b>事前承認済（予約失敗）</b>（変更なし）</div>`, 'display:block')}`, '10:41')],
+  'T14-receipt': () => [bot(`<div class="bubble">出張お疲れ様でした！手配明細または現地決済・立替費用に対応する領収書を添付して送信してください。</div>`, '19:00'), me('📄 [添付ファイル] 領収書_ランドーホテル福岡.pdf (420KB)', '19:03'), bot(`<div class="card"><h4>🧾 AI-OCR 解析 ＆ 証票照合結果</h4><div class="kv"><b>店舗名</b>ランドーホテル福岡<br><b>金額</b>12,200 円<br><b>利用日</b>2026年10月21日</div><div class="bubble notice ok" style="box-shadow:none;margin-top:8px">手配明細 #1（ホテル 12,200 円）と一致しました</div><div class="btns">${mk(1, '<span class="btn primary">この明細に紐付ける</span>')}<span class="btn" style="margin-left:6px">別の明細を選ぶ</span></div></div>`, '19:03')],
+};
+const FORM = `<div class="overlay"><div class="modal"><h3>出張申請</h3><div class="desc">入力内容は連携先ワークフローに保存され、申請番号が発行されます。保存後、そのままホテル・新幹線・航空券の手配に進めます。</div>
+<div class="f"><label>件名 <i>*</i></label><div class="in">福岡出張（顧客訪問）</div></div>
+<div class="grid2"><div class="f"><label>出張者 <i>*</i></label><div class="in"><span class="chip"><span class="avatar">鈴</span>鈴木 花子</span></div></div><div class="f"><label>承認者 <i>*</i></label><div class="in"><span class="chip"><span class="avatar">山</span>山田 太郎</span></div></div></div>
+<div class="grid2"><div class="f"><label>出張先 <i>*</i></label><div class="in">福岡市</div></div><div class="f"><label>出張目的 <i>*</i></label><div class="in">顧客訪問・打ち合わせ</div></div></div>
+<div class="grid2"><div class="f"><label>出発日 <i>*</i></label><div class="in">2026-10-21</div></div><div class="f"><label>帰着日 <i>*</i></label><div class="in">2026-10-22</div></div></div>
+<div class="f"><label>スケジュール</label><table class="sch"><tr><th>日程</th><th>訪問先</th><th>目的・用件</th></tr><tr><td></td><td></td><td></td></tr></table></div>
+<div class="btns" style="justify-content:flex-end"><span class="btn">キャンセル</span>${mk(1, '<span class="btn primary">保存する</span>')}</div></div></div>`;
+
+const name = location.hash.slice(1) || 'T01-apply-form';
+document.getElementById('msgs').innerHTML = '<div class="divider">今日</div>' + (S[name] || (() => []))().join('');
+document.getElementById('meName').textContent = who.name;
+document.getElementById('meAv').textContent = who.av;
+const app = document.getElementById('app');
+if (name === 'T01-apply-form') app.insertAdjacentHTML('beforeend', FORM);
+if (name === 'T13b-withdraw-error') app.insertAdjacentHTML('beforeend', '');
+</script>
+</body>
+</html>
