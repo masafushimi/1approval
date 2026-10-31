@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>利用マニュアル for Teams | 1approval 出張手配</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><rect width=%2216%22 height=%2216%22 rx=%223%22 fill=%22%235B5FC7%22/><text x=%228%22 y=%2212%22 font-size=%2210%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22white%22>1</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+<style>nav.toc .brand, .doc-head .eyebrow, h2 .no { color: var(--teams); }</style>
+</head>
+<body>
+<div class="shell">
+
+<nav class="toc">
+  <div class="brand">1approval for Teams</div>
+  <div class="doc-title">利用マニュアル 第 1.0 版</div>
+  <a href="#overview">1. 全体の流れ</a>
+  <a href="#apply">2. 申請する（申請者）</a>
+  <a href="#book" class="lv2">2.1 予約サイトで手配する</a>
+  <a href="#book-train" class="lv2">2.1.1 新幹線の場合</a>
+  <a href="#book-air" class="lv2">2.1.2 航空券の場合</a>
+  <a href="#return" class="lv2">2.2 Teams に戻る</a>
+  <a href="#request" class="lv2">2.3 承認を依頼する</a>
+  <a href="#approve">3. 承認する（承認者）</a>
+  <a href="#approve-pre" class="lv2">3.1 事前承認（発注が行われます）</a>
+  <a href="#approve-final" class="lv2">3.2 完了承認（最終承認）</a>
+  <a href="#status">4. 予約状況の見かた</a>
+  <a href="#patterns">5. 手配結果のパターン別ガイド</a>
+  <a href="#p-all-ok" class="lv2">5.1 すべて予約できた</a>
+  <a href="#p-partial" class="lv2">5.2 予約に失敗した明細がある（事前承認済（予約失敗））</a>
+  <a href="#p-with-cancel" class="lv2">5.3 キャンセルが混ざっている</a>
+  <a href="#cancel">6. 予約をキャンセルする</a>
+  <a href="#withdraw">7. 申請を取り下げる</a>
+  <a href="#list">8. 一覧と CSV 出力</a>
+  <a href="#faq">9. 困ったとき</a>
+  <a href="#customize">10. アプリを変更するとき</a>
+  <a href="#glossary">付録: 用語</a>
+  <div class="back"><a href="index.html">← マニュアル一覧へ</a></div>
+</nav>
+
+<main>
+<div class="doc-head">
+  <div class="eyebrow">USER MANUAL ― for Microsoft Teams</div>
+  <h1>利用マニュアル for Teams</h1>
+  <p class="lede">Microsoft Teams のチャットから、出張申請の作成、予約サイトでの手配、承認、予約の確定、キャンセル、出張後の領収書の提出までの日々の操作を説明します。</p>
+  <div class="meta"><span>対象: 申請される方・承認される方・経理ご担当者</span></div>
+</div>
+
+<h2 id="overview"><span class="no">1</span>全体の流れ</h2>
+<p>出張の手配は「申請 → 手配 → 事前承認（発注） → 完了承認」の順に進みます。操作はすべて Teams の <strong>1Approval AI Bot</strong> とのチャットで行い、申請の内容は貴社の<strong>連携先ワークフロー</strong>（Microsoft 365 SharePointなど）に自動で保存されます。予約サイトで選んだ内容も<strong>自動で申請に反映される</strong>ので、転記は不要です。</p>
+<div class="flow">
+  <div class="node tm"><span class="who">申請者</span>Teams で<br>申請フォームを保存</div>
+  <div class="arrow">→</div>
+  <div class="node pk"><span class="who">申請者</span>予約サイトで<br>手配・申し込み</div>
+  <div class="arrow">→</div>
+  <div class="node tm"><span class="who">申請者</span>事前承認を依頼</div>
+  <div class="arrow">→</div>
+  <div class="node tm"><span class="who">承認者</span>承認カードで承認<br>（発注が行われる）</div>
+  <div class="arrow">→</div>
+  <div class="node vd"><span class="who">自動</span>予約が確定し<br>「予約済」になる</div>
+  <div class="arrow">→</div>
+  <div class="node tm"><span class="who">申請者→承認者</span>完了承認</div>
+</div>
+<table>
+  <tr><th style="width:11em">申請のステータス</th><th>意味</th><th>次に操作する人</th></tr>
+  <tr><td>未処理</td><td>申請番号の発行直後。予約サイトで手配できる状態</td><td>申請者</td></tr>
+  <tr><td>事前承認依頼中</td><td>承認者の確認待ち</td><td>承認者</td></tr>
+  <tr><td>却下</td><td>承認者に差し戻された状態。手配をやり直して「事前承認依頼」で再度依頼します</td><td>申請者</td></tr>
+  <tr><td>事前承認済</td><td>承認され、予約サイトへ発注済み。明細の予約状況を確認する段階</td><td>申請者</td></tr>
+  <tr><td>事前承認済（予約失敗）</td><td>承認は済んでいるが、予約に失敗した明細がある状態（一部でも全部でも。<a href="#p-partial">5.2</a>）</td><td>申請者</td></tr>
+  <tr><td>追加承認依頼中</td><td>失敗分を再手配して追加承認を待っている</td><td>承認者</td></tr>
+  <tr><td>完了承認依頼中</td><td>最終承認待ち</td><td>承認者</td></tr>
+  <tr><td>完了承認済</td><td>手続き完了（CSV 出力の対象になります）</td><td>—</td></tr>
+  <tr><td>追加承認却下</td><td>追加承認が却下された状態（終了）。必要なら申請し直します</td><td>—</td></tr>
+  <tr><td>取り下げ</td><td>申請者が申請を取り下げた状態（終了。<a href="#withdraw">7 章</a>）</td><td>—</td></tr>
+</table>
+<p>事前承認の段階で承認者が承認カードの <kbd class="ui">差戻し</kbd> を押すと、ステータスは<strong>「却下」</strong>になり、申請者の Teams に通知が届きます（完了承認の段階の差戻しは「事前承認済」に、追加承認の段階の差戻しは「事前承認済（予約失敗）」に戻ります。<a href="#approve-final">3.2</a>）。申請者は手配をやり直して（<a href="#request">2.3</a> のカートを空にする手順）、<kbd class="ui">事前承認依頼</kbd> で再度承認者へ依頼します。<br>本書の「申請者」は<strong>申請フォームを保存した方</strong>です。代理で作成した場合、承認後の操作（完了承認依頼など）のカードは作成した方の Teams に届きます。</p>
+<div class="callout info"><span class="label">色の見かた</span>
+<p>本書では <span class="actor-badge teams">Teams</span> の画面での操作と、<span class="actor-badge pikapaka">ピカパカ（予約サイト）</span>の画面での操作を色で区別しています。画面例の出張者は「鈴木 花子」、承認者は「山田 太郎」です。</p></div>
+<div class="callout info"><span class="label">連携先ワークフローの画面でも確認できます</span>
+<p>Teams で操作した内容は、連携先ワークフロー（SharePoint の出張申請サイト）の申請書にもそのまま反映されます。ボットが表示する<strong>申請番号</strong>と、カードの <kbd class="ui">申請書を開く</kbd> から、いつでも申請書を確認できます。</p></div>
+
+<h2 id="apply"><span class="no">2</span>申請する（申請者）</h2>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <ol class="procedure">
+    <li>Teams の左側の <kbd class="ui">チャット</kbd> から <strong>1Approval AI Bot</strong> を開き、<kbd class="ui">出張申請フォームを開く</kbd> をクリックします（ボットが見つからない場合は <a href="#faq">9 章</a>）。</li>
+    <li><strong>件名</strong>・<strong>出張者</strong>（自分が自動で入ります）・<strong>承認者</strong>・<strong>出張先</strong>・<strong>出張目的</strong>・<strong>出発日</strong>・<strong>帰着日</strong>を入力します。出張者・承認者は Microsoft 365 のアカウントから選びます（名前の一部を入力すると候補が出ます）。</li>
+    <li>必要に応じて<strong>スケジュール</strong>（日程・訪問先・目的・用件）と<strong>備考</strong>を入力します。</li>
+    <li><kbd class="ui">保存する</kbd> をクリックします。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/T01-apply-form.png" width="1200" height="788" alt="Teams の出張申請フォーム。出張者に鈴木 花子、承認者に山田 太郎、出張先・目的・日程を入力した状態" loading="lazy">
+    <figcaption>件名・出張者・承認者・出張先・目的・日程を入力して「保存する」。</figcaption>
+  </figure>
+  <p class="done-check"><strong>完了の確認</strong><span>ボットから「申請番号 ○○ を発行しました」と返信があり、その下に<strong>手配カード</strong>（<kbd class="ui">🏨 ホテル</kbd> / <kbd class="ui">🚅 新幹線</kbd> / <kbd class="ui">✈️ 航空券</kbd>）が表示されれば OK です。申請はこの時点で連携先ワークフローに「未処理」として保存されています。</span></p>
+  <figure class="shot">
+    <img src="img/T02-arrange-card.png" width="1200" height="788" alt="申請番号の発行メッセージと手配カード" loading="lazy">
+    <figcaption>申請番号の発行と、続けて表示される手配カード。</figcaption>
+  </figure>
+  <div class="callout"><span class="label">保存できないときは次を確認してください</span>
+  <p>必須項目（*）をすべて入力します。承認者は<strong>1 人だけ</strong>選びます。出発日は<strong>翌日以降</strong>の日付にします（当日出発の申請は登録できません）。帰着日は出発日以降にします。該当する項目にエラーが表示されます。</p></div>
+  <div class="callout info"><span class="label">予約内容は入力不要です</span>
+  <p>フォームには予約の項目はありません。予約内容は予約サイトから自動で申請に入るので、<strong>手で入力する必要はありません</strong>。</p></div>
+</div>
+
+<h3 id="book">2.1 予約サイトで手配する</h3>
+<div class="step actor-pikapaka">
+  <span class="actor-badge pikapaka">ピカパカ（予約サイト）</span>
+  <ol class="procedure">
+    <li>Teams の<strong>手配カード</strong>の <kbd class="ui">🏨 ホテル</kbd> / <kbd class="ui">🚅 新幹線</kbd> / <kbd class="ui">✈️ 航空券</kbd> をクリックします。予約サイトが開きます（Microsoft 365 のアカウントで自動的にログインした状態です）。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/T03-arrange-hotel.png" width="1200" height="788" alt="手配カードの「🏨 ホテル」ボタンに赤枠" loading="lazy">
+    <figcaption>手配カードのボタン (1) をクリックすると予約サイトが開きます。</figcaption>
+  </figure>
+  <ol class="procedure" start="2">
+    <li>検索条件を入れて検索します。出張の<strong>日程は申請から引き継がれています</strong>。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/B03-pikapaka-landing.png" width="1200" height="788" alt="ピカパカのホテル検索画面。チェックイン 2026年10月21日・チェックアウト 2026年10月22日が入っている" loading="lazy">
+    <figcaption>予約サイトの検索画面。チェックイン・チェックアウトは申請の出発日・帰着日が入った状態で開きます。</figcaption>
+  </figure>
+  <p>検索すると、条件に合うホテルの一覧が表示されます。</p>
+  <figure class="shot">
+    <img src="img/B04-cb.png" width="1200" height="788" alt="ホテルの検索結果一覧。各ホテルに「キャンセル無料」の表示" loading="lazy">
+    <figcaption>検索結果。上部の「①検索結果 → ②ホテル確認 → ③情報入力 → ④内容確認 → ⑤予約完了」の順に進みます。「キャンセル無料」(1) の表示があるプランは、期日までにキャンセルすると料金はかかりません。詳細は予約詳細をご確認ください。</figcaption>
+  </figure>
+  <ol class="procedure" start="3">
+    <li>商品（ホテルならプラン）を選び、宿泊者情報などを入力して <kbd class="ui">入力内容確認</kbd> → 申し込みを確定します。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/B04d-pikapaka-input-filled.png" width="1200" height="788" alt="ご宿泊者情報入力。姓 SUZUKI・名 HANAKO と、変更・取消規定の表示" loading="lazy">
+    <figcaption>③情報入力。宿泊者名は半角ローマ字で入力します。「変更・取消規定」に取消料が発生する日付が表示されるので確認しておきます。</figcaption>
+  </figure>
+  <p>入力を終えて進むと、申し込み内容の確認画面になります。</p>
+  <figure class="shot">
+    <img src="img/B04e-pikapaka-confirm.png" width="1200" height="788" alt="お申込みフォーム確認。ホテル名・チェックイン/アウト・宿泊人数・合計金額の確認画面" loading="lazy">
+    <figcaption>④内容確認。内容を確認して申し込みを確定すると、予約サイトが閉じて Teams に戻ります。</figcaption>
+  </figure>
+  <ol class="procedure" start="4">
+    <li>申し込みが完了すると、<strong>予約サイトが閉じて Teams のチャットに戻ります</strong>（予約内容は戻る前に申請へ書き込まれています）。</li>
+  </ol>
+  <div class="callout info"><span class="label">この時点では「在庫等の確保」はされていません</span>
+  <p>カートのデータをミラーした状態になっていますが、在庫などの確保はされていません。</p></div>
+  <div class="callout"><span class="label">予約サイトの画面は途中で閉じないでください</span>
+  <p>申し込みの途中で予約サイトの画面を閉じると、申請に予約内容が反映されません。最後まで進めてから Teams に戻ってください。</p></div>
+</div>
+
+<h3 id="book-train">2.1.1 新幹線の場合</h3>
+<div class="step actor-pikapaka">
+  <span class="actor-badge pikapaka">ピカパカ（新幹線）</span>
+  <p>新幹線の予約サイトは、本サイトの仕様と同様で、<strong>申し込み当日から 1 ヵ月先まで</strong>しか予約できません。</p>
+  <p><a href="https://www.jreast.co.jp/kippu/02.html" target="_blank" rel="noopener noreferrer">https://www.jreast.co.jp/kippu/02.html</a></p>
+  <ol class="procedure">
+    <li>手配カードの <kbd class="ui">🚅 新幹線</kbd> をクリックすると、「新幹線検索」の画面が開きます。</li>
+    <li><strong>使用路線</strong>（東海道・山陽新幹線 など）を選びます。選ぶと乗車駅・到着駅の候補がその路線の駅に切り替わります。</li>
+    <li>往路の<strong>乗車駅・到着駅・出発日時</strong>を選びます。日付は申請の出発日が入っています。復路は <kbd class="ui">復路自動入力</kbd> を選ぶと往路の逆区間が入ります。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/C12-train-search.png" width="1200" height="788" alt="新幹線検索の画面。使用路線: 東海道・山陽新幹線、往路と復路の乗車駅・到着駅・出発日時、復路自動入力、検索するボタン" loading="lazy">
+    <figcaption>新幹線検索。使用路線を選んでから往路・復路の駅と日時を選び「検索する」。</figcaption>
+  </figure>
+  <ol class="procedure" start="4">
+    <li><kbd class="ui">検索する</kbd> をクリックします。往路・復路それぞれの料金（自由席）が表示されるので、料金の左の ○ を選び <kbd class="ui">お申し込み画面に進む</kbd> をクリックします。表示される料金は通常期の目安で、別途送料がかかります（画面の注意事項）。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/C13-train-results.png" width="1200" height="788" alt="検索結果の画面。往路 10/4 東京→新横浜、復路 10/5 新横浜→東京 の自由席の料金 ¥1,380 と、注意事項、お申し込み画面に進むボタン" loading="lazy">
+    <figcaption>検索結果。往路・復路それぞれの料金を選んで「お申し込み画面に進む」。</figcaption>
+  </figure>
+  <ol class="procedure" start="5">
+    <li>申し込み画面で<strong>枚数・到着期限・搭乗者名（カタカナ）・会社名・お届け先・宛名・電話番号・メールアドレス</strong>を確認・入力し、「個人情報の取り扱いについて」に同意して <kbd class="ui">内容を確認して送信画面へ</kbd> → 送信します。送信が完了すると、予約サイトが閉じて Teams に戻ります。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/C14-train-apply.png" width="1200" height="788" alt="申し込み画面。ご予約の詳細（乗車日・区間・車両・券種・枚数・発券方法）と、チケットのお届け先・ご連絡先（到着期限・搭乗者名・会社/部署・郵便番号）" loading="lazy">
+    <figcaption>申し込み画面。到着期限の締切ルールが赤枠内に表示されます。入力後「内容を確認して送信画面へ」。</figcaption>
+  </figure>
+  <div class="callout"><span class="label">「きっぷ発券」は郵送で届きます</span>
+  <p>発券方法が「きっぷ発券」の場合は、指定した<strong>到着期限</strong>までにお届け先へ郵送されます。乗車予定日と同じ日の申し込みはできず、<strong>到着期限の 1 営業日前の午前 11 時</strong>が申込締切です（北海道・北東北・中四国・九州へのお届けは 2 営業日前。土日祝は営業日に含まれません）。締切を過ぎると手配できないので、余裕をもって申し込んでください。</p></div>
+  <div class="callout"><span class="label">JR東日本管轄エリアがQRコードでご利用いただけます</span>
+  <p>新幹線TOP画面にて、路線選択の際にJR東日本管轄を選ぶと、発券方法の選択画面が表示されますので、そこでQRコード発券をお選びいただく形になります。</p></div>
+  <figure class="shot">
+    <img src="img/C12b-train-qr.png" width="1171" height="847" alt="新幹線検索の画面。使用路線で東北新幹線を選ぶと発券方法の選択が表示され、「QRコード発券」(発券後、メールで引換証を送付します) を選べる" loading="lazy">
+    <figcaption>使用路線で JR東日本管轄の路線を選ぶと、発券方法で「QRコード発券」を選べます (赤枠)。QRコード発券では、発券後に引換証がメールで届きます。</figcaption>
+  </figure>
+  <p>Teams に戻ると、取り込み結果に<strong>往路と復路の 2 件</strong>が同じ予約番号で表示されます。</p>
+</div>
+
+<h3 id="book-air">2.1.2 航空券の場合</h3>
+<div class="step actor-pikapaka">
+  <span class="actor-badge pikapaka">ピカパカ（航空券）</span>
+  <ol class="procedure">
+    <li>手配カードの <kbd class="ui">✈️ 航空券</kbd> をクリックすると、国内航空券の検索画面が開きます。<kbd class="ui">往復</kbd> / <kbd class="ui">片道</kbd> を選び、<strong>出発地・到着地</strong>を選びます。行き・帰りの日付は申請の出発日・帰着日が入っています。</li>
+    <li><kbd class="ui">最安値を検索</kbd> をクリックします。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/C02-air-search.png" width="1200" height="788" alt="航空券の検索画面。往復/片道、出発: 羽田、到着: 福岡、行き 10月4日、帰り 10月5日、最安値を検索ボタン" loading="lazy">
+    <figcaption>航空券の検索。出発地・到着地を選び「最安値を検索」。日付は申請から引き継がれます。</figcaption>
+  </figure>
+  <ol class="procedure" start="3">
+    <li>「行きの便を選択してください」の一覧で、便ごとに<strong>割引運賃</strong>または<strong>変更可能運賃</strong>の <kbd class="ui">○</kbd> をクリックします。往復の場合は続けて「帰りの便」も同じように選びます。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/C03-air-flights.png" width="1200" height="788" alt="行きの便を選択する画面。便名・出発/到着時刻・座席・割引運賃・変更可能運賃の一覧と、各運賃の ○ ボタン" loading="lazy">
+    <figcaption>行きの便の一覧。運賃の「○」をクリックすると次（帰りの便 → 情報入力）へ進みます。</figcaption>
+  </figure>
+  <ol class="procedure" start="4">
+    <li>「情報入力」で選んだ航空券と搭乗者情報を確認し、決済方法（法人一括請求）と「個人情報の取り扱いについて」の同意を確認して <kbd class="ui">確認に進む</kbd> → 申し込みを確定します。確定すると、予約サイトが閉じて Teams に戻ります。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/C05-air-passenger.png" width="1200" height="788" alt="情報入力の画面。選択された航空券（往路 SKY 001、復路 JAL 300）の確認と、申込者・搭乗者の氏名（カナ）・生年月日・電話番号・メールアドレス" loading="lazy">
+    <figcaption>情報入力。選んだ航空券と搭乗者情報を確認して「確認に進む」。</figcaption>
+  </figure>
+  <p>Teams に戻ると、取り込み結果に<strong>往路と復路の 2 件</strong>が同じ予約番号で表示されます（片道の場合は 1 件）。</p>
+</div>
+
+<h3 id="return">2.2 Teams に戻る</h3>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <p>Teams に戻ると、ボットから<strong>「予約内容を申請に取り込みました」</strong>というメッセージが届き、選んだ<strong>予約番号・予約内容・金額</strong>が表示されます。同じ内容は連携先ワークフローの申請書の予約明細にも入っています。この時点の明細のステータスは「未予約」のままで正常です。</p>
+  <p>複数のサービスを手配する場合は、<kbd class="ui">➕ 手配を追加する</kbd> をクリックして手配カードを出し、続けて別のサービス（例: ホテルの次に新幹線）を同じように申し込みます。同じサービスを申し込み直すと、そのサービスの明細は<strong>新しい内容に置き換わります</strong>。</p>
+  <figure class="shot">
+    <img src="img/T04-imported.png" width="1200" height="788" alt="「予約内容を申請に取り込みました」のメッセージと申請内容の確認カード。予約番号 RES-DH-…、ランドーホテル福岡、12,200 円" loading="lazy">
+    <figcaption>取り込み結果 (1) と申請内容の確認カード。手配金額の合計が表示されます。</figcaption>
+  </figure>
+  <p class="done-check"><strong>完了の確認</strong><span>取り込み結果に予約番号（例: RES-DH-…）と金額が表示されていれば手配は完了です。</span></p>
+  <div class="callout"><span class="label">反映を待ってから次の操作へ</span>
+  <p>取り込みのメッセージが届く前に次の操作をしたり、連携先ワークフローの申請書を同時に編集したりすると、<strong>反映された内容が消えることがあります</strong>。取り込みのメッセージを確認してから次の操作に進み、同じ申請の同時編集は避けてください。</p></div>
+</div>
+
+<h3 id="request">2.3 承認を依頼する</h3>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <ol class="procedure">
+    <li>手配がそろったら、申請内容の確認カードで<strong>件名・承認者・出張先・日程・手配金額</strong>を確認します。</li>
+    <li><kbd class="ui">事前承認依頼</kbd> をクリックします。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/T05-request.png" width="1200" height="788" alt="申請内容の確認カードの「事前承認依頼」ボタンに赤枠" loading="lazy">
+    <figcaption>確認カードの「事前承認依頼」(1)。</figcaption>
+  </figure>
+  <p class="done-check"><strong>完了の確認</strong><span>ボットから「ステータスが『事前承認依頼中』に変わりました」と返信があれば依頼完了です。承認者の Teams に承認カードが届き、以降は承認者の操作に移ります。</span></p>
+  <figure class="shot">
+    <img src="img/T05b-requested.png" width="1200" height="788" alt="依頼後のメッセージ。ステータス: 事前承認依頼中、現在の作業者: 山田 太郎" loading="lazy">
+    <figcaption>依頼後はステータスと作業者が切り替わり、承認者の Teams に承認カードが届きます。</figcaption>
+  </figure>
+  <div class="callout"><span class="label">手配をやり直すとき（「カートを空にする」）</span>
+  <p>手配をやり直すには、申請内容の確認カードの <kbd class="ui">カートを空にする</kbd> から、やり直したいサービス（ホテル・新幹線・航空券）を選んで確定します（そのサービスに明細があり、ステータスが未処理・事前承認依頼中・却下のときだけ操作できます）。<strong>「カートを空にしました」と返信があるまで確定していません</strong>。明細が残ったままですと、発注されますのでご注意くださいませ。</p></div>
+</div>
+
+<h2 id="approve"><span class="no">3</span>承認する（承認者）</h2>
+<div class="callout"><span class="label">承認は Teams の承認カード（または申請書の詳細画面）から 1 件ずつ</span>
+<p>予約サイトへの発注や、価格確認中・エラー・キャンセル手配中の明細がある申請を止める確認は、<strong>Teams の承認カード、または 1approval が組み込まれた申請書の詳細画面で承認のボタンを押したときにだけ</strong>行われます。連携先ワークフローの一括承認機能や API、Power Automate のフローなど、これらを通らずにステータスを進めると、<strong>発注が行われないままステータスだけが進みます</strong>。承認は 1 件ずつ行ってください。</p></div>
+
+<h3 id="approve-pre">3.1 事前承認（このときに発注が行われます）</h3>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <ol class="procedure">
+    <li>Teams に届いた<strong>「出張承認依頼」カード</strong>を開きます（1Approval AI Bot とのチャットとアクティビティに届きます）。</li>
+    <li><strong>申請者・出張先・日程・目的・手配の明細（予約内容・金額）・合計</strong>を確認します。詳しく見る場合は <kbd class="ui">申請書を開く</kbd> から連携先ワークフローの申請書を開きます。</li>
+    <li>問題なければ <kbd class="ui">✓ 承認して即発券</kbd>。内容に問題がある場合は <kbd class="ui">差戻し</kbd> で、ステータスが<strong>「却下」</strong>になり申請者に通知されます。申請者は手配をやり直して <kbd class="ui">事前承認依頼</kbd> で再度依頼します。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/T06-approver-card.png" width="1200" height="788" alt="承認者の Teams に届いた承認カード。「✓ 承認して即発券」と「差戻し」に赤枠" loading="lazy">
+    <figcaption>承認者には「✓ 承認して即発券」(1) と「差戻し」(2) が表示されます。</figcaption>
+  </figure>
+  <p>承認すると、その場で予約サイトへ<strong>発注</strong>が行われます。通常は承認から 10 秒〜数十秒で予約サイト側の確定が届き、明細のステータスが<span class="badge green">予約済</span>に変わります。確定に時間がかかる場合は、それまで<span class="badge blue">手配中</span>と表示されます（<a href="#status">4 章</a>）。</p>
+  <figure class="shot">
+    <img src="img/T07-approved.png" width="1200" height="788" alt="「上長承認完了 ＆ 自動購買成功」のメッセージ。明細が「予約済」になっている" loading="lazy">
+    <figcaption>発注が確定すると、申請者と承認者に完了のメッセージが届き、明細 (1) のステータスが「予約済」になります。</figcaption>
+  </figure>
+  <p class="done-check"><strong>完了の確認</strong><span>承認カードが「承認しました」に変わり、申請のステータスが「事前承認済」、明細の予約状況が「予約済」になっていれば確定です。「手配中」の場合は発注は受け付けられており、確定を待っている状態です。</span></p>
+  <div class="callout"><span class="label">「注文の完了がタイムアウトしました」と出たら、すぐに承認し直さない</span>
+  <p>承認の実行後、明細の予約状況が更新される（通常は「予約済」、確定が遅い場合は「手配中」に変わる）のを<strong>最大 30 秒</strong>待ちます。通信の遅れなどで間に合わないと「注文の完了がタイムアウトしました。申請の状態を確認してください。」と表示され、<strong>ステータスは元のまま（事前承認なら「事前承認依頼中」、追加承認なら「追加承認依頼中」）・承認のボタンも残ります</strong>（発注そのものは送られている場合があります）。</p>
+  <p>カードの <kbd class="ui">最新の状態を表示</kbd> または申請書で明細を確認し、<strong>「未予約」の明細が残っていないこと</strong>を確認してから承認を押すと、発注は再送されずステータスだけが進みます（「手配中」「仮押さえ中」「予約済」「予約失敗」「キャンセル済」の明細は再送されません）。<strong>「未予約」の明細が残っている間は押し直さないでください</strong>（発注の受け付けは済んでいて記録だけが遅れている場合があり、押し直すと同じ内容が二重に発注されるおそれがあります）。しばらく待っても変わらない場合は管理者へお問い合わせください。</p></div>
+  <div class="callout"><span class="label">差し戻された申請を手配し直すとき</span>
+  <p>差し戻しても古い明細は残ります。申請者は<strong>先に確認カードの「カートを空にする」</strong>を行ってから、手配カードで選び直してください（<a href="#request">2.3</a>）。古い明細が残ったまま再度承認すると、<strong>古い予約も一緒に発注されます</strong>。選び直したら <kbd class="ui">事前承認依頼</kbd> で承認者へ再度依頼します。</p></div>
+</div>
+
+<h3 id="approve-final">3.2 完了承認（最終承認）</h3>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <ol class="procedure">
+    <li><strong>申請者</strong>: 明細がすべて「予約済」になったら、ボットのカードの <kbd class="ui">完了承認依頼</kbd> をクリックします。<strong>「未予約」「手配中」「仮押さえ中」の明細が残っている間は押さないでください</strong>（システムは止めませんが、その後に届いた予約失敗が通知されず、失敗を含んだまま完了扱いになります）。現地での立替費用がある場合は、先に領収書を提出しておきます（下の「出張から戻ったら」）。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/T08-final-request.png" width="1200" height="788" alt="申請者のカードの「完了承認依頼」ボタンに赤枠" loading="lazy">
+    <figcaption>申請者が「完了承認依頼」(1)。</figcaption>
+  </figure>
+  <ol class="procedure" start="2">
+    <li><strong>承認者</strong>: Teams に届いた<strong>「完了承認依頼」カード</strong>で、明細がすべて「予約済」であることを確認して <kbd class="ui">完了承認</kbd>。ステータスが「完了承認済」になり手続き完了です（一覧・CSV の集計対象になるのはこの状態です）。内容に問題があれば <kbd class="ui">差戻し</kbd> で「事前承認済」に戻ります（発注済みの予約はそのまま有効です）。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/T09-final-approve.png" width="1200" height="788" alt="承認者の完了承認カード。「完了承認」と「差戻し」" loading="lazy">
+    <figcaption>承認者が「完了承認」(1)。</figcaption>
+  </figure>
+  <div class="callout info"><span class="label">完了承認は承認者の作業です</span>
+  <p>完了承認依頼中の作業者は承認者です。事前承認のときと同じく、依頼後は申請者側のボタンが消え、承認者にだけ「完了承認」「差戻し」が表示されます。</p></div>
+  <p class="done-check"><strong>完了の確認</strong><span>ボットから「完了承認済」のメッセージが届けば手続き完了です。</span></p>
+  <figure class="shot">
+    <img src="img/T09b-final-done.png" width="1200" height="788" alt="「ステータスが『完了承認済』になりました」のメッセージ" loading="lazy">
+    <figcaption>「完了承認済」(1) で手続き完了です。</figcaption>
+  </figure>
+  <div class="callout info"><span class="label">出張から戻ったら（領収書の提出）</span>
+  <p>現地決済や立替の費用、証票の添付が必要な購買がある場合は、帰着後にボットから<strong>「領収書を添付してください」</strong>という案内が届きます。<kbd class="ui">📄 領収書（JPG/PDF）を添付・送信する</kbd>、またはチャット入力欄の添付ボタンから、領収書の画像（スマートフォンで撮影した JPG/PNG）や PDF を送信します。AI-OCR が日付・金額・店舗名を読み取って申請の明細と照合し、一致すると申請書に自動で添付されます（電子帳簿保存法に対応した形式で保存されます）。照合結果のカードで <kbd class="ui">この明細に紐付ける</kbd> を確認してください。</p></div>
+  <figure class="shot">
+    <img src="img/T14-receipt.png" width="1200" height="788" alt="領収書 PDF を送信し、AI-OCR の照合結果カードに「この明細に紐付ける」ボタンが表示されている" loading="lazy">
+    <figcaption>領収書を送ると照合結果が表示されます。内容を確認して「この明細に紐付ける」(1)。</figcaption>
+  </figure>
+  <div class="callout"><span class="label">金額が変わることがあります（価格変動）</span>
+  <p>商品を選んでから発注までに時間が経つと、予約サイト側で価格が変動することがあります。変動が設定の「価格閾値」（許容変動割合）を超えていた場合の現れ方は 2 通りです。</p>
+  <p>(a) <strong>承認の実行時</strong>に「予約サイトが発注を受け付けませんでした（価格の変動など）。承認者が差し戻し、申請者が手配をやり直してください。」と表示され、ステータスは進みません（何も発注されていません）。最新の状態を表示すると、通常は発注しようとした明細が<span class="badge red">予約失敗</span>になっています（この明細は次の発注には含まれません）。同じ承認ボタンを押し直しても「予約失敗（またはキャンセル済）の明細が残っており、新たに発注する明細がないため承認できません。」と表示されて進みません。<strong>最新の状態を表示してから</strong>承認者が <kbd class="ui">差戻し</kbd> を押してください。<br>
+  ・「事前承認」の実行時に出た場合: 差戻し → 申請者は <strong>必ず</strong> <a href="#request">2.3</a> の「カートを空にする」で古い明細を消してから選び直し →「事前承認依頼」で再度依頼 → 承認をやり直します（古い明細を残したまま承認すると、あとで「予約失敗」扱いに戻ることがあります）。<br>
+  ・「追加承認」の実行時に出た場合: 差戻しでステータスが「事前承認済（予約失敗）」に戻り、「手配失敗サービス」に「予約サイトが発注を受け付けませんでした（価格の変動など）」と記録されます。申請者はそのサービスを手配カードから選び直して「追加承認依頼」をやり直してください（成功している予約はそのまま残ります。「予約失敗」になった古い明細は再発注されないので、消さなくてかまいません）。<br>(b) <strong>発注後</strong>に明細が<span class="badge red">予約失敗</span>になり、失敗理由に価格の変動が記録されます（例:「価格が+28.57%変動しました。再承認が必要です。」）。<a href="#p-partial">5.2</a> の流れで再手配・追加承認してください。</p></div>
+</div>
+
+<h2 id="status"><span class="no">4</span>予約状況の見かた</h2>
+<p>ボットのカードと申請書の予約明細の「ステータス」は次のいずれかで表示されます。</p>
+<table>
+  <tr><th style="width:12em">表示</th><th>意味</th></tr>
+  <tr><td><span class="badge gray">未予約</span></td><td>まだ手配していない、または予約サイトで申し込んだ直後（発注前）の状態です</td></tr>
+  <tr><td><span class="badge blue">手配中</span></td><td>承認によって発注が受け付けられ、予約サイト側の確定を待っている状態です。通常は承認から 10 秒〜数十秒で「予約済」に変わるため、この表示を目にすることはほとんどありません。<strong>確定に時間がかかる場合（係員の対応を待つときなど）は「手配中」または「仮押さえ中」のまま数時間かかることがあります</strong>（そのままお待ちください）</td></tr>
+  <tr><td><span class="badge blue">仮押さえ中</span></td><td>発注後、予約サイト側で仮押さえの通知があった状態です（確定待ち）</td></tr>
+  <tr><td><span class="badge green">予約済</span></td><td>予約が確定しました</td></tr>
+  <tr><td><span class="badge red">予約失敗</span></td><td>予約を確定できませんでした。理由はボットからの通知と「手配失敗サービス」欄に表示されます（<a href="#p-partial">5.2</a>）</td></tr>
+  <tr><td><span class="badge amber">キャンセル手配中</span></td><td>取り消しの手続き中です。<strong>この状態の明細があると承認できません</strong></td></tr>
+  <tr><td><span class="badge gray">キャンセル済</span></td><td>取り消しが完了しました。金額は通常 0 円になります（予約サイトが取消料を通知した場合はその金額が入ります）</td></tr>
+</table>
+<p>このほか<span class="badge amber">価格確認中</span>・<span class="badge red">エラー</span>という表示が定義されていますが、通常の運用では現れません。これらの明細があると承認できません（「キャンセル手配中」と同じ扱いです）。表示された場合は管理者へお問い合わせください。</p>
+
+<h2 id="patterns"><span class="no">5</span>手配結果のパターン別ガイド</h2>
+<p>事前承認後の発注では、予約サイト側の事情（満室・価格変動など）により結果が分かれることがあります。まず下の表で該当するパターンを確認してください。</p>
+<table>
+  <tr><th>手配の結果</th><th>申請のステータス</th><th>次にすること</th></tr>
+  <tr><td>すべて<span class="badge green">予約済</span></td><td>事前承認済のまま</td><td><a href="#p-all-ok">5.1</a> 完了承認へ</td></tr>
+  <tr><td><span class="badge red">予約失敗</span>がある（一部でも全部でも）</td><td>自動で<strong>「事前承認済（予約失敗）」</strong>に変わる</td><td><a href="#p-partial">5.2</a> 失敗分を再手配。出張をやめるなら <a href="#withdraw">7 章</a> 取り下げ</td></tr>
+  <tr><td><span class="badge gray">キャンセル済</span>が混ざっている</td><td>キャンセルは失敗扱いされない</td><td><a href="#p-with-cancel">5.3</a> 残りの明細で判断</td></tr>
+</table>
+
+<h3 id="p-all-ok">5.1 すべて予約できた</h3>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <p>全明細が<span class="badge green">予約済</span>になったら、そのまま <kbd class="ui">完了承認依頼</kbd> → 承認者の<strong>完了承認</strong>で手続き完了です（<a href="#approve-final">3.2</a>）。</p>
+</div>
+
+<h3 id="p-partial">5.2 予約に失敗した明細がある（事前承認済（予約失敗））</h3>
+<p>予約サイト側の事情（満室・価格変動など）で<strong>予約を確定できなかった明細がある</strong>場合です。複数のサービス（例: ホテル + 新幹線）のうち一部だけ失敗した場合も、すべて失敗した場合（サービスを 1 つだけ手配していてそれが失敗した場合を含みます）も、流れは同じです。</p>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <ol class="procedure">
+    <li>申請のステータスが自動で<strong>「事前承認済（予約失敗）」</strong>に変わり、ボットから<strong>赤い通知</strong>（「新幹線の予約に失敗しました。追加申請を行ってください。」と失敗理由）が届きます。失敗理由は申請書の「手配失敗サービス」欄にも「サービス名: 理由」の形で記録されます。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/T10-failed.png" width="1200" height="788" alt="予約失敗の通知カード。「新幹線の予約に失敗しました。追加申請を行ってください。新幹線：価格が+28.57%変動しました。再承認が必要です。」" loading="lazy">
+    <figcaption>通知 (1) に失敗したサービスと理由が出ます。再手配が済んだら「追加承認依頼」(2)。</figcaption>
+  </figure>
+  <p>「手配失敗サービス」欄のサービス名は英語表記です: <code>Hotel</code> = ホテル / <code>Train</code> = 新幹線 / <code>Air</code> = 航空券（ボットの通知では「国内航空券」と表示されます）。</p>
+  <ol class="procedure" start="2">
+    <li>成功した予約（<span class="badge green">予約済</span>）があれば<strong>そのまま有効</strong>です。取り直しは不要です。</li>
+    <li>通知のカードには<strong>失敗したサービスの手配ボタンだけ</strong>が表示されるので（すべて失敗した場合はすべてのサービスのボタン）、そこから<strong>再手配</strong>してください（<a href="#book">2.1</a> と同じ操作）。<strong>必ず承認依頼より先に再手配を済ませます</strong>（先に依頼へ進むとボタンが表示されなくなります）。出張そのものを取りやめる場合は、再手配せずに、<strong>成功している予約を <a href="#cancel">6 章</a>の手順でキャンセルして「キャンセル済」にしてから</strong>、<a href="#withdraw">7 章</a>の手順で取り下げます（「予約済」の明細が残っていると取り下げられません）。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/T10b-failed-rearrange.png" width="1200" height="788" alt="予約状況カード。ホテルは予約済、新幹線は予約失敗で、新幹線の手配ボタンだけが表示されている" loading="lazy">
+    <figcaption>失敗した新幹線の手配ボタン (1) だけが表示され、明細は「予約失敗」(2) です。ホテルの「予約済」はそのまま有効です。</figcaption>
+  </figure>
+  <ol class="procedure" start="4">
+    <li>再手配が済んだら、申請者が <kbd class="ui">追加承認依頼</kbd> をクリックします。</li>
+    <li>承認者の Teams に<strong>「追加承認依頼」カード</strong>が届きます。承認者が <kbd class="ui">追加承認</kbd> を押すと、失敗分の再発注が行われ、ステータスは「事前承認済」に戻ります。全明細がそろったら完了承認へ進みます（<a href="#approve-final">3.2</a>）。再手配をやり直させる場合は <kbd class="ui">差戻し</kbd>（ステータスが「事前承認済（予約失敗）」に戻り、申請者が失敗分を手配し直して「追加承認依頼」をやり直せます。予約サイトが発注を受け付けなかった場合もこれです。そのとき発注しようとした明細は「予約失敗」になっており、再発注されません）。申請そのものを終える場合は <kbd class="ui">追加承認却下</kbd>（この申請は終了。<strong>成功している予約は自動では取り消されない</strong>ので、不要なら <a href="#cancel">6 章</a>の手順で取り消し、必要なら申請し直します）。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/T11-additional-approve.png" width="1200" height="788" alt="承認者の追加承認カード。「追加承認」「差戻し」「追加承認却下」" loading="lazy">
+    <figcaption>承認者には「追加承認」(1)・「差戻し」・「追加承認却下」(2) が表示されます。追加承認で失敗分が再発注されます。</figcaption>
+  </figure>
+  <div class="callout"><span class="label">再手配をせずに追加承認依頼をしない</span>
+  <p>再手配をしないまま追加承認まで進むと、何も発注されずにステータスだけ「事前承認済」に戻り、失敗の通知も残ります。必ず「再手配 → 追加承認依頼」の順で進めてください。先に依頼へ進んでしまった場合は、承認後に申請者がカードの「予約失敗」ボタンを押すと手配ボタンが再び表示されます。</p></div>
+</div>
+
+<h3 id="p-with-cancel">5.3 キャンセルが混ざっている</h3>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <p><span class="badge gray">キャンセル済</span>の明細は<strong>失敗としては扱われません</strong>（キャンセルだけでは「事前承認済（予約失敗）」にはなりません）。キャンセル済を除いた残りの明細の結果で、上のパターンに当てはめて進めてください。</p>
+</div>
+
+<h2 id="cancel"><span class="no">6</span>予約をキャンセルする</h2>
+<p>出張が取りやめになった場合は、<strong>予約サイト側で取り消し</strong>を行います。申請の明細は自動で更新されます。</p>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <ol class="procedure">
+    <li>ボットのカード（または申請書の予約明細）で、取り消したい明細の <kbd class="ui">詳細・キャンセル</kbd> をクリックします（発注後、「仮押さえ中」「予約済」になった明細に表示されます。<strong>発注前の明細には表示されません</strong> — その場合は予約サイトに直接アクセスしてください）。予約サイトの「出張登録確認」画面が開きます。</li>
+  </ol>
+</div>
+<div class="step actor-pikapaka">
+  <span class="actor-badge pikapaka">ピカパカ（予約サイト）</span>
+  <ol class="procedure">
+    <li>取り消したい予約の <kbd class="ui">詳細/キャンセル</kbd> をクリックします。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/B12a-cb.png" width="1200" height="1192" alt="予約サイトの出張登録確認画面。国内ホテルの行の「詳細/キャンセル」ボタンに赤枠" loading="lazy">
+    <figcaption>出張登録確認 →「詳細/キャンセル」(1)。</figcaption>
+  </figure>
+  <ol class="procedure" start="2">
+    <li>「お申込みのホテル」の詳細が開くので、<strong>「最終変更日・取消可能日」と「変更・取消規定」</strong>を確認し、画面下の <kbd class="ui">予約をキャンセルする</kbd> をクリックします。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/B12b-cb.png" width="1200" height="788" alt="お申込みのホテルの詳細。取消規定の下に「閉じる」と「予約をキャンセルする」ボタン" loading="lazy">
+    <figcaption>取消規定を確認して「予約をキャンセルする」(1)。</figcaption>
+  </figure>
+  <ol class="procedure" start="3">
+    <li>「予約をキャンセルしてよろしいですか？」で <kbd class="ui">OK</kbd> をクリックします。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/B12c-cb.png" width="1200" height="788" alt="確認ダイアログ「予約をキャンセルしてよろしいですか？」と OK ボタン" loading="lazy">
+    <figcaption>「OK」(1) で確定します。</figcaption>
+  </figure>
+  <ol class="procedure" start="4">
+    <li>「キャンセルが成功となりました。」と表示されれば取り消し完了です。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/B12d-pikapaka-cancel-done.png" width="1200" height="788" alt="「キャンセルが成功となりました。」のダイアログ" loading="lazy">
+    <figcaption>「キャンセルが成功となりました。」が出れば予約サイト側の取り消しは完了です。</figcaption>
+  </figure>
+</div>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <p>明細の予約状況が<span class="badge amber">キャンセル手配中</span>を経て<span class="badge gray">キャンセル済</span>に自動で更新され、ボットから通知が届きます。金額は通常 0 円になります（予約サイトが取消料を通知した場合はその金額が入ります。反映まで 1 分ほどかかることがあります）。</p>
+  <figure class="shot">
+    <img src="img/T12-cancelled.png" width="1200" height="788" alt="キャンセル完了の通知。ホテルの明細が「キャンセル済」・0 円" loading="lazy">
+    <figcaption>明細 (1) が「キャンセル済」・0 円になります。</figcaption>
+  </figure>
+  <p class="done-check"><strong>完了の確認</strong><span>明細が「キャンセル済」になっていれば完了です。しばらく待っても「キャンセル手配中」のまま進まない場合は自動反映が失敗している可能性があるため、管理者へお問い合わせください。</span></p>
+  <div class="callout"><span class="label">取消料にご注意ください</span>
+  <p>取消料の有無と発生する日付は予約サイトの「変更・取消規定」に表示されます。申し込み時に「キャンセル無料」の表示があるプランを選ぶと、規定の期日までは取消料がかかりません。</p></div>
+</div>
+
+<h2 id="withdraw"><span class="no">7</span>申請を取り下げる</h2>
+<p>出張が取りやめになった申請は、申請者が<strong>「取り下げ」</strong>で終了できます。取り下げられるのは<strong>購入が成立していない申請</strong>です。</p>
+<table>
+  <tr><th style="width:16em">明細の予約状況</th><th>取り下げ</th></tr>
+  <tr><td>すべて「未予約」「価格確認中」「仮押さえ中」「予約失敗」「キャンセル済」のいずれか（明細が無い場合も含む）</td><td>できます</td></tr>
+  <tr><td><span class="badge green">予約済</span>がある</td><td>できません。先に <a href="#cancel">6 章</a>の手順で予約をキャンセルし、「キャンセル済」になってから取り下げます</td></tr>
+  <tr><td><span class="badge blue">手配中</span>・<span class="badge amber">キャンセル手配中</span>がある</td><td>できません。予約サイト側の結果（予約済 / 予約失敗 / キャンセル済）が出てから判断します</td></tr>
+</table>
+<div class="step actor-teams">
+  <span class="actor-badge teams">Teams</span>
+  <ol class="procedure">
+    <li>申請のカードの <kbd class="ui">取り下げ</kbd> をクリックし、確認で <kbd class="ui">実行</kbd> をクリックします。
+      <figure class="shot">
+    <img src="img/T13-withdraw.png" width="1200" height="788" alt="カードの「取り下げ」ボタンと確認の「実行」ボタン" loading="lazy">
+    <figcaption>「取り下げ」(1) をクリックし、確認の「実行」(2) をクリックします。</figcaption>
+  </figure>
+    </li>
+  </ol>
+  <p class="done-check"><strong>完了の確認</strong><span>ボットから「取り下げ」の返信があり、ステータスが「取り下げ」になっていれば完了です。</span></p>
+  <figure class="shot">
+    <img src="img/T13b-withdraw-error.png" width="1200" height="788" alt="取り下げできなかったときのメッセージ「予約済の明細があります。予約サイトでキャンセルしてから取り下げてください。」" loading="lazy">
+    <figcaption>取り下げが止まったときは、理由 (1) が表示され、ステータスは変わりません。</figcaption>
+  </figure>
+  <div class="callout"><span class="label">「取り下げ」ボタンが表示されないとき</span>
+  <p>取り下げができるのは、ステータスが<strong>未処理・事前承認済・事前承認済（予約失敗）・却下</strong>のときです。承認者の確認待ち（事前承認依頼中）の申請は、承認者に <kbd class="ui">差戻し</kbd> してもらうと「却下」になり、申請者が取り下げられます。追加承認依頼中の申請は、承認者に <kbd class="ui">差戻し</kbd> してもらうと「事前承認済（予約失敗）」に戻り、申請者が取り下げられます（成功している予約が残っていれば、先に <a href="#cancel">6 章</a>でキャンセルします）。承認者の <kbd class="ui">追加承認却下</kbd> はこの申請を終了します。</p></div>
+  <div class="callout"><span class="label">取り下げが止まったとき</span>
+  <p>「予約済の明細があります。予約サイトでキャンセルしてから取り下げてください。」と表示されたときは、<a href="#cancel">6 章</a>の手順で予約をキャンセルし、明細が「キャンセル済」になってから取り下げます。「手配中の明細があります。手配の結果が出てから取り下げてください。」と表示されたときは、明細の予約状況が「予約済」「予約失敗」「キャンセル済」のいずれかになるまで待ちます。ステータスは変わりません。</p></div>
+  <div class="callout"><span class="label">仮押さえ中の明細がある申請を取り下げたとき</span>
+  <p>取り下げのあとに予約サイト側で予約が確定すると、明細は「予約済」に変わります。取り下げた申請に「予約済」の明細が付いたときは、<a href="#cancel">6 章</a>の手順で予約をキャンセルしてください。</p></div>
+  <p>取り下げた申請は元に戻せません。改めて出張を手配する場合は、<kbd class="ui">出張申請フォームを開く</kbd> から新しい申請を作成してください。</p>
+</div>
+
+<h2 id="list"><span class="no">8</span>一覧と CSV 出力</h2>
+<div class="step">
+  <span class="actor-badge">連携先ワークフロー</span>
+  <h3>一覧の確認</h3>
+  <p>申請の一覧と CSV 出力は、<strong>連携先ワークフロー（SharePoint の出張申請サイト）</strong>の画面で行います。Teams のチャットには進行中の申請のカードが履歴として残るので、個別の申請はカードの <kbd class="ui">申請書を開く</kbd> から確認できます。</p>
+  <table>
+    <tr><th style="width:12em">一覧</th><th>表示される申請</th></tr>
+    <tr><td>（作業者が自分）</td><td>自分が次に操作する申請</td></tr>
+    <tr><td>すべて</td><td>すべての申請。ステータス・金額・承認者を一覧できます</td></tr>
+    <tr><td>出張者が自分</td><td>出張者が自分（ログイン中のユーザー）の申請</td></tr>
+    <tr><td>完了承認済み</td><td>ステータスが「完了承認済」の申請</td></tr>
+    <tr><td>完了承認未実施</td><td>ステータスが「事前承認済」または「完了承認依頼中」の申請（事前承認済（予約失敗）・追加承認依頼中の申請は含みません）</td></tr>
+  </table>
+  <p>出張申請サイトの「出張申請」リストを開き、右上のビューの切り替えで一覧を選びます。CSV はコマンドバーのボタンから出力します。</p>
+  <figure class="shot">
+    <img src="img/S01-sp-list.png" width="1200" height="788" alt="SharePoint の出張申請リスト。右上のビュー切り替えとコマンドバーの「CSVダウンロード」ボタンに赤枠" loading="lazy">
+    <figcaption>ビューの切り替え (1) と「CSVダウンロード」ボタン (2)。</figcaption>
+  </figure>
+  <p>切り替えのメニューを開くと、上の表の一覧が並びます。</p>
+  <figure class="shot">
+    <img src="img/S02-sp-views.png" width="1200" height="788" alt="ビュー切り替えのメニューを開いた状態。（作業者が自分）・すべて・出張者が自分・完了承認済み・完了承認未実施" loading="lazy">
+    <figcaption>メニューを開いたところ。</figcaption>
+  </figure>
+
+  <h3>CSV 出力（経理ご担当者向け）</h3>
+  <p>連携先ワークフローの一覧画面の <kbd class="ui">CSVダウンロード</kbd> から、設定の「CSV 出力対象ステータス」（既定: 完了承認済）の申請の実績を CSV でダウンロードできます。ボタンは<strong>管理者と、設定で許可されたユーザー</strong>にのみ表示されます（ただし、これは連携先ワークフローの権限設定とは別です。下の注意をご覧ください）。</p>
+  <div class="callout"><span class="label">CSV ボタンの表示の制限は、データへのアクセス制限ではありません</span>
+  <p>CSV ダウンロードは、操作している方の連携先ワークフローの権限で申請を読み出して出力します。<strong>申請の閲覧権限がある方は、CSV のデータを取得できます</strong>（絞っているのは<strong>ボタンを表示するかどうかだけ</strong>で、アクセス制限ではありません）。閲覧させたくない申請や項目は、連携先ワークフローのアクセス権で制限してください。ただし、<strong>申請者・承認者が予約明細（ホテル・新幹線・航空券）を閲覧できる状態は保ってください</strong>（見えないと、承認しても発注されないまま進みます）。項目やアクセス権を絞る前に、導入手順書の<a href="onboarding.html#customize">「アプリをカスタマイズするとき」</a>をご確認のうえ、1approval 事務局へご相談ください。</p></div>
+  <ol class="procedure">
+    <li>一覧画面の <kbd class="ui">CSVダウンロード</kbd> をクリックします。</li>
+    <li><strong>実績発生日（開始）・（終了）</strong>で期間を指定します。</li>
+    <li><strong>パターン</strong>で出力する種類を選びます: ホテル / 飛行機、新幹線 / 経費精算。</li>
+    <li><kbd class="ui">ダウンロード</kbd> をクリックします。</li>
+  </ol>
+  <figure class="shot">
+    <img src="img/S03-sp-csv.png" width="1200" height="788" alt="CSVダウンロードのダイアログ。実績発生日（開始）・（終了）、パターン: ホテル、キャンセルとダウンロードのボタン" loading="lazy">
+    <figcaption>CSV ダウンロードのダイアログ (1)。期間とパターンを指定します。</figcaption>
+  </figure>
+  <p>「実績発生日」は、ホテルは<strong>チェックアウト日</strong>（未設定の場合は利用日）、新幹線・航空券は<strong>利用日</strong>、経費精算は利用日で判定します。一度に出力できるのは 5,000 件までです。ボタンはパソコン版の一覧画面にのみ表示されます（スマートフォン版・Teams のチャットにはありません）。該当がない場合は「該当するデータが見つかりませんでした。」などと表示されます。</p>
+  <div class="callout info"><span class="label">出力される申請</span>
+  <p>CSV に含まれるのは、設定「CSV 出力対象ステータス」で選ばれたステータス（既定: 完了承認済）の申請です。貴社で独自のステータス（経理確認中など）を追加している場合は、CSV を出す段階のステータスを選んでください。集計の締めまでに、対象のステータスへ進めておいてください。</p>
+  <p>ホテル・交通機関のパターンには末尾に「予約状況」列があります。「予約失敗」「キャンセル済」の明細も行として出力されるので、この列で判別して集計から除いてください。Teams から提出した領収書は申請書の添付ファイルに保存されています。</p></div>
+</div>
+
+<h2 id="faq"><span class="no">9</span>困ったとき</h2>
+<table>
+  <tr><th style="width:17em">症状</th><th>まず確認すること</th></tr>
+  <tr><td>Teams に 1Approval AI Bot が見つからない</td><td>Teams の <kbd class="ui">アプリ</kbd> で「1Approval」を検索して追加してください。表示されない場合は、貴社の Teams 管理者がアプリを許可していない可能性があります。管理者へ</td></tr>
+  <tr><td>手配カード（手配ボタン）が表示されない</td><td>申請フォームを<strong>保存して申請番号が発行されている</strong>か。手配ボタンが使えるのはステータスが「未処理」「却下」「事前承認済（予約失敗）」のときだけです（事前承認済（予約失敗）では失敗したサービスのみ）。<kbd class="ui">➕ 手配を追加する</kbd> でカードを出し直せます。それでも表示されない場合は管理者へ</td></tr>
+  <tr><td>手配ボタンを押しても何も起きない</td><td>Teams を最新の状態にし、ボットとのチャットを開き直してからもう一度押してください。ブラウザ版の Teams をお使いの場合は、<strong>ポップアップブロック</strong>で予約サイトが止められていないか（アドレスバーのブロック表示）も確認してください</td></tr>
+  <tr><td>ボタンを押すと「予約サイトに出張者が登録されていないため、手配を開始できません。」と表示された</td><td>出張者（利用者）が予約サイトに登録されていません。予約サイトへの登録を管理者に依頼し、登録後にもう一度押してください（出張者を登録済みの方に変えても手配できます）</td></tr>
+  <tr><td>ボタンを押すと「予約サイトが手配の受付を拒否しました。理由: …」と表示された</td><td>予約サイトが申請内容を受け付けていません。表示された理由（予約サイトからの英語の文言です）をもとに出張者や日付を確認して直し、解決しない場合や意味が分からない場合は理由の文言を添えて管理者へ</td></tr>
+  <tr><td>ボタンを押すと「購入サイトへの接続に失敗しました。管理者にお問い合わせください。」と表示された</td><td>予約サイトへの接続そのものに失敗しています。時間をおいて再度押し、繰り返す場合は管理者へ</td></tr>
+  <tr><td>予約サイトで申し込んだのに「予約内容を申請に取り込みました」が届かない／英語のエラー画面（<code>"success":false</code> …）が表示された</td><td>予約内容の書き込みに失敗しています。<strong>予約サイト側の申し込みは成立しているため、買い直さないでください</strong>（二重予約になります）。画面のスクリーンショットを添えて管理者へ</td></tr>
+  <tr><td>予約サイトでエラーになった</td><td>画面のメッセージを控えて（スクリーンショット推奨）管理者へ</td></tr>
+  <tr><td>承認者に承認カードが届かない</td><td>申請の承認者が正しいか、承認者の Teams に 1Approval AI Bot が追加されているかを確認してください。承認者は申請書の詳細画面から承認することもできます</td></tr>
+  <tr><td>承認したのに明細が「手配中」「仮押さえ中」のまま</td><td>予約サイト側の確定待ちです。係員の対応を待つ場合は数時間かかることがあります。それ以外で数分経っても「予約済」にならない場合は確定が遅れているか失敗している可能性があります。<strong>再度承認し直さず</strong>、管理者へ</td></tr>
+  <tr><td>承認したのに明細が「未予約」のまま</td><td>発注が受け付けられていないか、受け付けの記録に失敗しています（この場合はしばらくして「予約済」に変わることがあります）。最新の状態を表示しても変わらない場合は管理者へ（<strong>再度承認し直さない</strong>でください）</td></tr>
+  <tr><td>「注文の完了がタイムアウトしました。申請の状態を確認してください。」と表示された</td><td>発注そのものは送られている場合があり、ステータスは「事前承認依頼中」のままです。最新の状態を表示して明細を確認し、<a href="#approve-pre">3.1</a> の条件（「未予約」の明細が残っていないこと。手配中・仮押さえ中の明細は再送されません）を満たしてから承認をやり直してください</td></tr>
+  <tr><td>「予約サイトが発注を受け付けませんでした（価格の変動など）。」と表示された</td><td>予約サイトが発注を拒否したため何も発注されていません（発注しようとした明細は「予約失敗」になります）。<a href="#approve-final">3.2</a> の (a) の手順（差戻し → 再手配 → 事前承認依頼）へ。追加承認の実行時に出た場合は、承認者の「差戻し」で「事前承認済（予約失敗）」に戻り、「手配失敗サービス」に記録されたサービスを選び直して追加承認依頼をやり直せます</td></tr>
+  <tr><td>「注文の送信に失敗しました。管理者にお問い合わせください。」と表示された</td><td>通信の失敗や予期しないエラーです。最新の状態を表示して明細がすべて「未予約」のままなら発注されていません。判断がつかない場合は再操作せず管理者へ</td></tr>
+  <tr><td>「予約情報が不足しているため発注できません。手配をやり直してください。」と表示された</td><td>明細の内容が予約サイトの情報と合っていません。該当サービスの手配をやり直してください</td></tr>
+  <tr><td>「予約失敗（またはキャンセル済）の明細が残っており、新たに発注する明細がないため承認できません。」と表示された</td><td>予約失敗の明細が残っているのに新しく発注する明細が無い状態（発注拒否のあとに同じ承認ボタンを押し直した場合など）で、承認を進めても何も発注されないため止めています。承認者が「差戻し」し、申請者が手配をやり直してください（<a href="#approve-final">3.2</a> の (a)）。手配中・仮押さえ中の明細がある場合（タイムアウト後の承認のやり直し）は止まりません</td></tr>
+  <tr><td>金額が申請時と違う</td><td>価格変動の可能性があります。<a href="#approve-final">3.2</a> と <a href="#p-partial">5.2</a> の流れをご確認ください</td></tr>
+  <tr><td>「キャンセル手配中」のまま進まない</td><td>自動反映が失敗している可能性があります。管理者へ</td></tr>
+  <tr><td>領収書を送ったのに明細と照合されない</td><td>画像がぼやけていないか、日付・金額・店舗名が写っているかを確認して撮り直してください。照合できない場合は、照合結果のカードから対象の明細を選んで紐付けるか、管理者へ</td></tr>
+  <tr><td>「取り下げ」を押すと「予約済の明細があります。予約サイトでキャンセルしてから取り下げてください。」と表示された</td><td>購入が成立している明細があります。<a href="#cancel">6 章</a>の手順でキャンセルし、「キャンセル済」になってから取り下げてください（<a href="#withdraw">7 章</a>）</td></tr>
+  <tr><td>「取り下げ」を押すと「手配中の明細があります。手配の結果が出てから取り下げてください。」と表示された</td><td>予約サイト側で手配が進んでいます。明細が「予約済」「予約失敗」「キャンセル済」のいずれかになってから判断してください（<a href="#withdraw">7 章</a>）</td></tr>
+</table>
+<p>解決しない場合は、<strong>申請番号・発生日時・画面のメッセージ</strong>を添えて社内の管理者へお問い合わせください。</p>
+
+<h2 id="customize"><span class="no">10</span>アプリを変更するとき（管理者向け）</h2>
+<p>連携先ワークフローの項目・一覧・通知・承認経路や、Teams アプリの設定を変えるときに、変えてよいもの・変えてはいけないものは、導入手順書の<a href="onboarding.html#customize">「アプリをカスタマイズするとき」</a>にまとめています。特に次の点にご注意ください。</p>
+<ul>
+  <li>初期設定で作った項目の削除・列の内部名の変更、ステータス名・アクション名の変更はしないでください（承認時の発注や、予約内容の書き戻し、Teams への通知が動かなくなります）。項目の表示名の変更や、項目・一覧の追加はできます。</li>
+  <li><strong>連携先ワークフローの一括承認機能や、Power Automate などでステータスを自動で進める仕組みとは併用できません</strong>（<a href="#approve">3 章</a>の注意）。</li>
+  <li>Teams の 1Approval AI Bot は、Teams 管理センターで<strong>申請者・承認者の全員が使える状態</strong>にしてください（承認者が使えないと承認カードが届きません）。</li>
+  <li>CSV ダウンロードのボタンの表示の制限は、連携先ワークフローの権限設定とは別です（<a href="#list">8 章</a>の注意）。</li>
+</ul>
+
+<h2 id="glossary"><span class="no">&nbsp;</span>付録: 用語</h2>
+<table>
+  <tr><th>用語</th><th>意味</th></tr>
+  <tr><td>1Approval AI Bot</td><td>Teams で出張の申請・手配・承認・領収書の提出を行うためのチャットボット</td></tr>
+  <tr><td>連携先ワークフロー</td><td>申請の正式な記録を保存する貴社のワークフロー（Microsoft 365 SharePoint）</td></tr>
+  <tr><td>手配カード</td><td>ボットが表示する「🏨 ホテル」「🚅 新幹線」「✈️ 航空券」のボタンが並んだカード。クリックで予約サイトへ移動します</td></tr>
+  <tr><td>承認カード</td><td>承認者の Teams に届く、申請内容と「承認する」「差戻し」のボタンが並んだカード</td></tr>
+  <tr><td>申請者</td><td>申請フォームを保存した方。承認後の操作のカードはこの方に届きます</td></tr>
+  <tr><td>申請番号</td><td>申請フォームの保存時に発行される番号。連携先ワークフローの申請書と共通です</td></tr>
+  <tr><td>予約番号</td><td>予約サイトが発行する番号（例: RES-DH-…）。申請の予約明細に自動で入ります</td></tr>
+  <tr><td>事前承認</td><td>承認者による最初の承認。このときに予約サイトへ発注されます</td></tr>
+  <tr><td>完了承認</td><td>最終承認。CSV 出力の対象になります</td></tr>
+  <tr><td>事前承認済（予約失敗）</td><td>承認は済んでいるが予約に失敗した明細があるときのステータス。失敗分を再手配して追加承認を受けるか、取り下げます</td></tr>
+  <tr><td>取り下げ</td><td>申請者が申請を終了するときのステータス。購入が成立している明細があるときは、先に予約をキャンセルします</td></tr>
+  <tr><td>手配失敗サービス</td><td>失敗したサービスと理由が記録される欄（Hotel / Train / Air）</td></tr>
+  <tr><td>AI-OCR 照合</td><td>Teams で送った領収書の日付・金額・店舗名を読み取り、申請の明細と自動で照合する機能</td></tr>
+</table>
+</main>
+</div>
+</body>
+</html>

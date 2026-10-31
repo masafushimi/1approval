@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>SharePoint 画面モック（マニュアル撮影用）</title>
+<!-- マニュアル 8 章の SharePoint 一覧画面の撮影用モック。shots/capture.js が #シーン名 ごとに撮影する -->
+<style>
+  :root { --bar: #03787c; --ink: #323130; --soft: #605e5c; --line: #edebe9; --bg: #faf9f8; --accent: #0f6cbd; --mark: #d32f2f; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif; color: var(--ink); font-size: 14px; background: #fff; }
+  .app { width: 1200px; height: 788px; overflow: hidden; position: relative; }
+  .suite { height: 48px; background: var(--bar); color: #fff; display: flex; align-items: center; padding: 0 16px; gap: 16px; font-size: 15px; font-weight: 700; }
+  .suite .search { flex: 0 1 460px; margin: 0 auto; height: 32px; background: #fff; border-radius: 4px; color: #888; display: flex; align-items: center; padding: 0 12px; font-size: 13px; font-weight: 400; }
+  .suite .me { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 400; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: #c8e6e4; color: #03585b; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+  .site { padding: 14px 24px 10px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; }
+  .site .logo { width: 40px; height: 40px; border-radius: 6px; background: var(--bar); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .site h1 { font-size: 20px; margin: 0; font-weight: 600; }
+  .site .nav { margin-left: 24px; display: flex; gap: 18px; font-size: 13px; color: var(--soft); }
+  .cmd { display: flex; align-items: center; gap: 6px; padding: 8px 20px; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .cmd .c { padding: 6px 10px; border-radius: 4px; color: var(--ink); }
+  .cmd .c.primary { background: var(--accent); color: #fff; font-weight: 700; padding: 7px 14px; }
+  .cmd .spacer { flex: 1; }
+  .view { border: 1px solid #c8c6c4; border-radius: 4px; padding: 6px 12px; min-width: 200px; display: flex; justify-content: space-between; background: #fff; }
+  h2 { font-size: 18px; margin: 14px 24px 8px; font-weight: 600; }
+  table { border-collapse: collapse; margin: 0 24px; width: calc(100% - 48px); font-size: 13px; }
+  th { text-align: left; font-weight: 600; color: var(--soft); padding: 9px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td { padding: 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .who { display: inline-flex; align-items: center; gap: 6px; }
+  .who .avatar { width: 22px; height: 22px; font-size: 10px; }
+  .menu { position: absolute; background: #fff; border-radius: 4px; box-shadow: 0 6px 20px rgba(0,0,0,.18); padding: 6px 0; width: 220px; font-size: 13px; z-index: 3; }
+  .menu div { padding: 8px 16px; }
+  .menu div.on { background: #f3f2f1; font-weight: 700; }
+  .overlay { position: absolute; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; z-index: 4; }
+  .dlg { width: 440px; background: #fff; border-radius: 6px; box-shadow: 0 8px 30px rgba(0,0,0,.25); padding: 22px 24px; }
+  .dlg h3 { margin: 0 0 16px; font-size: 18px; }
+  .row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 13.5px; }
+  .row label { width: 9.5em; }
+  .in { border: 1px solid #c8c6c4; border-radius: 4px; padding: 5px 10px; min-width: 150px; }
+  .btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+  .btn { border: 1px solid #c8c6c4; border-radius: 4px; padding: 6px 16px; font-weight: 700; font-size: 13px; background: #fff; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .mk { position: relative; outline: 3px solid var(--mark); outline-offset: 3px; border-radius: 6px; }
+  .mk::before { content: attr(data-n); position: absolute; left: -16px; top: -18px; width: 26px; height: 26px; border-radius: 50%; background: var(--mark); color: #fff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; z-index: 5; font-family: Arial, sans-serif; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="suite"><span>SharePoint</span><div class="search">このサイトを検索</div><div class="me">鈴木 花子<div class="avatar">鈴</div></div></div>
+  <div class="site"><div class="logo">出</div><h1>出張申請サイト</h1><div class="nav"><span>ホーム</span><span style="color:#323130;font-weight:700">出張申請</span><span>ドキュメント</span></div></div>
+  <div class="cmd"><span class="c">＋ 新規</span><span class="c">編集</span><span class="c">共有</span><span id="csv"></span><span class="spacer"></span><span id="view"></span></div>
+  <h2>出張申請</h2>
+  <table>
+    <tr><th>申請番号</th><th>作成者</th><th>出張者</th><th>出張先</th><th>出発日</th><th>帰着日</th><th>ステータス</th><th>会社請求金額</th><th>承認者</th></tr>
+    <tr><td>TR-2026-0013</td><td><span class="who"><span class="avatar">鈴</span>鈴木 花子</span></td><td><span class="who"><span class="avatar">鈴</span>鈴木 花子</span></td><td>福岡市</td><td>2026-10-21</td><td>2026-10-22</td><td>完了承認済</td><td class="num">12,200 円</td><td><span class="who"><span class="avatar">山</span>山田 太郎</span></td></tr>
+    <tr><td>TR-2026-0012</td><td><span class="who"><span class="avatar">鈴</span>鈴木 花子</span></td><td><span class="who"><span class="avatar">鈴</span>鈴木 花子</span></td><td>大阪市</td><td>2026-10-14</td><td>2026-10-15</td><td>事前承認済</td><td class="num">14,800 円</td><td><span class="who"><span class="avatar">山</span>山田 太郎</span></td></tr>
+    <tr><td>TR-2026-0011</td><td><span class="who"><span class="avatar">鈴</span>鈴木 花子</span></td><td><span class="who"><span class="avatar">鈴</span>鈴木 花子</span></td><td>名古屋市</td><td>2026-10-07</td><td>2026-10-08</td><td>事前承認依頼中</td><td class="num">9,600 円</td><td><span class="who"><span class="avatar">山</span>山田 太郎</span></td></tr>
+    <tr><td>TR-2026-0010</td><td><span class="who"><span class="avatar">鈴</span>鈴木 花子</span></td><td><span class="who"><span class="avatar">鈴</span>鈴木 花子</span></td><td>福岡市</td><td>2026-10-06</td><td>2026-10-07</td><td>未処理</td><td class="num">0 円</td><td><span class="who"><span class="avatar">山</span>山田 太郎</span></td></tr>
+  </table>
+</div>
+<script>
+const scene = location.hash.slice(1) || 'S01-sp-list';
+const mk = (n, html) => `<span class="mk" data-n="${n}" style="display:inline-flex">${html}</span>`;
+const csvBtn = '<span class="c primary">CSVダウンロード</span>';
+const viewBox = name => `<span class="view"><span>▤ ${name}</span><span>⌄</span></span>`;
+const app = document.getElementById('app');
+if (scene === 'S01-sp-list') {
+  document.getElementById('view').innerHTML = mk(1, viewBox('（作業者が自分）'));
+  document.getElementById('csv').innerHTML = mk(2, csvBtn);
+} else if (scene === 'S02-sp-views') {
+  document.getElementById('view').innerHTML = viewBox('すべて');
+  document.getElementById('csv').innerHTML = csvBtn;
+  app.insertAdjacentHTML('beforeend', '<div class="menu" style="right:20px;top:160px"><div>（作業者が自分）</div><div class="on">✓ すべて</div><div>出張者が自分</div><div>完了承認済み</div><div>完了承認未実施</div></div>');
+} else if (scene === 'S03-sp-csv') {
+  document.getElementById('view').innerHTML = viewBox('すべて');
+  document.getElementById('csv').innerHTML = csvBtn;
+  app.insertAdjacentHTML('beforeend', `<div class="overlay">${mk(1, `<div class="dlg"><h3>CSVダウンロード</h3><div class="row"><label>実績発生日（開始）：</label><span class="in">2026/10/01</span></div><div class="row"><label>実績発生日（終了）：</label><span class="in">2026/10/31</span></div><div class="row"><label>パターン：</label><span class="in">ホテル ⌄</span></div><div class="btns"><span class="btn">キャンセル</span><span class="btn primary">ダウンロード</span></div></div>`)}</div>`);
+}
+</script>
+</body>
+</html>
