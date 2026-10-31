@@ -1,4 +1,4 @@
-// Teams 画面モック (teams-mock.html) を撮影して ../img/ に保存する。
+// Teams 画面モック (teams-mock.html) と SharePoint 画面モック (sharepoint-mock.html) を撮影して ../img/ に保存する。
 // 使い方: node teams/manual/shots/capture.js
 const path = require('path');
 const { chromium } = require('playwright');
@@ -16,6 +16,12 @@ const SCENES = [
   const url = 'file://' + path.join(__dirname, 'teams-mock.html');
   for (const s of SCENES) {
     await page.goto(`${url}#${s}`);
+    await page.reload();
+    await page.screenshot({ path: path.join(__dirname, '..', 'img', `${s}.png`) });
+  }
+  const sp = 'file://' + path.join(__dirname, 'sharepoint-mock.html');
+  for (const s of ['S01-sp-list', 'S02-sp-views', 'S03-sp-csv']) {
+    await page.goto(`${sp}#${s}`);
     await page.reload();
     await page.screenshot({ path: path.join(__dirname, '..', 'img', `${s}.png`) });
   }

@@ -79,7 +79,7 @@
 <div class="callout info"><span class="label">色の見かた</span>
 <p>本書では <span class="actor-badge teams">Teams</span> の画面での操作と、<span class="actor-badge pikapaka">ピカパカ（予約サイト）</span>の画面での操作を色で区別しています。画面例の出張者は「鈴木 花子」、承認者は「山田 太郎」です。</p></div>
 <div class="callout info"><span class="label">連携先ワークフローの画面でも確認できます</span>
-<p>Teams で操作した内容は、連携先ワークフロー（SharePoint の出張申請サイト・kintone の出張手配申請アプリなど）の申請書にもそのまま反映されます。ボットが表示する<strong>申請番号</strong>と、カードの <kbd class="ui">申請書を開く</kbd> から、いつでも申請書を確認できます。</p></div>
+<p>Teams で操作した内容は、連携先ワークフロー（SharePoint の出張申請サイト）の申請書にもそのまま反映されます。ボットが表示する<strong>申請番号</strong>と、カードの <kbd class="ui">申請書を開く</kbd> から、いつでも申請書を確認できます。</p></div>
 
 <h2 id="apply"><span class="no">2</span>申請する（申請者）</h2>
 <div class="step actor-teams">
@@ -469,7 +469,7 @@
 <div class="step">
   <span class="actor-badge">連携先ワークフロー</span>
   <h3>一覧の確認</h3>
-  <p>申請の一覧と CSV 出力は、<strong>連携先ワークフロー（SharePoint の出張申請サイト・kintone の出張手配申請アプリなど）</strong>の画面で行います。Teams のチャットには進行中の申請のカードが履歴として残るので、個別の申請はカードの <kbd class="ui">申請書を開く</kbd> から確認できます。</p>
+  <p>申請の一覧と CSV 出力は、<strong>連携先ワークフロー（SharePoint の出張申請サイト）</strong>の画面で行います。Teams のチャットには進行中の申請のカードが履歴として残るので、個別の申請はカードの <kbd class="ui">申請書を開く</kbd> から確認できます。</p>
   <table>
     <tr><th style="width:12em">一覧</th><th>表示される申請</th></tr>
     <tr><td>（作業者が自分）</td><td>自分が次に操作する申請</td></tr>
@@ -478,10 +478,15 @@
     <tr><td>完了承認済み</td><td>ステータスが「完了承認済」の申請</td></tr>
     <tr><td>完了承認未実施</td><td>ステータスが「事前承認済」または「完了承認依頼中」の申請（事前承認済（予約失敗）・追加承認依頼中の申請は含みません）</td></tr>
   </table>
-  <p>一覧の名前と並び方は連携先ワークフローによって異なります。kintone をお使いの場合は『利用マニュアル（kintone 版）』の 8 章をご覧ください。</p>
+  <p>出張申請サイトの「出張申請」リストを開き、右上のビューの切り替えで一覧を選びます。CSV はコマンドバーのボタンから出力します。</p>
   <figure class="shot">
-    <img src="img/B11-cb.png" width="1200" height="788" alt="kintone の一覧画面。左上の一覧切替ドロップダウンと「CSVダウンロード」ボタンに赤枠" loading="lazy">
-    <figcaption>kintone の場合: 一覧の切り替え (1) と「CSVダウンロード」ボタン (2)。</figcaption>
+    <img src="img/S01-sp-list.png" width="1200" height="788" alt="SharePoint の出張申請リスト。右上のビュー切り替えとコマンドバーの「CSVダウンロード」ボタンに赤枠" loading="lazy">
+    <figcaption>ビューの切り替え (1) と「CSVダウンロード」ボタン (2)。</figcaption>
+  </figure>
+  <p>切り替えのメニューを開くと、上の表の一覧が並びます。</p>
+  <figure class="shot">
+    <img src="img/S02-sp-views.png" width="1200" height="788" alt="ビュー切り替えのメニューを開いた状態。（作業者が自分）・すべて・出張者が自分・完了承認済み・完了承認未実施" loading="lazy">
+    <figcaption>メニューを開いたところ。</figcaption>
   </figure>
 
   <h3>CSV 出力（経理ご担当者向け）</h3>
@@ -495,8 +500,8 @@
     <li><kbd class="ui">ダウンロード</kbd> をクリックします。</li>
   </ol>
   <figure class="shot">
-    <img src="img/B14-cb.png" width="1200" height="788" alt="CSVダウンロードのダイアログ。実績発生日（開始）・（終了）、パターン: ホテル、キャンセルとダウンロードのボタン" loading="lazy">
-    <figcaption>CSV ダウンロードのダイアログ (1)。期間とパターンを指定します（kintone の場合）。</figcaption>
+    <img src="img/S03-sp-csv.png" width="1200" height="788" alt="CSVダウンロードのダイアログ。実績発生日（開始）・（終了）、パターン: ホテル、キャンセルとダウンロードのボタン" loading="lazy">
+    <figcaption>CSV ダウンロードのダイアログ (1)。期間とパターンを指定します。</figcaption>
   </figure>
   <p>「実績発生日」は、ホテルは<strong>チェックアウト日</strong>（未設定の場合は利用日）、新幹線・航空券は<strong>利用日</strong>、経費精算は利用日で判定します。一度に出力できるのは 5,000 件までです。ボタンはパソコン版の一覧画面にのみ表示されます（スマートフォン版・Teams のチャットにはありません）。該当がない場合は「該当するデータが見つかりませんでした。」などと表示されます。</p>
   <div class="callout info"><span class="label">出力される申請</span>
@@ -534,7 +539,7 @@
 <h2 id="customize"><span class="no">10</span>アプリを変更するとき（管理者向け）</h2>
 <p>連携先ワークフローの項目・一覧・通知・承認経路や、Teams アプリの設定を変えるときに、変えてよいもの・変えてはいけないものは、導入手順書の<a href="onboarding.html#customize">「アプリをカスタマイズするとき」</a>にまとめています。特に次の点にご注意ください。</p>
 <ul>
-  <li>初期設定で作った項目の削除・内部名（フィールドコード）の変更、ステータス名・アクション名の変更はしないでください（承認時の発注や、予約内容の書き戻し、Teams への通知が動かなくなります）。項目の表示名の変更や、項目・一覧の追加はできます。</li>
+  <li>初期設定で作った項目の削除・列の内部名の変更、ステータス名・アクション名の変更はしないでください（承認時の発注や、予約内容の書き戻し、Teams への通知が動かなくなります）。項目の表示名の変更や、項目・一覧の追加はできます。</li>
   <li><strong>連携先ワークフローの一括承認機能や、Power Automate などでステータスを自動で進める仕組みとは併用できません</strong>（<a href="#approve">3 章</a>の注意）。</li>
   <li>Teams の 1Approval AI Bot は、Teams 管理センターで<strong>申請者・承認者の全員が使える状態</strong>にしてください（承認者が使えないと承認カードが届きません）。</li>
   <li>CSV ダウンロードのボタンの表示の制限は、連携先ワークフローの権限設定とは別です（<a href="#list">8 章</a>の注意）。</li>
@@ -544,7 +549,7 @@
 <table>
   <tr><th>用語</th><th>意味</th></tr>
   <tr><td>1Approval AI Bot</td><td>Teams で出張の申請・手配・承認・領収書の提出を行うためのチャットボット</td></tr>
-  <tr><td>連携先ワークフロー</td><td>申請の正式な記録を保存する貴社のワークフロー（Microsoft 365 SharePoint・kintone など）</td></tr>
+  <tr><td>連携先ワークフロー</td><td>申請の正式な記録を保存する貴社のワークフロー（Microsoft 365 SharePoint）</td></tr>
   <tr><td>手配カード</td><td>ボットが表示する「🏨 ホテル」「🚅 新幹線」「✈️ 航空券」のボタンが並んだカード。クリックで予約サイトへ移動します</td></tr>
   <tr><td>承認カード</td><td>承認者の Teams に届く、申請内容と「承認する」「差戻し」のボタンが並んだカード</td></tr>
   <tr><td>申請者</td><td>申請フォームを保存した方。承認後の操作のカードはこの方に届きます</td></tr>
