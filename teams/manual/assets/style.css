@@ -225,13 +225,19 @@ ul.check li::before {
 @media print {
   body { background: var(--paper); font-size: 12.5px; }
   /* 印刷は背景色が落ちるため、バッジは枠線+文字色で判読できる形に切り替える */
-  .actor-badge { color: var(--kintone); background: none; border: 1.5px solid currentColor; }
+  .actor-badge, .actor-badge.teams, .actor-badge.pikapaka, .actor-badge.vendor { color: var(--kintone); background: none; border: 1.5px solid currentColor; }
   .actor-badge.teams { color: var(--teams); }
   .actor-badge.pikapaka { color: var(--pikapaka); }
   .actor-badge.vendor { color: var(--vendor); }
   nav.toc { display: none; }
   main { padding: 0; max-width: none; }
-  .step, .callout, figure.shot, table { break-inside: avoid; }
-  h2 { page-break-after: avoid; }
+  /* 手順ブロックは 1 ページに収まらないことが多いので分割を許し、図・注意・表だけを分けない */
+  .step { page-break-inside: auto; break-inside: auto; }
+  .callout, figure.shot, table { break-inside: avoid; }
+  h2, h3 { page-break-after: avoid; break-after: avoid; }
+  /* スクリーンショットは紙面では縮めて、1 ページに複数枚が入るようにする */
+  figure.shot { text-align: center; }
+  figure.shot img { max-height: 105mm; width: auto; box-shadow: none; }
+  figure.shot figcaption { text-align: left; }
   a { color: inherit; text-decoration: none; }
 }
