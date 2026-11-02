@@ -2,16 +2,848 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>出張手配｜Agent Purchase</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-body{margin:0;font-family:Inter,"Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;background:#F4F6FB;color:#151823}
-a{color:#2F55D4}
+:root{--ink:#151823;--sub:#59617A;--mute:#7D8699;--line:#E2E6F0;--line2:#C6CCDC;--bg:#F4F6FB;--soft:#F2F4FA;--blue:#2F55D4;--violet:#6E43D6;--green:#067A57;--amber:#8A5F03;--red:#C42B3B;--grad:linear-gradient(135deg,#2F55D4 0%,#6E43D6 100%);--mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,"Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;background:var(--bg);color:var(--ink)}
+a{color:var(--blue)}
+button{font:inherit}
+.page{width:1440px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
+header{color:#EEF1F8;flex-shrink:0;height:68px;padding:0 26px;background:#0D1018;border-bottom:1px solid #1E2433;box-shadow:0 1px 0 rgba(13,16,24,.10),0 4px 14px rgba(13,16,24,.10);display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:20}
+header nav a{padding:8px 15px;color:#9AA3B8;text-decoration:none;font-size:13px;border-radius:8px}
+header nav a.cur{background:#1B2030;color:#fff;border:1px solid #3E465C;font-weight:600}
+.demo-badge{font-size:10px;font-weight:700;color:#FFD88A;border:1px solid rgba(255,216,138,.45);border-radius:999px;padding:3px 9px;letter-spacing:.04em}
+.hbtn{font-size:12px;color:#9AA3B8;background:none;border:1px solid #343B4E;border-radius:8px;padding:6px 10px;cursor:pointer}
+.hbtn:hover{color:#fff;border-color:#59617A}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+main{flex-grow:1;padding:22px 26px 28px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(19,24,45,.05),0 1px 3px rgba(19,24,45,.05);padding:18px}
+.ttl{font-size:13px;font-weight:600}
+.lbl{font-size:11px;color:var(--sub);margin-bottom:5px}
+.field{font:inherit;font-size:13px;background:#fff;border:1px solid #8793AF;border-radius:9px;padding:0 12px;color:var(--ink);width:100%;height:38px;outline:none;transition:background .3s}
+.field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,85,212,.15)}
+select.field{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2359617A' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;cursor:pointer}
+.field.ro{background:var(--soft);border-color:var(--line2);display:flex;align-items:center;color:var(--sub)}
+.dates{display:flex;gap:6px;align-items:center}
+.dates span{color:var(--sub);font-size:12px}
+.btn{font-size:13px;font-weight:500;color:var(--ink);background:var(--soft);border:1px solid var(--line2);border-radius:9px;padding:9px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:#8793AF}
+.btn.primary{font-weight:600;color:#fff;background:var(--grad);border:0;box-shadow:0 6px 18px rgba(47,85,212,.22)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.danger{font-weight:600;color:#fff;background:var(--red);border:0}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.chip{font-size:12px;color:var(--sub);background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
+.chip:hover{border-color:var(--line2);color:var(--ink)}
+.chip.on{color:var(--blue);border-color:rgba(47,85,212,.45);background:rgba(47,85,212,.08);font-weight:600}
+.chip.hint{border-color:rgba(138,95,3,.5);color:var(--amber);background:rgba(138,95,3,.07)}
+.chip.ex{font-size:12px;text-align:left;border-style:dashed}
+.tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;white-space:nowrap}
+.tag.ok{color:var(--green);background:rgba(6,122,87,.10)}
+.tag.chk{color:var(--amber);background:rgba(138,95,3,.11)}
+.tag.ng{color:var(--red);background:rgba(196,43,59,.10)}
+.tag.info{color:var(--blue);background:rgba(47,85,212,.09)}
+.tag.mute{color:var(--sub);background:rgba(89,97,122,.09)}
+.note{margin-top:12px;padding:11px 13px;background:rgba(47,85,212,.07);border:1px solid rgba(47,85,212,.22);border-radius:9px;font-size:12px;color:var(--blue);line-height:1.7}
+.note.ng{background:rgba(196,43,59,.06);border-color:rgba(196,43,59,.3);color:var(--red)}
+.note.ok{background:rgba(6,122,87,.06);border-color:rgba(6,122,87,.28);color:var(--green)}
+.item{background:var(--soft);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+.item.ng{border-color:rgba(196,43,59,.45);background:rgba(196,43,59,.035)}
+.ico{width:28px;height:28px;border-radius:8px;background:rgba(47,85,212,.09);display:flex;align-items:center;justify-content:center}
+.reason{margin-top:11px;padding:10px 12px;background:rgba(47,85,212,.05);border:1px solid rgba(47,85,212,.18);border-radius:8px;font-size:12px;color:var(--sub);line-height:1.7}
+.reason b{color:var(--ink)}
+.reason .rh{color:var(--blue);font-weight:700;margin-right:6px}
+.reason.ng .rh{color:var(--red)}
+.row{display:flex;gap:10px;align-items:flex-start}
+.flash{animation:flash 1.4s ease-out}
+@keyframes flash{0%{background-color:rgba(110,67,214,.22)}100%{background-color:transparent}}
+.field.flash{animation:flashf 1.4s ease-out}
+@keyframes flashf{0%{background-color:rgba(110,67,214,.22)}100%{background-color:#fff}}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid rgba(47,85,212,.25);border-top-color:var(--blue);animation:sp .7s linear infinite;flex-shrink:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+.steps{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:13px}
+.steps li{display:flex;gap:10px;align-items:center;opacity:0;transform:translateY(4px);transition:all .25s}
+.steps li.show{opacity:1;transform:none}
+.steps .ck{width:14px;height:14px;border-radius:50%;background:var(--green);color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.steps .sub{color:var(--sub);font-size:12px}
+.placeholder{padding:36px 20px;text-align:center;color:var(--sub);font-size:13px;line-height:1.9}
+.audit{max-height:260px;overflow:auto;font-size:12px;display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.audit .e{display:grid;grid-template-columns:58px 64px 1fr;gap:6px;line-height:1.55}
+.audit .t{font-family:var(--mono);color:var(--mute);font-size:11px;padding-top:1px}
+.audit .w{font-weight:600}
+.audit .w.agent{color:var(--violet)}
+.audit .w.sys{color:var(--sub)}
+.audit .w.human{color:var(--green)}
+.perm{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;font-size:12px;line-height:1.75}
+.perm ul{margin:4px 0 0;padding-left:16px;color:var(--sub)}
+.money{display:flex;justify-content:space-between;margin-top:6px}
+.money span:last-child{color:var(--ink)}
+.modal-back{position:fixed;inset:0;background:rgba(13,16,24,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal-back.open{display:flex}
+.modal{width:660px;max-width:100%;max-height:90vh;overflow:auto;background:#fff;border-radius:14px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal h2{margin:0;font-size:18px}
+.mhead{display:flex;align-items:center;gap:10px}
+.mclose{margin-left:auto;background:none;border:0;font-size:20px;color:var(--sub);cursor:pointer}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;font-size:13px;margin-top:12px}
+.kv dt{color:var(--sub)}
+.kv dd{margin:0}
+.route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:12px}
+.route .st{border:1px solid var(--line2);border-radius:8px;padding:6px 10px;background:#fff}
+.route .st.done{border-color:rgba(6,122,87,.4);background:rgba(6,122,87,.06);color:var(--green)}
+.route .st.cur{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,85,212,.12)}
+.route .st.rej{border-color:var(--red);color:var(--red)}
+.notif{border:1px solid var(--line2);border-radius:12px;overflow:hidden;margin-top:14px}
+.notif .nh{background:#0D1018;color:#EEF1F8;padding:10px 14px;font-size:12px;display:flex;align-items:center;gap:8px}
+.notif .nb{padding:14px}
+textarea.field{height:72px;padding:9px 12px;resize:vertical;line-height:1.6}
+table.t{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+table.t th{text-align:left;color:var(--sub);font-weight:500;border-bottom:1px solid var(--line);padding:7px 6px}
+table.t td{border-bottom:1px solid var(--line);padding:8px 6px}
+.policy p{font-size:13px;line-height:1.8;margin:10px 0}
+.policy b{display:inline-block;min-width:74px}
+.nl{display:flex;gap:9px;margin-top:14px}
+.nl input{flex-grow:1;height:44px;font-size:14px}
+.parsed{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center;font-size:12px;min-height:0}
+.ex-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px;align-items:center}
+.kbd{font-family:var(--mono);font-size:10px;color:var(--mute);border:1px solid #343B4E;border-radius:4px;padding:1px 5px}
 </style>
 </head>
-<body style="margin:0;display:flex;justify-content:center;align-items:flex-start;">
-<div style="width: 1440px; height: 900px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F6FB;"><header style="color: #EEF1F8; flex-shrink: 0; box-sizing: border-box; height: 68px; padding: 0 26px; background: #0D1018; border-bottom: 1px solid #1E2433; box-shadow: 0 1px 0 rgba(13,16,24,0.10), 0 4px 14px rgba(13,16,24,0.10); display: flex; align-items: center; gap: 16px;"><div style="display: flex; align-items: center; gap: 10px;"><span style="background: #FFFFFF; border-radius: 6px; padding: 5px 8px; display: inline-flex;"><img src="../assets/1approval_logo.webp" alt="1Approval" style="height: 17px; width: auto; display: block;"></span><span style="width: 1px; height: 20px; background: #343B4E;"></span><span style="font-size: 14px; font-weight: 700; letter-spacing: -0.01em;">Agent Purchase</span><span style="font-size: 10px; font-weight: 700; color: #FFFFFF; background: linear-gradient(135deg, #4F7BFF 0%, #9B6BFF 100%); border-radius: 999px; padding: 3px 8px; letter-spacing: 0.04em;">BETA</span></div><nav style="display: flex; align-items: center; gap: 2px; margin-left: 18px;" aria-label="メインメニュー"><a href="AgentPurchase.html" style="padding: 8px 15px; color: #9AA3B8; text-decoration: none; font-size: 13px; border-radius: 8px;">AIレコメンド</a><a href="AgentTrip.html" style="padding: 8px 15px; background: #1B2030; color: #FFFFFF; border: 1px solid #3E465C; text-decoration: none; font-size: 13px; font-weight: 600; border-radius: 8px;">出張手配</a><a href="RequestCatalog.html" style="padding: 8px 15px; color: #9AA3B8; text-decoration: none; font-size: 13px; border-radius: 8px;">カタログ</a><a href="Rfq.html" style="padding: 8px 15px; color: #9AA3B8; text-decoration: none; font-size: 13px; border-radius: 8px;">見積依頼</a><a href="MyRequests.html" style="padding: 8px 15px; color: #9AA3B8; text-decoration: none; font-size: 13px; border-radius: 8px;">申請</a><a href="Approve.html" style="padding: 8px 15px; color: #9AA3B8; text-decoration: none; font-size: 13px; border-radius: 8px;">承認</a></nav><div style="margin-left: auto; display: flex; align-items: center; gap: 16px;"><span style="font-size: 11px; color: #7D8699; font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;">app.1approval.com<span style="color: #9AA3B8;">/trip</span></span><a href="Home.html" style="font-size: 12px; color: #9AA3B8; text-decoration: none;">管理画面</a><span style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #4F7BFF 0%, #9B6BFF 100%); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #FFFFFF;">田</span></div></header><main style="flex-grow: 1; box-sizing: border-box; padding: 22px 26px; overflow: hidden;"><div style="display: flex; align-items: baseline; gap: 13px;"><h1 style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.02em;">出張手配</h1><span style="font-size: 12px; color: #59617A;">日程と場所が決まったら、あとは押すだけ</span><div style="margin-left: auto; display: flex; gap: 8px; align-items: center;"><a href="AgentTrip.html" style="font-size: 13px; font-weight: 500; color: #151823; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 9px; padding: 9px 15px; text-decoration: none; display: inline-flex; align-items: center;">規程の設定</a><a href="MyRequests.html" style="font-size: 13px; font-weight: 500; color: #151823; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 9px; padding: 9px 15px; text-decoration: none; display: inline-flex; align-items: center;">過去の出張</a></div></div><div style="margin-top: 12px;"><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 18px;"><div style="display: flex; align-items: center; gap: 9px;"><span style="width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, #2F55D4 0%, #6E43D6 100%); display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" aria-hidden="true"><path d="M12 3v2.5M4.9 6.3l1.8 1.8M3 13h2.5M18.5 13H21M17.1 8.1l1.8-1.8"/><circle cx="12" cy="14" r="4.5"/></svg></span><span style="font-size: 13px; font-weight: 600;">日程と場所だけ入れてください</span><span style="font-size: 11px; font-weight: 600; color: #59617A; background: rgba(89,97,122,0.09); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">1Approval for Trip × Agent</span><span style="margin-left: auto;"><span style="font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace; font-size: 12px; color: #59617A;">policy: v2026.04</span></span></div><div style="margin-top: 15px; display: grid; grid-template-columns: 1.3fr 1fr 1.3fr; gap: 11px;"><div><div style="font-size: 11px; color: #59617A; margin-bottom: 5px;">目的地・訪問先</div><div style="font-size: 13px; background: #FFFFFF; border: 1px solid #8793AF; border-radius: 9px; padding: 9px 12px; color: #151823; display: flex; align-items: center;"><span style="flex-grow: 1;">大阪市北区 ／ ○○製作所 本社</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#59617A" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div></div><div><div style="font-size: 11px; color: #59617A; margin-bottom: 5px;">出発 〜 帰着</div><div style="font-size: 13px; background: #FFFFFF; border: 1px solid #8793AF; border-radius: 9px; padding: 9px 12px; color: #151823; display: flex; align-items: center;"><span style="flex-grow: 1;">2026-10-08 〜 10-09</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#59617A" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div></div><div><div style="font-size: 11px; color: #59617A; margin-bottom: 5px;">目的</div><div style="font-size: 13px; background: #FFFFFF; border: 1px solid #8793AF; border-radius: 9px; padding: 9px 12px; color: #151823; display: flex; align-items: center;"><span style="flex-grow: 1;">新製品の共同評価・立ち会い</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#59617A" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div></div></div><div style="margin-top: 11px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 11px;"><div><div style="font-size: 11px; color: #59617A; margin-bottom: 5px;">同行者</div><div style="font-size: 13px; background: #FFFFFF; border: 1px solid #8793AF; border-radius: 9px; padding: 9px 12px; color: #151823; display: flex; align-items: center;"><span style="flex-grow: 1;">鈴木 健（技術）</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#59617A" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div></div><div><div style="font-size: 11px; color: #59617A; margin-bottom: 5px;">勘定科目</div><div style="font-size: 13px; background: #FFFFFF; border: 1px solid #8793AF; border-radius: 9px; padding: 9px 12px; color: #151823; display: flex; align-items: center;"><span style="flex-grow: 1;">旅費交通費（自動）</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#59617A" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div></div><div><div style="font-size: 11px; color: #59617A; margin-bottom: 5px;">部門負担</div><div style="font-size: 13px; background: #FFFFFF; border: 1px solid #8793AF; border-radius: 9px; padding: 9px 12px; color: #151823; display: flex; align-items: center;"><span style="flex-grow: 1;">製造1課</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#59617A" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div></div><div><div style="font-size: 11px; color: #59617A; margin-bottom: 5px;">出発地</div><div style="font-size: 13px; background: #FFFFFF; border: 1px solid #8793AF; border-radius: 9px; padding: 9px 12px; color: #151823; display: flex; align-items: center;"><span style="flex-grow: 1;">本社（東京）</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#59617A" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div></div></div><div style="margin-top: 14px; display: flex; gap: 9px; align-items: center;"><a href="AgentTrip.html" style="font-size: 13px; font-weight: 600; color: #FFFFFF; background: linear-gradient(135deg, #2F55D4 0%, #6E43D6 100%); border-radius: 9px; padding: 9px 17px; text-decoration: none; display: inline-flex; align-items: center; box-shadow: 0 6px 18px rgba(47,85,212,0.22);">この条件で組み立てる</a><span style="font-size: 12px; color: #59617A;">規程と、あなたの過去5回の出張から好みを読み取ります</span></div></div></div><div style="display: flex; gap: 16px; margin-top: 14px; align-items: flex-start;"><div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px;"><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 18px;"><div style="display: flex; align-items: flex-start; gap: 14px;"><div><div style="font-size: 11px; color: #2F55D4; font-weight: 600; letter-spacing: 0.06em;">AGENT RECOMMENDATION</div><div style="font-size: 18px; font-weight: 700; margin-top: 4px;">最適な出張パッケージ</div><div style="font-size: 12px; color: #59617A; margin-top: 4px;">東京 → 大阪 ／ 1泊2日 ／ 2名</div></div><div style="margin-left: auto; text-align: right;"><div style="font-size: 12px; color: #59617A; text-decoration: line-through;">通常 ¥51,200</div><div style="font-size: 30px; font-weight: 700; letter-spacing: -0.02em;">¥46,900</div><div style="font-size: 11px; color: #067A57;">法人料金で ¥4,300 安い（税込・1名分）</div></div></div><div style="margin-top: 15px; display: flex; flex-direction: column; gap: 11px;"><div style="background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 11px; padding: 14px 16px;"><div style="display: flex; align-items: center; gap: 10px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: rgba(47,85,212,0.09); display: flex; align-items: center; justify-content: center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2F55D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="13" rx="2"/><path d="M4 11h16M8 21l2-3M16 21l-2-3"/><circle cx="8.5" cy="13.5" r=".5"/><circle cx="15.5" cy="13.5" r=".5"/></svg></span><span style="font-size: 12px; font-weight: 600; color: #59617A;">新幹線</span><span style="margin-left: auto; font-size: 16px; font-weight: 700;">¥28,400</span></div><div style="font-size: 14px; font-weight: 600; margin-top: 10px; line-height: 1.5;">のぞみ 227号 ／ 東京 7:33 → 新大阪 10:00（往復・指定席）</div><div style="font-size: 11px; color: #59617A; margin-top: 3px;">復路 10/9 18:30発 ／ 普通車指定席 E席</div><div style="margin-top: 11px; padding: 10px 12px; background: rgba(47,85,212,0.05); border: 1px solid rgba(47,85,212,0.18); border-radius: 8px; font-size: 12px; color: #59617A; line-height: 1.7;"><strong style="color: #2F55D4;">推薦の理由</strong>　過去5回すべて<strong style="color: #151823;">E席・進行方向窓側</strong>を選ばれています。訪問先の始業に間に合う最も遅い便を取りました。</div></div><div style="background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 11px; padding: 14px 16px;"><div style="display: flex; align-items: center; gap: 10px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: rgba(47,85,212,0.09); display: flex; align-items: center; justify-content: center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2F55D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 18v-6h20v6M2 18v2M22 18v2M6 12V8h12v4"/><circle cx="8" cy="10" r="1.6"/></svg></span><span style="font-size: 12px; font-weight: 600; color: #59617A;">宿泊</span><span style="margin-left: auto; font-size: 16px; font-weight: 700;">¥18,500</span></div><div style="font-size: 14px; font-weight: 600; margin-top: 10px; line-height: 1.5;">ホテル阪急インターナショナル（梅田駅 徒歩3分・禁煙）</div><div style="font-size: 11px; color: #59617A; margin-top: 3px;">10/8 チェックイン ／ 朝食つき</div><div style="margin-top: 11px; padding: 10px 12px; background: rgba(47,85,212,0.05); border: 1px solid rgba(47,85,212,0.18); border-radius: 8px; font-size: 12px; color: #59617A; line-height: 1.7;"><strong style="color: #2F55D4;">推薦の理由</strong>　「梅田徒歩5分圏内・禁煙・朝食の評価が高い」という傾向を履歴から抽出。規程の上限 <strong style="color: #151823;">20,000円以内</strong>に収まっています。</div></div></div><div style="margin-top: 12px; display: flex; gap: 9px; flex-wrap: wrap;"><a href="AgentTrip.html" style="font-size: 12px; color: #59617A; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; padding: 7px 13px; text-decoration: none;">もっと安い案を見る</a><a href="AgentTrip.html" style="font-size: 12px; color: #59617A; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; padding: 7px 13px; text-decoration: none;">ホテルを変える</a><a href="AgentTrip.html" style="font-size: 12px; color: #59617A; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; padding: 7px 13px; text-decoration: none;">前泊を足す</a><a href="AgentTrip.html" style="font-size: 12px; color: #59617A; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; padding: 7px 13px; text-decoration: none;">復路を早める</a><a href="AgentTrip.html" style="font-size: 12px; color: #59617A; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; padding: 7px 13px; text-decoration: none;">レンタカーを足す</a></div><div style="margin-top: 12px; padding: 11px 13px; background: rgba(47,85,212,0.07); border: 1px solid rgba(47,85,212,0.22); border-radius: 9px; font-size: 12px; color: #2F55D4; line-height: 1.7;"><strong>予約はまだしていません。</strong>いまは押さえているだけで、承認された瞬間に予約が確定します。却下・期限切れなら自動で解放されます。</div><div style="margin-top: 14px; display: flex; gap: 9px;"><a href="AgentTrip.html" style="font-size: 13px; font-weight: 500; color: #151823; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 9px; padding: 9px 15px; text-decoration: none; display: inline-flex; align-items: center;">内容を直す</a><a href="AgentTrip.html" style="font-size: 13px; font-weight: 500; color: #151823; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 9px; padding: 9px 15px; text-decoration: none; display: inline-flex; align-items: center;">同行者の分もまとめる</a><a href="MyRequests.html" style="font-size: 13px; font-weight: 600; color: #FFFFFF; background: linear-gradient(135deg, #2F55D4 0%, #6E43D6 100%); border-radius: 9px; padding: 9px 17px; text-decoration: none; display: inline-flex; align-items: center; box-shadow: 0 6px 18px rgba(47,85,212,0.22);">この内容で申請する</a></div></div></div><aside style="width: 380px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px;"><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 18px;"><div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 13px; font-weight: 600;">規程の確認</span></div><div style="margin-top: 13px;"><div style="display: flex; flex-direction: column; gap: 11px; font-size: 13px;"><div style="display: flex; gap: 10px; align-items: flex-start;"><span style="font-size: 11px; font-weight: 600; color: #067A57; background: rgba(6,122,87,0.10); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">適合</span><span style="line-height: 1.7;">宿泊費 ¥18,500 ／ 上限 ¥20,000（出張旅費規程 第7条）</span></div><div style="display: flex; gap: 10px; align-items: flex-start;"><span style="font-size: 11px; font-weight: 600; color: #067A57; background: rgba(6,122,87,0.10); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">適合</span><span style="line-height: 1.7;">移動は普通車指定席（第5条2項）。グリーン車は部長以上</span></div><div style="display: flex; gap: 10px; align-items: flex-start;"><span style="font-size: 11px; font-weight: 600; color: #067A57; background: rgba(6,122,87,0.10); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">適合</span><span style="line-height: 1.7;">日帰り可能距離だが、翌日午前の予定があるため宿泊を認める（第4条）</span></div><div style="display: flex; gap: 10px; align-items: flex-start;"><span style="font-size: 11px; font-weight: 600; color: #8A5F03; background: rgba(138,95,3,0.11); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">確認</span><span style="line-height: 1.7;">日当 ¥2,500 × 2日は、帰着後の精算で自動計上されます</span></div></div><div style="margin-top: 12px; padding: 11px 13px; background: rgba(47,85,212,0.07); border: 1px solid rgba(47,85,212,0.22); border-radius: 9px; font-size: 12px; color: #2F55D4; line-height: 1.7;">規程の条文を引いて判定しています。<strong>規程に定めのない項目は「定めなし」と出し、推測しません。</strong></div></div></div><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 18px;"><div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 13px; font-weight: 600;">承認者</span><span style="font-size: 11px; color: #59617A;">選ぶか、Agentに任せる</span></div><div style="margin-top: 13px;"><div style="display: flex; flex-direction: column; gap: 9px;"><div style="display: flex; gap: 10px; align-items: flex-start; padding: 12px; background: rgba(47,85,212,0.06); border: 1px solid rgba(47,85,212,0.22); border-radius: 10px;"><span style="width: 16px; height: 16px; border-radius: 50%; border: 5px solid #2F55D4; background: #FFFFFF; flex-shrink: 0; margin-top: 2px;"></span><span style="flex-grow: 1;"><span style="font-size: 13px; font-weight: 600;">Agentが指定</span><span style="display: block; font-size: 12px; color: #59617A; margin-top: 4px; line-height: 1.7;"><strong style="color: #151823;">山口 剛（製造1課 課長）</strong><br>同じ費目・同じ金額帯の申請を過去38件承認。平均2.4時間で判断。</span></span><span style="font-size: 11px; font-weight: 600; color: #2F55D4; background: rgba(47,85,212,0.09); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">信頼度 96%</span></div><div style="display: flex; gap: 10px; align-items: flex-start; padding: 12px; border: 1px solid #C6CCDC; border-radius: 10px;"><span style="width: 16px; height: 16px; border-radius: 50%; border: 1px solid #C6CCDC; background: #FFFFFF; flex-shrink: 0; margin-top: 2px;"></span><span style="flex-grow: 1;"><span style="font-size: 13px; font-weight: 600;">自分で選ぶ</span><span style="display: block; font-size: 12px; color: #59617A; margin-top: 4px; line-height: 1.7;">部署・役職・過去の承認実績から検索できます。複数人の直列・並列も指定できます。</span></span></div></div><div style="margin-top: 10px; display: flex; align-items: center; gap: 9px; font-size: 12px; color: #59617A;"><span style="font-size: 11px; font-weight: 600; color: #8A5F03; background: rgba(138,95,3,0.11); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">自動追加</span><span>10万円を超えるため、2段目に <strong style="color: #151823;">工場長 大西</strong> が入ります（金額ルール）</span></div></div></div><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 18px;"><div style="font-size: 13px; font-weight: 600;">総額</div><div style="margin-top: 12px; font-size: 12px; color: #59617A;"><div style="display: flex; justify-content: space-between;"><span>新幹線（往復・2名）</span><span style="color: #151823;">¥56,800</span></div><div style="display: flex; justify-content: space-between; margin-top: 6px;"><span>宿泊（2名）</span><span style="color: #151823;">¥37,000</span></div><div style="display: flex; justify-content: space-between; margin-top: 6px;"><span>日当（2名×2日）</span><span style="color: #151823;">¥10,000</span></div><div style="display: flex; justify-content: space-between; margin-top: 6px;"><span>法人料金の割引</span><span style="color: #151823;">−¥8,600</span></div></div><div style="height: 1px; background: #C6CCDC; margin: 11px 0;"></div><div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 13px; font-weight: 600;">総額（税込）</span><span style="font-size: 24px; font-weight: 700;">¥95,200</span></div><div style="margin-top: 12px; padding: 11px 13px; background: rgba(47,85,212,0.07); border: 1px solid rgba(47,85,212,0.22); border-radius: 9px; font-size: 12px; color: #2F55D4; line-height: 1.7;"><strong>この金額のまま承認者に回ります。</strong>承認後に運賃が変わることはありません（押さえた価格で確定するため）。</div><div style="margin-top: 13px; display: flex; gap: 9px;"><a href="MyRequests.html" style="font-size: 13px; font-weight: 500; color: #151823; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 9px; padding: 9px 15px; text-decoration: none; display: inline-flex; align-items: center;">下書き</a><a href="MyRequests.html" style="font-size: 13px; font-weight: 600; color: #FFFFFF; background: linear-gradient(135deg, #2F55D4 0%, #6E43D6 100%); border-radius: 9px; padding: 9px 17px; text-decoration: none; display: inline-flex; align-items: center; box-shadow: 0 6px 18px rgba(47,85,212,0.22);">押さえて申請する</a></div></div><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 18px;"><div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 13px; font-weight: 600;">承認されたら</span></div><div style="margin-top: 13px;"><div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;"><div style="display: flex; gap: 9px; align-items: flex-start;"><span style="font-size: 11px; font-weight: 600; color: #2F55D4; background: rgba(47,85,212,0.09); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">即時</span><span style="line-height: 1.6;">新幹線とホテルの予約が確定。e特急券とホテル確認番号が届きます</span></div><div style="display: flex; gap: 9px; align-items: flex-start;"><span style="font-size: 11px; font-weight: 600; color: #2F55D4; background: rgba(47,85,212,0.09); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">即時</span><span style="line-height: 1.6;">購買明細台帳に記録。旅費交通費として会計へ</span></div><div style="display: flex; gap: 9px; align-items: flex-start;"><span style="font-size: 11px; font-weight: 600; color: #59617A; background: rgba(89,97,122,0.09); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">帰着後</span><span style="line-height: 1.6;">日当と実費の差額だけを精算。領収書の提出は原則不要です</span></div></div><div style="margin-top: 12px; padding: 11px 13px; background: rgba(47,85,212,0.07); border: 1px solid rgba(47,85,212,0.22); border-radius: 9px; font-size: 12px; color: #2F55D4; line-height: 1.7;"><strong>承認してから予約するのではありません。</strong>承認された瞬間に予約が終わっている、が 1Approval の形です。</div></div></div></aside></div><div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid #E2E6F0; margin-top: 16px; padding-top: 13px;"><span style="font-size: 10px; color: #676D80; font-weight: 600; letter-spacing: 0.06em;">RELATED</span><a href="AgentPurchase.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">AIレコメンド</a><a href="RequestCatalog.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">カタログ</a><a href="MyRequests.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">申請</a><a href="Approve.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">承認</a><a href="Spend.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">管理画面：支出分析</a><a href="Ledger.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">管理画面：購買明細台帳</a></div></main></div>
+<body>
+<div class="page" id="page">
+<header>
+  <div style="display:flex;align-items:center;gap:10px"><span style="background:#fff;border-radius:6px;padding:5px 8px;display:inline-flex"><img src="../assets/1approval_logo.webp" alt="1Approval" style="height:17px;width:auto;display:block"></span><span style="width:1px;height:20px;background:#343B4E"></span><span style="font-size:14px;font-weight:700;letter-spacing:-.01em">Agent Purchase</span><span style="font-size:10px;font-weight:700;color:#fff;background:linear-gradient(135deg,#4F7BFF 0%,#9B6BFF 100%);border-radius:999px;padding:3px 8px;letter-spacing:.04em">BETA</span><span class="demo-badge" title="この画面はデモです。表示される便・ホテル・料金・人物はすべて架空のダミーデータです。">DEMO・ダミーデータ</span></div>
+  <nav style="display:flex;align-items:center;gap:2px;margin-left:12px" aria-label="メインメニュー"><a href="AgentPurchase.html">AIレコメンド</a><a href="AgentTrip.html" class="cur">出張手配</a><a href="RequestCatalog.html">カタログ</a><a href="Rfq.html">見積依頼</a><a href="MyRequests.html">申請</a><a href="Approve.html">承認</a></nav>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:14px">
+    <button class="hbtn" id="resetBtn" title="デモを初期状態に戻す（Shift+R）">↺ デモをリセット</button>
+    <span style="font-size:11px;color:#7D8699;font-family:var(--mono)">app.1approval.com<span style="color:#9AA3B8">/trip</span></span>
+    <a href="Home.html" style="font-size:12px;color:#9AA3B8;text-decoration:none">管理画面</a>
+    <span class="avatar" id="avatar">田</span>
+  </div>
+</header>
+<main>
+  <div style="display:flex;align-items:baseline;gap:13px"><h1 style="margin:0;font-size:22px;font-weight:700;letter-spacing:-.02em">出張手配</h1><span style="font-size:12px;color:var(--sub)">日程と場所が決まったら、あとは押すだけ</span>
+    <div style="margin-left:auto;display:flex;gap:8px"><button class="btn" data-open="policy">規程の設定</button><button class="btn" data-open="history">過去の出張</button></div>
+  </div>
+
+  <!-- 入力 -->
+  <div class="card" style="margin-top:12px">
+    <div style="display:flex;align-items:center;gap:9px"><span style="width:26px;height:26px;border-radius:7px;background:var(--grad);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" aria-hidden="true"><path d="M12 3v2.5M4.9 6.3l1.8 1.8M3 13h2.5M18.5 13H21M17.1 8.1l1.8-1.8"/><circle cx="12" cy="14" r="4.5"/></svg></span><span class="ttl">文章で頼むか、日程と場所だけ入れてください</span><span class="tag mute">1Approval for Trip × Agent</span><span style="margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--sub)">policy: v2026.04</span></div>
+    <form class="nl" id="nlForm" autocomplete="off"><input class="field" id="nlInput" placeholder="例：来週木曜、大阪の○○製作所へ鈴木さんと1泊で新製品の評価立ち会い。10時半から"><button class="btn primary" type="submit">Agentに頼む</button></form>
+    <div class="ex-row"><span style="font-size:11px;color:var(--mute)">デモ用の例文：</span><span id="exRow" style="display:contents"></span></div>
+    <div class="parsed" id="parsed"></div>
+
+    <div style="margin-top:14px;display:grid;grid-template-columns:1.25fr 1.25fr 1.3fr;gap:11px">
+      <div><div class="lbl">目的地・訪問先</div><div style="display:grid;grid-template-columns:118px 1fr;gap:6px"><select class="field" id="fDest"></select><input class="field" id="fCompany"></div></div>
+      <div><div class="lbl">出発 〜 帰着</div><div class="dates"><input type="date" class="field" id="fDep"><span>〜</span><input type="date" class="field" id="fRet"></div></div>
+      <div><div class="lbl">目的</div><input class="field" id="fPurpose"></div>
+    </div>
+    <div style="margin-top:11px;display:grid;grid-template-columns:repeat(6,1fr);gap:11px">
+      <div><div class="lbl">申請者</div><select class="field" id="fApplicant"></select></div>
+      <div><div class="lbl">同行者</div><select class="field" id="fCompanion"></select></div>
+      <div><div class="lbl">訪問先の開始時刻</div><input type="time" class="field" id="fVisit" step="900"></div>
+      <div><div class="lbl">勘定科目</div><div class="field ro">旅費交通費（自動）</div></div>
+      <div><div class="lbl">部門負担</div><div class="field ro" id="fDept">製造1課</div></div>
+      <div><div class="lbl">出発地</div><div class="field ro">本社（東京）</div></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:9px;align-items:center"><button class="btn primary" id="buildBtn">この条件で組み立てる</button><span style="font-size:12px;color:var(--sub)" id="buildHint">規程と、あなたの過去5回の出張から好みを読み取ります</span></div>
+  </div>
+
+  <div style="display:flex;gap:16px;margin-top:14px;align-items:flex-start">
+    <div style="flex-grow:1;min-width:0;display:flex;flex-direction:column;gap:12px">
+      <div class="card" id="recCard"></div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:9px"><span class="ttl">Agentに任せている範囲</span><span class="tag info">権限は管理者が設定</span></div>
+        <div class="perm">
+          <div><span class="tag ok">できること</span><ul><li>規程の参照と、条文に基づく判定</li><li>空席・空室の照会（読み取りのみ）</li><li>承認待ちの間の仮押さえ（24時間で自動解放）</li><li>承認者の提案</li></ul></div>
+          <div><span class="tag ng">できないこと</span><ul><li>承認を経ずに予約を確定すること・決済すること</li><li>規程外の手配を黙って通すこと（必ず例外承認に回します）</li><li>承認ルートを省略すること</li><li>行動ログを消すこと</li></ul></div>
+        </div>
+      </div>
+    </div>
+    <aside style="width:400px;flex-shrink:0;display:flex;flex-direction:column;gap:12px">
+      <div class="card"><div class="ttl">規程の確認</div><div id="policyBox" style="margin-top:13px"></div></div>
+      <div class="card"><div style="display:flex;align-items:center;gap:9px"><span class="ttl">承認者</span><span style="font-size:11px;color:var(--sub)">選ぶか、Agentに任せる</span></div><div id="approverBox" style="margin-top:13px"></div></div>
+      <div class="card"><div class="ttl">総額</div><div id="totalBox"></div></div>
+      <div class="card"><div style="display:flex;align-items:center;gap:9px"><span class="ttl">行動ログ</span><span class="tag mute">改ざん不可・監査用</span><span style="margin-left:auto;font-size:11px;color:var(--mute)" id="auditCount"></span></div><div class="audit" id="audit"></div></div>
+    </aside>
+  </div>
+</main>
+</div>
+
+<div class="modal-back" id="modalBack"><div class="modal" id="modal" role="dialog" aria-modal="true"></div></div>
+
+<script>
+/* =========================================================
+   ダミーデータ（デモ専用・すべて架空）
+   ========================================================= */
+const POLICY_VER = 'v2026.04';
+const CAP = { A:{'一般':20000,'部長':25000}, B:{'一般':15000,'部長':20000} };
+const ALLOW = { '一般':2500, '部長':3500 };
+const RENTAL = 7700;
+const AIR_RULE_MIN = 240; // 鉄道でこの時間を超える区間は航空機可（第5条3項）
+
+const MEMBERS = {
+  tanaka:{ name:'田中 誠', short:'田中', initial:'田', dept:'製造1課', title:'主任', grade:'一般',
+    pref:{ seat:'E席（窓側）', walk:5, nonSmoke:true, bf:true, airline:'ANA', airSeat:'通路側' },
+    history:[
+      ['2026-09-10','大阪','のぞみ・E席','梅田 徒歩3分・禁煙・朝食つき','¥45,300'],
+      ['2026-07-22','名古屋','のぞみ・E席','名駅 徒歩2分・禁煙・朝食つき','¥31,800'],
+      ['2026-06-05','福岡','ANA・通路側','博多 徒歩4分・禁煙・朝食つき','¥58,600'],
+      ['2026-04-16','大阪','のぞみ・E席','梅田 徒歩5分・禁煙・朝食つき','¥44,900'],
+      ['2026-02-19','仙台','はやぶさ・E席','仙台駅 徒歩2分・禁煙・朝食つき','¥33,200'] ] },
+  sasaki:{ name:'佐々木 隆', short:'佐々木', initial:'佐', dept:'製造部', title:'部長', grade:'部長',
+    pref:{ seat:'A席（窓側）', walk:5, nonSmoke:true, bf:true, airline:'ANA', airSeat:'窓側' },
+    history:[
+      ['2026-09-28','福岡','ANA・窓側','博多 徒歩3分・禁煙・朝食つき','¥61,400'],
+      ['2026-08-18','大阪','のぞみ グリーン・A席','梅田 徒歩4分・禁煙・朝食つき','¥55,200'],
+      ['2026-07-02','札幌','ANA・窓側','札幌駅 徒歩2分・禁煙・朝食つき','¥57,900'],
+      ['2026-05-14','名古屋','のぞみ グリーン・A席','名駅 徒歩2分・禁煙・朝食つき','¥39,700'],
+      ['2026-03-11','広島','のぞみ グリーン・A席','広島駅 徒歩2分・禁煙・朝食つき','¥52,300'] ] }
+};
+const COMPANIONS = {
+  none:{ label:'なし' },
+  suzuki:{ label:'鈴木 健（技術）', name:'鈴木 健', key:'鈴木', grade:'一般' },
+  sato:{ label:'佐藤 美咲（品質保証）', name:'佐藤 美咲', key:'佐藤', grade:'一般' },
+  takahashi:{ label:'高橋 涼（営業）', name:'高橋 涼', key:'高橋', grade:'一般' }
+};
+const APPROVERS = {
+  yamaguchi:{ name:'山口 剛', title:'製造1課 課長', stat:'同じ費目・同じ金額帯の申請を過去38件承認。平均2.4時間で判断。', conf:96 },
+  ito:{ name:'伊藤 直子', title:'製造部 次長', stat:'同じ費目の申請を過去12件承認。平均5.1時間で判断。', conf:71 },
+  onishi:{ name:'大西 修', title:'工場長', stat:'部長職の出張申請を過去21件承認。平均3.0時間で判断。', conf:92 },
+  mori:{ name:'森 和彦', title:'取締役 製造本部長', stat:'', conf:0 },
+  kobayashi:{ name:'小林 恵', title:'総務部長（規程の例外承認）', stat:'', conf:0 }
+};
+
+function trainDest(o){ return Object.assign({mode:'train'},o); }
+const DEST = {
+  osaka: trainDest({ label:'大阪', kw:['大阪','梅田','新大阪','難波','なんば'], to:'新大阪', line:'のぞみ', dur:147, first:363, num0:207, numStep:4, count:10,
+    fare:14720, corp:14200, green:5150, access:30, region:'A', area:'梅田', company:'○○製作所 本社', visit:'10:30',
+    back:{ std:['のぞみ 248号','18:30'], early:['のぞみ 236号','15:30'] }, eve:['のぞみ 259号','18:03'],
+    hotels:[ ['ホテル梅田スカイゲート',3,'梅田駅',false,4.6,18500,21760], ['梅田ステーションイン',1,'梅田駅',false,3.9,11800,13200],
+      ['ホテル北浜リバーサイド',9,'北浜駅',false,4.4,14200,16500], ['グランドパレス梅田',4,'梅田駅',false,4.8,27500,30800],
+      ['ビジネスホテル新大阪中央',2,'新大阪駅',true,3.2,8900,9800] ] }),
+  nagoya: trainDest({ label:'名古屋', kw:['名古屋','名駅'], to:'名古屋', line:'のぞみ', dur:98, first:360, num0:201, numStep:4, count:10,
+    fare:11300, corp:10900, green:4190, access:25, region:'A', area:'名駅', company:'△△工業 名古屋事業所', visit:'10:00',
+    back:{ std:['のぞみ 244号','18:30'], early:['のぞみ 228号','15:30'] }, eve:['のぞみ 253号','18:00'],
+    hotels:[ ['ホテル名駅サンライズ',2,'名古屋駅',false,4.5,16800,19400], ['名古屋ステーションイン',1,'名古屋駅',false,3.8,9800,11000],
+      ['ホテル伏見ガーデン',8,'伏見駅',false,4.6,13500,15800], ['ザ・名古屋グランデ',5,'名古屋駅',false,4.9,26000,29000],
+      ['ビジネスイン太閤通',4,'名古屋駅',true,3.0,7600,8400] ] }),
+  sendai: trainDest({ label:'仙台', kw:['仙台'], to:'仙台', line:'はやぶさ', dur:90, first:366, num0:3, numStep:2, count:10,
+    fare:11410, corp:10980, green:4190, access:20, region:'B', area:'仙台駅', company:'☆☆化学 東北工場', visit:'10:00',
+    back:{ std:['はやぶさ 40号','18:30'], early:['はやぶさ 30号','15:30'] }, eve:['はやぶさ 37号','18:00'],
+    hotels:[ ['ホテル仙台ステーションゲート',2,'仙台駅',false,4.5,12800,14600], ['仙台駅東口イン',3,'仙台駅',false,3.7,7900,8800],
+      ['ホテル定禅寺ガーデン',11,'勾当台公園駅',false,4.6,10900,12400], ['グランド青葉仙台',6,'仙台駅',false,4.8,19800,22000],
+      ['ビジネスホテル榴岡',8,'仙台駅',true,3.0,6200,6800] ] }),
+  hiroshima: trainDest({ label:'広島', kw:['広島'], to:'広島', line:'のぞみ', dur:230, first:360, num0:1, numStep:2, count:9,
+    fare:19760, corp:19080, green:6530, access:20, region:'B', area:'広島駅', company:'◎◎重工 広島製作所', visit:'13:00',
+    back:{ std:['のぞみ 50号','18:30'], early:['のぞみ 38号','15:30'] }, eve:['のぞみ 59号','16:00'],
+    hotels:[ ['ホテル広島ステーションゲート',2,'広島駅',false,4.4,12500,14300], ['広島駅南口イン',2,'広島駅',false,3.8,8200,9100],
+      ['ホテル紙屋町リバーサイド',12,'紙屋町駅',false,4.6,11800,13400], ['グランドベイ広島',7,'広島駅',false,4.8,19500,22000],
+      ['ビジネスホテル的場',5,'広島駅',true,3.0,6400,7000] ] }),
+  fukuoka:{ mode:'air', label:'福岡', kw:['福岡','博多','天神'], from:'羽田', to:'福岡空港', line:'ANA', railDur:300,
+    outs:[['ANA 241便','7:00','8:55'],['ANA 243便','8:00','9:55'],['ANA 245便','9:00','10:55'],['ANA 247便','10:00','11:55'],['ANA 249便','11:00','12:55']],
+    fare:41000, corp:27800, access:25, region:'A', area:'博多', company:'◇◇電機 九州支社', visit:'13:00',
+    back:{ std:['ANA 266便','18:30','20:10'], early:['ANA 260便','15:30','17:10'] }, eve:['ANA 263便','18:00','19:55'],
+    hotels:[ ['ホテル博多シティゲート',3,'博多駅',false,4.5,15800,18200], ['博多駅前ステーションイン',1,'博多駅',false,3.9,9200,10300],
+      ['ホテル天神ブリーズ',10,'天神駅',false,4.7,13800,16000], ['グランドハーバー博多',6,'博多駅',false,4.8,24500,27800],
+      ['カプセル&ホテル中洲',7,'中洲川端駅',true,2.9,5800,6200] ] },
+  sapporo:{ mode:'air', label:'札幌', kw:['札幌','北海道','千歳'], from:'羽田', to:'新千歳空港', line:'ANA', railDur:480,
+    outs:[['ANA 51便','7:30','9:05'],['ANA 53便','8:30','10:05'],['ANA 55便','9:30','11:05'],['ANA 57便','10:30','12:05']],
+    fare:38000, corp:25900, access:50, region:'A', area:'札幌駅', company:'□□精機 札幌工場', visit:'13:30',
+    back:{ std:['ANA 76便','18:30','20:05'], early:['ANA 70便','15:30','17:05'] }, eve:['ANA 73便','18:00','19:35'],
+    hotels:[ ['ホテル札幌ノースゲート',2,'札幌駅',false,4.6,14800,17000], ['札幌駅前ステーションイン',1,'札幌駅',false,3.8,8800,9900],
+      ['ホテル大通パーク',9,'大通駅',false,4.5,12600,14500], ['グランドスノー札幌',4,'札幌駅',false,4.9,23800,26500],
+      ['ビジネスホテルすすきの',12,'すすきの駅',true,3.1,6900,7600] ] }
+};
+const RAIL_DUR = { osaka:147, nagoya:98, sendai:90, hiroshima:230 };
+
+const POLICY_TEXT = [
+  ['第4条','宿泊','出張先での予定が翌日以降も続く場合、宿泊を認める。','2項：前泊は、当日の移動では訪問先の開始時刻に間に合わない場合に限り認める。'],
+  ['第5条','交通手段','移動は鉄道の普通車指定席を原則とする。','2項：グリーン車の利用は部長以上に限る。　3項：鉄道で4時間を超える区間は航空機（エコノミー）を利用できる。'],
+  ['第6条','レンタカー','公共交通機関での移動が困難な場合に限り、理由を付して利用できる。',''],
+  ['第7条','宿泊費の上限','1泊あたりの上限は、地域A（大阪・名古屋・福岡・札幌）で一般20,000円／部長以上25,000円、地域B（仙台・広島 ほか）で一般15,000円／部長以上20,000円とする。',''],
+  ['第9条','日当','一般2,500円／日、部長以上3,500円／日を帰着後の精算で支給する。',''],
+  ['第11条','承認','総額10万円を超える出張は、第2承認者（工場長、部長以上の申請は取締役）の承認を要する。','2項：本規程に適合しない手配は、理由を付して総務部長の例外承認を要する。']
+];
+
+const EXAMPLES = [
+  '来週木曜、大阪の○○製作所へ鈴木さんと1泊で新製品の評価立ち会い。10時半から',
+  '福岡の◇◇電機へ日帰りで商談、13時から',
+  '名古屋の△△工業へ佐藤さんと1泊で打ち合わせ。グリーン車で行きたい',
+  '札幌の□□精機へ2泊で品質監査、朝9時から。前泊したい'
+];
+
+/* =========================================================
+   ユーティリティ
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const yen = n => '¥' + Math.round(n).toLocaleString('ja-JP');
+const toMin = t => { const [h,m] = t.split(':').map(Number); return h*60 + m; };
+const fromMin = m => Math.floor(m/60) + ':' + String(m%60).padStart(2,'0');
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const WD = ['日','月','火','水','木','金','土'];
+const pad = n => String(n).padStart(2,'0');
+const iso = d => d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+const parseIso = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const addDays = (s, n) => { const d = parseIso(s); d.setDate(d.getDate()+n); return iso(d); };
+const md = s => { const d = parseIso(s); return (d.getMonth()+1) + '/' + d.getDate() + '(' + WD[d.getDay()] + ')'; };
+const dayDiff = (a, b) => Math.round((parseIso(b) - parseIso(a)) / 86400000);
+const nowT = () => { const d = new Date(); return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()); };
+function nextWeekday(wd, minAhead){ const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() + minAhead); while (d.getDay() !== wd) d.setDate(d.getDate()+1); return iso(d); }
+
+/* =========================================================
+   状態
+   ========================================================= */
+let S, AUDIT, REQ_SEQ = 8842;
+function defaults(){
+  const dep = nextWeekday(4, 3);
+  return { applicant:'tanaka', companion:'suzuki', dest:'osaka', company:DEST.osaka.company, purpose:'新製品の共同評価・立ち会い',
+    dep, ret:addDays(dep,1), visit:'10:30',
+    prenight:false, early:false, rental:false, green:false, cheap:false, hotelIdx:0,
+    approverMode:'agent', approverManual:'yamaguchi', built:false, building:false };
+}
+
+function audit(who, text, kind){
+  AUDIT.unshift({ t:nowT(), who, text, kind: kind || (who === 'Agent' ? 'agent' : who === 'システム' ? 'sys' : 'human') });
+  renderAudit();
+}
+
+/* =========================================================
+   計算（Agentの判断ロジック）
+   ========================================================= */
+function trainSchedule(d){
+  const list = [];
+  for (let i = 0; i < d.count; i++){ const dep = d.first + i*30; list.push({ name: d.line + ' ' + (d.num0 + i*d.numStep) + '号', dep: fromMin(dep), arr: fromMin(dep + d.dur) }); }
+  return list;
+}
+function hotelList(d, me, cap){
+  const p = me.pref;
+  const score = h => (h[1] <= p.walk ? 3 : 0) + (h[3] ? -6 : 2) + h[4]*1.2 - h[5]/10000*0.8;
+  const rows = d.hotels.map(h => ({ n:h[0], walk:h[1], st:h[2], smoke:h[3], bf:h[4], rate:h[5], list:h[6], score:score(h) }));
+  const nonSmoke = rows.filter(h => !h.smoke);
+  const inCap = nonSmoke.filter(h => h.rate <= cap), over = nonSmoke.filter(h => h.rate > cap);
+  inCap.sort(S.cheap ? (a,b) => a.rate - b.rate : (a,b) => b.score - a.score);
+  over.sort((a,b) => b.score - a.score);
+  return { list: inCap.concat(over), excluded: rows.length - inCap.length, total: rows.length };
+}
+
+function plan(){
+  const d = DEST[S.dest], me = MEMBERS[S.applicant], comp = COMPANIONS[S.companion];
+  const people = [{ name:me.name, grade:me.grade }].concat(S.companion !== 'none' ? [{ name:comp.name, grade:comp.grade }] : []);
+  const tripDays = Math.max(0, dayDiff(S.dep, S.ret)) + 1;
+  const nights = tripDays - 1 + (S.prenight ? 1 : 0);
+  const allowDays = tripDays + (S.prenight ? 1 : 0);
+  const visitMin = toMin(S.visit || '10:00');
+  const isAir = d.mode === 'air';
+
+  // 往路
+  const outs = isAir ? d.outs.map(o => ({ name:o[0], dep:o[1], arr:o[2] })) : trainSchedule(d);
+  const ok = outs.filter(o => toMin(o.arr) + d.access <= visitMin);
+  const sameDayOk = ok.length > 0;
+  let out, outDate = S.dep;
+  if (S.prenight){ out = isAir ? { name:d.eve[0], dep:d.eve[1], arr:d.eve[2] } : { name:d.eve[0], dep:d.eve[1], arr:fromMin(toMin(d.eve[1]) + d.dur) }; outDate = addDays(S.dep, -1); }
+  else out = sameDayOk ? ok[ok.length-1] : outs[0];
+  const late = !S.prenight && !sameDayOk;
+  const b = S.early ? d.back.early : d.back.std;
+  const back = isAir ? { name:b[0], dep:b[1], arr:b[2] } : { name:b[0], dep:b[1], arr:fromMin(toMin(b[1]) + d.dur) };
+
+  // 宿泊
+  const capOf = g => CAP[d.region][g];
+  const strictCap = Math.min.apply(null, people.map(p => capOf(p.grade)));
+  const hl = hotelList(d, me, strictCap);
+  const hotel = nights > 0 ? hl.list[S.hotelIdx % hl.list.length] : null;
+  const topHotel = hl.list[0];
+
+  // 金額（1名あたり）
+  const greenAdd = (!isAir && S.green) ? d.green*2 : 0;
+  const tCorp = d.corp*2 + greenAdd, tList = d.fare*2 + greenAdd;
+  const hCorp = hotel ? hotel.rate*nights : 0, hList = hotel ? hotel.list*nights : 0;
+  const lines = [];
+  lines.push([ (isAir ? '航空券' : '新幹線') + '（往復・' + people.length + '名）', tCorp*people.length ]);
+  if (hotel) lines.push([ '宿泊（' + nights + '泊・' + people.length + '名）', hCorp*people.length ]);
+  let allowance = 0; people.forEach(p => allowance += ALLOW[p.grade]*allowDays);
+  lines.push([ '日当（' + people.length + '名×' + allowDays + '日）', allowance ]);
+  if (S.rental) lines.push([ 'レンタカー（' + tripDays + '日）', RENTAL*tripDays ]);
+  const total = lines.reduce((a,l) => a + l[1], 0);
+  const saving = ((tList - tCorp) + (hList - hCorp)) * people.length;
+  const perPersonList = tList + hList, perPerson = tCorp + hCorp;
+
+  // 規程チェック
+  const checks = [];
+  if (hotel){
+    const bad = people.filter(p => hotel.rate > capOf(p.grade));
+    if (bad.length) checks.push({ lv:'ng', art:'第7条', text:'宿泊費 ' + yen(hotel.rate) + ' が上限 ' + yen(strictCap) + ' を超えています（' + bad.map(p => p.name).join('・') + '）' });
+    else checks.push({ lv:'ok', art:'第7条', text:'宿泊費 ' + yen(hotel.rate) + ' ／ 上限 ' + yen(strictCap) });
+  } else checks.push({ lv:'ok', art:'第4条', text:'日帰りのため宿泊なし' });
+  if (isAir) checks.push({ lv:'ok', art:'第5条3項', text:'鉄道では約' + Math.round(d.railDur/60) + '時間かかるため航空機（エコノミー）を利用' });
+  else if (S.green){
+    const bad = people.filter(p => p.grade !== '部長');
+    if (bad.length) checks.push({ lv:'ng', art:'第5条2項', text:'グリーン車は部長以上に限られます（' + bad.map(p => p.name).join('・') + '）' });
+    else checks.push({ lv:'ok', art:'第5条2項', text:'グリーン車（部長以上のため可）' });
+  } else checks.push({ lv:'ok', art:'第5条', text:'移動は普通車指定席' + (d.dur <= AIR_RULE_MIN ? '（鉄道' + Math.floor(d.dur/60) + '時間' + (d.dur%60 ? (d.dur%60) + '分' : '') + 'のため鉄道を優先）' : '') });
+  if (S.prenight){
+    if (sameDayOk) checks.push({ lv:'ng', art:'第4条2項', text:'当日の' + ok[ok.length-1].name + 'で開始時刻 ' + S.visit + ' に間に合うため、前泊は認められません' });
+    else checks.push({ lv:'ok', art:'第4条2項', text:'当日の始発でも ' + S.visit + ' に間に合わないため、前泊を認める' });
+  }
+  if (late) checks.push({ lv:'chk', art:'第4条2項', text:'当日の始発（' + outs[0].name + '）でも開始時刻 ' + S.visit + ' に間に合いません。前泊を検討してください' });
+  if (tripDays > 1) checks.push({ lv:'ok', art:'第4条', text:'翌日も予定があるため宿泊を認める' });
+  if (S.rental) checks.push({ lv:'chk', art:'第6条', text:'レンタカーは、公共交通機関での移動が難しい理由を申請時に添えてください' });
+  checks.push({ lv:'chk', art:'第9条', text:'日当 ' + yen(allowance) + '（' + people.length + '名×' + allowDays + '日）は帰着後の精算で自動計上されます' });
+  const violations = checks.filter(c => c.lv === 'ng');
+
+  // 承認ルート
+  const route = [];
+  const isBucho = me.grade === '部長';
+  const first = isBucho ? 'onishi' : (S.approverMode === 'agent' ? 'yamaguchi' : S.approverManual);
+  route.push({ id:first, why: S.approverMode === 'agent' || isBucho ? 'Agentが指定' : '申請者が指定' });
+  if (total > 100000){ const second = isBucho ? 'mori' : 'onishi'; if (second !== first) route.push({ id:second, why:'10万円超（第11条）' }); }
+  if (violations.length) route.push({ id:'kobayashi', why:'規程外の手配（第11条2項）' });
+
+  return { d, me, people, tripDays, nights, allowDays, isAir, out, outDate, back, hotel, topHotel, hl, lines, total, saving,
+    perPerson, perPersonList, checks, violations, route, sameDayOk, late, outs, strictCap };
+}
+
+/* =========================================================
+   描画
+   ========================================================= */
+const ICON = {
+  train:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2F55D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="13" rx="2"/><path d="M4 11h16M8 21l2-3M16 21l-2-3"/></svg>',
+  air:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2F55D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>',
+  hotel:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2F55D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18v-6h20v6M2 18v2M22 18v2M6 12V8h12v4"/></svg>',
+  car:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2F55D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14v-5l-2-5H7l-2 5z"/><circle cx="8" cy="17" r="2"/><circle cx="16" cy="17" r="2"/></svg>'
+};
+
+function renderRec(){
+  const box = $('#recCard');
+  if (S.building) return;
+  if (!S.built){
+    box.innerHTML = '<div style="font-size:11px;color:var(--blue);font-weight:600;letter-spacing:.06em">AGENT RECOMMENDATION</div><div class="placeholder">上の欄に<b>文章で頼む</b>か、条件を確認して<b>「この条件で組み立てる」</b>を押してください。<br>Agentが規程と過去の出張履歴を読んで、承認に回せる形まで組み立てます。</div>';
+    return;
+  }
+  const P = plan(), d = P.d, me = P.me, pref = me.pref;
+  const transLabel = P.isAir ? '航空券' : '新幹線';
+  const seat = P.isAir ? 'エコノミー ' + pref.airSeat : (S.green ? 'グリーン車 ' : '普通車指定席 ') + pref.seat;
+  const fromSt = P.isAir ? d.from : '東京', toSt = P.isAir ? d.to : d.to;
+  let transReason;
+  if (S.prenight) transReason = '前泊のため、前日 ' + md(P.outDate) + ' の夕方の便にしました。';
+  else if (P.late) transReason = '当日の始発でも開始時刻に間に合いません。<b>前泊を足す</b>ことをおすすめします。';
+  else transReason = '訪問先の開始 <b>' + esc(S.visit) + '</b> から、駅からの移動 ' + d.access + '分を逆算して<b>間に合う最も遅い便</b>を取りました。';
+  if (P.isAir) transReason = '鉄道では約' + Math.round(d.railDur/60) + '時間かかるため航空機を選択（第5条3項）。過去の出張では<b>' + pref.airline + '・' + pref.airSeat + '</b>を選ばれています。' + transReason;
+  else transReason = '過去5回すべて<b>' + pref.seat + '</b>を選ばれています。' + transReason;
+  const transNg = P.violations.some(v => v.art === '第5条2項');
+  if (transNg) transReason = '<span class="rh">規程外</span>グリーン車は部長以上に限られます（第5条2項）。このまま申請すると<b>総務部長の例外承認</b>が必要です。普通車指定席に戻すと規程内に収まります。';
+
+  let html = '<div style="display:flex;align-items:flex-start;gap:14px"><div><div style="font-size:11px;color:var(--blue);font-weight:600;letter-spacing:.06em">AGENT RECOMMENDATION</div><div style="font-size:18px;font-weight:700;margin-top:4px">最適な出張パッケージ</div><div style="font-size:12px;color:var(--sub);margin-top:4px">東京 → ' + esc(d.label) + ' ／ ' + (P.nights ? P.nights + '泊' + (P.tripDays + (S.prenight?1:0)) + '日' : '日帰り') + ' ／ ' + P.people.length + '名 ／ ' + esc(S.company) + '</div></div>'
+    + '<div style="margin-left:auto;text-align:right"><div style="font-size:12px;color:var(--sub);text-decoration:line-through">通常 ' + yen(P.perPersonList) + '</div><div style="font-size:30px;font-weight:700;letter-spacing:-.02em">' + yen(P.perPerson) + '</div><div style="font-size:11px;color:var(--green)">法人料金で ' + yen(P.perPersonList - P.perPerson) + ' 安い（交通・宿泊、1名分）</div></div></div>';
+  html += '<div style="margin-top:15px;display:flex;flex-direction:column;gap:11px">';
+  html += '<div class="item' + (transNg ? ' ng' : '') + '"><div style="display:flex;align-items:center;gap:10px"><span class="ico">' + (P.isAir ? ICON.air : ICON.train) + '</span><span style="font-size:12px;font-weight:600;color:var(--sub)">' + transLabel + '</span><span style="margin-left:auto;font-size:16px;font-weight:700">' + yen(d.corp*2 + ((!P.isAir && S.green) ? d.green*2 : 0)) + '<span style="font-size:11px;color:var(--sub);font-weight:500">／1名</span></span></div>'
+    + '<div style="font-size:14px;font-weight:600;margin-top:10px;line-height:1.5">往路 ' + md(P.outDate) + '　' + esc(P.out.name) + ' ／ ' + fromSt + ' ' + P.out.dep + ' → ' + toSt + ' ' + P.out.arr + '</div>'
+    + '<div style="font-size:12px;color:var(--sub);margin-top:3px">復路 ' + md(S.ret) + '　' + esc(P.back.name) + ' ／ ' + toSt + ' ' + P.back.dep + ' → ' + fromSt + ' ' + P.back.arr + ' ／ ' + seat + '</div>'
+    + '<div class="reason' + (transNg ? ' ng' : '') + '">' + (transNg ? '' : '<span class="rh">推薦の理由</span>') + transReason + '</div></div>';
+  if (P.hotel){
+    const h = P.hotel, over = h.rate > P.strictCap;
+    let r;
+    if (over) r = '<span class="rh">規程外</span>1泊 ' + yen(h.rate) + ' は上限 ' + yen(P.strictCap) + ' を <b>' + yen(h.rate - P.strictCap) + '</b> 超えています（第7条）。このまま申請すると<b>総務部長の例外承認</b>が必要です。';
+    else if (S.cheap) r = '<span class="rh">推薦の理由</span><b>規程内でいちばん安い</b>ホテルを選びました。おすすめ（' + esc(P.topHotel.n) + '）より 1泊 ' + yen(Math.max(0, P.topHotel.rate - h.rate)) + ' 安くなります。';
+    else if (S.hotelIdx % P.hl.list.length === 0) r = '<span class="rh">推薦の理由</span>「' + esc(d.area) + ' 徒歩' + pref.walk + '分圏内・禁煙・朝食の評価が高い」という傾向を履歴から抽出。規程の上限 <b>' + yen(P.strictCap) + '以内</b>に収まっています。';
+    else r = '<span class="rh">別の候補</span>' + (S.hotelIdx % P.hl.list.length + 1) + '番目の候補です。徒歩' + h.walk + '分・朝食評価 ' + h.bf + '。規程の上限 ' + yen(P.strictCap) + ' 以内です。';
+    html += '<div class="item' + (over ? ' ng' : '') + '"><div style="display:flex;align-items:center;gap:10px"><span class="ico">' + ICON.hotel + '</span><span style="font-size:12px;font-weight:600;color:var(--sub)">宿泊</span><span style="margin-left:auto;font-size:16px;font-weight:700">' + yen(h.rate) + '<span style="font-size:11px;color:var(--sub);font-weight:500">／1泊・1名</span></span></div>'
+      + '<div style="font-size:14px;font-weight:600;margin-top:10px;line-height:1.5">' + esc(h.n) + '（' + esc(h.st) + ' 徒歩' + h.walk + '分・禁煙）</div>'
+      + '<div style="font-size:12px;color:var(--sub);margin-top:3px">' + md(S.prenight ? P.outDate : S.dep) + ' チェックイン ／ ' + P.nights + '泊 ／ 朝食つき（評価 ' + h.bf + '）</div>'
+      + '<div class="reason' + (over ? ' ng' : '') + '">' + r + '</div></div>';
+  }
+  if (S.rental){
+    html += '<div class="item"><div style="display:flex;align-items:center;gap:10px"><span class="ico">' + ICON.car + '</span><span style="font-size:12px;font-weight:600;color:var(--sub)">レンタカー</span><span style="margin-left:auto;font-size:16px;font-weight:700">' + yen(RENTAL*P.tripDays) + '</span></div><div style="font-size:14px;font-weight:600;margin-top:10px">コンパクトカー ／ ' + esc(d.area) + ' 駅前営業所 ／ ' + P.tripDays + '日</div><div class="reason"><span class="rh">確認</span>第6条により、公共交通機関での移動が難しい理由を申請時に添えてください。</div></div>';
+  }
+  html += '</div>';
+  const chips = [
+    ['cheap','もっと安い案を見る', S.cheap],
+    ['hotel','ホテルを変える', false, P.nights === 0],
+    ['prenight', S.prenight ? '前泊をやめる' : '前泊を足す', S.prenight, false, P.late],
+    ['early', S.early ? '復路を戻す' : '復路を早める', S.early],
+    ['rental', S.rental ? 'レンタカーを外す' : 'レンタカーを足す', S.rental],
+    ['green', S.green ? '普通車に戻す' : 'グリーン車にする', S.green, P.isAir]
+  ];
+  html += '<div style="margin-top:12px;display:flex;gap:9px;flex-wrap:wrap">' + chips.filter(c => !c[3]).map(c => '<button class="chip' + (c[2] ? ' on' : '') + (c[4] ? ' hint' : '') + '" data-act="' + c[0] + '">' + c[1] + '</button>').join('') + '</div>';
+  html += '<div class="note"><b>予約はまだしていません。</b>申請すると押さえ（24時間有効）、承認された瞬間に予約が確定します。却下・期限切れなら自動で解放されます。</div>';
+  html += '<div style="margin-top:14px;display:flex;gap:9px;align-items:center"><button class="btn" data-act="rebuild">組み立て直す</button><span style="font-size:12px;color:var(--sub)">' + (P.violations.length ? '<span style="color:var(--red)">規程外が' + P.violations.length + '件あります。理由を添えて例外承認に回ります。</span>' : '規程の全項目に適合しています。') + '</span><button class="btn primary" style="margin-left:auto" data-act="submit">' + (P.violations.length ? '理由を添えて申請する' : 'この内容で申請する') + '</button></div>';
+  box.innerHTML = html;
+}
+
+function renderSide(){
+  const pb = $('#policyBox'), ab = $('#approverBox'), tb = $('#totalBox');
+  if (!S.built){
+    pb.innerHTML = '<div style="font-size:12px;color:var(--sub);line-height:1.7">組み立てると、出張旅費規程 ' + POLICY_VER + ' の条文を引いて1項目ずつ判定します。</div>';
+    ab.innerHTML = '<div style="font-size:12px;color:var(--sub)">組み立て後に提案します。</div>';
+    tb.innerHTML = '<div style="font-size:12px;color:var(--sub);margin-top:10px">—</div>';
+    $('#avatar').textContent = MEMBERS[S.applicant].initial;
+    return;
+  }
+  const P = plan();
+  const tagOf = lv => lv === 'ok' ? '<span class="tag ok">適合</span>' : lv === 'ng' ? '<span class="tag ng">規程外</span>' : '<span class="tag chk">確認</span>';
+  pb.innerHTML = '<div style="display:flex;flex-direction:column;gap:11px;font-size:13px">' + P.checks.map(c => '<div class="row">' + tagOf(c.lv) + '<span style="line-height:1.7">' + esc(c.text) + '<span style="color:var(--mute);font-size:11px">（' + c.art + '）</span></span></div>').join('') + '</div>'
+    + (P.violations.length ? '<div class="note ng"><b>規程外の手配はAgentが勝手に通しません。</b>申請者が理由を添え、総務部長の例外承認に回します。</div>' : '<div class="note">規程の条文を引いて判定しています。<b>規程に定めのない項目は「定めなし」と出し、推測しません。</b></div>');
+
+  const isBucho = P.me.grade === '部長';
+  let a = '';
+  if (isBucho){
+    const ap = APPROVERS.onishi;
+    a = '<div class="row" style="padding:12px;background:rgba(47,85,212,.06);border:1px solid rgba(47,85,212,.22);border-radius:10px"><span style="flex-grow:1"><span style="font-size:13px;font-weight:600">Agentが指定</span><span style="display:block;font-size:12px;color:var(--sub);margin-top:4px;line-height:1.7"><b style="color:var(--ink)">' + ap.name + '（' + ap.title + '）</b><br>' + ap.stat + '</span></span><span class="tag info">信頼度 ' + ap.conf + '%</span></div>';
+  } else {
+    const ag = APPROVERS.yamaguchi;
+    const sel = S.approverMode === 'agent';
+    a = '<div style="display:flex;flex-direction:column;gap:9px">'
+      + '<label class="row" style="padding:12px;border-radius:10px;cursor:pointer;' + (sel ? 'background:rgba(47,85,212,.06);border:1px solid rgba(47,85,212,.22)' : 'border:1px solid var(--line2)') + '"><input type="radio" name="apm" value="agent"' + (sel ? ' checked' : '') + ' style="margin-top:3px;accent-color:#2F55D4"><span style="flex-grow:1"><span style="font-size:13px;font-weight:600">Agentが指定</span><span style="display:block;font-size:12px;color:var(--sub);margin-top:4px;line-height:1.7"><b style="color:var(--ink)">' + ag.name + '（' + ag.title + '）</b><br>' + ag.stat + '</span></span><span class="tag info">信頼度 ' + ag.conf + '%</span></label>'
+      + '<label class="row" style="padding:12px;border-radius:10px;cursor:pointer;' + (!sel ? 'background:rgba(47,85,212,.06);border:1px solid rgba(47,85,212,.22)' : 'border:1px solid var(--line2)') + '"><input type="radio" name="apm" value="manual"' + (!sel ? ' checked' : '') + ' style="margin-top:3px;accent-color:#2F55D4"><span style="flex-grow:1"><span style="font-size:13px;font-weight:600">自分で選ぶ</span>'
+      + (sel ? '<span style="display:block;font-size:12px;color:var(--sub);margin-top:4px;line-height:1.7">部署・役職・過去の承認実績から選べます。</span>' : '<select class="field" id="apSel" style="margin-top:8px"><option value="yamaguchi"' + (S.approverManual === 'yamaguchi' ? ' selected' : '') + '>山口 剛（製造1課 課長）</option><option value="ito"' + (S.approverManual === 'ito' ? ' selected' : '') + '>伊藤 直子（製造部 次長）</option></select>')
+      + '</span></label></div>';
+  }
+  const extra = P.route.slice(1).map(r => '<div class="row" style="margin-top:10px;font-size:12px;color:var(--sub)"><span class="tag ' + (r.id === 'kobayashi' ? 'ng' : 'chk') + '">自動追加</span><span>' + r.why + 'のため、<b style="color:var(--ink)">' + APPROVERS[r.id].title + ' ' + APPROVERS[r.id].name + '</b> が入ります</span></div>').join('');
+  ab.innerHTML = a + extra + '<div class="route">' + P.route.map((r,i) => (i ? '<span style="color:var(--mute)">→</span>' : '') + '<span class="st">' + (i+1) + '. ' + APPROVERS[r.id].name + '</span>').join('') + '</div>';
+
+  tb.innerHTML = '<div style="margin-top:12px;font-size:12px;color:var(--sub)">' + P.lines.map(l => '<div class="money"><span>' + l[0] + '</span><span>' + yen(l[1]) + '</span></div>').join('') + '<div class="money"><span>法人料金の割引（内訳に反映済み）</span><span style="color:var(--green)">−' + yen(P.saving) + '</span></div></div>'
+    + '<div style="height:1px;background:var(--line2);margin:11px 0"></div><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;font-weight:600">総額（税込）</span><span style="font-size:24px;font-weight:700">' + yen(P.total) + '</span></div>'
+    + '<div class="note"><b>この金額のまま承認者に回ります。</b>押さえた価格で確定するため、承認後に運賃が変わることはありません。</div>';
+  $('#avatar').textContent = P.me.initial;
+}
+
+function renderAudit(){
+  const el = $('#audit');
+  el.innerHTML = AUDIT.map(e => '<div class="e"><span class="t">' + e.t + '</span><span class="w ' + e.kind + '">' + esc(e.who) + '</span><span>' + esc(e.text) + '</span></div>').join('');
+  $('#auditCount').textContent = AUDIT.length + '件';
+}
+
+function renderAll(){ renderRec(); renderSide(); }
+
+/* =========================================================
+   フォーム
+   ========================================================= */
+function fillForm(flashKeys){
+  $('#fDest').innerHTML = Object.keys(DEST).map(k => '<option value="' + k + '"' + (S.dest === k ? ' selected' : '') + '>' + DEST[k].label + '</option>').join('');
+  $('#fApplicant').innerHTML = Object.keys(MEMBERS).map(k => '<option value="' + k + '"' + (S.applicant === k ? ' selected' : '') + '>' + MEMBERS[k].name + '（' + MEMBERS[k].title + '）</option>').join('');
+  $('#fCompanion').innerHTML = Object.keys(COMPANIONS).map(k => '<option value="' + k + '"' + (S.companion === k ? ' selected' : '') + '>' + COMPANIONS[k].label + '</option>').join('');
+  $('#fCompany').value = S.company; $('#fPurpose').value = S.purpose;
+  $('#fDep').value = S.dep; $('#fRet').value = S.ret; $('#fVisit').value = S.visit;
+  $('#fDept').textContent = MEMBERS[S.applicant].dept;
+  (flashKeys || []).forEach(id => { const el = $(id); if (!el) return; el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); });
+}
+
+function onFieldChange(){
+  const prevDest = S.dest;
+  S.dest = $('#fDest').value;
+  if (S.dest !== prevDest){ S.company = DEST[S.dest].company; S.visit = DEST[S.dest].visit; S.hotelIdx = 0; }
+  else S.company = $('#fCompany').value;
+  S.purpose = $('#fPurpose').value;
+  S.applicant = $('#fApplicant').value; S.companion = $('#fCompanion').value;
+  S.dep = $('#fDep').value || S.dep; S.ret = $('#fRet').value || S.ret;
+  if (dayDiff(S.dep, S.ret) < 0) S.ret = S.dep;
+  if (S.dest !== prevDest) S.visit = DEST[S.dest].visit; else S.visit = $('#fVisit').value || S.visit;
+  fillForm();
+  if (S.built){ audit('Agent', '条件の変更を受けて再計算（' + DEST[S.dest].label + '・' + md(S.dep) + '〜' + md(S.ret) + '）'); renderAll(); }
+  else renderSide();
+}
+
+/* =========================================================
+   自然文の読み取り（デモ用のルールベース）
+   ========================================================= */
+function parseNL(t){
+  const r = {}, got = [];
+  const z = t.replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/：/g, ':').replace(/／/g, '/');
+  for (const k in DEST){ if (DEST[k].kw.some(w => z.includes(w))){ r.dest = k; got.push(['行き先', DEST[k].label]); break; } }
+  const cm = z.match(/([^\s、。,のにへでをとから]{1,10}(?:製作所|工業|商事|電機|化学|精機|重工|物産|工場|支社|事業所|本社|銀行))/);
+  if (cm){ r.company = cm[1]; got.push(['訪問先', cm[1]]); }
+  const today = new Date(); today.setHours(0,0,0,0);
+  let dep = null;
+  const dm = z.match(/(\d{1,2})[\/月](\d{1,2})日?/);
+  const wm = z.match(/(来週|今週|再来週)?\s*([月火水木金土日])曜/);
+  if (dm){ const d = new Date(today.getFullYear(), +dm[1]-1, +dm[2]); if (d < today) d.setFullYear(d.getFullYear()+1); dep = iso(d); }
+  else if (/明後日|あさって/.test(z)){ const d = new Date(today); d.setDate(d.getDate()+2); dep = iso(d); }
+  else if (/明日|あした/.test(z)){ const d = new Date(today); d.setDate(d.getDate()+1); dep = iso(d); }
+  else if (wm){
+    const target = WD.indexOf(wm[2]);
+    const d = new Date(today); const mon = new Date(today); mon.setDate(mon.getDate() - ((mon.getDay()+6)%7));
+    const weeks = wm[1] === '来週' ? 1 : wm[1] === '再来週' ? 2 : wm[1] === '今週' ? 0 : -1;
+    if (weeks >= 0){ d.setTime(mon.getTime()); d.setDate(d.getDate() + weeks*7 + ((target+6)%7)); }
+    else { d.setDate(d.getDate()+1); while (d.getDay() !== target) d.setDate(d.getDate()+1); }
+    dep = iso(d);
+  }
+  let nights = null;
+  if (/日帰り/.test(z)) nights = 0;
+  const nm = z.match(/([0-9一二三])泊/);
+  if (nm) nights = { '一':1, '二':2, '三':3 }[nm[1]] || +nm[1];
+  if (dep){ r.dep = dep; got.push(['出発', md(dep)]); }
+  if (nights !== null){ r.nights = nights; got.push(['日数', nights ? nights + '泊' : '日帰り']); }
+  const tm = z.match(/(\d{1,2}):(\d{2})/) || z.match(/(\d{1,2})時(半)?/);
+  if (tm){ let h = +tm[1]; const m = tm[2] === '半' ? 30 : (tm[2] && /^\d+$/.test(tm[2]) ? +tm[2] : 0); if (/午後/.test(z) && h < 12) h += 12; r.visit = pad(h) + ':' + pad(m); got.push(['開始', h + ':' + pad(m)]); }
+  r.companion = 'none';
+  for (const k in COMPANIONS){ if (k !== 'none' && z.includes(COMPANIONS[k].key)){ r.companion = k; got.push(['同行', COMPANIONS[k].name]); break; } }
+  if (r.companion === 'none') got.push(['同行', 'なし']);
+  if (/佐々木|部長として/.test(z)){ r.applicant = 'sasaki'; }
+  const pm = z.match(/(?:[へにで、]|^)([^へにで、。]{0,14}(?:立ち会い|立会い|立会|商談|打ち合わせ|打合せ|監査|展示会|研修|評価|納品|調査|定例))/);
+  if (pm){ r.purpose = pm[1].replace(/^[をのは]/, ''); got.push(['目的', r.purpose]); }
+  r.prenight = /前泊/.test(z); if (r.prenight) got.push(['希望', '前泊']);
+  r.green = /グリーン/.test(z); if (r.green) got.push(['希望', 'グリーン車']);
+  r.rental = /レンタカー|車で回/.test(z); if (r.rental) got.push(['希望', 'レンタカー']);
+  r.cheap = /安く|安い|節約|最安/.test(z); if (r.cheap) got.push(['希望', 'できるだけ安く']);
+  r.early = /早めに帰|早く帰|復路を早/.test(z); if (r.early) got.push(['希望', '早めに帰る']);
+  return { r, got };
+}
+
+async function runNL(text){
+  if (!text.trim() || S.building) return;
+  const { r, got } = parseNL(text);
+  audit(MEMBERS[S.applicant].name, '依頼：「' + text + '」');
+  if (!r.dest){
+    $('#parsed').innerHTML = '<span class="tag chk">確認</span><span style="color:var(--amber)">行き先が読み取れませんでした（デモでは 大阪・名古屋・仙台・広島・福岡・札幌 に対応）。目的地を選ぶか、言い換えてください。</span>';
+    audit('Agent', '行き先を特定できず、申請者に確認を依頼');
+    return;
+  }
+  const flash = [];
+  if (r.applicant){ S.applicant = r.applicant; flash.push('#fApplicant'); }
+  if (r.dest !== S.dest){ S.dest = r.dest; S.company = DEST[r.dest].company; S.visit = DEST[r.dest].visit; flash.push('#fDest'); }
+  if (r.company){ S.company = r.company; flash.push('#fCompany'); }
+  else { S.company = DEST[r.dest].company; flash.push('#fCompany'); }
+  if (r.dep){ S.dep = r.dep; flash.push('#fDep'); }
+  const n = r.nights !== null && r.nights !== undefined ? r.nights : (r.dep ? 1 : dayDiff(S.dep, S.ret));
+  S.ret = addDays(S.dep, Math.max(0, n)); flash.push('#fRet');
+  if (r.visit){ S.visit = r.visit; flash.push('#fVisit'); }
+  if (r.companion !== S.companion) flash.push('#fCompanion');
+  S.companion = r.companion;
+  if (r.purpose){ S.purpose = r.purpose; flash.push('#fPurpose'); }
+  S.prenight = r.prenight; S.green = r.green; S.rental = r.rental; S.cheap = r.cheap; S.early = r.early; S.hotelIdx = 0;
+  $('#parsed').innerHTML = '<span style="color:var(--sub)">読み取った条件：</span>' + got.map(g => '<span class="tag info">' + esc(g[0]) + '：' + esc(g[1]) + '</span>').join('');
+  audit('Agent', '依頼文から条件を抽出（' + got.map(g => g[0] + '=' + g[1]).join('、') + '）');
+  fillForm(flash);
+  await sleep(500);
+  build();
+}
+
+/* =========================================================
+   組み立て（Agentの作業表示）
+   ========================================================= */
+async function build(){
+  if (S.building) return;
+  S.building = true; S.built = false; S.hotelIdx = 0;
+  $('#buildBtn').disabled = true;
+  renderSide();
+  S.built = true; const P = plan(); S.built = false;
+  const d = P.d, me = P.me;
+  const steps = [
+    ['出張旅費規程 ' + POLICY_VER + ' を読み込み', '全12条・改定日 2026-04-01'],
+    [me.name + 'さんの過去5回の出張を参照', '傾向：' + (P.isAir ? me.pref.airline + '・' + me.pref.airSeat : me.pref.seat) + '／駅徒歩' + me.pref.walk + '分圏内／禁煙／朝食重視'],
+    [(P.isAir ? '羽田 → ' + d.to.replace('空港','') + ' の空席を照会' : '東京 → ' + d.to + ' の新幹線の空席を照会'), md(S.dep) + '　' + P.outs.length + '便が該当（読み取りのみ）'],
+    [P.nights ? d.area + '周辺の空室を照会' : '宿泊なし（日帰り）', P.nights ? (P.hl.total + 18) + '件を確認' : '帰着日が出発日と同じ'],
+    ['規程と照合', P.nights ? '上限超過・喫煙室など ' + (P.hl.excluded + 14) + '件を除外' : '交通手段・日当を判定'],
+    ['開始時刻 ' + S.visit + ' から逆算して組み合わせを決定', P.out.name + ' ' + P.out.dep + '発' + (P.hotel ? ' ＋ ' + P.hotel.n : '')]
+  ];
+  const box = $('#recCard');
+  box.innerHTML = '<div style="font-size:11px;color:var(--blue);font-weight:600;letter-spacing:.06em">AGENT IS WORKING</div><div style="font-size:18px;font-weight:700;margin-top:4px">組み立てています…</div><ul class="steps" id="steps">' + steps.map(s => '<li><span class="spin"></span><span><span>' + esc(s[0]) + '</span><br><span class="sub">' + esc(s[1]) + '</span></span></li>').join('') + '</ul>';
+  const lis = box.querySelectorAll('.steps li');
+  audit('Agent', '組み立て開始：' + d.label + '・' + md(S.dep) + '〜' + md(S.ret) + '・' + P.people.length + '名');
+  for (let i = 0; i < lis.length; i++){
+    lis[i].classList.add('show');
+    await sleep(380 + Math.random()*260);
+    lis[i].querySelector('.spin').outerHTML = '<span class="ck">✓</span>';
+    if (i === 0) audit('Agent', '規程 ' + POLICY_VER + ' を参照');
+    if (i === 2) audit('Agent', '空席照会（読み取りのみ・予約操作なし）');
+    if (i === 3 && P.nights) audit('Agent', '空室照会（読み取りのみ・予約操作なし）');
+  }
+  await sleep(250);
+  S.building = false; S.built = true;
+  $('#buildBtn').disabled = false;
+  const P2 = plan();
+  audit('Agent', '提案を作成：総額 ' + yen(P2.total) + '・規程外 ' + P2.violations.length + '件');
+  renderAll();
+  $('#recCard').classList.remove('flash'); void $('#recCard').offsetWidth; $('#recCard').classList.add('flash');
+}
+
+/* =========================================================
+   チップ操作
+   ========================================================= */
+function act(a){
+  if (a === 'rebuild') return build();
+  if (a === 'submit') return openSubmit();
+  const before = plan();
+  const me = MEMBERS[S.applicant].name;
+  if (a === 'cheap'){ S.cheap = !S.cheap; S.hotelIdx = 0; }
+  if (a === 'hotel'){ S.hotelIdx = (S.hotelIdx + 1) % before.hl.list.length; if (S.cheap) S.cheap = false; }
+  if (a === 'prenight') S.prenight = !S.prenight;
+  if (a === 'early') S.early = !S.early;
+  if (a === 'rental') S.rental = !S.rental;
+  if (a === 'green') S.green = !S.green;
+  const after = plan();
+  const label = { cheap: S.cheap ? 'もっと安い案' : 'おすすめ案に戻す', hotel:'ホテルを変更：' + (after.hotel ? after.hotel.n : ''), prenight: S.prenight ? '前泊を追加' : '前泊を取り消し', early: S.early ? '復路を早める' : '復路を元に戻す', rental: S.rental ? 'レンタカーを追加' : 'レンタカーを外す', green: S.green ? 'グリーン車に変更' : '普通車に戻す' }[a];
+  audit(me, label);
+  const diff = after.total - before.total;
+  let msg = '再計算：総額 ' + yen(after.total) + '（' + (diff >= 0 ? '+' : '−') + yen(Math.abs(diff)) + '）';
+  const newV = after.violations.filter(v => !before.violations.some(b => b.text === v.text));
+  if (newV.length) msg += '／規程外を検知：' + newV.map(v => v.art).join('・') + ' → 例外承認ルートを追加';
+  audit('Agent', msg);
+  renderAll();
+}
+
+/* =========================================================
+   申請 → 承認 → 予約確定（デモフロー）
+   ========================================================= */
+let FLOW = null;
+function openModal(html){ $('#modal').innerHTML = html; $('#modalBack').classList.add('open'); }
+function closeModal(){ $('#modalBack').classList.remove('open'); FLOW = null; }
+
+function summaryKV(P){
+  return '<dl class="kv"><dt>申請者</dt><dd>' + esc(P.me.name) + '（' + esc(P.me.dept) + '）' + (P.people.length > 1 ? ' ＋ ' + esc(P.people[1].name) : '') + '</dd>'
+    + '<dt>行き先</dt><dd>' + esc(P.d.label) + ' ／ ' + esc(S.company) + '</dd><dt>日程</dt><dd>' + md(P.outDate) + ' 〜 ' + md(S.ret) + '</dd>'
+    + '<dt>目的</dt><dd>' + esc(S.purpose) + '</dd><dt>交通</dt><dd>' + esc(P.out.name) + ' ／ ' + esc(P.back.name) + '</dd>'
+    + (P.hotel ? '<dt>宿泊</dt><dd>' + esc(P.hotel.n) + '（' + P.nights + '泊）</dd>' : '')
+    + '<dt>総額</dt><dd><b>' + yen(P.total) + '</b></dd></dl>';
+}
+function routeHtml(P, curIdx, rejected){
+  return '<div class="route">' + P.route.map((r,i) => (i ? '<span style="color:var(--mute)">→</span>' : '') + '<span class="st ' + (i < curIdx ? 'done' : i === curIdx ? (rejected ? 'rej' : 'cur') : '') + '">' + (i < curIdx ? '✓ ' : '') + APPROVERS[r.id].name + '<span style="color:var(--mute)">（' + r.why + '）</span></span>').join('') + '</div>';
+}
+
+function openSubmit(){
+  const P = plan();
+  FLOW = { P, stage:0, id:'TR-' + (REQ_SEQ++), reason:'' };
+  const needReason = P.violations.length || S.rental || (S.prenight && !P.sameDayOk);
+  let h = '<div class="mhead"><h2>申請内容の確認</h2><span class="tag mute">' + FLOW.id + '</span><button class="mclose" data-flow="close" aria-label="閉じる">×</button></div>' + summaryKV(P);
+  if (P.violations.length) h += '<div class="note ng"><b>規程外が' + P.violations.length + '件あります：</b><br>' + P.violations.map(v => '・' + esc(v.text) + '（' + v.art + '）').join('<br>') + '</div>';
+  if (needReason) h += '<div style="margin-top:12px"><div class="lbl">理由（' + (P.violations.length ? '例外承認に必須' : '承認者に伝えます') + '）</div><textarea class="field" id="reason" placeholder="例：先方の評価設備が2日間しか使えないため、移動時間を短縮したい"></textarea></div>';
+  h += '<div style="margin-top:14px;font-size:12px;color:var(--sub)">承認ルート</div>' + routeHtml(P, -1);
+  h += '<div class="note">申請すると、Agentが便とホテルを<b>押さえます（24時間有効・まだ予約は確定しません）</b>。</div>';
+  h += '<div style="margin-top:16px;display:flex;gap:9px;justify-content:flex-end"><button class="btn" data-flow="close">戻る</button><button class="btn primary" data-flow="send" id="sendBtn"' + (P.violations.length ? ' disabled' : '') + '>押さえて申請する</button></div>';
+  openModal(h);
+  const ta = $('#reason');
+  if (ta && P.violations.length) ta.addEventListener('input', () => { $('#sendBtn').disabled = ta.value.trim().length < 4; });
+}
+
+async function sendRequest(){
+  const P = FLOW.P; const ta = $('#reason'); FLOW.reason = ta ? ta.value.trim() : '';
+  openModal('<div class="mhead"><h2>申請しています…</h2><span class="tag mute">' + FLOW.id + '</span></div><ul class="steps" id="fsteps"></ul>');
+  const st = [['Agent','便とホテルを押さえ（24時間有効）：' + P.out.name + (P.hotel ? '・' + P.hotel.n : '')], ['システム','申請 ' + FLOW.id + ' を記録（総額 ' + yen(P.total) + '）'], ['システム', APPROVERS[P.route[0].id].name + 'さんに承認依頼を通知（kintone / Teams / メール）']];
+  audit(P.me.name, '申請 ' + FLOW.id + ' を送信' + (FLOW.reason ? '（理由：' + FLOW.reason + '）' : ''));
+  for (const s of st){ $('#fsteps').insertAdjacentHTML('beforeend', '<li class="show"><span class="spin"></span><span>' + esc(s[1]) + '</span></li>'); await sleep(550); const sp = $('#fsteps').querySelector('.spin'); if (sp) sp.outerHTML = '<span class="ck">✓</span>'; audit(s[0], s[1]); }
+  await sleep(300);
+  showApproval();
+}
+
+function showApproval(){
+  const P = FLOW.P, r = P.route[FLOW.stage], ap = APPROVERS[r.id];
+  const okCount = P.checks.filter(c => c.lv === 'ok').length;
+  const aiNote = P.violations.length
+    ? '<span class="tag ng">規程外 ' + P.violations.length + '件</span> ' + P.violations.map(v => esc(v.text)).join('／') + (FLOW.reason ? '<br><span style="color:var(--sub)">申請者の理由：</span>' + esc(FLOW.reason) : '')
+    : '<span class="tag ok">規程外なし</span> 適合 ' + okCount + '項目・確認 ' + P.checks.filter(c => c.lv === 'chk').length + '項目。同じ費目・金額帯の過去の申請と比べて妥当な水準です。' + (FLOW.reason ? '<br><span style="color:var(--sub)">申請者のコメント：</span>' + esc(FLOW.reason) : '');
+  let h = '<div class="mhead"><h2>承認者の画面（デモ）</h2><span class="tag mute">' + FLOW.id + '</span><button class="mclose" data-flow="close" aria-label="閉じる">×</button></div>'
+    + routeHtml(P, FLOW.stage)
+    + '<div class="notif"><div class="nh"><span class="avatar" style="width:22px;height:22px;font-size:10px">1A</span>1Approval ｜ ' + esc(ap.name) + 'さん（' + esc(ap.title) + '）への承認依頼</div><div class="nb">'
+    + '<div style="font-size:15px;font-weight:700">出張申請：' + esc(P.d.label) + '（' + esc(S.company) + '）</div>' + summaryKV(P)
+    + '<div class="reason" style="margin-top:12px"><span class="rh">Agentの確認結果</span>' + aiNote + '</div>'
+    + '<div style="font-size:11px;color:var(--mute);margin-top:8px">判断するのは承認者です。Agentは確認結果を示すだけで、承認・却下はしません。</div>'
+    + '<div style="margin-top:14px;display:flex;gap:9px;justify-content:flex-end"><button class="btn" data-flow="reject">差し戻す</button><button class="btn primary" data-flow="approve">承認する</button></div></div></div>';
+  openModal(h);
+}
+
+async function approve(){
+  const P = FLOW.P, ap = APPROVERS[P.route[FLOW.stage].id];
+  audit(ap.name, FLOW.id + ' を承認（' + (FLOW.stage + 1) + '/' + P.route.length + '段目）');
+  FLOW.stage++;
+  if (FLOW.stage < P.route.length){ audit('システム', APPROVERS[P.route[FLOW.stage].id].name + 'さんに承認依頼を通知'); showApproval(); return; }
+  // 予約確定
+  openModal('<div class="mhead"><h2>承認されました。予約を確定しています…</h2><span class="tag mute">' + FLOW.id + '</span></div>' + routeHtml(P, P.route.length) + '<ul class="steps" id="fsteps"></ul>');
+  const seed = FLOW.id.replace(/\D/g,'');
+  const nums = { tr:(P.isAir ? 'ANA-' : 'EX-') + (seed*7919 % 900000 + 100000), ht:'HTL-' + (seed*104729 % 9000000 + 1000000) };
+  FLOW.nums = nums;
+  const st = [
+    ['システム', (P.isAir ? '航空券' : '新幹線') + 'の予約を確定（予約番号 ' + nums.tr + '・' + P.people.length + '名分）'],
+    P.hotel ? ['システム', 'ホテルの予約を確定（確認番号 ' + nums.ht + '・' + esc(P.hotel.n) + '）'] : null,
+    S.rental ? ['システム', 'レンタカーの予約を確定'] : null,
+    ['システム', '購買明細台帳に記録（旅費交通費・' + esc(MEMBERS[S.applicant].dept) + '負担）'],
+    ['システム', '仕訳データを作成：借方 旅費交通費 ' + yen(P.total) + ' ／ 貸方 未払金（法人一括請求）'],
+    ['システム', P.me.name + 'さんにeチケットと確認番号を送付']
+  ].filter(Boolean);
+  for (const s of st){ $('#fsteps').insertAdjacentHTML('beforeend', '<li class="show"><span class="spin"></span><span>' + s[1] + '</span></li>'); await sleep(600); const sp = $('#fsteps').querySelector('.spin'); if (sp) sp.outerHTML = '<span class="ck">✓</span>'; audit(s[0], s[1].replace(/<[^>]+>/g,'')); }
+  await sleep(300);
+  openModal('<div class="mhead"><h2>手配が完了しました</h2><span class="tag ok">予約確定</span><button class="mclose" data-flow="close" aria-label="閉じる">×</button></div>'
+    + routeHtml(P, P.route.length)
+    + '<table class="t"><tr><th>項目</th><th>内容</th><th>番号</th></tr>'
+    + '<tr><td>' + (P.isAir ? '航空券' : '新幹線') + '</td><td>' + esc(P.out.name) + ' ' + md(P.outDate) + ' ／ ' + esc(P.back.name) + ' ' + md(S.ret) + '</td><td style="font-family:var(--mono)">' + nums.tr + '</td></tr>'
+    + (P.hotel ? '<tr><td>宿泊</td><td>' + esc(P.hotel.n) + '（' + P.nights + '泊）</td><td style="font-family:var(--mono)">' + nums.ht + '</td></tr>' : '')
+    + '<tr><td>会計</td><td>旅費交通費 ' + yen(P.total) + ' ／ 法人一括請求（立替なし）</td><td style="font-family:var(--mono)">' + FLOW.id + '</td></tr></table>'
+    + '<div class="note ok"><b>承認してから予約するのではありません。</b>承認された瞬間に予約まで終わっている、が 1Approval の形です。行動ログに、誰が・いつ・何をしたかがすべて残っています。</div>'
+    + '<div style="margin-top:16px;display:flex;gap:9px;justify-content:flex-end"><button class="btn" data-flow="close">閉じる</button><button class="btn primary" data-flow="reset">最初からやり直す</button></div>');
+}
+
+async function reject(){
+  const P = FLOW.P, ap = APPROVERS[P.route[FLOW.stage].id];
+  audit(ap.name, FLOW.id + ' を差し戻し');
+  openModal('<div class="mhead"><h2>差し戻されました</h2><span class="tag ng">差し戻し</span></div>' + routeHtml(P, FLOW.stage, true) + '<ul class="steps" id="fsteps"></ul>');
+  const st = [['Agent','押さえていた便とホテルを解放（費用は発生しません）'], ['システム', P.me.name + 'さんに差し戻しを通知']];
+  for (const s of st){ $('#fsteps').insertAdjacentHTML('beforeend', '<li class="show"><span class="spin"></span><span>' + esc(s[1]) + '</span></li>'); await sleep(550); const sp = $('#fsteps').querySelector('.spin'); if (sp) sp.outerHTML = '<span class="ck">✓</span>'; audit(s[0], s[1]); }
+  $('#modal').insertAdjacentHTML('beforeend', '<div class="note">予約は確定していないため、取消料はかかりません。内容を直して再申請できます。</div><div style="margin-top:16px;display:flex;justify-content:flex-end"><button class="btn primary" data-flow="close">内容を直す</button></div>');
+}
+
+/* =========================================================
+   情報モーダル
+   ========================================================= */
+function openPolicy(){
+  openModal('<div class="mhead"><h2>出張旅費規程 ' + POLICY_VER + '</h2><span class="tag mute">デモ用の架空の規程</span><button class="mclose" data-flow="close" aria-label="閉じる">×</button></div><div class="policy">'
+    + POLICY_TEXT.map(p => '<p><b>' + p[0] + '</b><strong>' + p[1] + '</strong>　' + p[2] + (p[3] ? '<br><span style="color:var(--sub);font-size:12px;margin-left:74px;display:inline-block">' + p[3] + '</span>' : '') + '</p>').join('')
+    + '</div><div class="note">Agentはこの条文だけを根拠に判定し、判定ごとに条番号を示します。条文の改定は管理者だけが行えます。</div>');
+}
+function openHistory(){
+  const me = MEMBERS[S.applicant];
+  openModal('<div class="mhead"><h2>' + esc(me.name) + 'さんの過去の出張（直近5回）</h2><button class="mclose" data-flow="close" aria-label="閉じる">×</button></div>'
+    + '<table class="t"><tr><th>日付</th><th>行き先</th><th>交通</th><th>宿泊</th><th>総額</th></tr>' + me.history.map(h => '<tr>' + h.map(c => '<td>' + esc(c) + '</td>').join('') + '</tr>').join('') + '</table>'
+    + '<div style="margin-top:14px;font-size:12px;color:var(--sub)">Agentが読み取った好み</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px"><span class="tag info">新幹線 ' + me.pref.seat + '</span><span class="tag info">航空 ' + me.pref.airline + '・' + me.pref.airSeat + '</span><span class="tag info">駅 徒歩' + me.pref.walk + '分圏内</span><span class="tag info">禁煙</span><span class="tag info">朝食の評価を重視</span></div>'
+    + '<div class="note">好みは提案の順番を決めるためだけに使います。規程の判定には使いません。</div>');
+}
+
+/* =========================================================
+   初期化・イベント
+   ========================================================= */
+function reset(){
+  S = defaults(); AUDIT = [];
+  closeModal();
+  $('#nlInput').value = ''; $('#parsed').innerHTML = '';
+  fillForm();
+  audit('システム', 'デモを開始（ダミーデータ・規程 ' + POLICY_VER + '）');
+  renderAll();
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act],[data-flow],[data-open],[data-ex]');
+  if (!t) return;
+  if (t.dataset.act) act(t.dataset.act);
+  if (t.dataset.open === 'policy') openPolicy();
+  if (t.dataset.open === 'history') openHistory();
+  if (t.dataset.ex !== undefined){ const s = EXAMPLES[+t.dataset.ex]; $('#nlInput').value = s; runNL(s); }
+  const f = t.dataset.flow;
+  if (f === 'close') closeModal();
+  if (f === 'send') sendRequest();
+  if (f === 'approve') approve();
+  if (f === 'reject') reject();
+  if (f === 'reset') reset();
+});
+document.addEventListener('change', e => {
+  if (e.target.name === 'apm'){ S.approverMode = e.target.value; audit(MEMBERS[S.applicant].name, e.target.value === 'agent' ? '承認者をAgentの指定にする' : '承認者を自分で選ぶ'); renderSide(); return; }
+  if (e.target.id === 'apSel'){ S.approverManual = e.target.value; audit(MEMBERS[S.applicant].name, '承認者に ' + APPROVERS[S.approverManual].name + ' さんを指定'); renderSide(); return; }
+  if (['fDest','fCompany','fPurpose','fApplicant','fCompanion','fDep','fRet','fVisit'].includes(e.target.id)) onFieldChange();
+});
+$('#nlForm').addEventListener('submit', e => { e.preventDefault(); runNL($('#nlInput').value); });
+$('#buildBtn').addEventListener('click', () => build());
+$('#resetBtn').addEventListener('click', () => reset());
+$('#modalBack').addEventListener('click', e => { if (e.target.id === 'modalBack' && !document.querySelector('#modal .spin')) closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !document.querySelector('#modal .spin')) closeModal();
+  if (e.key === 'R' && e.shiftKey && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) reset();
+});
+$('#exRow').innerHTML = EXAMPLES.map((s,i) => '<button class="chip ex" data-ex="' + i + '">' + esc(s) + '</button>').join('');
+
+function fit(){ const z = Math.min(1, (window.innerWidth - 2) / 1440); $('#page').style.zoom = z; }
+window.addEventListener('resize', fit); fit();
+reset();
+</script>
 </body>
 </html>
