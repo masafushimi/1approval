@@ -1,0 +1,500 @@
+<title>1Approval 連携アプリストア</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: ストア型。上部バー＋検索 → ヒーロー（3軸の構図） → 左フィルタ＋右カードグリッド。一覧表ビューに切替可。詳細は右ドロワー */
+:root{
+  --bg:#F7F7F4; --surface:#FFFFFF; --sunk:#EFEFEA; --ink:#14171F; --ink2:#4A4F5C; --ink3:#7A7F8A;
+  --line:#E2E2DB; --amber:#FFB800; --amber-ink:#8A5A00; --amber-soft:#FFF4D1;
+  --s-live:#0E8A5F; --s-live-bg:#E2F4EC; --s-dev:#2457C5; --s-dev-bg:#E5ECFB;
+  --s-plan:#6A4FB8; --s-plan-bg:#EEE9FA; --s-talk:#A3540B; --s-talk-bg:#FBEBDD; --s-idea:#5E636E; --s-idea-bg:#ECECE8;
+  --shadow:0 1px 2px rgba(20,23,31,.06),0 6px 20px rgba(20,23,31,.06);
+  --f-display:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif;
+  --f-body:"Noto Sans JP","Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111318; --surface:#191C23; --sunk:#0C0E12; --ink:#ECEDEF; --ink2:#B3B7C0; --ink3:#878C97;
+  --line:#2A2E37; --amber:#FFC22E; --amber-ink:#FFD36B; --amber-soft:#2E2510;
+  --s-live:#4ED3A0; --s-live-bg:#123327; --s-dev:#86A9FF; --s-dev-bg:#18254A; --s-plan:#B9A2FF; --s-plan-bg:#261E44;
+  --s-talk:#F3A866; --s-talk-bg:#3A2412; --s-idea:#A9ADB6; --s-idea-bg:#24272E;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111318; --surface:#191C23; --sunk:#0C0E12; --ink:#ECEDEF; --ink2:#B3B7C0; --ink3:#878C97;
+  --line:#2A2E37; --amber:#FFC22E; --amber-ink:#FFD36B; --amber-soft:#2E2510;
+  --s-live:#4ED3A0; --s-live-bg:#123327; --s-dev:#86A9FF; --s-dev-bg:#18254A; --s-plan:#B9A2FF; --s-plan-bg:#261E44;
+  --s-talk:#F3A866; --s-talk-bg:#3A2412; --s-idea:#A9ADB6; --s-idea-bg:#24272E;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.65}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--ink)}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:#14171F;color:#F3F3F0}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:900;font-size:17px;letter-spacing:.01em;white-space:nowrap}
+.brand i{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:7px;background:#FFB800;color:#14171F;font-style:normal;font-size:15px}
+.brand small{font-weight:500;font-size:13px;color:#C9CAD0;margin-left:2px}
+.search{flex:1 1 320px;display:flex;align-items:center;gap:8px;background:#262A34;border:1px solid #363B47;border-radius:999px;padding:7px 14px}
+.search input{flex:1;min-width:0;background:none;border:0;color:#F3F3F0;font:inherit;outline:none}
+.search input::placeholder{color:#9A9EA8}
+.search svg{flex:none}
+.topnav{display:flex;gap:16px;font-size:13px;color:#C9CAD0;white-space:nowrap}
+.topnav span b{color:#FFB800;font-family:var(--f-mono);font-weight:500}
+
+/* hero */
+.hero{padding-block:36px 28px;border-bottom:1px solid var(--line);background:var(--surface)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:40px;align-items:center}
+.eyebrow{font-size:12px;letter-spacing:.14em;color:var(--amber-ink);font-weight:700}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(28px,4vw,42px);line-height:1.25;margin:.3em 0 .4em;text-wrap:balance}
+.hero p{color:var(--ink2);max-width:36em;margin:0}
+.stats{display:flex;gap:26px;margin-top:22px;flex-wrap:wrap}
+.stats div{display:flex;flex-direction:column}
+.stats b{font-family:var(--f-mono);font-size:24px;font-weight:500;font-variant-numeric:tabular-nums}
+.stats span{font-size:12px;color:var(--ink3)}
+.axis{position:relative;border:1px solid var(--line);border-radius:14px;background:var(--bg);padding:18px;display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+.axis .col{display:flex;flex-direction:column;gap:6px;min-width:0}
+.axis .lbl{font-size:11px;letter-spacing:.1em;color:var(--ink3);font-weight:700}
+.axis .chip{font-size:12px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hub{display:grid;place-items:center;text-align:center;width:112px;height:112px;border-radius:50%;background:#14171F;color:#fff;font-family:var(--f-display);font-weight:900;font-size:14px;line-height:1.3;box-shadow:0 0 0 6px var(--amber-soft),0 0 0 7px var(--amber)}
+.hub small{display:block;font-weight:500;font-size:10px;color:#FFB800;letter-spacing:.08em}
+.axis .bottom{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;border-top:1px dashed var(--line);padding-top:10px}
+
+/* category rail */
+.rail{border-bottom:1px solid var(--line);background:var(--surface)}
+.rail .wrap{display:flex;gap:4px;overflow-x:auto;padding-block:0;scrollbar-width:none}
+.rail button{background:none;border:0;padding:12px 12px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;color:var(--ink2);font-weight:500}
+.rail button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--amber);font-weight:700}
+.rail button em{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--ink3);margin-left:4px}
+
+/* main */
+main .wrap{display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;padding-block:24px 64px}
+aside{display:flex;flex-direction:column;gap:22px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px);align-self:start;max-height:calc(100vh - 90px);overflow:auto}
+aside h3{font-size:12px;letter-spacing:.1em;color:var(--ink3);margin:0 0 6px;font-weight:700}
+.opt{display:flex;align-items:center;gap:8px;padding:3px 0;cursor:pointer;font-size:13px;color:var(--ink2)}
+.opt input{accent-color:#FFB800;margin:0}
+.opt .n{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--ink3)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.legend{font-size:12px;color:var(--ink3);line-height:1.6;border-top:1px solid var(--line);padding-top:14px}
+
+.bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.bar h2{font-family:var(--f-display);font-weight:700;font-size:20px;margin:0}
+.bar .count{color:var(--ink3);font-size:13px}
+.seg{margin-left:auto;display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:none;padding:6px 12px;cursor:pointer;font-size:13px;color:var(--ink2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* featured strip */
+.featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:28px}
+.feat{position:relative;border-radius:12px;padding:18px;background:var(--surface);border:1px solid var(--line);cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:8px;min-width:0}
+.feat:hover{box-shadow:var(--shadow)}
+.feat .tag{font-size:11px;font-weight:700;color:var(--amber-ink);letter-spacing:.08em}
+.feat h4{margin:0;font-family:var(--f-display);font-size:17px;font-weight:700}
+.feat p{margin:0;color:var(--ink2);font-size:13px}
+.feat.dark{background:#14171F;color:#F3F3F0;border-color:#14171F}
+.feat.dark p{color:#C9CAD0}
+.feat.dark .tag{color:#FFB800}
+
+.group-title{font-family:var(--f-display);font-weight:700;font-size:16px;margin:26px 0 4px;display:flex;align-items:baseline;gap:10px}
+.group-title:first-child{margin-top:0}
+.group-title small{font-family:var(--f-body);font-weight:400;font-size:12px;color:var(--ink3)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:12px;margin-top:10px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;cursor:pointer;text-align:left;min-width:0;transition:box-shadow .15s,transform .15s}
+.card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+.card .head{display:flex;gap:10px;align-items:center;min-width:0}
+.logo{width:42px;height:42px;border-radius:9px;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:15px;flex:none;color:#fff;letter-spacing:-.02em}
+.card .nm{min-width:0}
+.card .nm b{display:block;font-size:14px;line-height:1.35;overflow-wrap:anywhere}
+.card .nm span{display:block;font-size:11.5px;color:var(--ink3)}
+.card p{margin:0;font-size:12.5px;color:var(--ink2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:3.2em}
+.card .foot{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:auto}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.meth{font-size:11px;color:var(--ink3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;white-space:nowrap}
+.st-live{color:var(--s-live);background:var(--s-live-bg)} .st-dev{color:var(--s-dev);background:var(--s-dev-bg)}
+.st-plan{color:var(--s-plan);background:var(--s-plan-bg)} .st-talk{color:var(--s-talk);background:var(--s-talk-bg)} .st-idea{color:var(--s-idea);background:var(--s-idea-bg)}
+.empty{padding:48px 16px;text-align:center;color:var(--ink3);border:1px dashed var(--line);border-radius:12px}
+
+/* table view */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:13px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.08em;color:var(--ink3);background:var(--sunk);position:sticky;top:0;font-weight:700}
+tbody tr{cursor:pointer} tbody tr:hover{background:var(--amber-soft)}
+td.src{color:var(--ink3);font-size:12px}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,12,16,.45);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--surface);z-index:41;overflow:auto;box-shadow:-10px 0 40px rgba(0,0,0,.2);padding:calc(env(safe-area-inset-top,0px) + 20px) max(22px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 28px) 22px;display:flex;flex-direction:column;gap:18px}
+.drawer .x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:max(12px,env(safe-area-inset-right,0px));border:0;background:var(--sunk);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1}
+.d-head{display:flex;gap:14px;align-items:center;padding-right:40px}
+.d-head .logo{width:60px;height:60px;font-size:20px;border-radius:12px}
+.d-head h2{margin:0;font-family:var(--f-display);font-size:22px;line-height:1.3}
+.d-head span{color:var(--ink3);font-size:12.5px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:0;border-radius:8px;padding:9px 18px;font-weight:700;cursor:pointer}
+.btn.primary{background:#FFB800;color:#14171F}
+.btn.ghost{background:none;border:1px solid var(--line)}
+.kv{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px 14px;font-size:13px;background:var(--bg);border-radius:10px;padding:14px}
+.kv dt{color:var(--ink3)} .kv dd{margin:0}
+.drawer h3{font-size:13px;letter-spacing:.06em;margin:0 0 6px}
+.drawer ul{margin:0;padding-left:1.2em;color:var(--ink2)}
+.drawer ul li{margin:2px 0}
+.note{font-size:12px;color:var(--ink3);border-top:1px solid var(--line);padding-top:12px}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);background:#14171F;color:#fff;padding:10px 18px;border-radius:999px;z-index:60;font-size:13px;box-shadow:var(--shadow)}
+
+footer{border-top:1px solid var(--line);color:var(--ink3);font-size:12px}
+footer .wrap{padding-block:20px 32px}
+
+@media (max-width:980px){
+  .hero .wrap{grid-template-columns:1fr}
+  .featured{grid-template-columns:1fr}
+  main .wrap{grid-template-columns:1fr}
+  aside{position:static;max-height:none;flex-direction:row;flex-wrap:wrap;gap:16px}
+  aside section{flex:1 1 180px}
+  .legend{flex-basis:100%}
+  .topnav{display:none}
+}
+@media (max-width:520px){
+  .axis{grid-template-columns:1fr;justify-items:stretch}
+  .hub{margin:4px auto}
+  .seg{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><i>1</i>1Approval <small>連携アプリストア</small></div>
+    <label class="search" for="q">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9A9EA8" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="サービス名・できること・連携方式で探す（例：勘定奉行、cXML、SCIM）" autocomplete="off">
+    </label>
+    <nav class="topnav" aria-label="ストア内メニュー">
+      <span>掲載 <b id="navTotal">0</b></span><span>提供中 <b id="navLive">0</b></span><span>パートナー掲載を申し込む</span>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">CONNECTIVITY MARKETPLACE</div>
+      <h1>承認したら、つながっている先で<br>そのまま終わる。</h1>
+      <p>申請・承認する場所、買う・手配する先、記帳・精算する先。1Approval がつなぐサービスをひとつの棚に並べました。管理者はここで連携を選んで有効化し、未対応のサービスには要望を送れます。</p>
+      <div class="stats">
+        <div><b id="stTotal">0</b><span>掲載サービス</span></div>
+        <div><b id="stLive">0</b><span>提供中</span></div>
+        <div><b id="stDev">0</b><span>開発中</span></div>
+        <div><b id="stCat">0</b><span>カテゴリ</span></div>
+      </div>
+    </div>
+    <div class="axis" aria-label="1Approvalの連携構造">
+      <div class="col"><span class="lbl">① 申請・承認する場所</span><span class="chip">kintone</span><span class="chip">Microsoft 365 / Teams</span><span class="chip">Google Workspace</span><span class="chip">Garoon・コラボフロー ほか</span></div>
+      <div class="hub"><div>1Approval<small>中間HUB</small></div></div>
+      <div class="col"><span class="lbl">② 買う・手配する先</span><span class="chip">ピカパカ出張DX・EX</span><span class="chip">モノタロウ・トラスコ</span><span class="chip">Amazon Business</span><span class="chip">会議室 38,000箇所</span></div>
+      <div class="bottom"><span class="lbl" style="width:100%;text-align:center">③ 記帳・精算・統制する先</span><span class="chip">勘定奉行</span><span class="chip">freee</span><span class="chip">マネーフォワード</span><span class="chip">楽楽精算</span><span class="chip">Entra ID</span><span class="chip">Jamf</span></div>
+    </div>
+  </div>
+</section>
+
+<nav class="rail" aria-label="カテゴリ"><div class="wrap" id="rail"></div></nav>
+
+<main>
+  <div class="wrap">
+    <aside id="filters">
+      <section><h3>提供状況</h3><div id="fStatus"></div></section>
+      <section><h3>連携方式</h3><div id="fMethod"></div></section>
+      <section><h3>提供元</h3><div id="fKind"></div></section>
+      <div class="legend">状態は構想資料（ポータル、各LP、管理画面モック、10/6 定例議事録）からの読み取りです。掲載前に担当者の確認が必要です。</div>
+    </aside>
+    <div style="min-width:0">
+      <div id="featuredBox">
+        <div class="featured" id="featured"></div>
+      </div>
+      <div class="bar">
+        <h2 id="viewTitle">すべての連携</h2><span class="count" id="count"></span>
+        <div class="seg" role="group" aria-label="表示切替">
+          <button type="button" id="vCards" aria-pressed="true">カード</button>
+          <button type="button" id="vTable" aria-pressed="false">洗い出し一覧</button>
+        </div>
+      </div>
+      <div id="results"></div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="wrap">1Approval 連携アプリストア 画面イメージ（モック）／ 株式会社エイチ ／ 2026-11-03 時点の構想資料から作成。ロゴは仮のモノグラムで、各社の商標・ロゴは使用していません。</div></footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-modal="true" role="dialog" aria-labelledby="dTitle"></aside>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const CATS = [
+  {id:"wf",   name:"申請・承認基盤", hint:"社員が申請し、上長が承認する場所", hue:"#2B4A9B"},
+  {id:"chat", name:"チャット・通知", hint:"承認依頼の通知と、チャットからの申請", hue:"#5B3FA8"},
+  {id:"trip", name:"出張・交通", hint:"ホテル・航空・新幹線の予約", hue:"#0F7C77"},
+  {id:"mice", name:"会議室・MICE", hint:"会議室・会場・講演会の手配", hue:"#B0471E"},
+  {id:"goods",name:"消耗品・備品EC", hint:"カタログを開き、承認と同時に発注", hue:"#C27A00"},
+  {id:"it",   name:"IT・SaaS購買", hint:"PC・ソフトウェア・SaaS契約の調達", hue:"#3B6E2E"},
+  {id:"acc",  name:"会計・請求書", hint:"検収済み明細を仕訳として出力", hue:"#1F2A44"},
+  {id:"exp",  name:"経費精算", hint:"立替が残る間の精算データ出力", hue:"#8E2F55"},
+  {id:"hr",   name:"人事・ID", hint:"人事マスターを正にした差分同期", hue:"#2F6F9E"},
+  {id:"mdm",  name:"MDM・IT資産", hint:"購買記録と管理端末の突合", hue:"#4C5566"},
+  {id:"pay",  name:"支払・電子インボイス", hint:"承認額を上限に支払を執行", hue:"#6E5A12"},
+  {id:"own",  name:"1Approval 純正ツール", hint:"ECや取引先の入口を広げる自社機能", hue:"#14171F"},
+];
+const STATUS = {
+  live:{n:"提供中",c:"st-live",cta:"接続する",col:"var(--s-live)"},
+  dev:{n:"開発中",c:"st-dev",cta:"リリース通知を受け取る",col:"var(--s-dev)"},
+  plan:{n:"計画中",c:"st-plan",cta:"先行利用を申し込む",col:"var(--s-plan)"},
+  talk:{n:"提携協議中",c:"st-talk",cta:"関心を登録する",col:"var(--s-talk)"},
+  idea:{n:"構想",c:"st-idea",cta:"要望を送る",col:"var(--s-idea)"},
+};
+const P = {
+  wf:"1本目は Core（月額 ¥98,000）に含む／2本目から +¥28,000/月",
+  ec:"1本目は Core に含む／2本目から +¥18,000/月",
+  acc:"CSV出力は Core に含む／API連携は +¥38,000/接続・月（初期 ¥300,000/接続）",
+  hr:"人事マスター連携オプション +¥68,000/月（初期 ¥400,000、6サービスまで）",
+  mdm:"IT資産オプション +¥58,000/月（人事マスター連携とセットで ¥110,000）",
+  trip:"月額費用なし／手配額に応じた購買手配DX利用料",
+  teams:"Teams オプション（別途）",
+  card:"ワンタイムカード オプション：月額固定＋決済件数",
+  ext:"Chrome拡張 オプション：ユーザー課金",
+  rfq:"見積依頼 オプション：月額固定（送信数に上限あり）",
+  tbd:"未定",
+};
+// id, name, vendor, cat, status, method[], kind, desc, can[], price, src, feat
+const A = [
+// ---- 申請・承認基盤
+["kintone","kintone","サイボウズ","wf","live",["プラグイン"],"公式","kintone のアプリにプラグインを入れるだけで、申請画面から出張予約・備品発注を呼び出し、承認と同時に確定させます。",["申請レコードから予約・カートを取り込み","承認ボタンで自動発注・発券","会計向けCSV（ホテル/飛行機/新幹線/経費）を出力"],P.wf,"総合ポータル／kintone LP／10/6 定例",1],
+["kintoneplus","RICOH kintone plus","リコー","wf","live",["プラグイン"],"公式","リコー版 kintone でも同じプラグインで動作。リコー経由の販売・導入支援に対応します。",["kintone と同じ申請〜承認〜発注の流れ","リコー経由の契約・請求"],P.wf,"総合ポータル／all LP"],
+["m365","Microsoft 365","Microsoft","wf","dev",["標準連携","Power Automate"],"公式","SharePoint リストと Power Automate の承認で購買・手配を完結。追加のSaaS契約やID管理は不要です。",["SharePoint リストを申請台帳に","Power Automate 標準承認＋メール/Teams通知","予約画面に出張リストを表示"],P.wf,"m365 LP／10/6 定例（指摘回収・デモ準備中）",1],
+["gws","Google Workspace","Google","wf","dev",["標準連携","GAS"],"公式","Google フォームで申請し、GAS と Google Chat で承認。承認と同時に自動購買し、一括請求まで完結します。",["Google フォームの申請を取込","Google Chat で承認通知","スプレッドシートに明細を保持"],P.wf,"google LP／10/6 定例（プレスリリース配信済）",1],
+["garoon","Garoon","サイボウズ","wf","idea",["API"],"パートナー","Garoon ワークフローの承認イベントを受けて発注。サイボウズ製品の2本目として位置づけ。",["承認イベントの受信","結果の書き戻し"],P.wf,"総合ポータル／all LP"],
+["xpoint","X-point Cloud","エイトレッド","wf","dev",["API"],"パートナー","開発環境を受領し、カスタマイズ可能な範囲を調査中です。",["申請フォームからの手配呼び出し（調査中）"],P.wf,"10/6 定例（開発環境発行済）"],
+["agileworks","AgileWorks","エイトレッド","wf","idea",["API"],"パートナー","大企業向けワークフロー。複雑な承認ルートの結果を受けて発注します。",["承認イベントの受信"],P.wf,"総合ポータル"],
+["collabo","コラボフロー","コラボスタイル","wf","idea",["API"],"パートナー","Excel 帳票型のワークフローから、承認後に手配を自動実行します。",["承認イベントの受信"],P.wf,"総合ポータル"],
+["rakuwf","楽楽ワークフローII","ラクス","wf","talk",["API"],"パートナー","海外出張の多い顧客からの紹介でコンタクト開始。楽楽精算と並ぶラクス製品群との接続。",["承認後の手配","楽楽精算との一体運用"],P.wf,"10/6 定例（アライアンス）"],
+["intramart","intra-mart","NTTデータ イントラマート","wf","idea",["API"],"パートナー","基幹系と並ぶ大企業ワークフロー基盤との接続。",["承認イベントの受信"],P.wf,"総合ポータル"],
+["desknets","desknet's NEO","ネオジャパン","wf","idea",["API"],"パートナー","グループウェア内のワークフローから手配を呼び出します。",["承認イベントの受信"],P.wf,"総合ポータル"],
+["rakumo","rakumo ワークフロー","rakumo","wf","idea",["API"],"パートナー","Google Workspace 上の rakumo ワークフローと接続。",["承認イベントの受信"],P.wf,"総合ポータル"],
+["smartdb","SmartDB","ドリーム・アーツ","wf","idea",["API"],"パートナー","大企業の業務デジタル化基盤からの申請に対応。",["承認イベントの受信"],P.wf,"総合ポータル"],
+["jobcan","ジョブカンワークフロー","DONUTS","wf","idea",["API"],"パートナー","中小企業で多いクラウドワークフローとの接続。",["承認イベントの受信"],P.wf,"総合ポータル"],
+["shonin","承認Times","—","wf","idea",["API"],"パートナー","ポータルの連携候補に掲載。",["承認イベントの受信"],P.wf,"総合ポータル"],
+["drbudget","Dr.Budget","—","wf","idea",["API"],"パートナー","予算管理と申請の接続候補。",["予算消化の連携"],P.wf,"総合ポータル"],
+["appremo","AppRemo","—","wf","dev",["API"],"パートナー","AppRemo の承認ひとつで、ピカパカのホテル候補を申請に取り込み、承認後に予約確定。操作デモを作成済み。",["ホテル候補の取り込み","承認後に予約確定"],P.wf,"appremo 操作デモ"],
+["ariba","SAP Ariba","SAP","wf","idea",["cXML"],"パートナー","購買管理システム側から 1Approval の手配先を呼び出す接続候補。",["購買申請の受け渡し"],P.wf,"総合ポータル"],
+["coupa","Coupa","Coupa","wf","idea",["cXML"],"パートナー","グローバル購買基盤との接続候補。",["購買申請の受け渡し"],P.wf,"総合ポータル"],
+["salesforce","Salesforce","Salesforce","wf","idea",["API"],"公式","1Approval Event：講演会の企画を起案し、確定した会場情報を1クリックで同期します。",["講演会企画の起案","会場・料金データの同期"],P.tbd,"1approval Event for Salesforce LP"],
+["veeva","Veeva Events Management","Veeva","wf","idea",["API"],"公式","製薬MRが Veeva から講演会を起案。HCPランクに応じた宿泊・交通ポリシーを適用します。",["HCPポリシー制限","EOSS/EBOSS コードの付与"],P.tbd,"1approval Event LP"],
+["own-wf","1Approval ワークフロー","株式会社エイチ","wf","plan",["内蔵"],"公式","外部のワークフローを契約していない会社向けに、1Approval 単体で多段承認・条件分岐を設定します。",["多段承認・条件分岐","単体での申請・承認"],"Agent Purchase に含む（+¥400/ユーザー月）","総合ポータル／functions_group"],
+// ---- チャット
+["teams","Microsoft Teams","Microsoft","chat","dev",["Bot"],"公式","Teams のチャットから申請。承認通知は Power Automate 標準でメールと Teams に届きます。",["Teams から申請（Bot）","承認通知の受け取り","AIレコメンド"],P.teams,"teams LP／10/6 定例（方針決定）",1],
+["gchat","Google Chat","Google","chat","dev",["標準連携"],"公式","Google Workspace 連携の承認通知と承認操作を Google Chat で受けます。",["承認依頼の通知","チャットからの承認"],"Google Workspace 連携に含む","google LP"],
+["outlook","Outlook メール承認","Microsoft","chat","dev",["Power Automate"],"公式","Power Automate の承認メールから承認。承認者・申請者どちらがステータスを変えても相手に通知します。",["メールでの承認","ステータス変更の相互通知"],"Microsoft 365 連携に含む","m365 LP／10/6 定例"],
+// ---- 出張
+["pikapaka","ピカパカ出張DX","ピカパカ","trip","live",["パンチアウト"],"パートナー","全国4万件のホテル、JAL・ANA・LCC含む国内線12社、JR を横断比較。事前承認で予約が確定し、法人一括請求になります。",["ホテル・航空・JRの横断検索","承認と同時に予約確定","法人一括請求（立替なし）","キャンセル（ホテル提供中・他は開発中）"],P.trip,"trip LP／10/6 定例",1],
+["ex","EX（エクスプレス予約・スマートEX）","JR東海","trip","dev",["API","バッチ"],"パートナー","東海道・山陽新幹線の予約データを連携。直前変更が多いため、翌日のバッチ取込が中心です。",["予約・変更データの翌日取込","出張申請との突合"],P.trip,"10/6 定例（実装完了→テスト）"],
+["air","国内航空券（JAL・ANA・LCC 12社）","ピカパカ経由","trip","live",["パンチアウト"],"パートナー","JAL、ANA、スターフライヤー、ソラシドエア、AIRDO、ピーチ、ジェットスターを一括比較。変更可能運賃も同時検索。",["12社横断の最安比較","変更可能運賃の同時検索"],P.trip,"trip LP"],
+["overseas","海外出張手配","ピカパカ","trip","plan",["パンチアウト"],"パートナー","ホテル以外のキャンセル対応の次に着手予定。海外出張の多い顧客からの要望。",["海外航空券・ホテル（予定）"],P.trip,"10/6 定例（優先順位決定）"],
+["bplus","B Plus","—","trip","idea",["API"],"パートナー","ポータルの出張宿泊カテゴリに掲載された手配先候補。",["宿泊手配"],P.trip,"総合ポータル"],
+// ---- MICE
+["mice","会議室・ワークスペース（38,000箇所）","株式会社エイチ","mice","plan",["API"],"公式","出張先のコワーキング、会議室、総会会場を承認から一発で仮キープ・発注します。",["全国38,000箇所の空き検索","承認で仮キープ→発注"],P.tbd,"総合ポータル（近日公開）／mice LP",1],
+["event","講演会会場手配（コンシェルジュ）","株式会社エイチ","mice","idea",["ポータル"],"公式","講演会の条件から、コンシェルジュが仮キープ済みの会場を半自動で提案します。",["会場の半自動提案","医師の宿泊交通手配"],P.tbd,"1approval Event LP"],
+["calplus","カレンダープラス","kintone プラグインメーカー","mice","talk",["画面遷移"],"パートナー","kintone のカレンダーから予約・申請手配ができる UI を共同開発・共同販売する構想。",["カレンダーから申請画面へ遷移"],P.tbd,"10/6 定例（アライアンス）"],
+["kizuna","絆ワークス","—","mice","talk",["画面遷移"],"パートナー","アライアンス先として共同販売を協議中。",["申請画面への遷移連携"],P.tbd,"10/6 定例（アライアンス）"],
+// ---- Goods
+["monotaro","モノタロウ","MonotaRO","goods","dev",["cXML PunchOut"],"パートナー","1,800万点のカタログを申請画面から開き、承認と同時に発注。出荷通知・請求通知も受け取ります。",["カタログのパンチアウト","承認で自動発注","出荷通知→検収","請求通知で3者照合"],P.ec,"接続を追加 画面／購買先の接続設定",1],
+["trusco","トラスコ中山（オレンジコマース）","トラスコ中山","goods","dev",["cXML PunchOut"],"パートナー","工具・現場資材のオレンジブックを呼び出して発注。出荷通知に対応。",["カタログのパンチアウト","出荷通知の受信"],P.ec,"接続を追加 画面（設定中）"],
+["netricoh","NetRICOH","リコー","goods","plan",["cXML PunchOut"],"パートナー","オフィス用品のリコー通販と接続。",["カタログのパンチアウト","承認で自動発注"],P.ec,"接続を追加 画面"],
+["amazon","Amazon Business","Amazon","goods","plan",["PunchOut"],"パートナー","BrowserFormPost 方式でカートを受け取り、承認後に発注します。",["カートの取り込み","承認で発注"],P.ec,"接続を追加 画面"],
+["askul","アスクル（ソロエルアリーナ）","アスクル","goods","idea",["個別対応","Chrome拡張"],"パートナー","正規連携は要相談。当面は Chrome 拡張で商品情報を取り込みます。",["商品名・品番・単価の取込"],P.ec,"接続を追加 画面／対応サイト"],
+["kaunet","カウネット","カウネット","goods","idea",["個別対応","Chrome拡張"],"パートナー","正規連携は要相談。Chrome 拡張で取り込み。",["商品情報の取込"],P.ec,"接続を追加 画面／対応サイト"],
+["tanomail","たのめーる","大塚商会","goods","idea",["Chrome拡張"],"パートナー","Chrome 拡張の個別対応サイト。",["商品情報の取込"],P.ec,"総合ポータル／対応サイト"],
+["catalogcsv","自社指定業者カタログ","各社","goods","plan",["CSV"],"公式","社内で指定した仕入先の品目と単価を CSV で取り込み、カタログとして出します。",["カタログCSVの取込","契約単価の適用"],P.ec,"接続を追加 画面"],
+["cxml","その他（cXML準拠EC）","各社","goods","plan",["cXML PunchOut"],"公式","仕様書をもとに Identity・SharedSecret・PunchOut URL を設定して追加します。",["汎用 cXML 接続"],P.ec,"接続を追加 画面"],
+// ---- IT
+["ricoh-it","RICOH（IT機器）","リコー","it","talk",["API"],"パートナー","資本業務提携先。PC・複合機などIT機器の調達窓口として連携を協議。",["IT機器の調達"],P.ec,"総合ポータル／10/6 定例"],
+["sbcs","SB C&S","SB C&S","it","talk",["API"],"パートナー","ソフトウェア・SaaS ライセンスの調達と販売チャネル。",["SaaS・ライセンスの調達"],P.ec,"総合ポータル／事業計画（仕切率）"],
+// ---- 会計
+["bugyo","勘定奉行クラウド","OBC","acc","plan",["CSV","API"],"パートナー","検収済み明細を仕訳伝票CSVで出力。取引先コード・部門コード・適格請求書番号まで対応づけます。",["仕訳伝票CSV（10項目マッピング）","二重計上の防止","固定資産台帳CSV"],P.acc,"会計システム設定 画面",1],
+["pca","PCA会計","ピー・シー・エー","acc","plan",["CSV","API"],"パートナー","会計6製品の1つ。項目マッピングとテスト出力で接続。",["仕訳CSVの出力"],P.acc,"functions_group"],
+["freee","freee会計","freee","acc","plan",["CSV","API"],"パートナー","会計6製品の1つ。",["仕訳の出力"],P.acc,"functions_group"],
+["mfacc","マネーフォワード クラウド会計","マネーフォワード","acc","plan",["CSV","API"],"パートナー","会計6製品の1つ。",["仕訳の出力"],P.acc,"functions_group"],
+["obic","OBIC7","オービック","acc","idea",["CSV"],"パートナー","ポータルの会計連携に掲載。",["仕訳の出力"],P.acc,"総合ポータル"],
+["sap","SAP S/4HANA","SAP","acc","idea",["API"],"パートナー","講演会費用を EOSS/EBOSS コード付きで基幹会計に出力。",["透明性ガイドライン準拠の仕訳"],P.acc,"1approval Event LP"],
+["billone","Bill One","Sansan","acc","idea",["CSV"],"パートナー","総括請求書と明細を請求書受領サービスに取り込み、会計に流す顧客向け。",["請求書・明細の受け渡し"],P.acc,"10/6 定例（会計連携の議論）"],
+// ---- 経費
+["rakuraku","楽楽精算","ラクス","exp","plan",["CSV","API"],"パートナー","立替購入分を精算データとして出力。証憑画像の受け渡しと重複精算の検知付き。",["汎用データCSV（9項目）","証憑画像の受け渡し","重複精算の警告"],P.acc,"経費精算設定 画面／10/6 定例",1],
+["mfexp","マネーフォワード クラウド経費","マネーフォワード","exp","plan",["CSV","API"],"パートナー","出張明細を「請求書払い」フラグ付きで流し、部署別PLを管理する顧客向け。",["請求書払いフラグ付き明細","インボイス番号の受け渡し"],P.acc,"10/6 定例／経費精算設定 画面"],
+["bakuraku","バクラク","LayerX","exp","plan",["CSV","API"],"パートナー","会計・経費6製品の1つ。",["精算データの出力"],P.acc,"functions_group"],
+["concur","SAP Concur","SAP","exp","plan",["CSV","API"],"パートナー","大企業の経費精算基盤。講演会の仕訳出力先としても想定。",["精算データの出力","EOSS/EBOSS 仕訳"],P.acc,"経費精算設定 画面／Event LP"],
+// ---- 人事・ID
+["entra","Microsoft Entra ID","Microsoft","hr","plan",["SCIM","API"],"公式","人事マスターの「正」。入社・異動・退職の差分を各サービスへ同期します。",["差分同期の起点","承認ルートの自動更新","サインイン履歴から実利用を算出"],P.hr,"人事マスターの一括同期 画面",1],
+["gdir","Google Workspace Directory","Google","hr","plan",["API"],"公式","Directory API でアカウントと所属を同期。",["アカウント同期","実利用の算出"],P.hr,"人事マスターの一括同期 画面"],
+["kintone-user","kintone ユーザー・組織","サイボウズ","hr","plan",["API"],"公式","ユーザーAPIで組織も同期。役職変更で承認権限を付け替えます。",["ユーザー・組織の同期","役職による承認権限"],P.hr,"人事マスターの一括同期 画面"],
+["smarthr","SmartHR","SmartHR","hr","plan",["API"],"パートナー","人事システムを正として社員マスターを取り込みます。",["社員マスターの取込"],P.hr,"admin 仕様"],
+["jinjer","jinjer","jinjer","hr","plan",["API"],"パートナー","人事マスターの取込元候補。",["社員マスターの取込"],P.hr,"admin 仕様"],
+["slack","Slack","Salesforce","hr","plan",["SCIM"],"パートナー","入社で付与、退職で無効化。ライセンス費用の止め忘れを防ぎます。",["アカウント付与・剥奪"],P.hr,"人事マスターの一括同期 画面"],
+["figma","Figma","Figma","hr","plan",["SCIM"],"パートナー","席の自動返上に対応。",["付与・剥奪","席の返上"],P.hr,"人事マスターの一括同期 画面"],
+["sfdc-user","Salesforce ユーザー","Salesforce","hr","plan",["CSV"],"パートナー","当面は手動CSVで同期。",["ユーザーCSVの同期"],P.hr,"人事マスターの一括同期 画面"],
+// ---- MDM
+["jamf","Jamf Pro","Jamf","mdm","plan",["API"],"パートナー","購買記録と MDM の管理端末をシリアル番号で突合し、未登録の端末を見つけます。",["未登録端末の検出","登録依頼の起票"],P.mdm,"MDM 未登録の検出 画面"],
+["lanscope","LANSCOPE","エムオーテックス","mdm","plan",["API"],"パートナー","Windows 端末の管理台帳と突合。",["未登録端末の検出"],P.mdm,"MDM 未登録の検出 画面"],
+["intune","Microsoft Intune","Microsoft","mdm","plan",["API"],"パートナー","端末情報の取込と、紛失時の遠隔ロック指示。",["端末情報の取込","遠隔ロック"],P.mdm,"admin 仕様"],
+// ---- 支払
+["vcard","法人バーチャルカード（都度発行）","カード事業者（未定）","pay","plan",["API"],"パートナー","承認額＋5% を上限に1回限りのカードを発行。承認そのものを支払の上限として執行します。",["承認額を限度に都度発行","承認店舗に限定","決済の照合"],P.card,"カード発行ルール 画面"],
+["peppol","Peppol 電子インボイス","—","pay","plan",["Peppol"],"公式","請求書をデータで授受し、紙の領収書と帳票の突き合わせをなくします。",["JP PINT 形式の受領","請求と発注の自動照合"],"Core に含む","総合ポータル"],
+// ---- 純正
+["chromeext","1Approval Chrome 拡張","株式会社エイチ","own","plan",["Chrome拡張"],"公式","正規連携のないECでも、閲覧中の商品をそのまま申請に取り込みます。12サイトは個別対応、それ以外は汎用で拾います。",["amazon.co.jp・アスクル・たのめーる・カウネットに個別対応","その他サイトは汎用取得"],P.ext,"対応サイト 画面",1],
+["rfqmail","見積依頼・受信メール","株式会社エイチ","own","plan",["メール"],"公式","EC以外の仕入先に見積依頼を送り、返信を申請に紐づけます。社員は見積を転送するだけ。",["見積依頼の送信","転送された見積の自動取込","SPF/DKIM/DMARC 設定"],P.rfq,"メール設定 画面"],
+["aiagent","Agent Purchase","株式会社エイチ","own","plan",["内蔵"],"公式","購買規定を学習したAIが、最適なサプライヤーや代替品を選んで代理購買します。",["AIレコメンド","規程のRAG学習","全社標準品カタログ"],"+¥400/ユーザー月（最低 ¥98,000）","functions_group／総合ポータル"],
+];
+const APPS = A.map(r=>({id:r[0],name:r[1],vendor:r[2],cat:r[3],status:r[4],method:r[5],kind:r[6],desc:r[7],can:r[8],price:r[9],src:r[10],feat:!!r[11]}));
+const catOf = id => CATS.find(c=>c.id===id);
+const ORDER = ["live","dev","plan","talk","idea"];
+
+const state = {cat:"all", q:"", status:new Set(), method:new Set(), kind:new Set(), view:"cards"};
+try{ const v=localStorage.getItem("mp-view"); if(v==="table"||v==="cards") state.view=v; }catch(e){}
+
+function mono(name){
+  const s=name.replace(/^(Microsoft|Google|SAP|RICOH|1Approval)\s+/,"").replace(/[（(].*$/,"").trim();
+  const ascii=s.match(/[A-Za-z0-9]+/g);
+  if(/^\d+$/.test(s)) return s.slice(0,3);
+  if(/^[A-Za-z0-9]/.test(s) && ascii){ return (ascii.length>1? ascii[0][0]+ascii[1][0] : ascii[0].slice(0,2)).replace(/^./,c=>c.toUpperCase()); }
+  return s.slice(0,2);
+}
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pill = st => `<span class="pill ${STATUS[st].c}">${STATUS[st].n}</span>`;
+const logo = a => `<span class="logo" style="background:${catOf(a.cat).hue}" aria-hidden="true">${esc(mono(a.name))}</span>`;
+
+function match(a, ignore){
+  if(ignore!=="cat" && state.cat!=="all" && a.cat!==state.cat) return false;
+  if(ignore!=="status" && state.status.size && !state.status.has(a.status)) return false;
+  if(ignore!=="method" && state.method.size && !a.method.some(m=>state.method.has(m))) return false;
+  if(ignore!=="kind" && state.kind.size && !state.kind.has(a.kind)) return false;
+  if(state.q){
+    const hay=(a.name+a.vendor+a.desc+a.can.join("")+a.method.join("")+catOf(a.cat).name).toLowerCase();
+    if(!state.q.toLowerCase().split(/\s+/).filter(Boolean).every(t=>hay.includes(t))) return false;
+  }
+  return true;
+}
+
+function renderRail(){
+  const r=document.getElementById("rail");
+  const cnt=id=>APPS.filter(a=>(id==="all"||a.cat===id)&&match(a,"cat")).length;
+  r.innerHTML=[{id:"all",name:"すべて"},...CATS].map(c=>`<button type="button" data-cat="${c.id}" aria-pressed="${state.cat===c.id}">${c.name}<em>${cnt(c.id)}</em></button>`).join("");
+}
+function optList(el,key,items){
+  el.innerHTML=items.map(it=>{
+    const n=APPS.filter(a=>match(a,key)&&(key==="status"?a.status===it.v:key==="method"?a.method.includes(it.v):a.kind===it.v)).length;
+    return `<label class="opt"><input type="checkbox" id="f-${key}-${it.v}" data-k="${key}" value="${esc(it.v)}" ${state[key].has(it.v)?"checked":""}>${it.dot?`<span class="dot" style="background:${it.dot}"></span>`:""}${esc(it.n)}<span class="n">${n}</span></label>`;
+  }).join("");
+}
+function renderFilters(){
+  optList(document.getElementById("fStatus"),"status",ORDER.map(s=>({v:s,n:STATUS[s].n,dot:STATUS[s].col})));
+  const ms=[...new Set(APPS.flatMap(a=>a.method))];
+  const mc=m=>APPS.filter(a=>a.method.includes(m)).length;
+  ms.sort((x,y)=>mc(y)-mc(x));
+  optList(document.getElementById("fMethod"),"method",ms.filter(m=>mc(m)>=2||state.method.has(m)).map(m=>({v:m,n:m})));
+  optList(document.getElementById("fKind"),"kind",[{v:"公式",n:"1Approval 公式"},{v:"パートナー",n:"パートナー"}]);
+}
+function card(a){
+  return `<button type="button" class="card" data-id="${a.id}">
+    <div class="head">${logo(a)}<div class="nm"><b>${esc(a.name)}</b><span>${esc(a.vendor)}</span></div></div>
+    <p>${esc(a.desc)}</p>
+    <div class="foot">${pill(a.status)}${a.method.slice(0,2).map(m=>`<span class="meth">${esc(m)}</span>`).join("")}</div>
+  </button>`;
+}
+function renderFeatured(){
+  const box=document.getElementById("featuredBox");
+  const show = state.cat==="all" && !state.q && !state.status.size && !state.method.size && !state.kind.size && state.view==="cards";
+  box.hidden=!show; if(!show) return;
+  const F=[
+    {id:"kintone",tag:"いちばん使われている入口",t:"kintone プラグイン",d:"申請レコードから予約・発注まで。立替も領収書回収もなくなります。",dark:true},
+    {id:"m365",tag:"まもなく公開",t:"Microsoft 365 ＋ Teams",d:"SharePoint と Power Automate の承認のまま、購買が終わる。Teams から申請も。"},
+    {id:"bugyo",tag:"経理のための連携",t:"会計・経費 6製品",d:"勘定奉行・PCA・freee・マネーフォワード・楽楽精算・バクラクへ、検収済み明細を出力。"},
+  ];
+  document.getElementById("featured").innerHTML=F.map(f=>`<button type="button" class="feat${f.dark?" dark":""}" data-id="${f.id}"><span class="tag">${f.tag}</span><h4>${f.t}</h4><p>${f.d}</p></button>`).join("");
+}
+function renderResults(){
+  const list=APPS.filter(a=>match(a));
+  list.sort((x,y)=>ORDER.indexOf(x.status)-ORDER.indexOf(y.status));
+  document.getElementById("count").textContent=`${list.length}件`;
+  document.getElementById("viewTitle").textContent= state.cat==="all"?"すべての連携":catOf(state.cat).name;
+  const out=document.getElementById("results");
+  if(!list.length){ out.innerHTML=`<div class="empty">条件に合う連携が見つかりません。検索語を変えるか、フィルタを外してください。<br>見つからないサービスは「要望を送る」から追加をリクエストできます。</div>`; return; }
+  if(state.view==="table"){
+    const byCat=[...list].sort((x,y)=>CATS.findIndex(c=>c.id===x.cat)-CATS.findIndex(c=>c.id===y.cat)||ORDER.indexOf(x.status)-ORDER.indexOf(y.status));
+    out.innerHTML=`<div class="tbl-wrap"><table><thead><tr><th>カテゴリ</th><th>サービス</th><th>提供元</th><th>状態</th><th>連携方式</th><th>料金の考え方</th><th>出典</th></tr></thead><tbody>${
+      byCat.map(a=>`<tr data-id="${a.id}" tabindex="0"><td>${esc(catOf(a.cat).name)}</td><td><b>${esc(a.name)}</b></td><td>${esc(a.vendor)}</td><td>${pill(a.status)}</td><td>${esc(a.method.join(" / "))}</td><td>${esc(a.price)}</td><td class="src">${esc(a.src)}</td></tr>`).join("")
+    }</tbody></table></div>`;
+    return;
+  }
+  const cats= state.cat==="all"? CATS : [catOf(state.cat)];
+  out.innerHTML=cats.map(c=>{
+    const items=list.filter(a=>a.cat===c.id); if(!items.length) return "";
+    return `<h3 class="group-title">${c.name}<small>${c.hint}・${items.length}件</small></h3><div class="grid">${items.map(card).join("")}</div>`;
+  }).join("");
+}
+function renderAll(){ renderRail(); renderFilters(); renderFeatured(); renderResults();
+  document.getElementById("vCards").setAttribute("aria-pressed",state.view==="cards");
+  document.getElementById("vTable").setAttribute("aria-pressed",state.view==="table");
+}
+
+// drawer
+const drawer=document.getElementById("drawer"), scrim=document.getElementById("scrim");
+let lastFocus=null;
+function openApp(id){
+  const a=APPS.find(x=>x.id===id); if(!a) return;
+  lastFocus=document.activeElement;
+  const c=catOf(a.cat), st=STATUS[a.status];
+  const related=APPS.filter(x=>x.cat===a.cat&&x.id!==a.id).slice(0,4);
+  drawer.innerHTML=`<button type="button" class="x" id="dClose" aria-label="閉じる">×</button>
+    <div class="d-head">${logo(a)}<div><h2 id="dTitle">${esc(a.name)}</h2><span>${esc(a.vendor)} ・ ${c.name}</span></div></div>
+    <div class="cta"><button type="button" class="btn primary" data-act="${a.status}">${st.cta}</button><button type="button" class="btn ghost" data-act="doc">接続ガイドを見る</button>${pill(a.status)}</div>
+    <p style="margin:0;color:var(--ink2)">${esc(a.desc)}</p>
+    <div><h3>できること</h3><ul>${a.can.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+    <dl class="kv"><dt>連携方式</dt><dd>${esc(a.method.join(" / "))}</dd><dt>提供元</dt><dd>${a.kind==="公式"?"1Approval 公式":"パートナー連携"}</dd><dt>料金</dt><dd>${esc(a.price)}</dd><dt>状態</dt><dd>${st.n}</dd><dt>出典</dt><dd>${esc(a.src)}</dd></dl>
+    ${a.cat==="goods"?`<div><h3>接続に必要なもの</h3><ul><li>Identity（買い手ID）・SharedSecret・PunchOut 開始URL</li><li>出荷通知・請求通知の送信先設定</li><li>営業担当経由の発行のため、申込から利用開始まで約2週間</li></ul></div>`:""}
+    ${a.cat==="acc"||a.cat==="exp"?`<div><h3>接続の流れ</h3><ul><li>接続情報を入れる（会社コード・出力単位・文字コード）</li><li>1Approval の項目と取込形式の列を対応づける</li><li>テスト出力（1件）で確認して有効化</li></ul></div>`:""}
+    ${related.length?`<div><h3>同じカテゴリの連携</h3><div class="grid" style="grid-template-columns:1fr">${related.map(card).join("")}</div></div>`:""}
+    <div class="note">これは画面イメージです。ボタンを押しても実際の接続や申込は行われません。</div>`;
+  drawer.hidden=false; scrim.hidden=false; document.getElementById("dClose").focus();
+}
+function closeApp(){ drawer.hidden=true; scrim.hidden=true; if(lastFocus) lastFocus.focus(); }
+let tt; function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.hidden=false; clearTimeout(tt); tt=setTimeout(()=>t.hidden=true,2600); }
+
+document.addEventListener("click",e=>{
+  const cat=e.target.closest("[data-cat]"); if(cat){ state.cat=cat.dataset.cat; renderAll(); return; }
+  const act=e.target.closest("[data-act]");
+  if(act){ const m={live:"接続の設定画面へ進みます（モック）",dev:"リリース時にお知らせします（モック）",plan:"先行利用の申込を受け付けました（モック）",talk:"関心を登録しました（モック）",idea:"要望を送りました（モック）",doc:"接続ガイドを開きます（モック）"}; toast(m[act.dataset.act]); return; }
+  if(e.target.closest("#dClose")||e.target===scrim){ closeApp(); return; }
+  const it=e.target.closest("[data-id]"); if(it){ openApp(it.dataset.id); }
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!drawer.hidden) closeApp();
+  if(e.key==="Enter"&&e.target.matches("tr[data-id]")) openApp(e.target.dataset.id);
+});
+document.getElementById("filters").addEventListener("change",e=>{
+  const i=e.target; if(!i.dataset.k) return; const s=state[i.dataset.k]; i.checked?s.add(i.value):s.delete(i.value); renderAll();
+});
+document.getElementById("q").addEventListener("input",e=>{ state.q=e.target.value.trim(); renderAll(); });
+["vCards","vTable"].forEach(id=>document.getElementById(id).addEventListener("click",()=>{
+  state.view=id==="vTable"?"table":"cards"; try{localStorage.setItem("mp-view",state.view);}catch(e){} renderAll();
+}));
+
+const live=APPS.filter(a=>a.status==="live").length, dev=APPS.filter(a=>a.status==="dev").length;
+document.getElementById("stTotal").textContent=APPS.length; document.getElementById("navTotal").textContent=APPS.length;
+document.getElementById("stLive").textContent=live; document.getElementById("navLive").textContent=live;
+document.getElementById("stDev").textContent=dev; document.getElementById("stCat").textContent=CATS.length;
+renderAll();
+</script>
