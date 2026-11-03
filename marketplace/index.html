@@ -106,6 +106,10 @@ aside h3{font-size:14px;color:var(--ink);margin:0 0 6px;font-weight:700}
 .card:hover{border-color:var(--amber)}
 .card .head{display:flex;gap:12px;align-items:center;min-width:0}
 .logo{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:14px;flex:none;letter-spacing:0}
+.logo.img{background:#fff;border:1px solid var(--line);padding:6px}
+.logo.img.wide{width:88px;padding:4px}
+.d-head .logo.img.wide{width:120px}
+.logo.img img{width:100%;height:100%;object-fit:contain;display:block}
 .card .nm{min-width:0}
 .card .nm b{display:block;font-size:14px;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
 .card .nm span{display:block;font-size:12px;color:var(--ink3)}
@@ -116,6 +120,7 @@ aside h3{font-size:14px;color:var(--ink);margin:0 0 6px;font-weight:700}
 .meth{font-size:12px;color:var(--ink3);border:1px solid var(--line);border-radius:999px;padding:0 8px;white-space:nowrap}
 .st-live{color:var(--s-live);background:var(--s-live-bg)} .st-dev{color:var(--s-dev);background:var(--s-dev-bg)}
 .st-plan{color:var(--s-plan);background:var(--s-plan-bg)} .st-talk{color:var(--s-talk);background:var(--s-talk-bg)} .st-idea{color:var(--s-idea);background:var(--s-idea-bg)}
+.pill.pri{color:#92600A;background:#FFF7E0}
 .empty{padding:48px 16px;color:var(--ink3);border:1px dashed var(--line2);border-radius:12px;font-size:14px}
 
 /* table */
@@ -231,7 +236,7 @@ footer img{height:24px;width:auto}
   </div>
 </main>
 
-<footer><div class="wrap"><span>1Approval 連携アプリストア 画面イメージ（モック）／ 株式会社エイチ ／ 2026-11-03 時点の構想資料から作成。ロゴは仮のアイコンで、各社の商標・ロゴは使用していません。</span></div></footer>
+<footer><div class="wrap"><span>1Approval 連携アプリストア 画面イメージ（モック）／ 株式会社エイチ ／ 2026-11-03 時点の構想資料から作成。ロゴは各社公式サイトのアイコンを仮掲載しています（掲載許諾は未取得）。取得できなかったものは頭文字で表示しています。</span></div></footer>
 
 <div class="scrim" id="scrim" hidden></div>
 <aside class="drawer" id="drawer" hidden aria-modal="true" role="dialog" aria-labelledby="dTitle"></aside>
@@ -250,6 +255,7 @@ const CATS = [
   {id:"hr",   name:"人事・ID", hint:"人事マスターを正にした差分同期", hue:"#0369A1",bg:"#F0F9FF"},
   {id:"mdm",  name:"MDM・IT資産", hint:"購買記録と管理端末の突合", hue:"#475569",bg:"#F1F5F9"},
   {id:"pay",  name:"支払・電子インボイス", hint:"承認額を上限に支払を執行", hue:"#A16207",bg:"#FEFCE8"},
+  {id:"util", name:"便利機能", hint:"カレンダーなど、申請・手配をもっと便利にする機能", hue:"#BE185D",bg:"#FDF2F8"},
   {id:"own",  name:"1Approval 純正ツール", hint:"ECや取引先の入口を広げる自社機能", hue:"#B45309",bg:"#FFF7E0"},
 ];
 const STATUS = {
@@ -277,8 +283,8 @@ const A = [
 // ---- 申請・承認基盤
 ["kintone","kintone","サイボウズ","wf","live",["プラグイン"],"公式","kintone のアプリにプラグインを入れるだけで、申請画面から出張予約・備品発注を呼び出し、承認と同時に確定させます。",["申請レコードから予約・カートを取り込み","承認ボタンで自動発注・発券","会計向けCSV（ホテル/飛行機/新幹線/経費）を出力"],P.wf,"総合ポータル／kintone LP／10/6 定例",1],
 ["kintoneplus","RICOH kintone plus","リコー","wf","live",["プラグイン"],"公式","リコー版 kintone でも同じプラグインで動作。リコー経由の販売・導入支援に対応します。",["kintone と同じ申請〜承認〜発注の流れ","リコー経由の契約・請求"],P.wf,"総合ポータル／all LP"],
-["m365","Microsoft 365","Microsoft","wf","dev",["標準連携","Power Automate"],"公式","SharePoint リストと Power Automate の承認で購買・手配を完結。追加のSaaS契約やID管理は不要です。",["SharePoint リストを申請台帳に","Power Automate 標準承認＋メール/Teams通知","予約画面に出張リストを表示"],P.wf,"m365 LP／10/6 定例（指摘回収・デモ準備中）",1],
-["gws","Google Workspace","Google","wf","dev",["標準連携","GAS"],"公式","Google フォームで申請し、GAS と Google Chat で承認。承認と同時に自動購買し、一括請求まで完結します。",["Google フォームの申請を取込","Google Chat で承認通知","スプレッドシートに明細を保持"],P.wf,"google LP／10/6 定例（プレスリリース配信済）",1],
+["m365","Microsoft 365","Microsoft","wf","live",["標準連携","Power Automate"],"公式","SharePoint リストと Power Automate の承認で購買・手配を完結。追加のSaaS契約やID管理は不要です。",["SharePoint リストを申請台帳に","Power Automate 標準承認＋メール/Teams通知","予約画面に出張リストを表示"],P.wf,"m365 LP",1],
+["gws","Google Workspace","Google","wf","live",["標準連携","GAS"],"公式","Google フォームで申請し、GAS と Google Chat で承認。承認と同時に自動購買し、一括請求まで完結します。",["Google フォームの申請を取込","Google Chat で承認通知","スプレッドシートに明細を保持"],P.wf,"google LP",1],
 ["garoon","Garoon","サイボウズ","wf","idea",["API"],"パートナー","Garoon ワークフローの承認イベントを受けて発注。サイボウズ製品の2本目として位置づけ。",["承認イベントの受信","結果の書き戻し"],P.wf,"総合ポータル／all LP"],
 ["xpoint","X-point Cloud","エイトレッド","wf","dev",["API"],"パートナー","開発環境を受領し、カスタマイズ可能な範囲を調査中です。",["申請フォームからの手配呼び出し（調査中）"],P.wf,"10/6 定例（開発環境発行済）"],
 ["agileworks","AgileWorks","エイトレッド","wf","idea",["API"],"パートナー","大企業向けワークフロー。複雑な承認ルートの結果を受けて発注します。",["承認イベントの受信"],P.wf,"総合ポータル"],
@@ -297,32 +303,36 @@ const A = [
 ["salesforce","Salesforce","Salesforce","wf","idea",["API"],"公式","1Approval Event：講演会の企画を起案し、確定した会場情報を1クリックで同期します。",["講演会企画の起案","会場・料金データの同期"],P.tbd,"1approval Event for Salesforce LP"],
 ["veeva","Veeva Events Management","Veeva","wf","idea",["API"],"公式","製薬MRが Veeva から講演会を起案。HCPランクに応じた宿泊・交通ポリシーを適用します。",["HCPポリシー制限","EOSS/EBOSS コードの付与"],P.tbd,"1approval Event LP"],
 ["own-wf","1Approval ワークフロー","株式会社エイチ","wf","plan",["内蔵"],"公式","外部のワークフローを契約していない会社向けに、1Approval 単体で多段承認・条件分岐を設定します。",["多段承認・条件分岐","単体での申請・承認"],"Agent Purchase に含む（+¥400/ユーザー月）","総合ポータル／functions_group"],
+["deems","Deems","—","wf","idea",["API"],"パートナー","申請・承認基盤の連携候補。承認の結果を受けて、手配・発注を自動で進めます。",["承認イベントの受信","結果の書き戻し"],P.wf,"追加指示（11/3）"],
 // ---- チャット
-["teams","Microsoft Teams","Microsoft","chat","dev",["Bot"],"公式","Teams のチャットから申請。承認通知は Power Automate 標準でメールと Teams に届きます。",["Teams から申請（Bot）","承認通知の受け取り","AIレコメンド"],P.teams,"teams LP／10/6 定例（方針決定）",1],
-["gchat","Google Chat","Google","chat","dev",["標準連携"],"公式","Google Workspace 連携の承認通知と承認操作を Google Chat で受けます。",["承認依頼の通知","チャットからの承認"],"Google Workspace 連携に含む","google LP"],
-["outlook","Outlook メール承認","Microsoft","chat","dev",["Power Automate"],"公式","Power Automate の承認メールから承認。承認者・申請者どちらがステータスを変えても相手に通知します。",["メールでの承認","ステータス変更の相互通知"],"Microsoft 365 連携に含む","m365 LP／10/6 定例"],
+["teams","Microsoft Teams","Microsoft","chat","live",["Bot"],"公式","Teams のチャットから申請。承認通知は Power Automate 標準でメールと Teams に届きます。",["Teams から申請（Bot）","承認通知の受け取り","AIレコメンド"],P.teams,"teams LP",1],
+["gchat","Google Chat","Google","chat","live",["標準連携"],"公式","Google Workspace 連携の承認通知と承認操作を Google Chat で受けます。",["承認依頼の通知","チャットからの承認"],"Google Workspace 連携に含む","google LP"],
+["outlook","Outlook メール承認","Microsoft","chat","live",["Power Automate"],"公式","Power Automate の承認メールから承認。承認者・申請者どちらがステータスを変えても相手に通知します。",["メールでの承認","ステータス変更の相互通知"],"Microsoft 365 連携に含む","m365 LP／10/6 定例"],
 // ---- 出張
 ["pikapaka","ピカパカ出張DX","ピカパカ","trip","live",["パンチアウト"],"パートナー","全国4万件のホテル、JAL・ANA・LCC含む国内線12社、JR を横断比較。事前承認で予約が確定し、法人一括請求になります。",["ホテル・航空・JRの横断検索","承認と同時に予約確定","法人一括請求（立替なし）","キャンセル（ホテル提供中・他は開発中）"],P.trip,"trip LP／10/6 定例",1],
 ["ex","EX（エクスプレス予約・スマートEX）","JR東海","trip","dev",["API","バッチ"],"パートナー","東海道・山陽新幹線の予約データを連携。直前変更が多いため、翌日のバッチ取込が中心です。",["予約・変更データの翌日取込","出張申請との突合"],P.trip,"10/6 定例（実装完了→テスト）"],
 ["air","国内航空券（JAL・ANA・LCC 12社）","ピカパカ経由","trip","live",["パンチアウト"],"パートナー","JAL、ANA、スターフライヤー、ソラシドエア、AIRDO、ピーチ、ジェットスターを一括比較。変更可能運賃も同時検索。",["12社横断の最安比較","変更可能運賃の同時検索"],P.trip,"trip LP"],
 ["overseas","海外出張手配","ピカパカ","trip","plan",["パンチアウト"],"パートナー","ホテル以外のキャンセル対応の次に着手予定。海外出張の多い顧客からの要望。",["海外航空券・ホテル（予定）"],P.trip,"10/6 定例（優先順位決定）"],
 ["bplus","B Plus","—","trip","idea",["API"],"パートナー","ポータルの出張宿泊カテゴリに掲載された手配先候補。",["宿泊手配"],P.trip,"総合ポータル"],
+["kinkon","キンコン","—","trip","idea",["API"],"パートナー","出張・交通の連携候補。",["出張手配データの連携"],P.trip,"追加指示（11/3）"],
 // ---- MICE
 ["mice","会議室・ワークスペース（38,000箇所）","株式会社エイチ","mice","plan",["API"],"公式","出張先のコワーキング、会議室、総会会場を承認から一発で仮キープ・発注します。",["全国38,000箇所の空き検索","承認で仮キープ→発注"],P.tbd,"総合ポータル（近日公開）／mice LP",1],
 ["event","講演会会場手配（コンシェルジュ）","株式会社エイチ","mice","idea",["ポータル"],"公式","講演会の条件から、コンシェルジュが仮キープ済みの会場を半自動で提案します。",["会場の半自動提案","医師の宿泊交通手配"],P.tbd,"1approval Event LP"],
-["calplus","カレンダープラス","kintone プラグインメーカー","mice","talk",["画面遷移"],"パートナー","kintone のカレンダーから予約・申請手配ができる UI を共同開発・共同販売する構想。",["カレンダーから申請画面へ遷移"],P.tbd,"10/6 定例（アライアンス）"],
-["kizuna","絆ワークス","—","mice","talk",["画面遷移"],"パートナー","アライアンス先として共同販売を協議中。",["申請画面への遷移連携"],P.tbd,"10/6 定例（アライアンス）"],
+["calplus","カレンダーPlus","ラジカルブリッジ","util","talk",["画面遷移"],"パートナー","kintone のカレンダーから予約・申請手配ができる UI を共同開発・共同販売する構想。",["カレンダーから申請画面へ遷移"],P.tbd,"10/6 定例（アライアンス）"],
+["kizuna","KizunaWorks","—","util","talk",["画面遷移"],"パートナー","アライアンス先として共同販売を協議中。",["申請画面への遷移連携"],P.tbd,"10/6 定例（アライアンス）"],
 // ---- Goods
-["monotaro","モノタロウ","MonotaRO","goods","dev",["cXML PunchOut"],"パートナー","1,800万点のカタログを申請画面から開き、承認と同時に発注。出荷通知・請求通知も受け取ります。",["カタログのパンチアウト","承認で自動発注","出荷通知→検収","請求通知で3者照合"],P.ec,"接続を追加 画面／購買先の接続設定",1],
+["monotaro","モノタロウ","MonotaRO","goods","live",["cXML PunchOut"],"パートナー","1,800万点のカタログを申請画面から開き、承認と同時に発注。出荷通知・請求通知も受け取ります。",["カタログのパンチアウト","承認で自動発注","出荷通知→検収","請求通知で3者照合"],P.ec,"接続を追加 画面／購買先の接続設定",1],
+["bic","ビックカメラ（法人）","ビックカメラ","goods","live",["パンチアウト"],"パートナー","家電・事務機器・日用品を申請画面から選び、承認と同時に発注します。",["商品の選択・取り込み","承認で自動発注","法人一括請求"],P.ec,"追加指示（11/3）"],
 ["trusco","トラスコ中山（オレンジコマース）","トラスコ中山","goods","dev",["cXML PunchOut"],"パートナー","工具・現場資材のオレンジブックを呼び出して発注。出荷通知に対応。",["カタログのパンチアウト","出荷通知の受信"],P.ec,"接続を追加 画面（設定中）"],
 ["netricoh","NetRICOH","リコー","goods","plan",["cXML PunchOut"],"パートナー","オフィス用品のリコー通販と接続。",["カタログのパンチアウト","承認で自動発注"],P.ec,"接続を追加 画面"],
 ["amazon","Amazon Business","Amazon","goods","plan",["PunchOut"],"パートナー","BrowserFormPost 方式でカートを受け取り、承認後に発注します。",["カートの取り込み","承認で発注"],P.ec,"接続を追加 画面"],
 ["askul","アスクル（ソロエルアリーナ）","アスクル","goods","idea",["個別対応","Chrome拡張"],"パートナー","正規連携は要相談。当面は Chrome 拡張で商品情報を取り込みます。",["商品名・品番・単価の取込"],P.ec,"接続を追加 画面／対応サイト"],
 ["kaunet","カウネット","カウネット","goods","idea",["個別対応","Chrome拡張"],"パートナー","正規連携は要相談。Chrome 拡張で取り込み。",["商品情報の取込"],P.ec,"接続を追加 画面／対応サイト"],
-["tanomail","たのめーる","大塚商会","goods","idea",["Chrome拡張"],"パートナー","Chrome 拡張の個別対応サイト。",["商品情報の取込"],P.ec,"総合ポータル／対応サイト"],
+["tanomail","たのめーる","大塚商会","goods","plan",["パンチアウト","Chrome拡張"],"パートナー","次に正規連携する上位候補。オフィス用品を申請画面から選び、承認と同時に発注します。接続までは Chrome 拡張で取り込めます。",["カタログからの商品選択（予定）","承認で自動発注（予定）","Chrome 拡張での商品情報取込"],P.ec,"総合ポータル／対応サイト"],
 ["catalogcsv","自社指定業者カタログ","各社","goods","plan",["CSV"],"公式","社内で指定した仕入先の品目と単価を CSV で取り込み、カタログとして出します。",["カタログCSVの取込","契約単価の適用"],P.ec,"接続を追加 画面"],
 ["cxml","その他（cXML準拠EC）","各社","goods","plan",["cXML PunchOut"],"公式","仕様書をもとに Identity・SharedSecret・PunchOut URL を設定して追加します。",["汎用 cXML 接続"],P.ec,"接続を追加 画面"],
 // ---- IT
+["bic-it","ビックカメラ（IT機器）","ビックカメラ","it","live",["パンチアウト"],"パートナー","PC・周辺機器・スマートフォンなどIT機器を、承認と同時に発注します。",["IT機器の選択・取り込み","承認で自動発注","検収後に資産台帳へ"],P.ec,"追加指示（11/3）"],
 ["ricoh-it","RICOH（IT機器）","リコー","it","talk",["API"],"パートナー","資本業務提携先。PC・複合機などIT機器の調達窓口として連携を協議。",["IT機器の調達"],P.ec,"総合ポータル／10/6 定例"],
 ["sbcs","SB C&S","SB C&S","it","talk",["API"],"パートナー","ソフトウェア・SaaS ライセンスの調達と販売チャネル。",["SaaS・ライセンスの調達"],P.ec,"総合ポータル／事業計画（仕切率）"],
 // ---- 会計
@@ -359,7 +369,10 @@ const A = [
 ["rfqmail","見積依頼・受信メール","株式会社エイチ","own","plan",["メール"],"公式","EC以外の仕入先に見積依頼を送り、返信を申請に紐づけます。社員は見積を転送するだけ。",["見積依頼の送信","転送された見積の自動取込","SPF/DKIM/DMARC 設定"],P.rfq,"メール設定 画面"],
 ["aiagent","Agent Purchase","株式会社エイチ","own","plan",["内蔵"],"公式","購買規定を学習したAIが、最適なサプライヤーや代替品を選んで代理購買します。",["AIレコメンド","規程のRAG学習","全社標準品カタログ"],"+¥400/ユーザー月（最低 ¥98,000）","functions_group／総合ポータル"],
 ];
-const APPS = A.map(r=>({id:r[0],name:r[1],vendor:r[2],cat:r[3],status:r[4],method:r[5],kind:r[6],desc:r[7],can:r[8],price:r[9],src:r[10],feat:!!r[11]}));
+const WIDE = new Set(["netricoh"]);
+const LOGOS = {"own-wf":"logos/1approval.png","mice":"logos/1approval.png","event":"logos/1approval.png","chromeext":"logos/1approval.png","rfqmail":"logos/1approval.png","aiagent":"logos/1approval.png","amazon":"logos/amazon.png","ariba":"logos/ariba.png","askul":"logos/askul.png","bakuraku":"logos/bakuraku.png","billone":"logos/billone.png","calplus":"logos/calplus.png","collabo":"logos/collabo.png","concur":"logos/concur.svg","coupa":"logos/coupa.png","desknets":"logos/desknets.png","entra":"logos/entra.png","ex":"logos/ex.png","figma":"logos/figma.png","freee":"logos/freee.png","garoon":"logos/garoon.png","gchat":"logos/gchat.png","gdir":"logos/gdir.png","gws":"logos/gws.png","intramart":"logos/intramart.png","intune":"logos/intune.png","jamf":"logos/jamf.png","jobcan":"logos/jobcan.png","kintone":"logos/kintone.png","kintoneplus":"logos/kintoneplus.png","m365":"logos/m365.png","monotaro":"logos/monotaro.png","netricoh":"logos/netricoh.png","obic":"logos/obic.png","outlook":"logos/outlook.png","pca":"logos/pca.png","peppol":"logos/peppol.png","rakumo":"logos/rakumo.png","rakuraku":"logos/rakuraku.png","rakuwf":"logos/rakuwf.png","ricoh-it":"logos/ricoh-it.png","salesforce":"logos/salesforce.png","sap":"logos/sap.png","sfdc-user":"logos/sfdc-user.png","slack":"logos/slack.png","smartdb":"logos/smartdb.png","smarthr":"logos/smarthr.png","tanomail":"logos/tanomail.png","teams":"logos/teams.png","veeva":"logos/veeva.png"};
+const PRI = new Set(["tanomail"]);
+const APPS = A.map(r=>({pri:PRI.has(r[0]),id:r[0],name:r[1],vendor:r[2],cat:r[3],status:r[4],method:r[5],kind:r[6],desc:r[7],can:r[8],price:r[9],src:r[10],feat:!!r[11]}));
 const catOf = id => CATS.find(c=>c.id===id);
 const ORDER = ["live","dev","plan","talk","idea"];
 
@@ -375,7 +388,7 @@ function mono(name){
 }
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pill = st => `<span class="pill ${STATUS[st].c}">${STATUS[st].n}</span>`;
-const logo = a => `<span class="logo" style="color:${catOf(a.cat).hue};background:${catOf(a.cat).bg}" aria-hidden="true">${esc(mono(a.name))}</span>`;
+const logo = a => LOGOS[a.id] ? `<span class="logo img${WIDE.has(a.id)?" wide":""}" aria-hidden="true"><img src="${LOGOS[a.id]}" alt="" loading="lazy" onerror="this.parentNode.classList.remove('img');this.parentNode.style.cssText='color:${catOf(a.cat).hue};background:${catOf(a.cat).bg}';this.replaceWith('${esc(mono(a.name))}')"></span>` : `<span class="logo" style="color:${catOf(a.cat).hue};background:${catOf(a.cat).bg}" aria-hidden="true">${esc(mono(a.name))}</span>`;
 
 function match(a, ignore){
   if(ignore!=="cat" && state.cat!=="all" && a.cat!==state.cat) return false;
@@ -412,7 +425,7 @@ function card(a){
   return `<button type="button" class="card" data-id="${a.id}">
     <div class="head">${logo(a)}<div class="nm"><b>${esc(a.name)}</b><span>${esc(a.vendor)}</span></div></div>
     <p>${esc(a.desc)}</p>
-    <div class="foot">${pill(a.status)}${a.method.slice(0,2).map(m=>`<span class="meth">${esc(m)}</span>`).join("")}</div>
+    <div class="foot">${pill(a.status)}${a.pri?'<span class="pill pri">上位候補</span>':""}${a.method.slice(0,2).map(m=>`<span class="meth">${esc(m)}</span>`).join("")}</div>
   </button>`;
 }
 function renderFeatured(){
@@ -421,20 +434,21 @@ function renderFeatured(){
   box.hidden=!show; if(!show) return;
   const F=[
     {id:"kintone",tag:"いちばん使われている入口",t:"kintone プラグイン",d:"申請レコードから予約・発注まで。立替も領収書回収もなくなります。",c:"#FFB800"},
-    {id:"m365",c:"#00B0FF",tag:"まもなく公開",t:"Microsoft 365 ＋ Teams",d:"SharePoint と Power Automate の承認のまま、購買が終わる。Teams から申請も。"},
+    {id:"m365",c:"#00B0FF",tag:"提供開始",t:"Microsoft 365 ＋ Teams",d:"SharePoint と Power Automate の承認のまま、購買が終わる。Teams から申請も。"},
     {id:"bugyo",c:"#00C853",tag:"経理のための連携",t:"会計・経費 6製品",d:"勘定奉行・PCA・freee・マネーフォワード・楽楽精算・バクラクへ、検収済み明細を出力。"},
   ];
   document.getElementById("featured").innerHTML=F.map(f=>`<button type="button" class="feat" style="--c:${f.c}" data-id="${f.id}"><span class="tag">${f.tag}</span><h4>${f.t}</h4><p>${f.d}</p></button>`).join("");
 }
 function renderResults(){
   const list=APPS.filter(a=>match(a));
-  list.sort((x,y)=>ORDER.indexOf(x.status)-ORDER.indexOf(y.status));
+  const rank=a=>a.status==="live"?0:a.pri?1:2+ORDER.indexOf(a.status);
+  list.sort((x,y)=>rank(x)-rank(y));
   document.getElementById("count").textContent=`${list.length}件`;
   document.getElementById("viewTitle").textContent= state.cat==="all"?"すべての連携":catOf(state.cat).name;
   const out=document.getElementById("results");
   if(!list.length){ out.innerHTML=`<div class="empty">条件に合う連携が見つかりません。検索語を変えるか、フィルタを外してください。<br>見つからないサービスは「要望を送る」から追加をリクエストできます。</div>`; return; }
   if(state.view==="table"){
-    const byCat=[...list].sort((x,y)=>CATS.findIndex(c=>c.id===x.cat)-CATS.findIndex(c=>c.id===y.cat)||ORDER.indexOf(x.status)-ORDER.indexOf(y.status));
+    const byCat=[...list].sort((x,y)=>CATS.findIndex(c=>c.id===x.cat)-CATS.findIndex(c=>c.id===y.cat)||rank(x)-rank(y));
     out.innerHTML=`<div class="tbl-wrap"><table><thead><tr><th>カテゴリ</th><th>サービス</th><th>提供元</th><th>状態</th><th>連携方式</th><th>料金の考え方</th><th>出典</th></tr></thead><tbody>${
       byCat.map(a=>`<tr data-id="${a.id}" tabindex="0"><td>${esc(catOf(a.cat).name)}</td><td><b>${esc(a.name)}</b></td><td>${esc(a.vendor)}</td><td>${pill(a.status)}</td><td>${esc(a.method.join(" / "))}</td><td>${esc(a.price)}</td><td class="src">${esc(a.src)}</td></tr>`).join("")
     }</tbody></table></div>`;
@@ -461,7 +475,7 @@ function openApp(id){
   const related=APPS.filter(x=>x.cat===a.cat&&x.id!==a.id).slice(0,4);
   drawer.innerHTML=`<button type="button" class="x" id="dClose" aria-label="閉じる">×</button>
     <div class="d-head">${logo(a)}<div><h2 id="dTitle">${esc(a.name)}</h2><span>${esc(a.vendor)} ・ ${c.name}</span></div></div>
-    <div class="cta"><button type="button" class="btn grad" data-act="${a.status}">${st.cta}</button><button type="button" class="btn" data-act="doc">接続ガイドを見る</button>${pill(a.status)}</div>
+    <div class="cta"><button type="button" class="btn grad" data-act="${a.status}">${st.cta}</button><button type="button" class="btn" data-act="doc">接続ガイドを見る</button>${pill(a.status)}${a.pri?'<span class="pill pri">上位候補</span>':""}</div>
     <p class="lead">${esc(a.desc)}</p>
     <div><h3>できること</h3><ul>${a.can.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
     <dl class="kv"><dt>連携方式</dt><dd>${esc(a.method.join(" / "))}</dd><dt>提供元</dt><dd>${a.kind==="公式"?"1Approval 公式":"パートナー連携"}</dd><dt>料金</dt><dd>${esc(a.price)}</dd><dt>状態</dt><dd>${st.n}</dd><dt>出典</dt><dd>${esc(a.src)}</dd></dl>
