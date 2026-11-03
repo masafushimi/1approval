@@ -171,6 +171,35 @@ footer img{height:24px;width:auto}
   .stats{gap:24px}
 }
 @media (prefers-reduced-motion:reduce){.card{transition:none}}
+
+/* hero v2 */
+.nw{display:inline-block;white-space:nowrap}
+.hero{position:relative;overflow:hidden;background:var(--tint)}
+.hero::before{content:"";position:absolute;inset:-40% -10% auto;height:520px;background:radial-gradient(closest-side,rgba(255,184,0,.18),transparent 70%),radial-gradient(closest-side at 80% 60%,rgba(0,176,255,.10),transparent 70%);pointer-events:none}
+.hero .wrap.hero-in{position:relative;padding-block:56px 28px;gap:22px}
+.hero h1{font-size:36px;line-height:1.3}
+.hero h1 .big{font-size:clamp(36px,6.4vw,64px);line-height:1.2;margin-top:6px}
+.hero h1 .big .mono{font-family:var(--f-mono);font-weight:500;letter-spacing:-.02em}
+.hsearch{width:100%;max-width:720px;display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--ink);border-radius:999px;padding:8px 8px 8px 22px}
+.hsearch:focus-within{border-color:var(--amber)}
+.hsearch input{flex:1;min-width:0;border:0;outline:none;background:none;font:inherit;font-size:16px;color:var(--ink);padding-block:8px}
+.hsearch input::placeholder{color:#94A3B8}
+.hs-btn{flex:none;border:0;cursor:pointer;background:var(--grad);color:#fff;font-weight:900;font-size:14px;border-radius:999px;padding:10px 22px}
+.quick{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.quick span{font-size:12px;color:var(--ink3);font-weight:700;margin-right:4px}
+.quick button{border:1px solid var(--line2);background:#fff;border-radius:999px;padding:3px 14px;font-size:14px;font-weight:700;cursor:pointer;color:var(--ink2)}
+.quick button:hover{border-color:var(--ink);color:var(--ink)}
+.hero .stats{margin-top:4px}
+.wall{position:relative;display:flex;flex-direction:column;gap:14px;padding-block:8px 44px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.row{display:flex;gap:14px;width:max-content;animation:slide var(--dur,60s) linear infinite}
+.row.rev{animation-direction:reverse}
+.wall:hover .row{animation-play-state:paused}
+.tile{width:76px;height:76px;flex:none;border-radius:12px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;padding:12px}
+.tile.w{width:140px}
+.tile img{width:100%;height:100%;object-fit:contain}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.row{animation:none}}
+@media (max-width:560px){.top .search{display:none}.tile{width:56px;height:56px;padding:9px}.tile.w{width:104px}.hs-btn{display:none}.hero h1{font-size:24px}}
 </style>
 
 <header class="top">
@@ -188,26 +217,26 @@ footer img{height:24px;width:auto}
 </header>
 
 <section class="hero">
-  <div class="wrap">
+  <div class="wrap hero-in">
     <span class="badge">承認と間接購買をつなぐ統合Hubの連携先</span>
-    <h1>いつものワークフローに<span class="big"><span class="grad-text">つなぐだけ</span></span></h1>
-    <p>申請・承認する場所、買う・手配する先、記帳・精算する先。1Approval がつなぐサービスをひとつの棚に並べました。連携を選んで有効化し、まだないサービスは要望を送れます。</p>
+    <h1>承認ひとつで、<span class="big"><span class="nw grad-text"><span class="mono" id="heroN">76</span>のサービス</span><span class="nw">とつながる</span></span></h1>
+    <label class="hsearch" for="q2">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q2" type="search" placeholder="つなぎたいサービスを探す（例：勘定奉行、モノタロウ、Teams）" autocomplete="off">
+      <button type="button" class="hs-btn" id="hsGo">検索</button>
+    </label>
+    <div class="quick" aria-label="よく探されるもの">
+      <span>よく探されるもの</span>
+      <button type="button" data-q="kintone">kintone</button><button type="button" data-q="Teams">Teams</button><button type="button" data-q="勘定奉行">勘定奉行</button><button type="button" data-q="モノタロウ">モノタロウ</button><button type="button" data-cat="trip">出張・交通</button><button type="button" data-q="SCIM">SCIM</button>
+    </div>
     <div class="stats">
-      <div><b id="stTotal">0</b><span>掲載サービス</span></div>
       <div><b id="stLive">0</b><span>提供中</span></div>
       <div><b id="stDev">0</b><span>開発中</span></div>
       <div><b id="stCat">0</b><span>カテゴリ</span></div>
-    </div>
-    <div class="flow" aria-label="1Approvalの連携構造">
-      <div class="col"><span class="lbl st-dev">1. 社内承認基盤</span><span class="chip">kintone</span><span class="chip">Microsoft 365 / Teams</span><span class="chip">Google Workspace</span><span class="chip" style="color:var(--ink3)">Garoon・コラボフロー…</span></div>
-      <span class="arr" aria-hidden="true">→</span>
-      <div class="hubc"><span class="tagh">中間統合 HUB</span><img src="data:image/webp;base64,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" alt="1Approval" width="96" height="28"><small>承認を受けて<br>自動で予約・発注</small></div>
-      <span class="arr" aria-hidden="true">→</span>
-      <div class="col"><span class="lbl st-live">2. 購買・手配ポータル</span><span class="chip">ピカパカ出張DX・EX</span><span class="chip">モノタロウ・トラスコ</span><span class="chip">Amazon Business</span><span class="chip">会議室 38,000箇所</span></div>
-      <span class="arr" aria-hidden="true">→</span>
-      <div class="col"><span class="lbl" style="color:#0E7490;background:#ECFEFF">3. バックオフィス</span><span class="chip">勘定奉行・PCA</span><span class="chip">freee・マネーフォワード</span><span class="chip">楽楽精算・バクラク</span><span class="chip">Entra ID・Jamf</span></div>
+      <div><b id="stTotal">0</b><span>掲載サービス</span></div>
     </div>
   </div>
+  <div class="wall" id="wall" aria-hidden="true"></div>
 </section>
 
 <nav class="rail" aria-label="カテゴリ"><div class="wrap" id="rail"></div></nav>
@@ -289,7 +318,7 @@ const A = [
 ["xpoint","X-point Cloud","エイトレッド","wf","dev",["API"],"パートナー","開発環境を受領し、カスタマイズ可能な範囲を調査中です。",["申請フォームからの手配呼び出し（調査中）"],P.wf,"10/6 定例（開発環境発行済）"],
 ["agileworks","AgileWorks","エイトレッド","wf","idea",["API"],"パートナー","大企業向けワークフロー。複雑な承認ルートの結果を受けて発注します。",["承認イベントの受信"],P.wf,"総合ポータル"],
 ["collabo","コラボフロー","コラボスタイル","wf","idea",["API"],"パートナー","Excel 帳票型のワークフローから、承認後に手配を自動実行します。",["承認イベントの受信"],P.wf,"総合ポータル"],
-["rakuwf","楽楽ワークフローII","ラクス","wf","talk",["API"],"パートナー","海外出張の多い顧客からの紹介でコンタクト開始。楽楽精算と並ぶラクス製品群との接続。",["承認後の手配","楽楽精算との一体運用"],P.wf,"10/6 定例（アライアンス）"],
+["rakuwf","楽々ワークフローII","住友電工情報システム","wf","talk",["API"],"パートナー","大企業向けのワークフロー。海外出張の多い顧客からの紹介でコンタクトを開始しました。承認の結果を受けて、出張手配や発注を進めます。",["承認後の手配・発注","承認ルートの結果の受け取り"],P.wf,"10/6 定例（アライアンス）"],
 ["intramart","intra-mart","NTTデータ イントラマート","wf","idea",["API"],"パートナー","基幹系と並ぶ大企業ワークフロー基盤との接続。",["承認イベントの受信"],P.wf,"総合ポータル"],
 ["desknets","desknet's NEO","ネオジャパン","wf","idea",["API"],"パートナー","グループウェア内のワークフローから手配を呼び出します。",["承認イベントの受信"],P.wf,"総合ポータル"],
 ["rakumo","rakumo ワークフロー","rakumo","wf","idea",["API"],"パートナー","Google Workspace 上の rakumo ワークフローと接続。",["承認イベントの受信"],P.wf,"総合ポータル"],
@@ -369,8 +398,8 @@ const A = [
 ["rfqmail","見積依頼・受信メール","株式会社エイチ","own","plan",["メール"],"公式","EC以外の仕入先に見積依頼を送り、返信を申請に紐づけます。社員は見積を転送するだけ。",["見積依頼の送信","転送された見積の自動取込","SPF/DKIM/DMARC 設定"],P.rfq,"メール設定 画面"],
 ["aiagent","Agent Purchase","株式会社エイチ","own","plan",["内蔵"],"公式","購買規定を学習したAIが、最適なサプライヤーや代替品を選んで代理購買します。",["AIレコメンド","規程のRAG学習","全社標準品カタログ"],"+¥400/ユーザー月（最低 ¥98,000）","functions_group／総合ポータル"],
 ];
-const WIDE = new Set(["netricoh","deems"]);
-const LOGOS = {"agileworks":"logos/agileworks.png","aiagent":"logos/1approval.png","air":"logos/pikapaka.png","amazon":"logos/amazon.png","appremo":"logos/appremo.png","ariba":"logos/ariba.png","askul":"logos/askul.png","bakuraku":"logos/bakuraku.png","bic":"logos/bic.png","bic-it":"logos/bic.png","billone":"logos/billone.png","bplus":"logos/bplus.png","bugyo":"logos/bugyo.png","calplus":"logos/calplus.png","chromeext":"logos/1approval.png","collabo":"logos/collabo.png","concur":"logos/concur.svg","coupa":"logos/coupa.png","deems":"logos/deems.png","desknets":"logos/desknets.png","entra":"logos/entra.png","event":"logos/eichiii.png","ex":"logos/ex.png","figma":"logos/figma.png","freee":"logos/freee.png","garoon":"logos/garoon.png","gchat":"logos/gchat.png","gdir":"logos/gdir.png","gws":"logos/gws.png","intramart":"logos/intramart.png","intune":"logos/intune.png","jamf":"logos/jamf.png","jinjer":"logos/jinjer.png","jobcan":"logos/jobcan.png","kaunet":"logos/kaunet.png","kinkon":"logos/kinkon.png","kintone":"logos/kintone.png","kintone-user":"logos/kintone.png","kintoneplus":"logos/kintoneplus.png","lanscope":"logos/lanscope.png","m365":"logos/m365.png","mfacc":"logos/mfacc.png","mfexp":"logos/mfexp.png","mice":"logos/eichiii.png","monotaro":"logos/monotaro.png","netricoh":"logos/netricoh.png","obic":"logos/obic.png","outlook":"logos/outlook.png","overseas":"logos/pikapaka.png","own-wf":"logos/1approval.png","pca":"logos/pca.png","peppol":"logos/peppol.png","pikapaka":"logos/pikapaka.png","rakumo":"logos/rakumo.png","rakuraku":"logos/rakuraku.png","rakuwf":"logos/rakuwf.png","rfqmail":"logos/1approval.png","ricoh-it":"logos/ricoh-it.png","salesforce":"logos/salesforce.png","sap":"logos/sap.png","sfdc-user":"logos/sfdc-user.png","shonin":"logos/shonin.png","slack":"logos/slack.png","smartdb":"logos/smartdb.png","smarthr":"logos/smarthr.png","tanomail":"logos/tanomail.png","teams":"logos/teams.png","trusco":"logos/trusco.png","veeva":"logos/veeva.png","xpoint":"logos/xpoint.png"};
+const WIDE = new Set(["netricoh","deems","rakuwf"]);
+const LOGOS = {"agileworks":"logos/agileworks.png","aiagent":"logos/1approval.png","air":"logos/pikapaka.png","amazon":"logos/amazon.png","appremo":"logos/appremo.png","ariba":"logos/ariba.png","askul":"logos/askul.png","bakuraku":"logos/bakuraku.png","bic":"logos/bic.png","bic-it":"logos/bic.png","billone":"logos/billone.png","bplus":"logos/bplus.png","bugyo":"logos/bugyo.png","calplus":"logos/calplus.png","chromeext":"logos/1approval.png","collabo":"logos/collabo.png","concur":"logos/concur.svg","coupa":"logos/coupa.png","deems":"logos/deems.png","desknets":"logos/desknets.png","entra":"logos/entra.png","event":"logos/eichiii.png","ex":"logos/ex.png","figma":"logos/figma.png","freee":"logos/freee.png","garoon":"logos/garoon.png","gchat":"logos/gchat.png","gdir":"logos/gdir.png","gws":"logos/gws.png","intramart":"logos/intramart.png","intune":"logos/intune.png","jamf":"logos/jamf.png","jinjer":"logos/jinjer.png","jobcan":"logos/jobcan.png","kaunet":"logos/kaunet.png","kinkon":"logos/kinkon.png","kintone":"logos/kintone.png","kintone-user":"logos/kintone.png","kintoneplus":"logos/kintoneplus.png","lanscope":"logos/lanscope.png","m365":"logos/m365.png","mfacc":"logos/mfacc.png","mfexp":"logos/mfexp.png","mice":"logos/eichiii.png","monotaro":"logos/monotaro.png","netricoh":"logos/netricoh.png","obic":"logos/obic.png","outlook":"logos/outlook.png","overseas":"logos/pikapaka.png","own-wf":"logos/1approval.png","pca":"logos/pca.png","peppol":"logos/peppol.png","pikapaka":"logos/pikapaka.png","rakumo":"logos/rakumo.png","rakuraku":"logos/rakuraku.png","rakuwf":"logos/rakuwf.svg","rfqmail":"logos/1approval.png","ricoh-it":"logos/ricoh-it.png","salesforce":"logos/salesforce.png","sap":"logos/sap.png","sfdc-user":"logos/sfdc-user.png","shonin":"logos/shonin.png","slack":"logos/slack.png","smartdb":"logos/smartdb.png","smarthr":"logos/smarthr.png","tanomail":"logos/tanomail.png","teams":"logos/teams.png","trusco":"logos/trusco.png","veeva":"logos/veeva.png","xpoint":"logos/xpoint.png"};
 const PRI = new Set(["tanomail"]);
 const APPS = A.map(r=>({pri:PRI.has(r[0]),id:r[0],name:r[1],vendor:r[2],cat:r[3],status:r[4],method:r[5],kind:r[6],desc:r[7],can:r[8],price:r[9],src:r[10],feat:!!r[11]}));
 const catOf = id => CATS.find(c=>c.id===id);
@@ -511,5 +540,22 @@ const live=APPS.filter(a=>a.status==="live").length, dev=APPS.filter(a=>a.status
 document.getElementById("stTotal").textContent=APPS.length; 
 document.getElementById("stLive").textContent=live; 
 document.getElementById("stDev").textContent=dev; document.getElementById("stCat").textContent=CATS.length;
+
+// hero: logo wall + search mirror
+(function(){
+  const seen=new Set(), list=[];
+  APPS.forEach(a=>{const s=LOGOS[a.id]; if(s&&!seen.has(s)){seen.add(s);list.push({s,w:WIDE.has(a.id)});}});
+  const rows=[[],[],[]]; list.forEach((x,i)=>rows[i%3].push(x));
+  document.getElementById("wall").innerHTML=rows.map((r,i)=>{const tiles=r.map(x=>`<span class="tile${x.w?" w":""}"><img src="${x.s}" alt="" loading="eager"></span>`).join("");
+    return `<div class="row${i%2?" rev":""}" style="--dur:${54+i*10}s">${tiles}${tiles}</div>`;}).join("");
+  document.getElementById("heroN").textContent=APPS.length;
+  const q=document.getElementById("q"), q2=document.getElementById("q2");
+  const go=v=>{q.value=q2.value=v; state.q=v.trim(); renderAll(); document.querySelector(".rail").scrollIntoView({behavior:"smooth"});};
+  q2.addEventListener("input",e=>{q.value=e.target.value; state.q=e.target.value.trim(); renderAll();});
+  q2.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();go(q2.value);}});
+  document.querySelectorAll(".quick [data-q]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.q)));
+  q.addEventListener("input",e=>{q2.value=e.target.value;});
+  document.getElementById("hsGo").addEventListener("click",()=>go(q2.value));
+})();
 renderAll();
 </script>
