@@ -7,11 +7,588 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-body{margin:0;font-family:Inter,"Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;background:#F4F6FB;color:#151823}
-a{color:#2F55D4}
+:root{--ink:#151823;--sub:#59617A;--mute:#676D80;--line:#E2E6F0;--line2:#C6CCDC;--soft:#F2F4FA;--bg:#F4F6FB;
+ --blue:#2F55D4;--grad:linear-gradient(135deg,#2F55D4 0%,#6E43D6 100%);--red:#C7343A;--amber:#8A5F03;--green:#1C7C4A;
+ --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,"Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;background:var(--bg);color:var(--ink);display:flex;justify-content:center;align-items:flex-start}
+a{color:var(--blue)}
+button{font-family:inherit;cursor:pointer}
+.page{width:1440px;height:900px;display:flex;flex-direction:column;background:var(--bg);position:relative;overflow:hidden}
+/* header */
+.top{color:#EEF1F8;flex-shrink:0;height:68px;padding:0 26px;background:#0D1018;border-bottom:1px solid #1E2433;box-shadow:0 1px 0 rgba(13,16,24,.1),0 4px 14px rgba(13,16,24,.1);display:flex;align-items:center;gap:16px}
+.top .logo{background:#fff;border-radius:6px;padding:5px 8px;display:inline-flex}
+.top .logo img{height:17px;display:block}
+.top .bar{width:1px;height:20px;background:#343B4E}
+.beta{font-size:10px;font-weight:700;color:#fff;background:linear-gradient(135deg,#4F7BFF 0%,#9B6BFF 100%);border-radius:999px;padding:3px 8px;letter-spacing:.04em}
+.top nav{display:flex;gap:2px;margin-left:18px}
+.top nav a{padding:8px 15px;color:#9AA3B8;text-decoration:none;font-size:13px;border-radius:8px;border:1px solid transparent}
+.top nav a.on{background:#1B2030;color:#fff;border-color:#3E465C;font-weight:600}
+.top .r{margin-left:auto;display:flex;align-items:center;gap:16px}
+.top .url{font-size:11px;color:#7D8699;font-family:var(--mono)}
+.top .url span{color:#9AA3B8}
+.top .r a{font-size:12px;color:#9AA3B8;text-decoration:none}
+.reset{font-size:11px;color:#9AA3B8;background:transparent;border:1px dashed #3E465C;border-radius:7px;padding:5px 10px}
+.reset:hover{color:#fff;border-color:#9AA3B8}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#4F7BFF 0%,#9B6BFF 100%);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+/* main */
+main{flex-grow:1;padding:22px 26px 0;display:flex;flex-direction:column;min-height:0}
+.ttl{display:flex;align-items:baseline;gap:13px}
+.ttl h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.02em}
+.ttl .d{font-size:12px;color:var(--sub)}
+.ttl .acts{margin-left:auto;display:flex;gap:8px}
+.btn{font-size:13px;font-weight:500;color:var(--ink);background:var(--soft);border:1px solid var(--line2);border-radius:9px;padding:9px 15px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;line-height:1.2}
+.btn:hover{background:#E8EBF4}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.pri{font-weight:600;color:#fff;background:var(--grad);border-color:transparent;box-shadow:0 6px 18px rgba(47,85,212,.22);padding:9px 17px}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.sm{font-size:12px;padding:6px 11px;border-radius:8px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(19,24,45,.05),0 1px 3px rgba(19,24,45,.05)}
+.sig{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:14px}
+.sig .card{padding:13px 15px;text-align:left;font:inherit;color:inherit;transition:border-color .15s,box-shadow .15s,transform .15s;position:relative}
+.sig .card:hover{border-color:#9FB0E8;box-shadow:0 6px 18px rgba(47,85,212,.12);transform:translateY(-1px)}
+.sig .card .go{position:absolute;right:13px;top:12px;font-size:11px;color:var(--blue);opacity:0;transition:opacity .15s}
+.sig .card:hover .go{opacity:1}
+.sig .card.done{background:#F3FAF6;border-color:#BFE3CF}
+.tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;white-space:nowrap}
+.t-red{color:var(--red);background:rgba(199,52,58,.09)}.t-blue{color:var(--blue);background:rgba(47,85,212,.09)}
+.t-amber{color:var(--amber);background:rgba(138,95,3,.11)}.t-gray{color:var(--sub);background:rgba(89,97,122,.09)}
+.t-green{color:var(--green);background:rgba(28,124,74,.1)}
+.mono{font-family:var(--mono)}
+.sig .src{font-size:11px;color:var(--mute);font-family:var(--mono)}
+.sig .txt{font-size:13px;margin-top:8px;line-height:1.6}
+.cols{display:flex;gap:16px;margin-top:14px;flex-grow:1;min-height:0}
+/* chat */
+.chat{flex-grow:1;min-width:0;padding:18px;display:flex;flex-direction:column;min-height:0}
+.chat-h{display:flex;align-items:center;gap:9px}
+.ag-ic{width:26px;height:26px;flex-shrink:0;border-radius:7px;background:var(--grad);display:flex;align-items:center;justify-content:center}
+.msgs{margin-top:14px;flex-grow:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding-right:6px;scroll-behavior:smooth}
+.msgs::-webkit-scrollbar{width:6px}.msgs::-webkit-scrollbar-thumb{background:#D5DAE6;border-radius:3px}
+.m-u{display:flex;justify-content:flex-end}
+.m-u>div{max-width:76%;background:var(--soft);border:1px solid var(--line2);border-radius:12px 12px 4px 12px;padding:11px 14px;font-size:13px;line-height:1.7;white-space:pre-wrap}
+.m-a{display:flex;gap:10px;animation:in .25s ease}
+.m-a .body{max-width:84%;display:flex;flex-direction:column;gap:6px;min-width:0}
+.bub{border:1px solid var(--line);border-radius:12px 12px 12px 4px;padding:12px 14px;font-size:13px;line-height:1.8;background:var(--soft)}
+.bub .s{color:var(--sub)}
+.trig{font-size:11px;font-weight:600;color:#6E43D6;display:flex;align-items:center;gap:6px}
+.trig:before{content:"";width:6px;height:6px;border-radius:50%;background:#6E43D6;box-shadow:0 0 0 3px rgba(110,67,214,.18)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.steps{display:flex;flex-direction:column;gap:3px;font-size:11.5px;color:var(--sub)}
+.step{display:flex;align-items:center;gap:7px;animation:in .2s ease}
+.step .k{font-family:var(--mono);font-size:10.5px;color:var(--mute);background:#fff;border:1px solid var(--line);border-radius:4px;padding:0 5px}
+.spin{width:11px;height:11px;border:2px solid #C9D2EE;border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite;flex-shrink:0}
+.ok{width:11px;height:11px;flex-shrink:0;color:var(--green);font-size:11px;line-height:11px;font-weight:700}
+@keyframes sp{to{transform:rotate(360deg)}}
+.typing{display:inline-flex;gap:4px;padding:4px 0}
+.typing i{width:6px;height:6px;border-radius:50%;background:#A5AEC6;animation:bl 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bl{0%,80%,100%{opacity:.3}40%{opacity:1}}
+.qa{display:flex;flex-wrap:wrap;gap:6px;animation:in .25s ease}
+.qa button{font-size:12px;color:var(--blue);background:#fff;border:1px solid #BFCBF1;border-radius:999px;padding:5px 11px}
+.qa button:hover{background:#EEF2FD}
+.qa button:disabled{color:#9AA3B8;border-color:var(--line);background:#fff;cursor:default}
+.mini{width:100%;border-collapse:collapse;margin-top:8px;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:12px}
+.mini td,.mini th{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;line-height:1.4}
+.mini th{font-size:10.5px;color:var(--sub);font-weight:600;background:#F8F9FC}
+.mini tr:last-child td{border-bottom:0}
+.mini .n{text-align:right;white-space:nowrap}
+.barw{height:7px;background:#E8EBF4;border-radius:4px;overflow:hidden;width:120px;display:inline-block;vertical-align:middle}
+.barw b{display:block;height:100%;border-radius:4px;background:var(--blue)}
+.barw b.over{background:var(--red)}
+.inp{margin-top:12px;display:flex;gap:9px;align-items:center}
+.inp input{flex-grow:1;background:#fff;border:1px solid #8793AF;border-radius:10px;padding:11px 13px;font-size:13px;font-family:inherit;color:var(--ink);outline:none}
+.inp input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,85,212,.15)}
+.mic{width:38px;height:38px;border-radius:10px;border:1px solid var(--line2);background:var(--soft);display:flex;align-items:center;justify-content:center}
+.mic.rec{background:#FDECEC;border-color:#E8A4A7}
+.mic.rec svg{stroke:var(--red)}
+.chips{margin-top:10px;display:flex;gap:7px;flex-wrap:wrap}
+.chips button{font-size:12px;color:var(--sub);background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.chips button:hover{border-color:#9FB0E8;color:var(--blue);background:#EEF2FD}
+/* aside */
+aside{width:620px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;min-height:0}
+.draft{padding:18px;display:flex;flex-direction:column;min-height:0;flex-grow:1}
+.dh{display:flex;align-items:center;gap:9px}
+.dh .st{font-size:11px;color:var(--sub)}
+.tbl{margin-top:13px;border:1px solid var(--line);border-radius:12px;overflow:hidden;flex-shrink:1;min-height:0;display:flex;flex-direction:column}
+.tbl .scr{overflow-y:auto;max-height:236px}
+table.d{width:100%;border-collapse:collapse}
+table.d th{position:sticky;top:0;background:var(--soft);padding:10px 12px;font-weight:600;font-size:11px;color:var(--sub);letter-spacing:.04em;border-bottom:1px solid var(--line);text-align:left;z-index:1}
+table.d td{padding:11px 12px;font-size:13px;border-bottom:1px solid var(--line);vertical-align:top}
+table.d tr:last-child td{border-bottom:0}
+table.d .r{text-align:right}
+table.d .meta{color:var(--sub);font-size:11px;margin-top:2px}
+table.d tr.new td{animation:hl 1.6s ease}
+@keyframes hl{0%{background:#E4EBFF}100%{background:transparent}}
+.warn{display:inline-block;margin-top:4px;font-size:10.5px;font-weight:600;color:var(--amber);background:rgba(138,95,3,.11);border-radius:5px;padding:1px 6px}
+.qty{display:inline-flex;align-items:center;gap:0;border:1px solid var(--line2);border-radius:7px;overflow:hidden;background:#fff}
+.qty button{border:0;background:var(--soft);width:22px;height:24px;font-size:13px;color:var(--sub)}
+.qty span{min-width:26px;text-align:center;font-size:13px}
+.del{border:0;background:transparent;color:#9AA3B8;font-size:15px;padding:0 0 0 6px;vertical-align:middle}
+.del:hover{color:var(--red)}
+.empty{padding:34px 20px;text-align:center;color:var(--sub);font-size:12.5px;line-height:1.9}
+.empty b{display:block;font-size:13px;color:var(--ink);margin-bottom:2px}
+.foot{display:flex;gap:14px;margin-top:13px;align-items:flex-start}
+.foot .note{flex-grow:1;font-size:12px;color:var(--sub);line-height:1.8}
+.kv{display:grid;grid-template-columns:62px 1fr;gap:2px 8px;font-size:12px;margin-bottom:6px}
+.kv dt{color:var(--sub)}.kv dd{margin:0;color:var(--ink)}
+.sum{width:210px;flex-shrink:0;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.sum .l{display:flex;justify-content:space-between;font-size:12px;color:var(--sub)}
+.sum .l+.l{margin-top:5px}
+.sum hr{border:0;height:1px;background:var(--line2);margin:9px 0}
+.sum .tot{display:flex;justify-content:space-between;align-items:baseline}
+.sum .tot b{font-size:19px}
+.dacts{display:flex;gap:9px;margin-top:14px;position:relative}
+.dacts .pri{margin-left:auto}
+.pop{position:absolute;bottom:46px;left:110px;width:250px;background:#fff;border:1px solid var(--line2);border-radius:10px;box-shadow:0 14px 36px rgba(19,24,45,.18);padding:6px;z-index:5;display:none}
+.pop.on{display:block;animation:in .15s ease}
+.pop button{display:flex;width:100%;text-align:left;border:0;background:transparent;border-radius:7px;padding:8px 10px;font-size:13px;align-items:center;gap:8px}
+.pop button:hover{background:var(--soft)}
+.pop button small{margin-left:auto;color:var(--sub);font-size:11px}
+.pop .hd{font-size:10.5px;color:var(--sub);padding:6px 10px 4px;font-weight:600;letter-spacing:.04em}
+.cons{padding:16px 18px;flex-shrink:0}
+.cons .b{margin-top:10px;font-size:12px;color:var(--sub);line-height:1.85}
+.cons .b strong{color:var(--ink)}
+.related{display:flex;flex-wrap:wrap;align-items:center;gap:8px;border-top:1px solid var(--line);margin-top:14px;padding:12px 0 14px;flex-shrink:0}
+.related .h{font-size:10px;color:var(--mute);font-weight:600;letter-spacing:.06em}
+.related a{display:inline-flex;align-items:center;padding:5px 11px;background:var(--soft);border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--sub);text-decoration:none}
+/* modal */
+.ov{position:absolute;inset:0;background:rgba(13,16,24,.45);display:none;align-items:center;justify-content:center;z-index:20}
+.ov.on{display:flex;animation:fd .18s ease}
+@keyframes fd{from{opacity:0}to{opacity:1}}
+.mod{width:560px;max-height:780px;overflow:auto;background:#fff;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.35);padding:22px 24px;animation:in .2s ease}
+.mod h2{margin:0;font-size:17px}
+.mod .lead{font-size:12.5px;color:var(--sub);margin-top:6px;line-height:1.7}
+.mod .ma{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}
+.row:last-child{border-bottom:0}
+.row .x{flex-grow:1}
+.row .x small{display:block;color:var(--sub);font-size:11.5px;margin-top:2px;line-height:1.6}
+.sw{position:relative;width:38px;height:22px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0}
+.sw i{position:absolute;inset:0;background:#C6CCDC;border-radius:999px;transition:.2s;cursor:pointer}
+.sw i:before{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.sw input:checked+i{background:var(--blue)}
+.sw input:checked+i:before{transform:translateX(16px)}
+.tl{margin-top:16px;display:flex;flex-direction:column;gap:0}
+.tl .it{display:flex;gap:12px;opacity:.35;transition:opacity .3s}
+.tl .it.on{opacity:1}
+.tl .dot{width:22px;display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.tl .dot b{width:22px;height:22px;border-radius:50%;border:2px solid var(--line2);background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+.tl .it.on .dot b{background:var(--green);border-color:var(--green)}
+.tl .it.wait .dot b{background:#fff;border-color:var(--blue);border-top-color:transparent;animation:sp .8s linear infinite}
+.tl .dot s{flex-grow:1;width:2px;background:var(--line);min-height:14px}
+.tl .it:last-child .dot s{display:none}
+.tl .c{padding-bottom:14px;font-size:13px;line-height:1.6}
+.tl .c small{display:block;color:var(--sub);font-size:11.5px}
+.teams{margin-top:6px;border:1px solid #D6D9F2;border-left:4px solid #5B5FC7;border-radius:8px;padding:9px 11px;background:#F7F7FD;font-size:12px;line-height:1.6;max-width:380px}
+.teams .tb{display:flex;gap:6px;margin-top:6px}
+.teams .tb span{font-size:11px;padding:3px 9px;border-radius:5px;background:#5B5FC7;color:#fff}
+.teams .tb span.g{background:#fff;color:#444;border:1px solid #ccc}
+.cat{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.cat .x{flex-grow:1}.cat .x small{display:block;color:var(--sub);font-size:11px}
+.toast{position:absolute;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#151823;color:#fff;font-size:12.5px;padding:10px 16px;border-radius:9px;opacity:0;transition:.25s;z-index:30;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
 </style>
 </head>
-<body style="margin:0;display:flex;justify-content:center;align-items:flex-start;">
-<div style="width: 1440px; height: 900px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F6FB;"><header style="color: #EEF1F8; flex-shrink: 0; box-sizing: border-box; height: 68px; padding: 0 26px; background: #0D1018; border-bottom: 1px solid #1E2433; box-shadow: 0 1px 0 rgba(13,16,24,0.10), 0 4px 14px rgba(13,16,24,0.10); display: flex; align-items: center; gap: 16px;"><div style="display: flex; align-items: center; gap: 10px;"><span style="background: #FFFFFF; border-radius: 6px; padding: 5px 8px; display: inline-flex;"><img src="../assets/1approval_logo.webp" alt="1Approval" style="height: 17px; width: auto; display: block;"></span><span style="width: 1px; height: 20px; background: #343B4E;"></span><span style="font-size: 14px; font-weight: 700; letter-spacing: -0.01em;">Agent Purchase</span><span style="font-size: 10px; font-weight: 700; color: #FFFFFF; background: linear-gradient(135deg, #4F7BFF 0%, #9B6BFF 100%); border-radius: 999px; padding: 3px 8px; letter-spacing: 0.04em;">BETA</span></div><nav style="display: flex; align-items: center; gap: 2px; margin-left: 18px;" aria-label="メインメニュー"><a href="AgentPurchase.html" style="padding: 8px 15px; background: #1B2030; color: #FFFFFF; border: 1px solid #3E465C; text-decoration: none; font-size: 13px; font-weight: 600; border-radius: 8px;">AIレコメンド</a><a href="AgentTrip.html" style="padding: 8px 15px; color: #9AA3B8; text-decoration: none; font-size: 13px; border-radius: 8px;">出張手配</a><a href="RequestCatalog.html" style="padding: 8px 15px; color: #9AA3B8; text-decoration: none; font-size: 13px; border-radius: 8px;">カタログ</a><a href="Rfq.html" style="padding: 8px 15px; color: #9AA3B8; text-decoration: none; font-size: 13px; border-radius: 8px;">見積依頼</a><a href="MyRequests.html" style="padding: 8px 15px; color: #9AA3B8; text-decoration: none; font-size: 13px; border-radius: 8px;">申請</a><a href="Approve.html" style="padding: 8px 15px; color: #9AA3B8; text-decoration: none; font-size: 13px; border-radius: 8px;">承認</a></nav><div style="margin-left: auto; display: flex; align-items: center; gap: 16px;"><span style="font-size: 11px; color: #7D8699; font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;">app.1approval.com<span style="color: #9AA3B8;">/agent</span></span><a href="Home.html" style="font-size: 12px; color: #9AA3B8; text-decoration: none;">管理画面</a><span style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #4F7BFF 0%, #9B6BFF 100%); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #FFFFFF;">田</span></div></header><main style="flex-grow: 1; box-sizing: border-box; padding: 22px 26px; overflow: hidden;"><div style="display: flex; align-items: baseline; gap: 13px;"><h1 style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.02em;">AIレコメンド</h1><span style="font-size: 12px; color: #59617A;">購買履歴と在庫から、次に必要なものを先に出します</span><div style="margin-left: auto; display: flex; gap: 8px; align-items: center;"><a href="AgentPurchase.html" style="font-size: 13px; font-weight: 500; color: #151823; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 9px; padding: 9px 15px; text-decoration: none; display: inline-flex; align-items: center;">自動起動のルール</a><a href="AgentPurchase.html" style="font-size: 13px; font-weight: 500; color: #151823; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 9px; padding: 9px 15px; text-decoration: none; display: inline-flex; align-items: center;">学習範囲</a></div></div><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; margin-top: 14px;"><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 13px 15px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 11px; font-weight: 600; color: #C7343A; background: rgba(199,52,58,0.09); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">在庫</span><span style="font-size: 11px; color: #676D80; font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;">stock.realtime</span></div><div style="font-size: 13px; margin-top: 8px; line-height: 1.6;">第3工場の耐切創手袋が <strong>2袋</strong>（発注点10）</div></div><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 13px 15px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 11px; font-weight: 600; color: #2F55D4; background: rgba(47,85,212,0.09); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">履歴</span><span style="font-size: 11px; color: #676D80; font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;">orders.12m</span></div><div style="font-size: 13px; margin-top: 8px; line-height: 1.6;">同一品番を <strong>8回</strong>・平均5袋・周期2か月</div></div><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 13px 15px;"><div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 11px; font-weight: 600; color: #8A5F03; background: rgba(138,95,3,0.11); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">期限</span><span style="font-size: 11px; color: #676D80; font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;">expiry.watch</span></div><div style="font-size: 13px; margin-top: 8px; line-height: 1.6;">特級試薬Aが <strong>残り14日</strong>。先に使う指示を出せます</div></div></div><div style="display: flex; gap: 16px; margin-top: 14px; align-items: flex-start;"><div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px;"><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 18px;"><div style="display: flex; align-items: center; gap: 9px;"><span style="width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, #2F55D4 0%, #6E43D6 100%); display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" aria-hidden="true"><path d="M12 3v2.5M4.9 6.3l1.8 1.8M3 13h2.5M18.5 13H21M17.1 8.1l1.8-1.8"/><circle cx="12" cy="14" r="4.5"/></svg></span><span style="font-size: 13px; font-weight: 600;">Agent</span><span style="font-size: 11px; font-weight: 600; color: #59617A; background: rgba(89,97,122,0.09); padding: 3px 9px; border-radius: 6px; white-space: nowrap;">Teams / Slack / kintone から呼び出せます</span><span style="margin-left: auto;"><span style="font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace; font-size: 12px; color: #59617A;">model: purchase-agent v2</span></span></div><div style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px;"><div style="display: flex; justify-content: flex-end;"><div style="max-width: 76%; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 12px 12px 4px 12px; padding: 11px 14px; font-size: 13px; line-height: 1.7;">第3工場の手袋が切れそう。いつものを頼んでおいて。</div></div><div style="display: flex; gap: 10px;"><span style="width: 26px; height: 26px; flex-shrink: 0; border-radius: 7px; background: linear-gradient(135deg, #2F55D4 0%, #6E43D6 100%);"></span><div style="max-width: 78%; border: 1px solid #E2E6F0; border-radius: 12px 12px 12px 4px; padding: 12px 14px; font-size: 13px; line-height: 1.8; background: #F2F4FA;"><strong>耐切創手袋 L 10双入</strong> <span style="font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace; font-size: 12px; color: #59617A;">01658877</span> を 5袋で下書きしました。<br>過去8回の実績（平均5袋・周期2か月）と、現在庫2袋・発注点10から算出しています。<br><span style="color: #59617A;">他拠点の在庫も確認しましたが、大阪も2袋で融通できません。</span></div></div><div style="display: flex; justify-content: flex-end;"><div style="max-width: 76%; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 12px 12px 4px 12px; padding: 11px 14px; font-size: 13px; line-height: 1.7;">潤滑スプレーも切れそうだった気がする</div></div><div style="display: flex; gap: 10px;"><span style="width: 26px; height: 26px; flex-shrink: 0; border-radius: 7px; background: linear-gradient(135deg, #2F55D4 0%, #6E43D6 100%);"></span><div style="max-width: 78%; border: 1px solid #E2E6F0; border-radius: 12px 12px 12px 4px; padding: 12px 14px; font-size: 13px; line-height: 1.8; background: #F2F4FA;">残り4本、発注点12本を下回っています。前回と同じ12本入り1箱を追加しました。<br>承認者は <strong>山口 課長</strong> を指定しています。総額 <strong>¥24,376</strong>（税込）。</div></div></div><div style="margin-top: 14px; display: flex; gap: 9px; align-items: center;"><div style="flex-grow: 1; background: #FFFFFF; border: 1px solid #8793AF; border-radius: 10px; padding: 11px 13px; font-size: 13px; color: #676D80;">Agentに指示する…</div><a href="AgentPurchase.html" style="font-size: 13px; font-weight: 600; color: #FFFFFF; background: linear-gradient(135deg, #2F55D4 0%, #6E43D6 100%); border-radius: 9px; padding: 9px 17px; text-decoration: none; display: inline-flex; align-items: center; box-shadow: 0 6px 18px rgba(47,85,212,0.22);">送る</a></div><div style="margin-top: 10px; display: flex; gap: 7px; flex-wrap: wrap;"><a href="AgentPurchase.html" style="font-size: 12px; color: #59617A; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; padding: 6px 12px; text-decoration: none;">在庫が少ないものを教えて</a><a href="AgentPurchase.html" style="font-size: 12px; color: #59617A; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; padding: 6px 12px; text-decoration: none;">前回と同じものを頼む</a><a href="AgentPurchase.html" style="font-size: 12px; color: #59617A; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; padding: 6px 12px; text-decoration: none;">今月の使いすぎを教えて</a><a href="AgentPurchase.html" style="font-size: 12px; color: #59617A; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; padding: 6px 12px; text-decoration: none;">期限が近いものを使い切りたい</a></div></div></div><aside style="width: 620px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px;"><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 18px;"><div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 13px; font-weight: 600;">Agentが作った下書き</span><span style="font-size: 11px; color: #59617A;">未申請</span></div><div style="margin-top: 13px;"><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); overflow: hidden;"><table style="width: 100%; border-collapse: collapse;"><thead><tr style="background: #F2F4FA; text-align: left;"><th scope="col" style="padding: 10px 12px; font-weight: 600; font-size: 11px; color: #59617A; letter-spacing: 0.04em; border-bottom: 1px solid #E2E6F0;">品目</th><th scope="col" style="padding: 10px 12px; font-weight: 600; font-size: 11px; color: #59617A; letter-spacing: 0.04em; width: 64px; text-align: right; border-bottom: 1px solid #E2E6F0;">数量</th><th scope="col" style="padding: 10px 12px; font-weight: 600; font-size: 11px; color: #59617A; letter-spacing: 0.04em; width: 96px; text-align: right; border-bottom: 1px solid #E2E6F0;">小計</th><th scope="col" style="padding: 10px 12px; font-weight: 600; font-size: 11px; color: #59617A; letter-spacing: 0.04em; width: 190px; border-bottom: 1px solid #E2E6F0;">根拠</th></tr></thead><tbody><tr><td style="padding: 12px; font-size: 13px; border-bottom: 1px solid #E2E6F0;">耐切創手袋 L 10双入<div style="color: #59617A; font-size: 11px; margin-top: 2px;">01658877 ／ モノタロウ</div></td><td style="padding: 12px; font-size: 13px; text-align: right; border-bottom: 1px solid #E2E6F0;">5</td><td style="padding: 12px; font-size: 13px; text-align: right; border-bottom: 1px solid #E2E6F0;">¥12,800</td><td style="padding: 12px; font-size: 13px; border-bottom: 1px solid #E2E6F0;">過去8回の実績<div style="color: #59617A; font-size: 11px; margin-top: 2px;">平均5袋・周期2か月</div></td></tr><tr><td style="padding: 12px; font-size: 13px; border-bottom: 1px solid #E2E6F0;">潤滑スプレー 420mL ×12<div style="color: #59617A; font-size: 11px; margin-top: 2px;">28374615 ／ モノタロウ</div></td><td style="padding: 12px; font-size: 13px; text-align: right; border-bottom: 1px solid #E2E6F0;">1</td><td style="padding: 12px; font-size: 13px; text-align: right; border-bottom: 1px solid #E2E6F0;">¥9,360</td><td style="padding: 12px; font-size: 13px; border-bottom: 1px solid #E2E6F0;">発注点割れ<div style="color: #59617A; font-size: 11px; margin-top: 2px;">残り4本 / 閾値12本</div></td></tr></tbody></table></div><div style="display: flex; gap: 14px; margin-top: 13px; align-items: flex-start;"><div style="flex-grow: 1; font-size: 12px; color: #59617A; line-height: 1.8;">納入先・勘定科目・購買目的は前回の申請から引き継いでいます。在庫はモノタロウ側で確保され、承認されるとそのまま発注、却下されると解放されます。</div><div style="width: 210px; flex-shrink: 0; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 10px; padding: 12px 14px;"><div style="display: flex; justify-content: space-between; font-size: 12px; color: #59617A;"><span>小計</span><span>¥22,160</span></div><div style="display: flex; justify-content: space-between; font-size: 12px; color: #59617A; margin-top: 5px;"><span>消費税</span><span>¥2,216</span></div><div style="height: 1px; background: #C6CCDC; margin: 9px 0;"></div><div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 12px; font-weight: 600;">総額</span><span style="font-size: 19px; font-weight: 700;">¥24,376</span></div></div></div><div style="display: flex; gap: 9px; margin-top: 14px;"><a href="RequestCatalog.html" style="font-size: 13px; font-weight: 500; color: #151823; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 9px; padding: 9px 15px; text-decoration: none; display: inline-flex; align-items: center;">内容を直す</a><a href="AgentPurchase.html" style="font-size: 13px; font-weight: 500; color: #151823; background: #F2F4FA; border: 1px solid #C6CCDC; border-radius: 9px; padding: 9px 15px; text-decoration: none; display: inline-flex; align-items: center;">承認者を変える</a><a href="MyRequests.html" style="font-size: 13px; font-weight: 600; color: #FFFFFF; background: linear-gradient(135deg, #2F55D4 0%, #6E43D6 100%); border-radius: 9px; padding: 9px 17px; text-decoration: none; display: inline-flex; align-items: center; box-shadow: 0 6px 18px rgba(47,85,212,0.22);">この内容で申請する</a></div></div></div><div style="background: #FFFFFF; border: 1px solid #E2E6F0; border-radius: 12px; box-shadow: 0 1px 2px rgba(19,24,45,0.05), 0 1px 3px rgba(19,24,45,0.05); padding: 18px;"><div style="display: flex; align-items: center; gap: 9px;"><span style="font-size: 13px; font-weight: 600;">Agentの制約</span></div><div style="margin-top: 13px;"><div style="font-size: 12px; color: #59617A; line-height: 1.9;">・<strong style="color: #151823;">発注はしません。</strong>作るのは下書きと承認者の指定まで<br>・履歴のない品目は推測せず、カタログから選ぶよう促します<br>・単価が過去中央値を20%超えると、下書きに警告を付けます<br>・自動起動は「発注点割れ」「期限接近」の2つだけ（設定で変更）</div></div></div></aside></div><div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid #E2E6F0; margin-top: 16px; padding-top: 13px;"><span style="font-size: 10px; color: #676D80; font-weight: 600; letter-spacing: 0.06em;">RELATED</span><a href="AdsPlacement.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">広告が出る場所</a><a href="RequestCatalog.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">カタログ</a><a href="MyRequests.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">申請</a><a href="Approve.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">承認</a><a href="Ledger.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">管理画面：購買明細台帳</a><a href="Stock.html" style="display: inline-flex; align-items: center; padding: 5px 11px; background: #F2F4FA; border: 1px solid #E2E6F0; border-radius: 999px; font-size: 12px; color: #59617A; text-decoration: none;">管理画面：在庫</a></div></main></div>
+<body>
+<div class="page" id="page">
+<header class="top">
+  <div style="display:flex;align-items:center;gap:10px"><span class="logo"><img src="../assets/1approval_logo.webp" alt="1Approval"></span><span class="bar"></span><span style="font-size:14px;font-weight:700;letter-spacing:-.01em">Agent Purchase</span><span class="beta">BETA</span></div>
+  <nav aria-label="メインメニュー"><a class="on" href="AgentPurchase.html">AIレコメンド</a><a href="AgentTrip.html">出張手配</a><a href="RequestCatalog.html">カタログ</a><a href="Rfq.html">見積依頼</a><a href="MyRequests.html">申請</a><a href="Approve.html">承認</a></nav>
+  <div class="r"><button class="reset" id="reset" title="会話と下書きを最初の状態に戻します（Esc×2でも可）">デモをリセット</button><span class="url">app.1approval.com<span>/agent</span></span><a href="Home.html">管理画面</a><span class="avatar">田</span></div>
+</header>
+<main>
+  <div class="ttl"><h1>AIレコメンド</h1><span class="d">購買履歴と在庫から、次に必要なものを先に出します</span>
+    <div class="acts"><button class="btn" data-open="mRules">自動起動のルール</button><button class="btn" data-open="mScope">学習範囲</button></div></div>
+  <div class="sig" id="sig">
+    <button class="card" data-trig="stock"><span class="go">Agentで対応 →</span><div style="display:flex;align-items:center;gap:8px"><span class="tag t-red">在庫</span><span class="src">stock.realtime</span></div><div class="txt" id="sigStock">第3工場の耐切創手袋が <strong>2袋</strong>（発注点10）</div></button>
+    <button class="card" data-trig="hist"><span class="go">Agentで対応 →</span><div style="display:flex;align-items:center;gap:8px"><span class="tag t-blue">履歴</span><span class="src">orders.12m</span></div><div class="txt">同一品番を <strong>8回</strong>・平均5袋・周期2か月</div></button>
+    <button class="card" data-trig="expiry"><span class="go">Agentで対応 →</span><div style="display:flex;align-items:center;gap:8px"><span class="tag t-amber">期限</span><span class="src">expiry.watch</span></div><div class="txt" id="sigExp">特級試薬Aが <strong>残り14日</strong>。先に使う指示を出せます</div></button>
+  </div>
+  <div class="cols">
+    <section class="card chat">
+      <div class="chat-h"><span class="ag-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" aria-hidden="true"><path d="M12 3v2.5M4.9 6.3l1.8 1.8M3 13h2.5M18.5 13H21M17.1 8.1l1.8-1.8"/><circle cx="12" cy="14" r="4.5"/></svg></span><span style="font-size:13px;font-weight:600">Agent</span><span class="tag t-gray">Teams / Slack / kintone から呼び出せます</span><span style="margin-left:auto" class="mono" ><span style="font-size:12px;color:var(--sub)">model: purchase-agent v2</span></span></div>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <form class="inp" id="form" autocomplete="off"><input id="q" placeholder="Agentに指示する…（例：第3工場の手袋が切れそう。いつものを頼んでおいて。）"><button type="button" class="mic" id="mic" title="音声で指示"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#59617A" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button class="btn pri" id="send" type="submit">送る</button></form>
+      <div class="chips" id="chips"></div>
+    </section>
+    <aside>
+      <section class="card draft">
+        <div class="dh"><span style="font-size:13px;font-weight:600">Agentが作った下書き</span><span class="st" id="dst">未申請</span><span style="margin-left:auto;font-size:11px;color:var(--sub)" class="mono" id="did"></span></div>
+        <div class="tbl"><div class="scr" id="dscr"></div></div>
+        <div class="foot">
+          <div class="note"><dl class="kv"><dt>納入先</dt><dd>第3工場 資材庫</dd><dt>勘定科目</dt><dd>消耗品費</dd><dt>承認者</dt><dd id="appr">—</dd></dl><span id="dnote">納入先・勘定科目・購買目的は前回の申請から引き継ぎます。承認されるとそのまま発注、却下されると在庫確保は解放されます。</span></div>
+          <div class="sum"><div class="l"><span>小計</span><span id="sSub">¥0</span></div><div class="l"><span>消費税</span><span id="sTax">¥0</span></div><hr><div class="tot"><span style="font-size:12px;font-weight:600">総額</span><b id="sTot">¥0</b></div></div>
+        </div>
+        <div class="dacts">
+          <button class="btn" id="bEdit">内容を直す</button><button class="btn" id="bAppr">承認者を変える</button>
+          <div class="pop" id="pop"><div class="hd">承認者を選ぶ</div>
+            <button data-ap="auto">ルールに従う<small>5万円以上は部長</small></button>
+            <button data-ap="山口 課長">山口 課長<small>製造管理課</small></button>
+            <button data-ap="佐藤 部長">佐藤 部長<small>生産本部</small></button>
+            <button data-ap="鈴木 主任">鈴木 主任<small>第3工場</small></button></div>
+          <button class="btn pri" id="bSubmit">この内容で申請する</button>
+        </div>
+      </section>
+      <section class="card cons"><span style="font-size:13px;font-weight:600">Agentの制約</span>
+        <div class="b">・<strong>発注はしません。</strong>作るのは下書きと承認者の指定まで<br>・履歴のない品目は推測せず、カタログから選ぶよう促します<br>・単価が過去中央値を20%超えると、下書きに警告を付けます<br>・自動起動は<span id="consRules">「発注点割れ」「期限接近」の2つだけ</span>（設定で変更）</div></section>
+    </aside>
+  </div>
+  <div class="related"><span class="h">RELATED</span><a href="AdsPlacement.html">広告が出る場所</a><a href="RequestCatalog.html">カタログ</a><a href="MyRequests.html">申請</a><a href="Approve.html">承認</a><a href="Ledger.html">管理画面：購買明細台帳</a><a href="Stock.html">管理画面：在庫</a></div>
+</main>
+
+<!-- modals -->
+<div class="ov" id="mRules"><div class="mod"><h2>自動起動のルール</h2><div class="lead">条件を満たすと、Agentが話しかけられる前に下書きを作り、Teams で担当者に知らせます。発注は人の承認後だけです。</div>
+  <div style="margin-top:10px" id="rules"></div><div class="ma"><button class="btn" data-close>閉じる</button><button class="btn pri" data-close data-save="rules">保存する</button></div></div></div>
+<div class="ov" id="mScope"><div class="mod"><h2>学習範囲</h2><div class="lead">Agentが提案の根拠として参照するデータです。オフにした範囲は参照も学習もしません。</div>
+  <div style="margin-top:10px" id="scope"></div><div class="ma"><button class="btn" data-close>閉じる</button><button class="btn pri" data-close data-save="scope">保存する</button></div></div></div>
+<div class="ov" id="mCat"><div class="mod"><h2>品目を追加</h2><div class="lead">過去に購買実績のある品目です。履歴のない品目はカタログから選んでください。</div>
+  <div style="margin-top:8px" id="catList"></div><div class="ma"><a class="btn" href="RequestCatalog.html">カタログ全体を開く</a><button class="btn pri" data-close>閉じる</button></div></div></div>
+<div class="ov" id="mDone"><div class="mod"><h2 id="doneT">申請しました</h2><div class="lead" id="doneL"></div><div class="tl" id="tl"></div>
+  <div class="ma"><a class="btn" href="MyRequests.html">申請一覧を見る</a><button class="btn pri" id="doneClose">閉じる</button></div></div></div>
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+/* ---------- data ---------- */
+var ITEMS={
+ glove:{name:'耐切創手袋 L 10双入',code:'01658877',vendor:'モノタロウ',unit:'袋',price:2560,median:2560,stock:2,rop:10,rec:5,reason:'過去8回の実績',sub:'平均5袋・周期2か月',kw:/手袋|グローブ|軍手/},
+ spray:{name:'潤滑スプレー 420mL ×12',code:'28374615',vendor:'モノタロウ',unit:'箱',sunit:'本',price:9360,median:9360,stock:4,rop:12,rec:1,reason:'発注点割れ',sub:'残り4本 / 閾値12本',kw:/潤滑|スプレー|CRC|オイル/i},
+ paper:{name:'コピー用紙 A4 500枚×10冊',code:'PPC-A4-5000',vendor:'アスクル',unit:'箱',price:3280,median:3200,stock:3,rop:5,rec:3,reason:'発注点割れ',sub:'残り3箱 / 閾値5箱',kw:/コピー用紙|用紙|紙/},
+ toner:{name:'複合機トナー ブラック',code:'IMC-TN-BK',vendor:'リコー',unit:'本',price:18500,median:15040,contract:15040,stock:1,rop:2,rec:2,reason:'発注点割れ',sub:'残り1本 / 閾値2本',kw:/トナー|複合機|コピー機|プリンタ/},
+ waste:{name:'ウエス 白メリヤス 10kg',code:'49871203',vendor:'モノタロウ',unit:'袋',price:6480,median:6480,stock:6,rop:4,rec:2,reason:'前回と同じ',sub:'9/12 申請と同数',kw:/ウエス|ウェス|雑巾|布/},
+ tape:{name:'養生テープ 緑 50mm×25m 30巻',code:'30215548',vendor:'モノタロウ',unit:'箱',price:4780,median:4780,stock:18,rop:10,rec:1,reason:'指示による追加',sub:'在庫18 / 閾値10',kw:/養生|テープ/},
+ battery:{name:'アルカリ乾電池 単3 40本',code:'BT-AA-40',vendor:'アスクル',unit:'箱',price:1980,median:1980,stock:12,rop:10,rec:1,reason:'指示による追加',sub:'在庫12 / 閾値10',kw:/電池|単3/}
+};
+var LOW=['glove','spray','paper','toner'];
+var APPROVERS={'山口 課長':'製造管理課','佐藤 部長':'生産本部','鈴木 主任':'第3工場'};
+var RULES=[['rop','発注点割れ','在庫が発注点を下回ったら下書きを作る',true],['exp','期限接近','使用期限まで30日を切ったら先に使う指示を提案',true],['cycle','購買周期','いつもの周期が来たら前回と同じ内容を提案',false],['price','単価の上昇','中央値+20%を超える見積が来たら知らせる',false]];
+var SCOPE=[['h','購買履歴（12か月）','モノタロウ・アスクル・リコー・楽楽精算の明細',true],['s','在庫（リアルタイム）','全拠点の在庫と発注点',true],['e','使用期限','期限管理の対象品目',true],['b','予算','勘定科目×部門の月次予算（勘定奉行）',true],['k','kintone 申請アプリ','購買目的・納入先の過去入力',true],['o','他部署の購買履歴','同じ品目の他部署での単価・頻度',false]];
+var CHIPS=['第3工場の手袋が切れそう。いつものを頼んでおいて。','在庫が少ないものを教えて','前回と同じものを頼む','今月の使いすぎを教えて','期限が近いものを使い切りたい'];
+
+/* ---------- state ---------- */
+var S;
+function fresh(){return {draft:[],appr:null,busy:false,last:null,submitted:0,expDone:false,stockDone:false,edit:false};}
+S=fresh();
+var reqNo=411;
+
+/* ---------- helpers ---------- */
+var $=function(id){return document.getElementById(id);};
+function yen(n){return '¥'+Math.round(n).toLocaleString('ja-JP');}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
+function norm(t){return t.replace(/[０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0);}).replace(/[　\s]+/g,' ').trim();}
+var JPN={'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};
+function day(n){var d=new Date();d.setDate(d.getDate()+n);return (d.getMonth()+1)+'/'+d.getDate()+'（'+'日月火水木金土'[d.getDay()]+'）';}
+function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(function(){e.classList.remove('on');},2200);}
+function line(id){for(var i=0;i<S.draft.length;i++)if(S.draft[i].id===id)return S.draft[i];return null;}
+function totals(){var sub=0;S.draft.forEach(function(l){sub+=l.price*l.qty;});var tax=Math.floor(sub*0.1);return {sub:sub,tax:tax,tot:sub+tax};}
+function ruleAppr(){return totals().tot>=50000?'佐藤 部長':'山口 課長';}
+function approver(){return S.appr||ruleAppr();}
+
+/* ---------- draft rendering ---------- */
+var flash=null;
+function renderDraft(){
+  var box=$('dscr');
+  if(!S.draft.length){
+    box.innerHTML='<div class="empty"><b>まだ下書きはありません</b>左の Agent に話しかけるか、上のカードを押すと<br>根拠つきの下書きがここにできます。</div>';
+  }else{
+    var h='<table class="d"><thead><tr><th>品目</th><th style="width:'+(S.edit?112:64)+'px" class="r">数量</th><th style="width:96px" class="r">小計</th><th style="width:180px">根拠</th></tr></thead><tbody>';
+    S.draft.forEach(function(l){
+      var it=ITEMS[l.id], over=l.price/it.median-1;
+      h+='<tr'+(flash===l.id?' class="new"':'')+'><td>'+esc(it.name)+'<div class="meta">'+it.code+' ／ '+it.vendor+'</div>'+(over>0.2?'<span class="warn">⚠ 単価が過去中央値+'+Math.round(over*100)+'%</span>':'')+'</td>';
+      h+='<td class="r">'+(S.edit?'<span class="qty"><button data-q="-1" data-id="'+l.id+'" aria-label="減らす">−</button><span>'+l.qty+'</span><button data-q="1" data-id="'+l.id+'" aria-label="増やす">＋</button></span><button class="del" data-del="'+l.id+'" title="削除">×</button>':l.qty)+'</td>';
+      h+='<td class="r">'+yen(l.price*l.qty)+'</td><td>'+esc(l.reason)+'<div class="meta">'+esc(l.sub)+'</div></td></tr>';
+    });
+    box.innerHTML=h+'</tbody></table>';
+    if(flash){var r=box.querySelector('tr.new');if(r)r.scrollIntoView({block:'nearest'});}
+  }
+  flash=null;
+  var t=totals();
+  $('sSub').textContent=yen(t.sub);$('sTax').textContent=yen(t.tax);$('sTot').textContent=yen(t.tot);
+  var a=S.draft.length?approver():'—';
+  $('appr').innerHTML=S.draft.length?esc(a)+(S.appr?' <span class="tag t-gray" style="font-size:10px;padding:1px 6px">手動指定</span>':' <span style="color:var(--sub);font-size:11px">（ルール：'+(a==='佐藤 部長'?'5万円以上は部長':'5万円未満は課長')+'）</span>'):'—';
+  $('dst').textContent=S.draft.length?'未申請 · '+S.draft.length+'品目':'未申請';
+  $('did').textContent=S.draft.length?'DRAFT-'+(reqNo+1):'';
+  $('bSubmit').disabled=!S.draft.length;$('bAppr').disabled=!S.draft.length;
+  $('bEdit').textContent=S.edit?'編集を終える':'内容を直す';
+}
+function addLine(id,qty,opts){
+  opts=opts||{};var it=ITEMS[id],l=line(id);
+  if(l){l.qty=qty!=null?qty:l.qty+it.rec;}
+  else{l={id:id,qty:qty!=null?qty:it.rec,price:it.price,reason:opts.reason||it.reason,sub:opts.sub||it.sub};S.draft.push(l);}
+  S.last=id;flash=id;renderDraft();return l;
+}
+
+/* ---------- chat rendering ---------- */
+var msgs=$('msgs');
+function scroll(){msgs.scrollTop=msgs.scrollHeight;}
+function userMsg(t){var d=document.createElement('div');d.className='m-u';var b=document.createElement('div');b.textContent=t;d.appendChild(b);msgs.appendChild(d);scroll();}
+function agentShell(trigger){
+  var d=document.createElement('div');d.className='m-a';
+  d.innerHTML='<span class="ag-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="14" r="4.5"/><path d="M12 3v2.5M4.9 6.3l1.8 1.8M17.1 8.1l1.8-1.8"/></svg></span><div class="body">'+(trigger?'<div class="trig">自動起動：'+esc(trigger)+'</div>':'')+'</div>';
+  msgs.appendChild(d);scroll();return d.querySelector('.body');
+}
+async function steps(body,list){
+  if(!list||!list.length)return;
+  var w=document.createElement('div');w.className='steps';body.appendChild(w);
+  for(var i=0;i<list.length;i++){
+    var s=document.createElement('div');s.className='step';s.innerHTML='<span class="spin"></span><span>'+list[i][1]+'</span><span class="k">'+list[i][0]+'</span>';
+    w.appendChild(s);scroll();
+    await wait(380+Math.random()*320);
+    s.firstChild.outerHTML='<span class="ok">✓</span>';
+  }
+}
+async function stream(body,html){
+  var b=document.createElement('div');b.className='bub';b.innerHTML='<span class="typing"><i></i><i></i><i></i></span>';body.appendChild(b);scroll();
+  await wait(450);
+  var i=0,out='';
+  while(i<html.length){
+    var c=html[i];
+    if(c==='<'){var j=html.indexOf('>',i);out+=html.slice(i,j+1);i=j+1;continue;}
+    if(c==='&'){var k=html.indexOf(';',i);out+=html.slice(i,k+1);i=k+1;continue;}
+    out+=c;i++;
+    if(i%3===0||i>=html.length){b.innerHTML=out;scroll();await wait(14);}
+  }
+  b.innerHTML=html;scroll();return b;
+}
+function quick(body,list){
+  var q=document.createElement('div');q.className='qa';
+  list.forEach(function(x){var b=document.createElement('button');b.type='button';b.textContent=x[0];
+    b.onclick=function(){if(S.busy)return;q.querySelectorAll('button').forEach(function(z){z.disabled=true;});x[1]();};q.appendChild(b);});
+  body.appendChild(q);scroll();
+}
+async function say(o){ // {trigger, steps, html, then(body), quick}
+  var body=agentShell(o.trigger);
+  await steps(body,o.steps);
+  if(o.before)o.before();
+  var b=await stream(body,typeof o.html==='function'?o.html():o.html);
+  if(o.extra){var x=document.createElement('div');x.innerHTML=o.extra;b.appendChild(x.firstChild);scroll();}
+  if(o.after)o.after(b);
+  var qk=typeof o.quick==='function'?o.quick():o.quick;if(qk)quick(body,qk);
+  return body;
+}
+async function run(fn){if(S.busy)return;S.busy=true;$('send').disabled=true;try{await fn();}finally{S.busy=false;$('send').disabled=false;}}
+function ask(t){run(async function(){userMsg(t);await handle(norm(t));});}
+
+/* ---------- intents ---------- */
+function matchItems(t){var r=[];Object.keys(ITEMS).forEach(function(k){if(ITEMS[k].kw.test(t))r.push(k);});return r;}
+function num(t){var m=t.match(/(?<![第\d])(\d+)\s*(袋|本|箱|個|つ|ケース|セット|冊|双)/)||t.match(/(?<![第\d])(\d+)\s*(に|で)/);if(m)return +m[1];m=t.match(/([一二三四五六七八九十])\s*(袋|本|箱|個|つ)/);return m?JPN[m[1]]:null;}
+async function handle(t){
+  var items=matchItems(t), n=num(t);
+  if(/リセット|最初から|やり直/.test(t)){resetAll(true);return;}
+  if(/(申請|出して|進めて|お願い(します)?$|それで|OK|ok|よろしく)/.test(t)&&!items.length&&!/承認者|教えて|期限|在庫/.test(t)){return submitFlow();}
+  if(/承認者|部長|課長|主任|承認を/.test(t)){
+    var who=null;Object.keys(APPROVERS).forEach(function(a){if(t.indexOf(a.split(' ')[0])>=0)who=a;});
+    if(!who&&/部長/.test(t))who='佐藤 部長';if(!who&&/主任/.test(t))who='鈴木 主任';if(!who&&/課長/.test(t))who='山口 課長';
+    if(who)return setApprover(who,true);
+  }
+  if(items.length&&/(いらない|不要|削除|外して|消して|やめ|なし|キャンセル|取り消)/.test(t))return removeItems(items);
+  if(n!=null&&(items.length?line(items[0]):S.last&&line(S.last))&&/(に(して|変更|増|減)|変えて|へ|でいい|で(お願い)?$|にする|増やして|減らして)/.test(t))return setQty(items.length&&line(items[0])?items[0]:S.last,n);
+  if(/在庫.*(少|足り|切れ|ない)|少ない|発注点/.test(t)&&!items.length)return lowStock();
+  if(/前回|この前|先月と同じ|いつもと同じ/.test(t)&&!items.length)return previous();
+  if(/使いすぎ|使い過ぎ|予算|支出|コスト|いくら使/.test(t))return spend();
+  if(/期限|使い切|消費期限|試薬/.test(t))return expiry();
+  if(items.length)return addItems(items,n,t);
+  if(/いつもの/.test(t))return lowStock();
+  if(/^(こんにちは|はじめまして|hi|hello|やあ)|何ができ|できること|使い方|ヘルプ|help/i.test(t))return help();
+  if(/このまま|今回はいい|大丈夫|結構です/.test(t))return say({html:'承知しました。内容はそのままにしておきます。'});
+  if(/ありがと|助か|thanks/i.test(t))return say({html:'どういたしまして。発注点割れや期限接近を検知したら、またこちらから声をかけます。'});
+  return unknown(t);
+}
+async function help(){
+  await say({html:'購買担当の Agent です。<strong>在庫・購買履歴・期限・予算</strong>を見て、申請の下書きと承認者の指定までを代わりにやります。発注は承認後にだけ行われます。<br><span class="s">「〇〇が切れそう」「前回と同じもの」「今月の使いすぎは？」のように話しかけてください。</span>',
+    quick:[['在庫が少ないものを教えて',function(){ask('在庫が少ないものを教えて');}],['今月の使いすぎを教えて',function(){ask('今月の使いすぎを教えて');}]]});
+}
+async function addItems(ids,n,t){
+  var first=ids[0], it=ITEMS[first];
+  var st=[['stock.realtime','在庫を確認（第3工場・大阪）'],['orders.12m','購買履歴12か月を照合'],['price.median','単価を過去中央値と比較'],['approval.route','承認ルートを判定']];
+  var isFirst=!S.draft.length;
+  if(first==='glove'){
+    await say({steps:st,before:function(){addLine('glove',n);},
+      html:function(){return '<strong>'+it.name+'</strong> <span class="mono" style="font-size:12px;color:var(--sub)">'+it.code+'</span> を '+line('glove').qty+'袋で下書きしました。<br>過去8回の実績（平均5袋・周期2か月）と、現在庫2袋・発注点10から算出しています。<br><span class="s">他拠点の在庫も確認しましたが、大阪も2袋で融通できません。</span>';},
+      quick:function(){return line('spray')?null:[['潤滑スプレーも切れそうだった気がする',function(){ask('潤滑スプレーも切れそうだった気がする');}],['8袋にして',function(){ask('手袋は8袋にして');}],['この内容で申請して',function(){ask('この内容で申請して');}]];}});
+    return;
+  }
+  if(first==='toner'){
+    await say({steps:st,before:function(){addLine('toner',n);},
+      html:function(){return '<strong>'+it.name+'</strong> を '+line('toner').qty+'本 追加しました（残り1本・発注点2本）。<br><span style="color:var(--amber);font-weight:600">⚠ 今回の単価 ¥18,500 は過去中央値 ¥15,040 より23%高いため、警告を付けています。</span><br><span class="s">リコーとの年間保守契約の単価 ¥15,040 で手配すれば差額は '+yen((18500-15040)*line('toner').qty)+' です。</span>';},
+      quick:[['契約単価に切り替えて',function(){run(async function(){userMsg('契約単価に切り替えて');var l=line('toner');if(!l)return;l.price=ITEMS.toner.contract;l.reason='保守契約の単価';l.sub='年間契約 ¥15,040/本';flash='toner';renderDraft();
+        await say({steps:[['contract.lookup','保守契約を照会']],html:'契約単価 ¥15,040 に切り替えました。警告は外れています。承認者は <strong>'+approver()+'</strong> のままです。'});});}],['このままでいい',function(){ask('このままでいい');}]]});
+    return;
+  }
+  var added=[];
+  await say({steps:st,before:function(){ids.forEach(function(id,i){addLine(id,i===0?n:null);added.push(id);});},
+    html:function(){
+      var parts=added.map(function(id){var x=ITEMS[id],l=line(id);return '<strong>'+x.name+'</strong>（'+l.qty+x.unit+'）';});
+      var reason=ITEMS[first].stock<ITEMS[first].rop?'残り'+ITEMS[first].stock+(ITEMS[first].sunit||ITEMS[first].unit)+'、発注点'+ITEMS[first].rop+(ITEMS[first].sunit||ITEMS[first].unit)+'を下回っています。':'在庫は'+ITEMS[first].stock+'で発注点は上回っていますが、ご指示どおり追加しました。';
+      return reason+(first==='spray'?'前回と同じ12本入り1箱を追加しました。':parts.join('、')+' を下書きに追加しました。')+'<br>承認者は <strong>'+approver()+'</strong> を指定しています。総額 <strong>'+yen(totals().tot)+'</strong>（税込）。';},
+    quick:[['この内容で申請して',function(){ask('この内容で申請して');}],['ほかに在庫が少ないものは？',function(){ask('在庫が少ないものを教えて');}]]});
+}
+async function setQty(id,n){
+  var l=line(id),it=ITEMS[id];if(!l)return unknown('');
+  if(n<=0)return removeItems([id]);
+  var before=S.draft.length?approver():null;
+  l.qty=n;flash=id;S.last=id;renderDraft();
+  var after=approver();
+  var avg=id==='glove'?'<br><span class="s">平均（5袋）より多めです。周期が2か月→約3か月に延びる見込みです。</span>':'';
+  await say({steps:[['draft.update','下書きを更新'],['approval.route','承認ルートを再判定']],
+    html:'<strong>'+it.name+'</strong> を '+n+it.unit+'に変更しました。総額 <strong>'+yen(totals().tot)+'</strong>（税込）。'+avg+(before!==after?'<br>総額が5万円を超えたため、承認者を <strong>'+after+'</strong> に切り替えました。':'')});
+}
+async function removeItems(ids){
+  var names=[];ids.forEach(function(id){var i=S.draft.indexOf(line(id));if(i>=0){S.draft.splice(i,1);names.push(ITEMS[id].name);}});
+  renderDraft();
+  if(!names.length)return say({html:'その品目は下書きに入っていません。'});
+  await say({steps:[['draft.update','下書きを更新']],html:names.join('、')+' を下書きから外しました。'+(S.draft.length?'総額 <strong>'+yen(totals().tot)+'</strong>（税込）。':'下書きは空になりました。')});
+}
+async function setApprover(who,fromChat){
+  if(!S.draft.length){return say({html:'まだ下書きがないので、承認者は下書きを作るときに指定します。'});}
+  S.appr=who;renderDraft();
+  if(fromChat)await say({steps:[['org.directory','組織図を照会']],html:'承認者を <strong>'+who+'</strong>（'+APPROVERS[who]+'）に変更しました。申請すると Teams で承認依頼が届きます。'});
+  else toast('承認者を '+who+' に変更しました');
+}
+async function lowStock(trigger){
+  var rows=LOW.map(function(id){var x=ITEMS[id];var inD=!!line(id);
+    return '<tr><td>'+x.name+'<div style="color:var(--sub);font-size:10.5px">'+x.vendor+'</div></td><td class="n" style="color:var(--red);font-weight:600">'+x.stock+' / '+x.rop+'</td><td class="n">'+(inD?'<span class="tag t-green" style="font-size:10px">下書き済</span>':'<button class="btn sm" data-add="'+id+'">追加</button>')+'</td></tr>';}).join('');
+  await say({trigger:trigger,steps:[['stock.realtime','全拠点の在庫を集計'],['rules.reorder','発注点と照合']],
+    html:'発注点を下回っている品目が <strong>'+LOW.length+'件</strong> あります。数量は過去の実績から出しています。',
+    extra:'<table class="mini"><thead><tr><th>品目</th><th class="n">在庫/発注点</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>',
+    after:function(b){b.querySelectorAll('[data-add]').forEach(function(x){x.onclick=function(){if(S.busy)return;var id=x.dataset.add;x.outerHTML='<span class="tag t-green" style="font-size:10px">下書き済</span>';ask(ITEMS[id].name.split(' ')[0]+'を追加して');};});},
+    quick:[['まとめて下書きに入れて',function(){run(async function(){userMsg('まとめて下書きに入れて');var add=LOW.filter(function(id){return !line(id);});
+      await say({steps:[['orders.12m','購買履歴から数量を算出'],['price.median','単価を過去中央値と比較'],['approval.route','承認ルートを判定']],before:function(){add.forEach(function(id){addLine(id);});},
+        html:function(){return add.length?add.length+'品目を下書きに追加しました。総額 <strong>'+yen(totals().tot)+'</strong>（税込）。'+(totals().tot>=50000?'<br>5万円を超えたので、承認者は <strong>'+approver()+'</strong> です。':'')+(line('toner')&&line('toner').price>ITEMS.toner.contract?'<br><span style="color:var(--amber);font-weight:600">⚠ 複合機トナーの単価が過去中央値+23%です。</span>':''):'すべて下書きに入っています。';},
+        quick:function(){return line('toner')&&line('toner').price>ITEMS.toner.contract?[['トナーを契約単価に切り替えて',function(){run(async function(){userMsg('トナーを契約単価に切り替えて');var l=line('toner');l.price=ITEMS.toner.contract;l.reason='保守契約の単価';l.sub='年間契約 ¥15,040/本';flash='toner';renderDraft();await say({steps:[['contract.lookup','保守契約を照会']],html:'契約単価 ¥15,040 に切り替えました。総額 <strong>'+yen(totals().tot)+'</strong>（税込）。'});});}],['この内容で申請して',function(){ask('この内容で申請して');}]]:[['この内容で申請して',function(){ask('この内容で申請して');}]];}});});}]]});
+}
+async function previous(){
+  await say({steps:[['requests.history','前回の申請を検索（田中さん）'],['stock.realtime','現在の在庫を確認'],['catalog.price','最新の単価を取得']],
+    before:function(){addLine('glove',5,{reason:'前回と同じ',sub:'9/12 申請と同数'});addLine('waste',2);},
+    html:'前回の申請（<span class="mono" style="font-size:12px">PR-2609-0287</span>・9/12）と同じ内容で下書きしました。<br>耐切創手袋 5袋、ウエス 2袋。単価に変動はありません。<br><span class="s">ウエスは在庫6袋で発注点を上回っています。今回は外しますか？</span>',
+    quick:[['ウエスは外して',function(){ask('ウエスはいらない');}],['このままで申請して',function(){ask('この内容で申請して');}]]});
+}
+async function spend(){
+  var rows=[['消耗品費',412300,450000],['工具器具備品',268400,220000],['事務用品費',58200,80000],['修繕費',131000,200000]];
+  var h=rows.map(function(r){var p=r[1]/r[2];return '<tr><td>'+r[0]+'</td><td class="n">'+yen(r[1])+'</td><td><span class="barw"><b class="'+(p>1?'over':'')+'" style="width:'+Math.min(100,p*100)+'%"></b></span> <span style="font-size:11px;'+(p>1?'color:var(--red);font-weight:600':'color:var(--sub)')+'">'+Math.round(p*100)+'%</span></td></tr>';}).join('');
+  await say({steps:[['ledger.month','今月の購買明細を集計'],['budget.monthly','部門予算と照合（勘定奉行）']],
+    html:'今月（'+(new Date().getMonth()+1)+'月）の第3工場は、<strong style="color:var(--red)">工具器具備品が予算を22%超過</strong>しています。<br><span class="s">主因は 11/2 の電動ドライバー一括更新（¥96,800）です。消耗品費は92%で、このペースだと月末に約4%超過します。</span>',
+    extra:'<table class="mini"><thead><tr><th>勘定科目</th><th class="n">実績</th><th>予算比</th></tr></thead><tbody>'+h+'</tbody></table>',
+    quick:[['支出分析を開く',function(){location.href='Spend.html';}],['予算を超える申請には警告を付けて',function(){run(async function(){userMsg('予算を超える申請には警告を付けて');await say({steps:[['rules.update','ルールを追加']],html:'設定しました。今月の予算残を超える下書きには、承認者向けに「予算超過」の注記を付けます。'});});}]]});
+}
+async function expiry(trigger){
+  if(S.expDone)return say({html:'特級試薬A（ロット L-2309）の先行使用は、すでに研究棟の3名に通知済みです。残り3本の使用状況を毎朝確認しています。'});
+  await say({trigger:trigger,steps:[['expiry.watch','期限が近い品目を抽出'],['usage.30d','直近30日の使用量を確認']],
+    html:'使用期限が近いものが <strong>1件</strong> あります。',
+    extra:'<table class="mini"><thead><tr><th>品目</th><th>ロット</th><th class="n">残量</th><th class="n">期限</th></tr></thead><tbody><tr><td>特級試薬A 500mL</td><td class="mono" style="font-size:11px">L-2309</td><td class="n">3本</td><td class="n" style="color:var(--amber);font-weight:600">残り14日</td></tr><tr><td colspan="4" style="color:var(--sub);font-size:11.5px">同じ試薬の新ロット（L-2402）も4本あり、研究棟では新しい方から使われています。月の使用量は約4本なので、古いロットから使えば期限内に使い切れます。</td></tr></tbody></table>',
+    quick:[['古いロットから使うよう指示して',function(){run(async function(){userMsg('古いロットから使うよう指示して');
+      await say({steps:[['org.directory','研究棟の利用者を特定（3名）'],['teams.notify','Teams に通知を送信']],before:function(){S.expDone=true;markSig('sigExp','特級試薬A：<strong>先行使用を通知済み</strong>（3名）');},
+        html:'研究棟の3名に Teams で通知しました。<br><span class="s">「特級試薬A はロット L-2309 から先に使ってください（期限 '+day(14)+'）」</span><br>あわせて、この試薬の新規発注の提案を2週間止めます。'});});}],['今回はいい',function(){ask('今回はいい');}]]});
+}
+async function unknown(t){
+  await say({steps:[['orders.12m','購買履歴を検索'],['catalog.search','カタログを検索']],
+    html:'「'+esc(t.slice(0,30))+'」に当てはまる購買履歴が見つかりませんでした。<br>履歴のない品目は推測で下書きしない決まりなので、カタログから選んでください。<span class="s">選んだ品目は次回から履歴として提案に使います。</span>',
+    quick:[['実績のある品目から選ぶ',function(){openCat();}],['カタログを開く',function(){location.href='RequestCatalog.html';}]]});
+}
+function markSig(id,html){var e=$(id);e.innerHTML=html;e.closest('.card').classList.add('done');}
+
+/* ---------- submit flow ---------- */
+async function submitFlow(){
+  if(!S.draft.length)return say({html:'下書きがまだ空です。「在庫が少ないものを教えて」と話しかけると、必要なものから下書きを作ります。'});
+  var warn=S.draft.filter(function(l){return l.price/ITEMS[l.id].median-1>0.2;});
+  await say({steps:[['policy.check','購買規程と照合'],['budget.monthly','予算残を確認'],['request.create','申請を作成']],
+    html:warn.length?'申請を作成します。<span style="color:var(--amber)">単価警告が'+warn.length+'件あるため、承認者向けに注記を付けました。</span>':'規程・予算とも問題ありません。申請を作成して、<strong>'+approver()+'</strong> に承認依頼を送ります。'});
+  await openDone();
+}
+async function openDone(){
+  reqNo++;var no='PR-2611-0'+reqNo,t=totals(),ap=approver(),vendors=[];
+  S.draft.forEach(function(l){var v=ITEMS[l.id].vendor;if(vendors.indexOf(v)<0)vendors.push(v);});
+  $('doneT').textContent='申請しました';
+  $('doneL').innerHTML='<span class="mono">'+no+'</span> ・ '+S.draft.length+'品目 ・ 総額 <strong>'+yen(t.tot)+'</strong>（税込）';
+  var steps=[
+    ['申請を作成しました','申請者：田中 ／ kintone 購買申請アプリにも同期'],
+    [ap+' に承認依頼を送りました','Teams にカードで届いています<div class="teams"><b>1Approval</b> · 承認依頼<br>'+no+'　'+S.draft.map(function(l){return ITEMS[l.id].name.split(' ')[0];}).join('、')+'　<b>'+yen(t.tot)+'</b><div class="tb"><span>承認</span><span class="g">却下</span><span class="g">詳細</span></div></div>'],
+    [ap+' が承認しました','Teams から承認 ・ '+new Date().toTimeString().slice(0,5)],
+    [vendors.join('・')+' へ発注しました','注文番号 '+vendors.map(function(v,i){return (v==='モノタロウ'?'MO':v==='アスクル'?'AS':'RC')+'-'+(83021+i*17);}).join(' / ')+' ・ 在庫確保済み'],
+    ['納品予定 '+day(3),'第3工場 資材庫 ・ 入荷すると検収のやることに出ます']
+  ];
+  $('tl').innerHTML=steps.map(function(s){return '<div class="it"><div class="dot"><b>✓</b><s></s></div><div class="c">'+s[0]+'<small>'+s[1]+'</small></div></div>';}).join('');
+  $('mDone').classList.add('on');
+  var its=$('tl').querySelectorAll('.it');
+  var hadGlove=!!line('glove'), snapshot={no:no,ap:ap,tot:t.tot};
+  S.draft=[];S.appr=null;S.edit=false;renderDraft();openDone.pending=snapshot;
+  for(var i=0;i<its.length;i++){
+    if(i===2){its[i].classList.add('wait');its[i].querySelector('b').textContent='';$('doneT').textContent='承認待ち…';await wait(2600);its[i].classList.remove('wait');its[i].querySelector('b').textContent='✓';$('doneT').textContent='承認されました';}
+    its[i].classList.add('on');await wait(i===2?500:650);
+  }
+  $('doneT').textContent='承認・発注まで完了しました';
+  if(hadGlove)markSig('sigStock','耐切創手袋：<strong>発注済み</strong> ・ 納品予定 '+day(3));
+}
+$('doneClose').onclick=function(){$('mDone').classList.remove('on');var p=openDone.pending;if(p){openDone.pending=null;(function go(){if(S.busy)return setTimeout(go,300);run(async function(){await say({html:'<span class="mono" style="font-size:12px">'+p.no+'</span> は '+p.ap+' に承認され、発注まで完了しました（'+yen(p.tot)+'）。<br><span class="s">入荷したら検収の「やること」に出します。在庫の発注点も入荷に合わせて更新します。</span>',quick:[['在庫が少ないものを教えて',function(){ask('在庫が少ないものを教えて');}],['期限が近いものを使い切りたい',function(){ask('期限が近いものを使い切りたい');}]]});});})();}};
+
+/* ---------- modals ---------- */
+function toggles(el,list){el.innerHTML=list.map(function(r){return '<div class="row"><div class="x">'+r[1]+'<small>'+r[2]+'</small></div><label class="sw"><input type="checkbox" data-k="'+r[0]+'"'+(r[3]?' checked':'')+'><i></i></label></div>';}).join('');}
+toggles($('rules'),RULES);toggles($('scope'),SCOPE);
+function openCat(){
+  $('catList').innerHTML=Object.keys(ITEMS).map(function(id){var x=ITEMS[id],inD=!!line(id);return '<div class="cat"><div class="x">'+x.name+'<small>'+x.code+' ／ '+x.vendor+' ／ '+yen(x.price)+'/'+x.unit+' ／ 在庫 '+x.stock+'</small></div>'+(inD?'<span class="tag t-green">下書き済</span>':'<button class="btn sm" data-cadd="'+id+'">追加</button>')+'</div>';}).join('');
+  $('mCat').classList.add('on');
+}
+$('catList').addEventListener('click',function(e){var b=e.target.closest('[data-cadd]');if(!b)return;var id=b.dataset.cadd;addLine(id,null,{reason:'手動で追加',sub:'カタログから選択'});b.outerHTML='<span class="tag t-green">下書き済</span>';toast(ITEMS[id].name+' を追加しました');});
+document.querySelectorAll('[data-open]').forEach(function(b){b.onclick=function(){$(b.dataset.open).classList.add('on');};});
+document.querySelectorAll('.ov').forEach(function(o){o.addEventListener('click',function(e){
+  if(o.id==='mDone')return;
+  if(e.target===o||e.target.hasAttribute('data-close')){
+    if(e.target.dataset.save==='rules'){var on=[];o.querySelectorAll('input').forEach(function(i,ix){if(i.checked)on.push('「'+RULES[ix][1]+'」');});$('consRules').textContent=on.length?on.join('')+'の'+on.length+'つ':'なし';toast('自動起動のルールを保存しました');}
+    if(e.target.dataset.save==='scope')toast('学習範囲を保存しました');
+    o.classList.remove('on');}
+});});
+
+/* ---------- controls ---------- */
+$('form').addEventListener('submit',function(e){e.preventDefault();var v=$('q').value.trim();if(!v||S.busy)return;$('q').value='';ask(v);});
+$('q').addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.isComposing||e.keyCode===229)){e.preventDefault();}});
+$('chips').innerHTML=CHIPS.map(function(c){return '<button type="button">'+c+'</button>';}).join('');
+$('chips').addEventListener('click',function(e){var b=e.target.closest('button');if(b&&!S.busy)ask(b.textContent);});
+$('sig').addEventListener('click',function(e){var c=e.target.closest('[data-trig]');if(!c||S.busy)return;var k=c.dataset.trig;
+  run(async function(){
+    if(k==='stock'){if(line('glove')||c.classList.contains('done'))return say({html:'耐切創手袋はすでに下書き（または発注済み）です。'});
+      await say({trigger:'発注点割れ（第3工場）',steps:[['stock.realtime','在庫を確認（第3工場・大阪）'],['orders.12m','購買履歴12か月を照合'],['approval.route','承認ルートを判定']],before:function(){addLine('glove');},
+        html:'第3工場の <strong>耐切創手袋 L</strong> が残り2袋になり、発注点10を下回りました。いつもの5袋で下書きしておきました。<br><span class="s">このペースだと約6営業日で在庫切れです。大阪も2袋で融通できません。</span>',
+        quick:[['ほかに在庫が少ないものは？',function(){ask('在庫が少ないものを教えて');}],['この内容で申請して',function(){ask('この内容で申請して');}]]});}
+    else if(k==='hist'){await say({trigger:'購買周期',steps:[['orders.12m','同一品番の購買を集計']],html:'耐切創手袋 L（01658877）は過去12か月で <strong>8回</strong>、平均5袋を約2か月ごとに購入しています。前回は9/12なので、ちょうど次の周期です。',
+        quick:[['前回と同じものを頼む',function(){ask('前回と同じものを頼む');}]]});}
+    else await expiry('期限接近（研究棟）');
+  });});
+$('bEdit').onclick=function(){if(!S.draft.length){openCat();return;}S.edit=!S.edit;renderDraft();if(S.edit)toast('数量の ＋/− と × で直せます');};
+$('dscr').addEventListener('click',function(e){var q=e.target.closest('[data-q]'),d=e.target.closest('[data-del]');
+  if(q){var l=line(q.dataset.id);l.qty=Math.max(1,l.qty+(+q.dataset.q));renderDraft();}
+  if(d){S.draft.splice(S.draft.indexOf(line(d.dataset.del)),1);renderDraft();}});
+$('bAppr').onclick=function(e){e.stopPropagation();$('pop').classList.toggle('on');};
+$('pop').addEventListener('click',function(e){var b=e.target.closest('[data-ap]');if(!b)return;$('pop').classList.remove('on');
+  if(b.dataset.ap==='auto'){S.appr=null;renderDraft();toast('承認ルールに従って '+approver()+' を指定しました');}else setApprover(b.dataset.ap,false);});
+document.addEventListener('click',function(e){if(!e.target.closest('#pop'))$('pop').classList.remove('on');});
+$('bSubmit').onclick=function(){if(!S.draft.length)return;run(async function(){await submitFlow();});};
+function resetAll(say_){
+  S=fresh();msgs.innerHTML='';renderDraft();
+  $('sigStock').innerHTML='第3工場の耐切創手袋が <strong>2袋</strong>（発注点10）';$('sigExp').innerHTML='特級試薬Aが <strong>残り14日</strong>。先に使う指示を出せます';
+  document.querySelectorAll('.sig .card').forEach(function(c){c.classList.remove('done');});
+  document.querySelectorAll('.ov').forEach(function(o){o.classList.remove('on');});
+  greet();if(say_)toast('デモを最初の状態に戻しました');
+}
+function greet(){var b=agentShell();var x=document.createElement('div');x.className='bub';
+  x.innerHTML='おはようございます、田中さん。第3工場で <strong>発注点を下回った品目が4件</strong>、<strong>期限が近い試薬が1件</strong> あります。<br><span class="s">「〇〇が切れそう」と話しかけるか、上のカードを押してください。下書きと承認者の指定まで済ませます。</span>';b.appendChild(x);}
+$('reset').onclick=function(){resetAll(true);};
+var lastEsc=0;document.addEventListener('keydown',function(e){if(e.key==='Escape'){var now=Date.now();var open=document.querySelector('.ov.on:not(#mDone)');if(open){open.classList.remove('on');return;}if(now-lastEsc<500)resetAll(true);lastEsc=now;}});
+
+/* voice input (Chrome / Edge) */
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+$('mic').onclick=function(){
+  if(!SR){toast('このブラウザは音声入力に対応していません（Chrome推奨）');return;}
+  var r=new SR();r.lang='ja-JP';r.interimResults=true;var m=$('mic');m.classList.add('rec');
+  r.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;$('q').value=t;if(e.results[e.results.length-1].isFinal){m.classList.remove('rec');var v=$('q').value.trim();$('q').value='';if(v)ask(v);}};
+  r.onerror=r.onend=function(){m.classList.remove('rec');};r.start();
+};
+
+renderDraft();greet();
+})();
+</script>
 </body>
 </html>
