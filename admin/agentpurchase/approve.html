@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>承認 | 1Approval</title>
+<meta name="description" content="Agentが作成した購買申請を確認して承認・差し戻しする画面">
+<link rel="icon" href="../assets/1approval_logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --bg:#F6F7FB;--surface:#FFFFFF;--ink:#12141C;--ink2:#3B4152;--sub:#6B7186;--mute:#9298AA;
+ --line:#E6E8EF;--line2:#D5D9E4;--soft:#F3F4F8;--hover:#EEF0F6;
+ --accent:#3552D8;--accent-soft:#EEF1FD;--grad:linear-gradient(135deg,#3552D8 0%,#7048E8 100%);
+ --red:#C93A40;--red-soft:#FCEEEE;--amber:#9A6700;--amber-soft:#FFF6E0;--green:#1D7D4F;--green-soft:#E9F6EF;
+ --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
+ --shadow:0 1px 2px rgba(18,20,28,.04),0 2px 8px rgba(18,20,28,.04);
+ --shadow-lg:0 24px 64px rgba(18,20,28,.18),0 2px 8px rgba(18,20,28,.06);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:Inter,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;-webkit-font-smoothing:antialiased;overflow:hidden}
+button,textarea{font-family:inherit;color:inherit}
+button{cursor:pointer}
+.app{height:100vh;height:100dvh;display:flex;flex-direction:column}
+.tb{height:56px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:20px;display:block}
+.brand .dv{width:1px;height:18px;background:var(--line2)}
+.brand .pn{font-size:14px;font-weight:600}
+.ws{font-size:12.5px;color:var(--sub);display:flex;align-items:center;gap:6px;margin-left:6px;padding:5px 10px;border-radius:7px;background:var(--soft)}
+.ws i{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.tb-r{margin-left:auto;display:flex;align-items:center;gap:10px}
+.me{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--sub);text-align:right;line-height:1.3}
+.me b{display:block;color:var(--ink);font-size:13px}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1D7D4F 0%,#3E9E74 100%);color:#fff;font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.body{flex-grow:1;display:flex;min-height:0}
+
+/* list */
+.list{width:360px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.lh{padding:18px 18px 0}
+.lh h1{font-size:18px;margin:0;letter-spacing:-.01em}
+.tabs{display:flex;gap:4px;margin-top:12px;border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:transparent;padding:9px 10px;font-size:13px;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;gap:6px;align-items:center}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+.tabs .c{font-size:11px;background:var(--soft);color:var(--sub);border-radius:999px;padding:0 7px;font-weight:600}
+.tabs button.on .c{background:var(--accent);color:#fff}
+.items{flex-grow:1;overflow-y:auto;padding:8px}
+.it{width:100%;text-align:left;border:1px solid transparent;background:transparent;border-radius:10px;padding:12px;display:flex;gap:11px;align-items:flex-start;position:relative}
+.it:hover{background:var(--hover)}
+.it.on{background:var(--accent-soft);border-color:#C8D1F4}
+.it .av{width:34px;height:34px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:var(--ink2);flex-shrink:0}
+.it .m{flex-grow:1;min-width:0}
+.it .r1{display:flex;align-items:baseline;gap:8px}
+.it .r1 b{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .r1 span{margin-left:auto;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.it .r2{font-size:12px;color:var(--sub);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .r3{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.it .new{position:absolute;left:4px;top:24px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;border-radius:6px;padding:2px 7px;white-space:nowrap}
+.tg-ag{color:#6A45D8;background:#F3EFFD}.tg-amber{color:var(--amber);background:var(--amber-soft)}.tg-red{color:var(--red);background:var(--red-soft)}.tg-green{color:var(--green);background:var(--green-soft)}.tg-gray{color:var(--sub);background:var(--soft)}
+.lempty{padding:40px 18px;text-align:center;color:var(--sub);font-size:13px;line-height:1.8}
+
+/* detail */
+.detail{flex-grow:1;min-width:0;display:flex;flex-direction:column;min-height:0}
+.scroll{flex-grow:1;overflow-y:auto}
+.wrap{max-width:860px;margin:0 auto;padding:26px 32px 32px}
+.back{display:none;border:0;background:transparent;color:var(--accent);font-size:13px;padding:4px 0;margin-bottom:8px}
+.dh{display:flex;align-items:flex-start;gap:16px}
+.dh .t{flex-grow:1;min-width:0}
+.dh .no{font-family:var(--mono);font-size:12px;color:var(--mute)}
+.dh h2{font-size:22px;margin:4px 0 8px;letter-spacing:-.02em;line-height:1.35}
+.who{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--sub);flex-wrap:wrap}
+.who .av{width:22px;height:22px;border-radius:50%;background:var(--grad);color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.amt{text-align:right;flex-shrink:0}
+.amt small{display:block;font-size:12px;color:var(--sub)}
+.amt b{font-size:28px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);margin-top:16px}
+.card .hd{padding:14px 18px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.card .bd{padding:14px 18px}
+.agent{background:linear-gradient(180deg,#FAF9FF 0%,#FFFFFF 70%);border-color:#E2DCF8}
+.agent .hd{border-bottom-color:#ECE7FB}
+.orb{width:22px;height:22px;border-radius:7px;background:var(--grad);display:flex;align-items:center;justify-content:center}
+.sum{font-size:14px;line-height:1.85}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.ck{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;font-size:12.5px;line-height:1.55}
+.ck i{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;font-weight:700;color:#fff;margin-top:1px}
+.ck.ok i{background:var(--green)}.ck.wn i{background:#D99A00}.ck.ng i{background:var(--red)}
+.ck b{display:block;font-size:12.5px;color:var(--ink)}
+.ck span{color:var(--sub)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11.5px;color:var(--sub);font-weight:600;padding:10px 18px;background:#FAFBFD;border-bottom:1px solid var(--line)}
+td{padding:12px 18px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td .s{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.why{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ink2)}
+.why:before{content:"";width:5px;height:5px;border-radius:50%;background:#8C7CE8}
+.tot{display:flex;justify-content:flex-end;gap:28px;padding:12px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
+.tot b{color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two .card{margin-top:16px}
+.bud .l{display:flex;justify-content:space-between;font-size:12.5px;color:var(--sub);margin-top:6px;font-variant-numeric:tabular-nums}
+.bar{height:10px;background:#ECEEF4;border-radius:5px;overflow:hidden;display:flex;margin-top:10px}
+.bar b{display:block;height:100%}
+.legend{display:flex;gap:14px;font-size:11.5px;color:var(--sub);margin-top:8px}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:0}
+.route{display:flex;flex-direction:column;gap:0}
+.rs{display:flex;gap:12px}
+.rs .d{width:20px;display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.rs .d b{width:20px;height:20px;border-radius:50%;border:2px solid var(--line2);background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+.rs .d s{flex-grow:1;width:2px;background:var(--line);min-height:12px}
+.rs:last-child .d s{display:none}
+.rs .c{padding-bottom:12px;font-size:13px;line-height:1.5}
+.rs .c small{display:block;color:var(--sub);font-size:11.5px}
+.rs.done .d b{background:var(--green);border-color:var(--green)}
+.rs.cur .d b{border-color:var(--accent);background:var(--accent-soft)}
+.rs.cur .c{font-weight:600}
+.meta{display:grid;grid-template-columns:90px 1fr;gap:6px 12px;font-size:13px}
+.meta dt{color:var(--sub)}.meta dd{margin:0}
+
+/* action bar */
+.act{flex-shrink:0;border-top:1px solid var(--line);background:var(--surface)}
+.act .in{max-width:860px;margin:0 auto;padding:14px 32px;display:flex;align-items:center;gap:10px}
+.act .note{font-size:12px;color:var(--sub);flex-grow:1;line-height:1.6}
+.btn{font-size:14px;font-weight:600;border:1px solid var(--line2);background:var(--surface);border-radius:10px;padding:11px 20px;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.btn:hover{background:var(--hover)}
+.btn.pri{background:var(--grad);color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(53,82,216,.25);padding:11px 26px}
+.btn.pri:hover{filter:brightness(1.07)}
+.btn.ng{color:var(--red);border-color:#EBC4C6}
+.btn.ng:hover{background:var(--red-soft)}
+.btn:disabled{opacity:.45;cursor:default}
+.rej{display:none;max-width:860px;margin:0 auto;padding:14px 32px 0}
+.rej.on{display:block}
+.rej textarea{width:100%;border:1px solid var(--line2);border-radius:10px;padding:10px 12px;font-size:13.5px;resize:none;height:64px;outline:0}
+.rej textarea:focus{border-color:#8FA0E8;box-shadow:0 0 0 4px rgba(53,82,216,.10)}
+.rej .qc{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.rej .qc button{font-size:12px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 11px;color:var(--ink2)}
+.rej .qc button:hover{border-color:#B9C4F0;color:var(--accent)}
+.result{display:flex;align-items:center;gap:12px;padding:16px 18px;border-radius:14px;margin-top:16px;font-size:13.5px;line-height:1.6;animation:in .25s ease}
+.result i{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-style:normal;font-weight:700;flex-shrink:0}
+.result.ok{background:var(--green-soft);border:1px solid #C3E5D2}.result.ok i{background:var(--green)}
+.result.ng{background:var(--red-soft);border:1px solid #F0CACC}.result.ng i{background:var(--red)}
+.result small{display:block;color:var(--sub);font-size:12px}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--sub);line-height:1.8;padding:30px}
+.empty .ei{width:52px;height:52px;border-radius:14px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--mute)}
+.empty b{color:var(--ink);font-size:15px}
+@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(16px);background:#12141C;color:#fff;font-size:13px;padding:10px 16px;border-radius:10px;opacity:0;transition:.25s;z-index:60;pointer-events:none;box-shadow:var(--shadow-lg)}
+.toast.on{opacity:1;transform:translateX(-50%)}
+
+@media (max-width:980px){.list{width:300px}.two{grid-template-columns:1fr}.two .card+.card{margin-top:0}}
+@media (max-width:760px){
+ .ws,.me .nm{display:none}
+ .list{width:100%;border-right:0}
+ .detail{display:none}
+ .app.show .list{display:none}
+ .app.show .detail{display:flex}
+ .back{display:inline-block}
+ .wrap{padding:18px 16px 24px}
+ .act .in,.rej{padding-left:16px;padding-right:16px}
+ .act .note{display:none}
+ .act .btn{flex:1}
+ .dh{flex-direction:column;gap:8px}.amt{text-align:left}
+ .checks{grid-template-columns:1fr}
+ th,td{padding:10px 12px}
+ .hide-sp{display:none}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+ <header class="tb">
+  <div class="brand"><img src="../assets/1approval_logo.webp" alt="1Approval"><span class="dv"></span><span class="pn">承認</span></div>
+  <span class="ws"><i></i><span id="ws">サンプル精機</span></span>
+  <div class="tb-r"><div class="me"><span class="nm"><b id="meName"></b><span id="meDept"></span></span><span class="avatar" id="meIni"></span></div></div>
+ </header>
+ <div class="body">
+  <section class="list">
+   <div class="lh"><h1>承認</h1><div class="tabs"><button class="on" data-tab="wait">承認待ち <span class="c" id="cWait">0</span></button><button data-tab="done">処理済み <span class="c" id="cDone">0</span></button></div></div>
+   <div class="items" id="items"></div>
+  </section>
+  <section class="detail" id="detail"></section>
+ </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+function yen(n){return '¥'+Math.round(n).toLocaleString('ja-JP');}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function hhmm(d){d=d?new Date(d):new Date();return d.getHours()+':'+('0'+d.getMinutes()).slice(-2);}
+function day(n){var d=new Date();d.setDate(d.getDate()+n);return (d.getMonth()+1)+'/'+d.getDate()+'（'+'日月火水木金土'[d.getDay()]+'）';}
+function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(function(){e.classList.remove('on');},2300);}
+var store={get:function(k){try{return localStorage.getItem(k);}catch(e){return null;}},set:function(k,v){try{localStorage.setItem(k,v);}catch(e){}}};
+var ORB='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v2.5M4.9 6.3l1.8 1.8M17.1 8.1l1.8-1.8"/><circle cx="12" cy="14" r="4.5"/></svg>';
+
+/* --- demo bus: syncs with the requester screen in the same browser --- */
+var bus=(function(){var ch=null,h=[];try{ch=new BroadcastChannel('ap-demo');}catch(e){}
+  function emit(m){h.forEach(function(f){f(m);});}
+  if(ch)ch.onmessage=function(e){emit(e.data);};
+  window.addEventListener('storage',function(e){if(!ch&&e.key==='ap-demo-msg'&&e.newValue){try{emit(JSON.parse(e.newValue));}catch(_){}}});
+  return {send:function(m){m.at=Date.now();if(ch)ch.postMessage(m);store.set('ap-demo-msg',JSON.stringify(m));},on:function(f){h.push(f);}};})();
+
+/* --- sample requests already in the approver's inbox --- */
+var VC={'モノタロウ':'MO','アスクル':'AS','リコー':'RC'};
+function samples(ap){
+  var t=new Date();t.setHours(t.getHours()-3);
+  return [
+   {no:'PR-2611-0398',sample:1,ap:ap,user:'高橋 健',ini:'高',dept:'営業部',site:'本社 4F 営業部',account:'消耗品費',at:t.getTime(),title:'ノートPC用 ACアダプタ',agent:true,vendors:['アスクル'],
+    lines:[{name:'ノートPC用 ACアダプタ 65W',vendor:'アスクル',code:'AC-65W-C',unit:'個',qty:2,price:4400,median:4380,reason:'故障の交換',sub:'ヘルプデスク起票 #2281'}],
+    budget:{name:'消耗品費',used:186500,budget:250000},note:'ヘルプデスクの故障チケットから Agent が作成した申請です。同じ型番を昨年2回購入しています。'},
+   {no:'PR-2611-0402',sample:1,ap:ap,user:'伊藤 翔',ini:'伊',dept:'第2工場',site:'第2工場 資材庫',account:'消耗品費',at:t.getTime()-5400000,title:'安全靴 26.5cm ほか',agent:false,vendors:['モノタロウ'],
+    lines:[{name:'安全靴 JIS規格 26.5cm',vendor:'モノタロウ',code:'SF-265-BK',unit:'足',qty:3,price:7200,median:6980,reason:'新入社員の配布',sub:'11月入社 3名'}],
+    budget:{name:'消耗品費',used:412300,budget:450000},note:'申請者が直接作成した申請です。Agent が単価と予算をチェックしました。'}
+  ];
+}
+
+/* --- state --- */
+var REQS=[],sel=null,tab='wait';
+var live=null;try{live=JSON.parse(store.get('ap-demo-req')||'null');}catch(e){}
+function me(){return (live&&live.ap)||'中村 課長';}
+function meDept(){return (live&&live.apDept)||'総務課';}
+function load(){
+  REQS=samples(me());
+  if(live)REQS.unshift(live);
+  $('meName').textContent=me();$('meDept').textContent=meDept();$('meIni').textContent=me().charAt(0);
+  $('ws').textContent=live?live.company+' · '+live.place:'サンプル精機';
+}
+function totals(r){var s=0;r.lines.forEach(function(l){s+=l.price*l.qty;});var t=r.taxIncl?0:Math.floor(s*.1);return {sub:s,tax:t,tot:s+t};}
+function route(r){return r.route||[r.ap];}
+function cur(r){return r.cur||0;}
+function warns(r){return r.lines.filter(function(l){return l.price/l.median-1>.2;});}
+function waiting(){return REQS.filter(function(r){return !r.status||r.status==='wait';});}
+function done(){return REQS.filter(function(r){return r.status&&r.status!=='wait';});}
+
+/* --- list --- */
+function renderList(){
+  var w=waiting(),d=done();$('cWait').textContent=w.length;$('cDone').textContent=d.length;
+  var arr=tab==='wait'?w:d;
+  if(!arr.length){$('items').innerHTML='<div class="lempty">'+(tab==='wait'?'承認待ちの申請はありません。<br><span style="font-size:12px">申請側で「承認を依頼する」を押すと、ここに届きます。</span>':'処理済みの申請はまだありません。')+'</div>';return;}
+  $('items').innerHTML=arr.map(function(r){var t=totals(r),wn=warns(r).length;
+    return '<button class="it'+(sel===r.no?' on':'')+'" data-no="'+r.no+'">'+(r.live&&(!r.status||r.status==='wait')&&!r.seen?'<span class="new"></span>':'')+'<span class="av">'+esc(r.ini)+'</span><span class="m"><span class="r1"><b>'+esc(r.title)+'</b><span>'+yen(t.tot)+'</span></span><span class="r2">'+esc(r.user)+' · '+esc(r.dept)+' · '+hhmm(r.at)+'</span><span class="r3">'+
+      (r.kind==='trip'?'<span class="tag tg-gray">出張</span>':'')+(r.agent?'<span class="tag tg-ag">Agent作成</span>':'')+(route(r).length>1?'<span class="tag tg-gray">'+(cur(r)+1)+'/'+route(r).length+'段目</span>':'')+(wn?'<span class="tag tg-amber">単価注意</span>':'')+
+      (r.status==='approved'?'<span class="tag tg-green">承認済み</span>':r.status==='rejected'?'<span class="tag tg-red">差し戻し</span>':'')+'</span></span></button>';}).join('');
+}
+$('items').addEventListener('click',function(e){var b=e.target.closest('[data-no]');if(!b)return;select(b.dataset.no);});
+document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){tab=b.dataset.tab;document.querySelectorAll('.tabs button').forEach(function(x){x.classList.toggle('on',x===b);});renderList();};});
+
+/* --- detail --- */
+function find(no){for(var i=0;i<REQS.length;i++)if(REQS[i].no===no)return REQS[i];return null;}
+function select(no){sel=no;var r=find(no);if(r)r.seen=1;renderList();renderDetail();$('app').classList.add('show');}
+function renderDetail(){
+  var r=find(sel),el=$('detail');
+  if(!r){el.innerHTML='<div class="empty"><div class="ei"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg></div><b>申請を選んでください</b>左の一覧から、確認する申請を選びます。</div>';return;}
+  var t=totals(r),wn=warns(r),b=r.budget,after=b.used+t.tot,over=after>b.budget;
+  var st=r.status||'wait';
+  var checks=r.checks?r.checks.map(function(c){return [c[0]==='ng'?'ng':c[0]==='wn'?'wn':'ok',esc(c[1]),esc(c[2])];}).concat(over?[['wn','予算','承認すると '+esc(b.name)+' が予算を '+yen(after-b.budget)+' 超えます']]:[['ok','予算',esc(b.name)+' の今月予算残 '+yen(b.budget-b.used)+' に収まります']]):[
+    ['ok','購買規程','金額に応じた承認者（'+(t.tot>=50000?'5万円以上は部長':'5万円未満は課長')+'）'],
+    wn.length?['wn','単価','過去中央値より高い品目が'+wn.length+'件（'+esc(wn[0].name.split(' ')[0])+' +'+Math.round((wn[0].price/wn[0].median-1)*100)+'%）']:['ok','単価','すべて過去中央値の範囲内'],
+    over?['wn','予算','承認すると '+esc(b.name)+' が予算を '+yen(after-b.budget)+' 超えます']:['ok','予算',esc(b.name)+' の今月予算残 '+yen(b.budget-b.used)+' に収まります'],
+    ['ok','在庫の確保','購買先で確保済み（差し戻すと解放）']
+  ];
+  var used=Math.min(100,b.used/b.budget*100),add=Math.max(0,Math.min(100-used,t.tot/b.budget*100));
+  el.innerHTML='<div class="scroll"><div class="wrap">'+
+   '<button class="back" id="back">‹ 一覧へ</button>'+
+   '<div class="dh"><div class="t"><div class="no">'+r.no+'</div><h2>'+esc(r.title)+'</h2><div class="who"><span class="av">'+esc(r.ini)+'</span>'+esc(r.user)+'（'+esc(r.dept)+'）· '+hhmm(r.at)+' に申請'+(r.agent?' <span class="tag tg-ag">Agent作成</span>':'')+'</div></div>'+
+   '<div class="amt"><small>総額（税込）</small><b>'+yen(t.tot)+'</b></div></div>'+
+   (st==='approved'?'<div class="result ok"><i>✓</i><div><b>承認しました</b><small>'+hhmm(r.decidedAt)+' · '+(r.doneText?esc(r.doneText):r.vendors.join('・')+' へ発注済み（'+r.vendors.map(function(v,i){return (VC[v]||'OD')+'-'+(83021+i*17);}).join(' / ')+'）· 納品予定 '+day(3))+'</small></div></div>':'')+
+   (st==='rejected'?'<div class="result ng"><i>!</i><div><b>差し戻しました</b><small>'+hhmm(r.decidedAt)+' · コメント：「'+esc(r.comment)+'」</small></div></div>':'')+
+   '<div class="card agent"><div class="hd"><span class="orb">'+ORB+'</span>Agent の所見</div><div class="bd"><div class="sum">'+esc(r.note)+'</div>'+
+    '<div class="checks">'+checks.map(function(c){return '<div class="ck '+c[0]+'"><i>'+(c[0]==='ok'?'✓':'!')+'</i><div><b>'+c[1]+'</b><span>'+c[2]+'</span></div></div>';}).join('')+'</div></div></div>'+
+   '<div class="card"><div class="hd">明細 · '+r.lines.length+'品目</div><table><thead><tr><th>品目</th><th class="n">数量</th><th class="n hide-sp">単価</th><th class="n">小計</th><th class="hide-sp">根拠</th></tr></thead><tbody>'+
+    r.lines.map(function(l){var o=l.price/l.median-1;return '<tr><td>'+esc(l.name)+'<span class="s">'+esc(l.vendor)+' · '+esc(l.code)+'</span>'+(o>.2?'<span class="tag tg-amber" style="margin-top:5px">中央値 '+yen(l.median)+' より+'+Math.round(o*100)+'%</span>':'')+'</td><td class="n">'+l.qty+esc(l.unit)+'</td><td class="n hide-sp">'+yen(l.price)+'</td><td class="n">'+yen(l.price*l.qty)+'</td><td class="hide-sp"><span class="why">'+esc(l.reason)+'</span><span class="s">'+esc(l.sub)+'</span></td></tr>';}).join('')+
+    '</tbody></table><div class="tot"><span>小計 <b>'+yen(t.sub)+'</b></span><span>消費税 <b>'+yen(t.tax)+'</b></span><span>総額 <b>'+yen(t.tot)+'</b></span></div></div>'+
+   '<div class="two"><div class="card bud"><div class="hd">予算への影響 · '+esc(b.name)+'（今月）</div><div class="bd"><div class="bar"><b style="width:'+used+'%;background:#9AA6CF"></b><b style="width:'+add+'%;background:'+(over?'var(--red)':'var(--accent)')+'"></b></div>'+
+     '<div class="legend"><span><i style="background:#9AA6CF"></i>使用済み '+yen(b.used)+'</span><span><i style="background:'+(over?'var(--red)':'var(--accent)')+'"></i>この申請 '+yen(t.tot)+'</span></div>'+
+     '<div class="l"><span>予算</span><span>'+yen(b.budget)+'</span></div><div class="l"><span>承認後の残り</span><span style="'+(over?'color:var(--red);font-weight:600':'')+'">'+yen(b.budget-after)+'</span></div></div></div>'+
+    '<div class="card"><div class="hd">承認ルート</div><div class="bd"><div class="route">'+
+     routeHtml(r,st)+
+    '</div><dl class="meta" style="margin-top:6px"><dt>納入先</dt><dd>'+esc(r.site)+'</dd><dt>勘定科目</dt><dd>'+esc(r.account)+'</dd></dl></div></div></div>'+
+   '</div></div>'+
+   (st==='wait'?'<div class="act"><div class="rej" id="rej"><div class="qc"><button type="button">数量を見直してください</button><button type="button">今月は予算が厳しいので、来月にしてください</button><button type="button">契約単価で手配し直してください</button></div><textarea id="cm" placeholder="差し戻しの理由（申請者と Agent に届きます）"></textarea></div>'+
+     '<div class="in"><span class="note">'+(r.after?esc(r.after):'承認すると、'+r.vendors.join('・')+' へそのまま発注されます。')+(route(r).length>1&&cur(r)<route(r).length-1?' 承認後、'+esc(route(r)[cur(r)+1])+' に回ります。':'')+'</span><button class="btn ng" id="bNg">差し戻す</button><button class="btn pri" id="bOk">承認する</button></div></div>':'');
+  var bk=$('back');if(bk)bk.onclick=function(){$('app').classList.remove('show');};
+  if(st!=='wait')return;
+  $('bOk').onclick=function(){decide(r,true);};
+  $('bNg').onclick=function(){var rj=$('rej');if(!rj.classList.contains('on')){rj.classList.add('on');$('bNg').textContent='差し戻しを送る';$('cm').focus();return;}decide(r,false,$('cm').value.trim()||'内容を見直して、再申請してください。');};
+  $('rej').querySelector('.qc').addEventListener('click',function(e){var b=e.target.closest('button');if(b){$('cm').value=b.textContent;$('cm').focus();}});
+}
+function routeHtml(r,st){
+  var R=route(r),c=cur(r),dec=r.dec||[],me_=me();
+  var h='<div class="rs done"><div class="d"><b>✓</b><s></s></div><div class="c">'+esc(r.user)+'<small>申請 · '+hhmm(r.at)+'</small></div></div>';
+  R.forEach(function(ap,i){var d=dec[i],cls='rs',mark='',sub;
+    if(d&&d.ok){cls+=' done';mark='✓';sub='承認 · '+hhmm(d.at);}
+    else if(d&&!d.ok){cls+=' done';mark='!';sub='差し戻し · '+hhmm(d.at);}
+    else if(i===c&&st==='wait'){cls+=' cur';sub='承認待ち';}
+    else if(i===c&&st==='approved'){cls+=' done';mark='✓';sub='承認 · '+hhmm(r.decidedAt);}
+    else if(i===c&&st==='rejected'){cls+=' done';mark='!';sub='差し戻し · '+hhmm(r.decidedAt);}
+    else sub=i>c?'前の承認者のあと':'—';
+    h+='<div class="'+cls+'"><div class="d"><b>'+mark+'</b><s></s></div><div class="c">'+esc(ap)+(ap===me_&&i===c?'（あなた）':'')+(R.length>1?' <span class="tag tg-gray">'+(i+1)+'段目</span>':'')+'<small>'+sub+'</small></div></div>';});
+  h+='<div class="rs'+(st==='approved'?' done':'')+'"><div class="d"><b>'+(st==='approved'?'✓':'')+'</b><s></s></div><div class="c">'+(r.kind==='trip'?'予約の確定（自動）<small>新幹線・ホテル':'発注（自動）<small>'+r.vendors.join('・'))+'</small></div></div>';
+  return h;
+}
+function decide(r,ok,comment){
+  r.status=ok?'approved':'rejected';r.decidedAt=Date.now();r.comment=comment||'';
+  var next=ok&&r.live&&cur(r)<route(r).length-1;
+  if(next)r.status='wait';
+  if(r.live)bus.send({type:'decision',no:r.no,ok:ok,comment:r.comment,cur:cur(r)});
+  toast(!ok?'差し戻しました':next?'承認しました。次は '+route(r)[cur(r)+1]+' の承認です':r.kind==='trip'?'承認しました。予約を確定します':'承認しました。発注を開始します');
+  renderList();renderDetail();
+}
+
+/* --- sync with requester --- */
+bus.on(function(m){
+  if(m.type==='request'){var prev=live;live=m.req;load();
+    var fresh=!prev||prev.no!==live.no,step=prev&&prev.no===live.no&&prev.cur!==live.cur;
+    if(live.status==='wait'&&(fresh||step)){tab='wait';document.querySelectorAll('.tabs button').forEach(function(x){x.classList.toggle('on',x.dataset.tab==='wait');});
+      select(live.no);toast(fresh?'新しい承認依頼が届きました':'2段目：'+live.ap+' の承認待ちになりました');}
+    else{renderList();if(sel===live.no)renderDetail();}}
+  else if(m.type==='decision'){var r=find(m.no);if(r&&(!r.status||r.status==='wait')){r.status=m.ok?'approved':'rejected';r.decidedAt=m.at;r.comment=m.comment||'';renderList();renderDetail();toast(m.ok?'Teams から承認されました':'Teams から差し戻されました');}}
+  else if(m.type==='reset'){live=null;load();sel=null;renderList();renderDetail();}
+});
+
+load();
+bus.send({type:'hello'});
+var h=decodeURIComponent(location.hash.slice(1));
+var first=(h&&find(h))||waiting()[0];
+if(first)select(first.no);else{renderList();renderDetail();}
+if(!h||window.innerWidth<=760)$('app').classList.remove('show');
+if(h&&find(h))$('app').classList.add('show');
+})();
+</script>
+</body>
+</html>
