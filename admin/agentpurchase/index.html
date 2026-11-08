@@ -240,6 +240,23 @@ a{color:var(--accent)}
 .tl .c{padding-bottom:16px;font-size:13.5px;line-height:1.6;min-width:0}
 .tl .c small{display:block;color:var(--sub);font-size:12px}
 .tl .c .teams{margin-top:6px}
+.teams .tbs button{font:inherit;font-size:11px;padding:3px 10px;border-radius:5px;background:#5B5FC7;color:#fff;border:1px solid #5B5FC7;cursor:pointer}
+.teams .tbs button.g{background:#fff;color:#444;border-color:#ccc}
+.teams .tbs button:disabled{opacity:.45;cursor:default}
+.tl.waiting .teams{box-shadow:0 0 0 3px rgba(91,95,199,.18);animation:pulse 1.6s ease-in-out infinite}
+.tl.waiting .teams .tbs button[data-act=ok]{box-shadow:0 0 0 3px rgba(91,95,199,.3)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(91,95,199,.10)}50%{box-shadow:0 0 0 6px rgba(91,95,199,.22)}}
+.tl .it.ng{opacity:1}
+.tl .it.ng .dt b{background:var(--red);border-color:var(--red)}
+#pend:empty{display:none}
+.pend{margin:14px 20px 0;display:flex;align-items:center;gap:10px;border:1px solid #D6DCF6;background:#F6F8FF;border-radius:10px;padding:10px 12px;font-size:12.5px}
+.pend b{font-size:13px;font-weight:600}
+.pend small{display:block;color:var(--sub);font-size:11.5px}
+.pend .x2{flex-grow:1;min-width:0}
+.pend .pd{width:9px;height:9px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:bl 1.2s infinite}
+.pend.ok{border-color:#C3E5D2;background:var(--green-soft)}
+.pend.ok .pd{background:var(--green);animation:none}
+
 .cat{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .cat:last-child{border-bottom:0}
 .cat .x2{flex-grow:1}.cat small{display:block;color:var(--sub);font-size:12px;margin-top:1px}
@@ -291,6 +308,7 @@ a{color:var(--accent)}
   </section>
   <aside class="panel" id="panel">
    <div class="ph"><h2>申請の下書き</h2><span class="pill" id="dst">空</span><span class="id" id="did"></span></div>
+   <div id="pend"></div>
    <div class="lines" id="lines"></div>
    <div class="pf">
     <dl class="meta">
@@ -335,7 +353,7 @@ var ICON_AG='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke=
 var JPN={'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};
 
 var SC,S,reqNo=411;
-function fresh(){return {draft:[],appr:null,busy:false,last:null,flags:{},started:false};}
+function fresh(){return {draft:[],appr:null,busy:false,last:null,flags:{},started:false,pend:null};}
 function item(id){return SC.items[id];}
 function line(id){for(var i=0;i<S.draft.length;i++)if(S.draft[i].id===id)return S.draft[i];return null;}
 function totals(){var s=0;S.draft.forEach(function(l){s+=l.price*l.qty;});var t=Math.floor(s*.1);return {sub:s,tax:t,tot:s+t};}
@@ -479,6 +497,8 @@ function renderDraft(){
     if(flash){var r=box.querySelector('.ln.new');if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'});}
   }
   flash=null;
+  var P=S.pend;
+  $('pend').innerHTML=P&&P.state!=='rejected'?'<div class="pend'+(P.state==='approved'?' ok':'')+'"><span class="pd"></span><div class="x2"><b>'+(P.state==='approved'?'承認済み · 発注しました':P.ap+' の承認待ち')+'</b><small>'+P.no+' · '+P.n+'品目 · '+yen(P.tot)+'</small></div><button type="button" class="mini-btn">'+(P.state==='approved'?'詳細':'承認カードを開く')+'</button></div>':'';
   var t=totals(),n=S.draft.length;
   $('sSub').textContent=yen(t.sub);$('sTax').textContent=yen(t.tax);$('sTot').textContent=yen(t.tot);
   $('dst').textContent=n?n+'品目 · 未申請':'空';
@@ -668,36 +688,73 @@ async function submitFlow(){
   var warn=S.draft.filter(function(l){return l.price/item(l.id).median-1>.2;});
   await say({steps:[['購買規程と照合','policy'],['予算残を確認','budget'],['申請を作成','request']],
     html:warn.length?'申請を作成します。<span class="w">単価警告が'+warn.length+'件あるため、承認者向けに注記を付けました。</span>':'規程・予算とも問題ありません。申請を作成して、<strong>'+approver()+'</strong> に承認を依頼します。'});
+  if(S.pend&&S.pend.state==='wait')toast('前の申請が承認待ちです');
   await openDone();
 }
 var VC={'モノタロウ':'MO','アスクル':'AS','リコー':'RC'};
-async function openDone(){
-  reqNo++;var no='PR-2611-0'+reqNo,t=totals(),ap=approver(),vendors=[],names=[];
-  S.draft.forEach(function(l){var v=item(l.id).vendor;if(vendors.indexOf(v)<0)vendors.push(v);names.push(item(l.id).name.split(' ')[0]);});
-  var heroIn=SC.hero&&!!line(SC.hero.id);
-  $('doneT').textContent='承認を依頼しました';
-  $('doneL').innerHTML='<span style="font-family:var(--mono)">'+no+'</span> · '+S.draft.length+'品目 · 総額 <strong>'+yen(t.tot)+'</strong>（税込）';
+var REJECT_MSG='今月は予算が厳しいので、数量を見直してから再申請してください。';
+function openDone(){
+  reqNo++;var t=totals(),P={no:'PR-2611-0'+reqNo,ap:approver(),tot:t.tot,n:S.draft.length,lines:S.draft.map(function(l){return Object.assign({},l);}),appr:S.appr,
+    heroIn:SC.hero&&!!line(SC.hero.id),vendors:[],names:[],state:'wait',told:false};
+  S.draft.forEach(function(l){var v=item(l.id).vendor;if(P.vendors.indexOf(v)<0)P.vendors.push(v);P.names.push(item(l.id).name.split(' ')[0]);});
+  S.pend=P;S.draft=[];S.appr=null;renderDraft();
+  $('doneL').innerHTML='<span style="font-family:var(--mono)">'+P.no+'</span> · '+P.n+'品目 · 総額 <strong>'+yen(P.tot)+'</strong>（税込）';
   var st=[
     ['申請を作成しました','申請者：'+SC.user+' · kintone の購買申請アプリにも同期'],
-    [ap+' に承認を依頼しました','<div class="teams"><b>1Approval</b> · 承認依頼<br>'+no+'　'+names.join('、')+'　<b>'+yen(t.tot)+'</b><div class="tbs"><span>承認</span><span class="g">差し戻し</span><span class="g">詳細</span></div></div>'],
-    [ap+' が承認しました','Teams から承認 · '+hhmm()],
-    [vendors.join('・')+' へ発注しました','注文番号 '+vendors.map(function(v,i){return (VC[v]||'OD')+'-'+(83021+i*17);}).join(' / ')],
+    [P.ap+' に承認を依頼しました','<div class="teams"><b>1Approval</b> · 承認依頼<br>'+P.no+'　'+P.names.join('、')+'　<b>'+yen(P.tot)+'</b><div class="tbs"><button type="button" data-act="ok">承認</button><button type="button" class="g" data-act="ng">差し戻し</button><span class="g">詳細</span></div></div>'],
+    [P.ap+' の承認を待っています','Teams のカードで承認されると、そのまま発注に進みます'],
+    [P.vendors.join('・')+' へ発注します','承認後に自動で発注'],
     ['納品予定 '+day(3),SC.site+' · 入荷したら検収のやることに出します']
   ];
   $('tl').innerHTML=st.map(function(s){return '<div class="it"><div class="dt"><b>✓</b><s></s></div><div class="c">'+s[0]+'<small>'+s[1]+'</small></div></div>';}).join('');
+  $('doneT').textContent='承認を依頼しました';$('doneClose').textContent='閉じる';
   $('mDone').classList.add('on');
-  openDone.pending={no:no,ap:ap,tot:t.tot};
-  S.draft=[];S.appr=null;renderDraft();
-  var its=$('tl').querySelectorAll('.it');
-  for(var i=0;i<its.length;i++){
-    if(i===2){its[i].classList.add('wait');its[i].querySelector('b').textContent='';$('doneT').textContent='承認を待っています…';await wait(2600);its[i].classList.remove('wait');its[i].querySelector('b').textContent='✓';}
-    its[i].classList.add('on');await wait(i===2?500:650);
-  }
-  $('doneT').textContent='承認され、発注しました';
-  if(heroIn)doneAlert('stock',item(SC.hero.id).name.split(' ')[0]+'：<strong>発注済み</strong> · 納品 '+day(3));
+  return (async function(){
+    var its=$('tl').querySelectorAll('.it');
+    its[0].classList.add('on');await wait(650);its[1].classList.add('on');await wait(650);
+    its[2].classList.add('wait');its[2].querySelector('b').textContent='';
+    $('doneT').textContent='承認を待っています';$('doneClose').textContent='閉じる（承認待ちのまま）';
+    $('tl').classList.add('waiting');
+  })();
 }
-$('doneClose').onclick=function(){$('mDone').classList.remove('on');var p=openDone.pending;if(!p)return;openDone.pending=null;
-  (function go(){if(S.busy)return setTimeout(go,300);run(function(){return say({html:'<span style="font-family:var(--mono);font-size:12.5px">'+p.no+'</span> は '+p.ap+' に承認され、発注まで完了しました（'+yen(p.tot)+'）。<br><span class="s">入荷したら検収の「やること」に出します。発注点も入荷に合わせて更新します。</span>',quick:[['在庫が少ないものを教えて'],['今月の使いすぎを教えて']]});});})();};
+function setStep(i,title,sub){var it=$('tl').querySelectorAll('.it')[i];it.querySelector('.c').innerHTML=title+'<small>'+sub+'</small>';return it;}
+async function decide(ok){
+  var P=S.pend;if(!P||P.state!=='wait')return;
+  P.state='busy';$('tl').classList.remove('waiting');
+  $('tl').querySelectorAll('[data-act]').forEach(function(b){b.disabled=true;});
+  var its=$('tl').querySelectorAll('.it'),w=its[2];
+  w.classList.remove('wait');
+  if(!ok){
+    w.classList.add('ng');w.querySelector('b').textContent='!';
+    setStep(2,P.ap+' が差し戻しました','「'+REJECT_MSG+'」 · '+hhmm());
+    $('doneT').textContent='差し戻されました';$('doneClose').textContent='閉じる';
+    P.state='rejected';
+    S.draft=P.lines.map(function(l){return Object.assign({},l);});S.appr=P.appr;flash=null;renderDraft();
+    return;
+  }
+  w.querySelector('b').textContent='✓';w.classList.add('on');
+  setStep(2,P.ap+' が承認しました','Teams から承認 · '+hhmm());
+  $('doneT').textContent='承認されました';await wait(700);
+  setStep(3,P.vendors.join('・')+' へ発注しました','注文番号 '+P.vendors.map(function(v,i){return (VC[v]||'OD')+'-'+(83021+i*17);}).join(' / '));
+  its[3].classList.add('on');await wait(650);its[4].classList.add('on');
+  $('doneT').textContent='承認され、発注しました';$('doneClose').textContent='閉じる';
+  P.state='approved';renderDraft();
+  if(P.heroIn)doneAlert('stock',item(SC.hero.id).name.split(' ')[0]+'：<strong>発注済み</strong> · 納品 '+day(3));
+}
+$('tl').addEventListener('click',function(e){var b=e.target.closest('[data-act]');if(b)decide(b.dataset.act==='ok');});
+function report(html,quick){(function go(){if(S.busy)return setTimeout(go,300);run(function(){return say({html:html,quick:quick});});})();}
+$('doneClose').onclick=function(){
+  $('mDone').classList.remove('on');var P=S.pend;if(!P)return;
+  var no='<span style="font-family:var(--mono);font-size:12.5px">'+P.no+'</span>';
+  if(P.state==='wait'||P.state==='busy'){
+    if(!P.told){P.told=true;report(no+' を <strong>'+P.ap+'</strong> に承認依頼しました。承認されたら、そのまま発注まで進めます。<br><span class="s">状況は右の「承認待ち」から確認できます。</span>');}
+    return;
+  }
+  S.pend=null;renderDraft();
+  if(P.state==='approved')report(no+' は '+P.ap+' に承認され、発注まで完了しました（'+yen(P.tot)+'）。<br><span class="s">入荷したら検収の「やること」に出します。発注点も入荷に合わせて更新します。</span>',[['在庫が少ないものを教えて'],['今月の使いすぎを教えて']]);
+  else report(no+' は '+P.ap+' から差し戻されました。<br>コメント：「'+REJECT_MSG+'」<br><span class="s">内容は右の下書きに戻してあります。数量を直して、もう一度承認を依頼できます。</span>',[['在庫が少ないものを教えて']]);
+};
+$('pend').addEventListener('click',function(e){if(e.target.closest('button'))$('mDone').classList.add('on');});
 
 /* ========== alerts / chips / welcome ========== */
 function renderAlerts(){
@@ -773,7 +830,7 @@ document.addEventListener('keydown',function(e){
 
 /* ========== boot ========== */
 function resetAll(notify){
-  S=fresh();document.querySelectorAll('.ov').forEach(function(o){o.classList.remove('on');});openDone.pending=null;
+  S=fresh();document.querySelectorAll('.ov').forEach(function(o){o.classList.remove('on');});$('tl').classList.remove('waiting');
   $('ava').textContent=SC.ini;$('wsName').textContent=SC.company+' · '+SC.place;$('kvSite').textContent=SC.site;$('kvAcc').textContent=SC.account;
   $('q').placeholder='Agentに頼む…　例：'+SC.sugs[0];
   renderAlerts();renderMenu();renderDraft();welcome();renderChips();
