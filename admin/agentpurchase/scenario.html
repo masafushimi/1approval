@@ -95,6 +95,7 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--so
    <li><b>Esc を2回</b>で最初の状態に戻ります（アバター →「会話をリセット」でも可）</li>
    <li>入力は自由文でOK。画面下の候補ボタンを押すだけでも進みます</li>
    <li>返答中は次の入力を受け付けません。返答が終わってから操作</li>
+   <li>承認依頼のあとは<b>上長が承認するまで止まります</b>。Teams カードの「承認」を押すと発注に進みます</li>
   </ul></div>
  </div>
 </section>
@@ -111,12 +112,13 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--so
    <tr><td>3</td><td class="op">候補ボタン <span class="click">潤滑スプレーも切れそうだった気がする</span></td><td class="re">スプレー1箱が追加、総額 ¥24,376</td><td class="talk">「うろ覚えでも大丈夫。実際の在庫で発注点割れを確認してから足しています。」</td></tr>
    <tr><td>4</td><td class="op">入力：<span class="say">在庫が少ないものを教えて</span> → <span class="click">まとめて下書きに入れて</span></td><td class="re">4品目に。総額5万円超で承認者が<b>佐藤 部長</b>に自動で切替。トナーに<b>単価警告</b></td><td class="talk">「金額が5万円を超えたので、規程どおり部長承認に切り替わりました。それと、トナーの単価がいつもより23%高いと警告しています。」</td></tr>
    <tr><td>5</td><td class="op"><span class="click">契約単価に切り替えて</span></td><td class="re">リコーの保守契約単価 ¥15,040 に変更、警告が消える</td><td class="talk">「保守契約の単価があるのに、スポットで高く買ってしまう——よくあるムダを止めます。」</td></tr>
-   <tr><td>6</td><td class="op">右下 <span class="click">承認を依頼する</span></td><td class="re">申請作成 → Teams に承認カード → 承認 → 各社へ発注 → 納品予定</td><td class="talk">「承認者には Teams でカードが届き、承認された瞬間に発注されます。Agent が勝手に発注することはありません。」<span class="pt">▶ ポイント③：発注は人の承認後</span></td></tr>
-   <tr><td>7</td><td class="op">上部の「期限 · 研究棟」カードを押す → <span class="click">古いロットから使うよう指示して</span></td><td class="re">古いロットの先行使用を Teams で3名に通知</td><td class="talk">「買うだけでなく、“買わずに済ませる”提案もします。期限切れの廃棄を減らせます。」<span class="pt">▶ ポイント①：先回り</span></td></tr>
+   <tr><td>6</td><td class="op">右下 <span class="click">承認を依頼する</span></td><td class="re">申請作成 → Teams に承認カード → <b>「承認を待っています」で止まる</b></td><td class="talk">「承認者の山口課長に Teams でカードが届きました。ここで止まって、課長の判断を待ちます。Agent が勝手に発注することはありません。」<span class="pt">▶ ポイント③：発注は人の承認後</span></td></tr>
+   <tr><td>7</td><td class="op"><b>上長役として</b> Teams カードの <span class="click">承認</span> を押す</td><td class="re">承認 → 各社へ発注 → 納品予定。上部の在庫カードが「発注済み」に</td><td class="talk">「課長が承認ボタンを押した瞬間に、モノタロウ・アスクル・リコーへそれぞれ発注されます。」<span class="pt">※ 来場者に上長役で押してもらうと盛り上がります</span></td></tr>
+   <tr><td>8</td><td class="op">上部の「期限 · 研究棟」カードを押す → <span class="click">古いロットから使うよう指示して</span></td><td class="re">古いロットの先行使用を Teams で3名に通知</td><td class="talk">「買うだけでなく、“買わずに済ませる”提案もします。期限切れの廃棄を減らせます。」<span class="pt">▶ ポイント①：先回り</span></td></tr>
   </tbody>
  </table>
  <h3>ショート版（1分半）</h3>
- <p style="margin:0">#2 → #4 → #6 だけで「頼む → 規程どおりの承認者 → 承認されて発注」まで見せられます。</p>
+ <p style="margin:0">#2 → #4 → #6 → #7 だけで「頼む → 規程どおりの承認者 → 上長が承認して発注」まで見せられます。</p>
 </section>
 
 <section class="sheet">
@@ -131,11 +133,12 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--so
    <tr><td>3</td><td class="op">#1の候補ボタン <span class="click">カラーのトナーも見ておいて</span>（または同じ文を入力）</td><td class="re">シアン1本を追加。総額5万円超で<b>木村 部長</b>承認に自動切替</td><td class="talk">「ついでの一言も拾います。金額が変われば承認ルートも自動で変わります。」</td></tr>
    <tr><td>4</td><td class="op">上部の「購買周期」カード → <span class="click">今月分を下書きして</span> → <span class="click">毎月の定期購入にして</span></td><td class="re">コピー用紙20箱を追加。毎月1日に下書きするルールを作成</td><td class="talk">「毎月同じものを買っているなら、それ自体を Agent に任せられます。」</td></tr>
    <tr><td>5</td><td class="op">上部の「期限 · 防災備蓄」カード → <span class="click">社員に配布を案内して</span> → <span class="click">買い替えの下書きを作って</span></td><td class="re">全社チャンネルへ配布案内 → 保存水120ケースの買い替え下書き</td><td class="talk">「防災備蓄の入れ替えのような“年に一度で誰も覚えていない仕事”も、前回の記録から段取りします。」</td></tr>
-   <tr><td>6</td><td class="op">右下 <span class="click">承認を依頼する</span></td><td class="re">Teams 承認 → リコー・アスクルへ発注 → 納品予定</td><td class="talk">「複数の購買先にまたがっても、承認は1回。承認後はそれぞれに自動で発注されます。」<span class="pt">▶ ポイント③</span></td></tr>
+   <tr><td>6</td><td class="op">右下 <span class="click">承認を依頼する</span></td><td class="re">Teams に承認カード → <b>「承認を待っています」で止まる</b></td><td class="talk">「木村部長に承認依頼が届きました。部長が判断するまで、発注は止まったままです。」<span class="pt">▶ ポイント③</span></td></tr>
+   <tr><td>7</td><td class="op"><b>上長役として</b> Teams カードの <span class="click">承認</span> を押す</td><td class="re">リコー・アスクルへ発注 → 納品予定</td><td class="talk">「複数の購買先にまたがっても、承認は1回。承認された時点で、それぞれに自動で発注されます。」</td></tr>
   </tbody>
  </table>
  <h3>ショート版（1分半）</h3>
- <p style="margin:0">#1 → #2 → #6 で「複合機が知らせる → 単価のムダを止める → 承認されて発注」。</p>
+ <p style="margin:0">#1 → #2 → #6 → #7 で「複合機が知らせる → 単価のムダを止める → 上長が承認して発注」。</p>
 </section>
 
 <section class="sheet">
@@ -147,6 +150,7 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--so
    <li><span class="say">承認者を鈴木主任に</span>（A）／<span class="say">承認者を小林主任に</span>（B）</li>
    <li><span class="say">ウエスはいらない</span> などで品目を外す</li>
    <li>右の下書きの ＋ / − / × でも直せます</li>
+   <li>Teams カードで <span class="click">差し戻し</span> を押すと、コメントつきで下書きに戻ります（直して再依頼できる流れを見せられます）</li>
   </ul></div>
   <div class="box"><b>Agent に聞く</b><ul>
    <li><span class="say">前回と同じものを頼む</span></li>
@@ -157,7 +161,7 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--so
  </div>
  <h3>よくある質問</h3>
  <dl class="qa">
-  <dt>Q. 勝手に発注されませんか？</dt><dd>されません。Agent が作るのは申請の下書きと承認者の指定までで、発注は承認者が承認したときだけ行われます（画面下部にも常に表示）。</dd>
+  <dt>Q. 勝手に発注されませんか？</dt><dd>されません。Agent が作るのは申請の下書きと承認者の指定までです。承認依頼のあとは上長が承認するまで止まり、承認されたときだけ発注されます（画面下部にも常に表示）。</dd>
   <dt>Q. 何を根拠に提案しているの？</dt><dd>右上の歯車「Agentの設定」→「参照データ」で、購買履歴・在庫・期限・予算・kintone 申請など、参照する範囲を見せられます。オフにした範囲は参照しません。</dd>
   <dt>Q. いつ Agent から話しかけてくるの？</dt><dd>同じ設定画面の「自動起動」タブ。発注点割れ・期限接近などの条件を選べます。</dd>
   <dt>Q. 普段使っているツールから使える？</dt><dd>承認依頼は Teams のカードで届く流れをデモで見せています。対応ツールや連携範囲の詳細は、営業担当から説明します。</dd>
@@ -165,7 +169,7 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--so
  </dl>
  <h3>困ったとき</h3>
  <div class="cols">
-  <div class="box"><b>画面がおかしい・途中で止まった</b><ul><li>Esc を2回でリセット。だめならページを再読み込み</li></ul></div>
+  <div class="box"><b>画面がおかしい・途中で止まった</b><ul><li>「承認を待っています」で止まるのは正常です。Teams カードの「承認」を押してください</li><li>承認待ちの画面を閉じてしまったら、右上の「承認カードを開く」から戻れます</li><li>それ以外は Esc を2回でリセット。だめならページを再読み込み</li></ul></div>
   <div class="box"><b>音声入力が反応しない</b><ul><li>Chrome / Edge 以外は非対応。キーボード入力か候補ボタンで進める</li></ul></div>
  </div>
  <div class="note">本デモの会話はすべてブラウザ内で動き、外部のAIサービスには接続していません。想定外の入力には「履歴が見つからないのでカタログから選んでください」と返します。ページを一度開けば、その後は会場の回線が不安定でも動作します。</div>
