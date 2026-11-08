@@ -183,6 +183,7 @@ table.d tr.new td{animation:hl 1.6s ease}
 .teams{margin-top:6px;border:1px solid #D6D9F2;border-left:4px solid #5B5FC7;border-radius:8px;padding:9px 11px;background:#F7F7FD;font-size:12px;line-height:1.6;max-width:380px}
 .teams .tb{display:flex;gap:6px;margin-top:6px}
 .teams .tb span{font-size:11px;padding:3px 9px;border-radius:5px;background:#5B5FC7;color:#fff}
+.teams .tb span.go{cursor:pointer;box-shadow:0 0 0 3px rgba(91,95,199,.35);animation:bl 1.2s infinite}
 .teams .tb span.g{background:#fff;color:#444;border:1px solid #ccc}
 .cat{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
 .cat .x{flex-grow:1}.cat .x small{display:block;color:var(--sub);font-size:11px}
@@ -517,7 +518,7 @@ async function openDone(){
   var hadGlove=!!line('glove'), snapshot={no:no,ap:ap,tot:t.tot};
   S.draft=[];S.appr=null;S.edit=false;renderDraft();openDone.pending=snapshot;
   for(var i=0;i<its.length;i++){
-    if(i===2){its[i].classList.add('wait');its[i].querySelector('b').textContent='';$('doneT').textContent='承認待ち…';await wait(2600);its[i].classList.remove('wait');its[i].querySelector('b').textContent='✓';$('doneT').textContent='承認されました';}
+    if(i===2){its[i].classList.add('wait');its[i].querySelector('b').textContent='';$('doneT').textContent='承認待ち…（Teams カードの「承認」を押してください）';var ok=$('tl').querySelector('.teams .tb span');ok.classList.add('go');$('doneClose').disabled=true;await new Promise(function(res){ok.onclick=function(){ok.onclick=null;ok.classList.remove('go');res();};});$('doneClose').disabled=false;its[i].classList.remove('wait');its[i].querySelector('b').textContent='✓';$('doneT').textContent='承認されました';}
     its[i].classList.add('on');await wait(i===2?500:650);
   }
   $('doneT').textContent='承認・発注まで完了しました';
