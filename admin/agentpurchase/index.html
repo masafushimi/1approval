@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent Purchase | 1Approval</title>
+<meta name="description" content="購買履歴と在庫から、次に必要なものを先に用意する購買エージェント">
+<link rel="icon" href="../assets/1approval_logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --bg:#F6F7FB;--surface:#FFFFFF;--ink:#12141C;--ink2:#3B4152;--sub:#6B7186;--mute:#9298AA;
+ --line:#E6E8EF;--line2:#D5D9E4;--soft:#F3F4F8;--hover:#EEF0F6;
+ --accent:#3552D8;--accent-soft:#EEF1FD;--grad:linear-gradient(135deg,#3552D8 0%,#7048E8 100%);
+ --red:#C93A40;--red-soft:#FCEEEE;--amber:#9A6700;--amber-soft:#FFF6E0;--green:#1D7D4F;--green-soft:#E9F6EF;
+ --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
+ --shadow:0 1px 2px rgba(18,20,28,.04),0 2px 8px rgba(18,20,28,.04);
+ --shadow-lg:0 24px 64px rgba(18,20,28,.18),0 2px 8px rgba(18,20,28,.06);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:Inter,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font-family:inherit;cursor:pointer;color:inherit}
+a{color:var(--accent)}
+.app{height:100vh;height:100dvh;display:flex;flex-direction:column}
+
+/* top bar */
+.tb{height:56px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:20px;display:block}
+.brand .dv{width:1px;height:18px;background:var(--line2)}
+.brand .pn{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.ws{font-size:12.5px;color:var(--sub);display:flex;align-items:center;gap:6px;margin-left:6px;padding:5px 10px;border-radius:7px;background:var(--soft)}
+.ws i{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.tb-r{margin-left:auto;display:flex;align-items:center;gap:6px;position:relative}
+.ic{width:34px;height:34px;border-radius:8px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:var(--sub)}
+.ic:hover{background:var(--hover);color:var(--ink)}
+.avatar{width:32px;height:32px;border-radius:50%;border:0;background:var(--grad);color:#fff;font-size:12.5px;font-weight:700;margin-left:4px}
+.menu{position:absolute;right:0;top:44px;width:250px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg);padding:6px;display:none;z-index:40}
+.menu.on{display:block;animation:pop .14s ease}
+.menu .who{padding:10px 10px 8px}
+.menu .who b{display:block;font-size:13.5px}
+.menu .who span{font-size:12px;color:var(--sub)}
+.menu hr{border:0;border-top:1px solid var(--line);margin:6px 0}
+.menu .hd{font-size:11px;color:var(--mute);padding:6px 10px 4px;font-weight:600;letter-spacing:.04em}
+.menu button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:transparent;border-radius:7px;padding:8px 10px;font-size:13px}
+.menu button:hover{background:var(--hover)}
+.menu button .ck{width:14px;color:var(--accent);font-weight:700}
+.menu button small{margin-left:auto;color:var(--mute);font-size:11px}
+
+/* layout */
+.body{flex-grow:1;display:flex;min-height:0}
+.chat{flex-grow:1;min-width:0;display:flex;flex-direction:column;min-height:0}
+.panel{width:420px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.col{width:100%;max-width:780px;margin:0 auto;padding:0 28px}
+
+/* alerts */
+.alerts{flex-shrink:0;padding:16px 0 4px}
+.alerts .row{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}
+.alerts .row::-webkit-scrollbar{display:none}
+.al{flex:1 1 0;min-width:210px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 13px;box-shadow:var(--shadow);transition:border-color .15s,box-shadow .15s,transform .15s;display:flex;gap:10px;align-items:flex-start}
+.al:hover{border-color:#B9C4F0;box-shadow:0 6px 18px rgba(53,82,216,.10);transform:translateY(-1px)}
+.al .dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.al .k{font-size:11px;color:var(--sub);font-weight:600;letter-spacing:.02em}
+.al .v{font-size:13px;line-height:1.5;margin-top:1px;color:var(--ink2)}
+.al .v strong{color:var(--ink)}
+.al.done{background:var(--green-soft);border-color:#C3E5D2}
+.al.done .dot{background:var(--green)!important}
+.alerts .ttl{font-size:11.5px;color:var(--mute);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+
+/* messages */
+.msgs{flex-grow:1;overflow-y:auto;scroll-behavior:smooth}
+.msgs::-webkit-scrollbar{width:8px}.msgs::-webkit-scrollbar-thumb{background:#D9DCE6;border-radius:4px;border:2px solid var(--bg)}
+.stream{display:flex;flex-direction:column;gap:20px;padding:18px 0 24px}
+.hello{padding:44px 0 6px;text-align:left}
+.orb{width:40px;height:40px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(80,72,232,.28)}
+.hello h1{font-size:26px;letter-spacing:-.02em;margin:18px 0 6px;font-weight:700}
+.hello p{margin:0;color:var(--sub);font-size:14.5px;line-height:1.7}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.sg button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:13px 15px;font-size:13.5px;line-height:1.55;color:var(--ink2);box-shadow:var(--shadow);display:flex;gap:10px;align-items:flex-start}
+.sg button:hover{border-color:#B9C4F0;background:#FBFCFF}
+.sg button svg{flex-shrink:0;margin-top:2px;color:var(--accent)}
+.mu{display:flex;justify-content:flex-end;animation:in .2s ease}
+.mu div{max-width:78%;background:var(--accent-soft);color:#1E2B66;border-radius:16px 16px 4px 16px;padding:10px 15px;font-size:14px;line-height:1.7;white-space:pre-wrap}
+.ma{display:flex;gap:12px;animation:in .25s ease}
+.ma .av{width:28px;height:28px;flex-shrink:0;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:center}
+.ma .bd{flex-grow:1;min-width:0;display:flex;flex-direction:column;gap:8px;padding-top:3px}
+.txt{font-size:14px;line-height:1.85;color:var(--ink)}
+.txt .s{color:var(--sub)}
+.txt .w{color:var(--amber);font-weight:600}
+.trig{font-size:11.5px;font-weight:600;color:#6A45D8;display:inline-flex;align-items:center;gap:6px;background:#F3EFFD;border-radius:999px;padding:3px 10px;align-self:flex-start}
+.trig:before{content:"";width:6px;height:6px;border-radius:50%;background:#6A45D8}
+@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(-4px) scale(.98)}to{opacity:1;transform:none}}
+.steps{font-size:12.5px;color:var(--sub)}
+.steps .sum{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;padding:0;font-size:12.5px;color:var(--sub)}
+.steps .sum:hover{color:var(--ink)}
+.steps .sum .chev{transition:transform .15s}
+.steps.open .sum .chev{transform:rotate(90deg)}
+.steps .ls{display:flex;flex-direction:column;gap:4px;margin-top:2px}
+.steps.closed .ls{display:none}
+.steps.closed .ls,.steps:not(.closed):not(.running) .ls{margin-top:6px;padding-left:2px}
+.step{display:flex;align-items:center;gap:8px;animation:in .2s ease}
+.step .src{font-size:11px;color:var(--mute)}
+.spin{width:12px;height:12px;border:2px solid #D3D9F2;border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;flex-shrink:0}
+.ok{width:12px;flex-shrink:0;color:var(--green);font-weight:700;font-size:12px;text-align:center}
+@keyframes sp{to{transform:rotate(360deg)}}
+.typing{display:inline-flex;gap:4px;padding:8px 0}
+.typing i{width:6px;height:6px;border-radius:50%;background:#AEB4C6;animation:bl 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bl{0%,80%,100%{opacity:.3}40%{opacity:1}}
+.qa{display:flex;flex-wrap:wrap;gap:6px;animation:in .25s ease}
+.qa button{font-size:12.5px;color:var(--accent);background:var(--surface);border:1px solid #C8D1F4;border-radius:999px;padding:6px 13px}
+.qa button:hover{background:var(--accent-soft)}
+.qa button:disabled{color:var(--mute);border-color:var(--line);background:transparent;cursor:default}
+.tbl{width:100%;border-collapse:separate;border-spacing:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:12.5px;margin-top:2px}
+.tbl th,.tbl td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;line-height:1.45}
+.tbl th{font-size:11px;color:var(--sub);font-weight:600;background:#FAFBFD}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .n{text-align:right;white-space:nowrap}
+.tbl .note{color:var(--sub);font-size:12px;background:#FAFBFD}
+.bar{height:6px;background:#ECEEF4;border-radius:3px;overflow:hidden;width:110px;display:inline-block;vertical-align:middle}
+.bar b{display:block;height:100%;border-radius:3px;background:var(--accent)}
+.bar b.over{background:var(--red)}
+.mini-btn{font-size:12px;border:1px solid var(--line2);background:var(--surface);border-radius:7px;padding:4px 10px}
+.mini-btn:hover{background:var(--hover)}
+.tag{display:inline-flex;align-items:center;font-size:11px;font-weight:600;border-radius:6px;padding:2px 8px;white-space:nowrap}
+.tg-green{color:var(--green);background:var(--green-soft)}.tg-amber{color:var(--amber);background:var(--amber-soft)}.tg-red{color:var(--red);background:var(--red-soft)}.tg-gray{color:var(--sub);background:var(--soft)}
+.teams{border:1px solid #DADCF3;border-left:3px solid #5B5FC7;border-radius:8px;padding:9px 12px;background:#F8F8FE;font-size:12.5px;line-height:1.6;max-width:420px}
+.teams .tbs{display:flex;gap:6px;margin-top:6px}
+.teams .tbs span{font-size:11px;padding:3px 10px;border-radius:5px;background:#5B5FC7;color:#fff}
+.teams .tbs span.g{background:#fff;color:#444;border:1px solid #ccc}
+
+/* composer */
+.composer{flex-shrink:0;padding:8px 0 16px;background:linear-gradient(180deg,rgba(246,247,251,0) 0%,var(--bg) 22%)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex-shrink:0;font-size:12.5px;color:var(--ink2);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.chips button:hover{border-color:#B9C4F0;color:var(--accent)}
+.cbox{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:6px 6px 6px 16px;box-shadow:0 4px 18px rgba(18,20,28,.06);transition:border-color .15s,box-shadow .15s}
+.cbox:focus-within{border-color:#8FA0E8;box-shadow:0 0 0 4px rgba(53,82,216,.10),0 4px 18px rgba(18,20,28,.06)}
+.cbox input{flex-grow:1;border:0;outline:0;background:transparent;font:inherit;font-size:14.5px;padding:8px 0;color:var(--ink);min-width:0}
+.cbox input::placeholder{color:var(--mute)}
+.cbtn{width:36px;height:36px;border-radius:10px;border:0;display:flex;align-items:center;justify-content:center;background:transparent;color:var(--sub);flex-shrink:0}
+.cbtn:hover{background:var(--hover)}
+.cbtn.send{background:var(--grad);color:#fff}
+.cbtn.send:disabled{opacity:.4;cursor:default}
+.cbtn.rec{background:var(--red-soft);color:var(--red)}
+.hint{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:var(--mute);margin-top:9px}
+
+/* panel */
+.ph{padding:18px 20px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.ph h2{font-size:15px;margin:0;font-weight:600}
+.pill{font-size:11.5px;color:var(--sub);background:var(--soft);border-radius:999px;padding:3px 10px}
+.ph .id{margin-left:auto;font-size:11.5px;color:var(--mute);font-family:var(--mono)}
+.lines{flex-grow:1;overflow-y:auto;padding:6px 20px}
+.ln{padding:14px 0;border-bottom:1px solid var(--line)}
+.ln:last-child{border-bottom:0}
+.ln.new{animation:hl 1.6s ease}
+@keyframes hl{0%{background:var(--accent-soft);box-shadow:-20px 0 0 var(--accent-soft),20px 0 0 var(--accent-soft)}100%{background:transparent;box-shadow:none}}
+.ln .a{display:flex;align-items:flex-start;gap:8px}
+.ln .nm{font-size:13.5px;font-weight:600;line-height:1.45;flex-grow:1}
+.ln .vd{font-size:11.5px;color:var(--mute);margin-top:2px}
+.ln .why{margin-top:7px;font-size:12px;color:var(--sub);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.ln .why .r{display:inline-flex;align-items:center;gap:5px}
+.ln .why .r:before{content:"";width:5px;height:5px;border-radius:50%;background:#8C7CE8}
+.ln .b{display:flex;align-items:center;gap:10px;margin-top:10px}
+.ln .up{font-size:12px;color:var(--mute)}
+.ln .st{margin-left:auto;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+.x{border:0;background:transparent;color:var(--mute);width:24px;height:24px;border-radius:6px;font-size:16px;line-height:1;flex-shrink:0}
+.x:hover{background:var(--red-soft);color:var(--red)}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.qty button{border:0;background:var(--surface);width:28px;height:28px;font-size:15px;color:var(--sub)}
+.qty button:hover{background:var(--hover)}
+.qty span{min-width:30px;text-align:center;font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--sub);font-size:13px;line-height:1.8;padding:30px 10px}
+.empty .ei{width:44px;height:44px;border-radius:12px;background:var(--soft);display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:var(--mute)}
+.empty b{color:var(--ink);font-size:14px;font-weight:600}
+.pf{border-top:1px solid var(--line);padding:16px 20px 18px;flex-shrink:0}
+.meta{margin:0;display:grid;gap:8px;font-size:13px}
+.meta>div{display:flex;align-items:center;gap:10px}
+.meta dt{width:68px;color:var(--sub);flex-shrink:0}
+.meta dd{margin:0;flex-grow:1;min-width:0;position:relative}
+.apb{border:1px solid var(--line2);background:var(--surface);border-radius:8px;padding:5px 10px;font-size:13px;display:inline-flex;align-items:center;gap:8px}
+.apb:hover{background:var(--hover)}
+.apb:disabled{color:var(--mute);cursor:default;background:var(--soft)}
+.apb small{color:var(--mute);font-size:11px}
+.pop{position:absolute;left:0;bottom:36px;width:260px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg);padding:6px;display:none;z-index:30}
+.pop.on{display:block;animation:pop .14s ease}
+.pop button{display:flex;width:100%;text-align:left;border:0;background:transparent;border-radius:7px;padding:8px 10px;font-size:13px;align-items:center;gap:8px}
+.pop button:hover{background:var(--hover)}
+.pop button small{margin-left:auto;color:var(--mute);font-size:11px}
+.pop .hd{font-size:11px;color:var(--mute);padding:6px 10px 4px;font-weight:600}
+.totals{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line2);font-size:13px}
+.totals .l{display:flex;justify-content:space-between;color:var(--sub);margin-top:4px;font-variant-numeric:tabular-nums}
+.totals .t{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px}
+.totals .t b{font-size:22px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.btn{font-size:13.5px;font-weight:500;border:1px solid var(--line2);background:var(--surface);border-radius:10px;padding:10px 16px;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;color:var(--ink)}
+.btn:hover{background:var(--hover)}
+.btn.pri{background:var(--grad);color:#fff;border-color:transparent;font-weight:600;box-shadow:0 6px 18px rgba(53,82,216,.25)}
+.btn.pri:hover{filter:brightness(1.07)}
+.btn:disabled{opacity:.4;cursor:default;box-shadow:none;filter:none}
+.wide{width:100%;margin-top:14px;padding:12px 16px}
+.lnk{display:block;margin:10px auto 0;border:0;background:transparent;font-size:12.5px;color:var(--accent);padding:4px 8px;border-radius:6px}
+.lnk:hover{background:var(--accent-soft)}
+
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(18,20,28,.42);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;backdrop-filter:blur(2px)}
+.ov.on{display:flex;animation:fd .18s ease}
+@keyframes fd{from{opacity:0}to{opacity:1}}
+.mod{width:100%;max-width:560px;max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);border-radius:16px;box-shadow:var(--shadow-lg);padding:24px 26px;animation:in .2s ease}
+.mod h3{margin:0;font-size:18px;letter-spacing:-.01em}
+.mod .lead{font-size:13px;color:var(--sub);margin-top:6px;line-height:1.7}
+.mod .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:22px}
+.tabs{display:flex;gap:4px;margin-top:16px;border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:transparent;padding:9px 12px;font-size:13px;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+.trow{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.trow:last-child{border-bottom:0}
+.trow .x2{flex-grow:1}
+.trow small{display:block;color:var(--sub);font-size:12px;margin-top:2px;line-height:1.6}
+.sw{position:relative;width:38px;height:22px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sw i{position:absolute;inset:0;background:#CDD2DE;border-radius:999px;transition:.2s;cursor:pointer}
+.sw i:before{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.sw input:checked+i{background:var(--accent)}
+.sw input:checked+i:before{transform:translateX(16px)}
+.sw input:focus-visible+i{outline:2px solid var(--accent);outline-offset:2px}
+.tl{margin-top:18px}
+.tl .it{display:flex;gap:12px;opacity:.32;transition:opacity .3s}
+.tl .it.on,.tl .it.wait{opacity:1}
+.tl .dt{width:22px;display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.tl .dt b{width:22px;height:22px;border-radius:50%;border:2px solid var(--line2);background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+.tl .it.on .dt b{background:var(--green);border-color:var(--green)}
+.tl .it.wait .dt b{border-color:var(--accent);border-top-color:transparent;animation:sp .8s linear infinite}
+.tl .dt s{flex-grow:1;width:2px;background:var(--line);min-height:14px}
+.tl .it:last-child .dt s{display:none}
+.tl .c{padding-bottom:16px;font-size:13.5px;line-height:1.6;min-width:0}
+.tl .c small{display:block;color:var(--sub);font-size:12px}
+.tl .c .teams{margin-top:6px}
+.cat{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.cat:last-child{border-bottom:0}
+.cat .x2{flex-grow:1}.cat small{display:block;color:var(--sub);font-size:12px;margin-top:1px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(16px);background:#12141C;color:#fff;font-size:13px;padding:10px 16px;border-radius:10px;opacity:0;transition:.25s;z-index:60;pointer-events:none;box-shadow:var(--shadow-lg)}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.fab{display:none}
+
+@media (max-width:1080px){.panel{width:360px}}
+@media (max-width:860px){
+ body{overflow:auto}
+ .app{height:auto;min-height:100vh}
+ .body{flex-direction:column}
+ .chat{height:calc(100dvh - 56px)}
+ .panel{width:100%;border-left:0;border-top:1px solid var(--line)}
+ .lines{overflow:visible}
+ .col{padding:0 16px}
+ .ws{display:none}
+ .sg{grid-template-columns:1fr}
+ .hello{padding-top:24px}.hello h1{font-size:22px}
+ .fab{display:flex;position:fixed;right:16px;bottom:96px;z-index:20;border:0;background:var(--ink);color:#fff;border-radius:999px;padding:9px 14px;font-size:12.5px;gap:8px;box-shadow:var(--shadow-lg)}
+ .fab.hide{display:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+ <header class="tb">
+  <div class="brand"><img src="../assets/1approval_logo.webp" alt="1Approval"><span class="dv"></span><span class="pn">Agent Purchase</span></div>
+  <span class="ws" id="ws"><i></i><span id="wsName"></span></span>
+  <div class="tb-r">
+   <button class="ic" id="bSet" title="Agentの設定" aria-label="Agentの設定"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+   <button class="avatar" id="ava" aria-haspopup="true" aria-label="アカウント">田</button>
+   <div class="menu" id="menu"></div>
+  </div>
+ </header>
+ <div class="body">
+  <section class="chat">
+   <div class="alerts"><div class="col"><div class="ttl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7c0 5-2 6-2 6h18s-2-1-2-6a7 7 0 0 0-7-7zM10 20a2 2 0 0 0 4 0"/></svg>Agentが検知しています</div><div class="row" id="alerts"></div></div></div>
+   <div class="msgs" id="msgs"><div class="col"><div class="stream" id="stream"></div></div></div>
+   <div class="composer"><div class="col">
+     <div class="chips" id="chips"></div>
+     <form class="cbox" id="form" autocomplete="off">
+      <input id="q" placeholder="Agentに頼む…" aria-label="Agentへの指示">
+      <button type="button" class="cbtn" id="mic" title="音声で指示" aria-label="音声で指示"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+      <button type="submit" class="cbtn send" id="send" aria-label="送信"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+     </form>
+     <div class="hint"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Agentは発注しません。作るのは申請の下書きと承認者の指定までです。</div>
+   </div></div>
+  </section>
+  <aside class="panel" id="panel">
+   <div class="ph"><h2>申請の下書き</h2><span class="pill" id="dst">空</span><span class="id" id="did"></span></div>
+   <div class="lines" id="lines"></div>
+   <div class="pf">
+    <dl class="meta">
+     <div><dt>納入先</dt><dd id="kvSite"></dd></div>
+     <div><dt>勘定科目</dt><dd id="kvAcc"></dd></div>
+     <div><dt>承認者</dt><dd><button class="apb" id="bAppr" disabled>—</button><div class="pop" id="pop"></div></dd></div>
+    </dl>
+    <div class="totals"><div class="l"><span>小計</span><span id="sSub">¥0</span></div><div class="l"><span>消費税（10%）</span><span id="sTax">¥0</span></div><div class="t"><span style="font-weight:600">総額</span><b id="sTot">¥0</b></div></div>
+    <button class="btn pri wide" id="bSubmit" disabled>承認を依頼する</button>
+    <button class="lnk" id="bAdd">＋ 品目を追加</button>
+   </div>
+  </aside>
+ </div>
+ <button class="fab hide" id="fab"></button>
+</div>
+
+<div class="ov" id="mSet"><div class="mod"><h3>Agentの設定</h3><div class="lead">Agentがいつ動き、何を根拠にするかを決めます。発注は常に人の承認後です。</div>
+ <div class="tabs"><button class="on" data-tab="rules">自動起動</button><button data-tab="scope">参照データ</button></div>
+ <div id="tRules"></div><div id="tScope" style="display:none"></div>
+ <div class="acts"><button class="btn" data-close>キャンセル</button><button class="btn pri" data-close data-save>保存する</button></div></div></div>
+<div class="ov" id="mCat"><div class="mod"><h3>品目を追加</h3><div class="lead">購買実績のある品目です。初めての品目はカタログから選んでください。</div>
+ <div style="margin-top:10px" id="catList"></div><div class="acts"><button class="btn pri" data-close>完了</button></div></div></div>
+<div class="ov" id="mDone"><div class="mod"><h3 id="doneT">承認を依頼しました</h3><div class="lead" id="doneL"></div><div class="tl" id="tl"></div>
+ <div class="acts"><button class="btn pri" id="doneClose">閉じる</button></div></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+'use strict';
+/* ========== helpers ========== */
+var $=function(id){return document.getElementById(id);};
+function yen(n){return '¥'+Math.round(n).toLocaleString('ja-JP');}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
+function norm(t){return t.replace(/[０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0);}).replace(/[　\s]+/g,' ').trim();}
+function day(n){var d=new Date();d.setDate(d.getDate()+n);return (d.getMonth()+1)+'/'+d.getDate()+'（'+'日月火水木金土'[d.getDay()]+'）';}
+function hhmm(){var d=new Date();return d.getHours()+':'+('0'+d.getMinutes()).slice(-2);}
+function hello(){var h=new Date().getHours();return h<11?'おはようございます':h<18?'こんにちは':'お疲れさまです';}
+function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(function(){e.classList.remove('on');},2300);}
+var store={get:function(k){try{return localStorage.getItem(k);}catch(e){return null;}},set:function(k,v){try{localStorage.setItem(k,v);}catch(e){}}};
+var ICON_AG='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v2.5M4.9 6.3l1.8 1.8M3 13h2.5M18.5 13H21M17.1 8.1l1.8-1.8"/><circle cx="12" cy="14" r="4.5"/></svg>';
+var JPN={'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};
+
+var SC,S,reqNo=411;
+function fresh(){return {draft:[],appr:null,busy:false,last:null,flags:{},started:false};}
+function item(id){return SC.items[id];}
+function line(id){for(var i=0;i<S.draft.length;i++)if(S.draft[i].id===id)return S.draft[i];return null;}
+function totals(){var s=0;S.draft.forEach(function(l){s+=l.price*l.qty;});var t=Math.floor(s*.1);return {sub:s,tax:t,tot:s+t};}
+function ruleAppr(){return totals().tot>=50000?SC.hi:SC.lo;}
+function approver(){return S.appr||ruleAppr();}
+function dept(n){for(var i=0;i<SC.approvers.length;i++)if(SC.approvers[i][0]===n)return SC.approvers[i][1];return '';}
+function sunit(it){return it.sunit||it.unit;}
+
+/* ========== scenarios ========== */
+var SCN={
+factory:{
+ key:'factory',label:'A 工場（製造業）',company:'サンプル精機',place:'第3工場',user:'田中 恵',ini:'田',role:'製造管理課 · 購買担当',
+ site:'第3工場 資材庫',account:'消耗品費',
+ approvers:[['山口 課長','製造管理課'],['佐藤 部長','生産本部'],['鈴木 主任','第3工場']],lo:'山口 課長',hi:'佐藤 部長',
+ items:{
+  glove:{name:'耐切創手袋 L 10双入',code:'01658877',vendor:'モノタロウ',unit:'袋',price:2560,median:2560,stock:2,rop:10,rec:5,reason:'過去8回の実績',sub:'平均5袋・周期2か月',kw:/手袋|グローブ|軍手/},
+  spray:{name:'潤滑スプレー 420mL ×12本',code:'28374615',vendor:'モノタロウ',unit:'箱',sunit:'本',price:9360,median:9360,stock:4,rop:12,rec:1,reason:'発注点割れ',sub:'残り4本 / 発注点12本',kw:/潤滑|スプレー|CRC|オイル/i,addText:'前回と同じ12本入り1箱を追加しました。'},
+  paper:{name:'コピー用紙 A4 500枚×10冊',code:'PPC-A4-5000',vendor:'アスクル',unit:'箱',price:3280,median:3200,stock:3,rop:5,rec:3,reason:'発注点割れ',sub:'残り3箱 / 発注点5箱',kw:/コピー用紙|用紙/},
+  toner:{name:'複合機トナー ブラック',code:'IMC-TN-BK',vendor:'リコー',unit:'本',price:18500,median:15040,contract:15040,stock:1,rop:2,rec:2,reason:'発注点割れ',sub:'残り1本 / 発注点2本',kw:/トナー|複合機|コピー機|プリンタ/},
+  waste:{name:'ウエス 白メリヤス 10kg',code:'49871203',vendor:'モノタロウ',unit:'袋',price:6480,median:6480,stock:6,rop:4,rec:2,reason:'前回と同じ',sub:'9/12 の申請と同数',kw:/ウエス|ウェス|雑巾/},
+  tape:{name:'養生テープ 緑 50mm×25m 30巻',code:'30215548',vendor:'モノタロウ',unit:'箱',price:4780,median:4780,stock:18,rop:10,rec:1,reason:'ご指示による追加',sub:'在庫18 / 発注点10',kw:/養生|テープ/},
+  battery:{name:'アルカリ乾電池 単3 40本',code:'BT-AA-40',vendor:'アスクル',unit:'箱',price:1980,median:1980,stock:12,rop:10,rec:1,reason:'ご指示による追加',sub:'在庫12 / 発注点10',kw:/電池|単3/}
+ },
+ low:['glove','spray','paper','toner'],
+ sub:'第3工場で、発注点を下回った品目が <strong>4件</strong>、期限が近い試薬が <strong>1件</strong> あります。',
+ sugs:['第3工場の手袋が切れそう。いつものを頼んでおいて。','在庫が少ないものを教えて','前回と同じものを頼む','今月の使いすぎを教えて'],
+ chips:['在庫が少ないものを教えて','前回と同じものを頼む','今月の使いすぎを教えて','期限が近いものを使い切りたい','この内容で申請して'],
+ alerts:[
+  {k:'stock',c:'var(--red)',t:'在庫 · 第3工場',v:'耐切創手袋が <strong>残り2袋</strong>（発注点10）'},
+  {k:'hist',c:'var(--accent)',t:'購買周期',v:'耐切創手袋は <strong>2か月ごと</strong>。今週が次の周期'},
+  {k:'expiry',c:'var(--amber)',t:'期限 · 研究棟',v:'特級試薬Aが <strong>残り14日</strong>'}
+ ],
+ hero:{id:'glove',run:async function(n,trigger){
+  await say({trigger:trigger,steps:[['在庫を確認（第3工場・大阪）','stock'],['購買履歴12か月を照合','orders'],['単価を過去中央値と比較','price'],['承認ルートを判定','approval']],
+   before:function(){addLine('glove',n);},
+   html:function(){var l=line('glove');return (trigger?'第3工場の <strong>耐切創手袋 L</strong> が残り2袋になり、発注点10を下回りました。':'')+'<strong>耐切創手袋 L 10双入</strong> を <strong>'+l.qty+'袋</strong> で下書きしました。<br>過去8回の実績（平均5袋・周期2か月）と、現在庫2袋・発注点10から算出しています。<br><span class="s">他拠点の在庫も確認しましたが、大阪も2袋のため融通できません。</span>';},
+   quick:function(){return line('spray')?[['この内容で申請して']]:[['潤滑スプレーも切れそうだった気がする'],['手袋は8袋にして'],['この内容で申請して']];}});
+ }},
+ onAlert:{
+  stock:function(){if(line('glove'))return say({html:'耐切創手袋はすでに下書きに入っています。'});return SC.hero.run(null,'発注点割れ · 第3工場');},
+  hist:function(){return say({trigger:'購買周期',steps:[['同一品番の購買を集計','orders']],html:'耐切創手袋 L（01658877）は過去12か月で <strong>8回</strong>、平均5袋を約2か月ごとに購入しています。前回は9/12なので、ちょうど次の周期です。',quick:[['前回と同じものを頼む'],['在庫が少ないものを教えて']]});},
+  expiry:function(){return SC.expiry('期限接近 · 研究棟');}
+ },
+ prev:{ref:'PR-2609-0287',date:'9/12',lines:[['glove',5,'前回と同じ','9/12 の申請と同数'],['waste',2]],
+  html:'前回の申請（<span style="font-family:var(--mono);font-size:12.5px">PR-2609-0287</span>・9/12）と同じ内容で下書きしました。耐切創手袋 5袋、ウエス 2袋。単価の変動はありません。<br><span class="s">ただしウエスは在庫6袋で発注点4を上回っています。今回は外しますか？</span>',
+  quick:[['ウエスはいらない'],['このまま申請して']]},
+ spend:{rows:[['消耗品費',412300,450000],['工具器具備品',268400,220000],['事務用品費',58200,80000],['修繕費',131000,200000]],
+  html:'今月の第3工場は、<strong style="color:var(--red)">工具器具備品が予算を22%超過</strong>しています。<br><span class="s">主因は 11/2 の電動ドライバー一括更新（¥96,800）です。消耗品費は92%で、このペースだと月末に約4%超過します。</span>'},
+ expiry:async function(trigger){
+  if(S.flags.exp)return say({html:'特級試薬A（ロット L-2309）の先行使用は、研究棟の3名に通知済みです。残り3本の使用状況を毎朝確認しています。'});
+  await say({trigger:trigger,steps:[['期限が近い品目を抽出','expiry'],['直近30日の使用量を確認','usage']],
+   html:'使用期限が近いものが <strong>1件</strong> あります。',
+   extra:'<table class="tbl"><thead><tr><th>品目</th><th>ロット</th><th class="n">残量</th><th class="n">期限</th></tr></thead><tbody><tr><td>特級試薬A 500mL</td><td>L-2309</td><td class="n">3本</td><td class="n"><span class="tag tg-amber">残り14日</span></td></tr><tr><td colspan="4" class="note">新しいロット（L-2402）も4本あり、研究棟では新しい方から使われています。月の使用量は約4本なので、古いロットから使えば期限内に使い切れます。</td></tr></tbody></table>',
+   quick:[['古いロットから使うよう指示して',function(){return act('古いロットから使うよう指示して',async function(){
+     await say({steps:[['研究棟の利用者を特定（3名）','directory'],['Teams に通知を送信','teams']],before:function(){S.flags.exp=1;doneAlert('expiry','特級試薬A：<strong>先行使用を通知済み</strong>');},
+      html:'研究棟の3名に Teams で通知しました。<br><span class="s">「特級試薬A はロット L-2309 から先に使ってください（期限 '+day(14)+'）」</span><br>あわせて、この試薬の発注提案を2週間止めます。'});});}],['今回はいい']]});
+ },
+ intents:[]
+},
+office:{
+ key:'office',label:'B 本社オフィス（総務）',company:'サンプル精機',place:'本社',user:'佐々木 彩',ini:'佐',role:'総務課 · 購買担当',
+ site:'本社 3F 総務倉庫',account:'事務用品費',
+ approvers:[['中村 課長','総務課'],['木村 部長','管理本部'],['小林 主任','総務課']],lo:'中村 課長',hi:'木村 部長',
+ items:{
+  tonerc:{name:'複合機トナー シアン',code:'IMC-TN-C',vendor:'リコー',unit:'本',price:15800,median:15800,stock:1,rop:2,rec:1,reason:'発注点割れ',sub:'残り1本 / 発注点2本',kw:/シアン|カラー/},
+  toner:{name:'複合機トナー ブラック',code:'IMC-TN-BK',vendor:'リコー',unit:'本',price:18500,median:15040,contract:15040,stock:1,rop:2,rec:2,reason:'複合機からの残量通知',sub:'3F機 残り1本 / 約5営業日',kw:/トナー|複合機|コピー機|プリンタ/},
+  paper:{name:'コピー用紙 A4 500枚×10冊',code:'PPC-A4-5000',vendor:'アスクル',unit:'箱',price:3280,median:3200,stock:8,rop:20,rec:20,reason:'毎月の定期',sub:'12か月平均 20箱/月',kw:/コピー用紙|用紙/},
+  sticky:{name:'付箋 75×75mm 黄 20冊',code:'ST-7575-Y',vendor:'アスクル',unit:'箱',price:2380,median:2380,stock:3,rop:5,rec:2,reason:'発注点割れ',sub:'残り3箱 / 発注点5箱',kw:/付箋|ふせん|ポストイット/},
+  tea:{name:'来客用 緑茶 500mL×24本',code:'DR-GT-24',vendor:'アスクル',unit:'ケース',price:2680,median:2680,stock:2,rop:3,rec:2,reason:'前回と同じ',sub:'10/3 の申請と同数',kw:/お茶|緑茶|飲料|来客/},
+  water:{name:'保存水 2L×6本（5年保存）',code:'BS-W2-6',vendor:'アスクル',unit:'ケース',price:1580,median:1580,stock:120,rop:120,rec:120,reason:'防災備蓄の入れ替え',sub:'期限切れ分と同数',kw:/保存水|備蓄|防災/},
+  battery:{name:'アルカリ乾電池 単3 40本',code:'BT-AA-40',vendor:'アスクル',unit:'箱',price:1980,median:1980,stock:12,rop:10,rec:1,reason:'ご指示による追加',sub:'在庫12 / 発注点10',kw:/電池|単3/}
+ },
+ low:['toner','tonerc','paper','sticky'],
+ sub:'本社で、発注点を下回った品目が <strong>4件</strong>、入れ替え時期の防災備蓄が <strong>1件</strong> あります。',
+ sugs:['3階の複合機のトナーが切れそう。いつものを頼んでおいて。','在庫が少ないものを教えて','前回と同じものを頼む','今月の使いすぎを教えて'],
+ chips:['在庫が少ないものを教えて','前回と同じものを頼む','今月の使いすぎを教えて','防災備蓄の期限を確認して','この内容で申請して'],
+ alerts:[
+  {k:'stock',c:'var(--red)',t:'複合機 · 本社3F',v:'ブラックトナーが <strong>残り1本</strong>（約5営業日）'},
+  {k:'hist',c:'var(--accent)',t:'購買周期',v:'コピー用紙は <strong>毎月20箱</strong>。今月分が未申請'},
+  {k:'expiry',c:'var(--amber)',t:'期限 · 防災備蓄',v:'保存水120ケースが <strong>残り30日</strong>'}
+ ],
+ hero:{id:'toner',run:async function(n,trigger){
+  await say({trigger:trigger,steps:[['複合機のトナー残量を取得（3F・5F）','mfp'],['購買履歴12か月を照合','orders'],['単価を過去中央値と比較','price'],['承認ルートを判定','approval']],
+   before:function(){addLine('toner',n);},
+   html:function(){var l=line('toner');return '本社3Fの複合機から <strong>ブラックトナー残り1本</strong> の通知が来ています。印刷量から見て約5営業日で切れるため、<strong>'+l.qty+'本</strong> で下書きしました。<br><span class="w">⚠ 今回の見積単価 ¥18,500 は過去中央値 ¥15,040 より23%高いため、警告を付けています。</span><br><span class="s">リコーとの保守契約単価で手配すれば、'+yen((18500-15040)*l.qty)+' 抑えられます。</span>';},
+   quick:[['契約単価に切り替えて'],['カラーのトナーも見ておいて'],['この内容で申請して']]});
+ }},
+ onAlert:{
+  stock:function(){if(line('toner'))return say({html:'ブラックトナーはすでに下書きに入っています。'});return SC.hero.run(null,'複合機からの通知 · 本社3F');},
+  hist:function(){return paperCycle('購買周期');},
+  expiry:function(){return SC.expiry('期限接近 · 防災備蓄');}
+ },
+ prev:{ref:'PR-2610-0193',date:'10/3',lines:[['paper',20,'前回と同じ','10/3 の申請と同数'],['sticky',2,'前回と同じ','10/3 の申請と同数'],['tea',2]],
+  html:'前回の申請（<span style="font-family:var(--mono);font-size:12.5px">PR-2610-0193</span>・10/3）と同じ内容で下書きしました。コピー用紙 20箱、付箋 2箱、来客用緑茶 2ケース。<br><span class="s">来客用緑茶は在庫2・発注点3です。来週は来客予定が多い（Outlook 予定表で12件）ので、3ケースに増やしますか？</span>',
+  quick:[['緑茶は3ケースにして'],['このまま申請して']]},
+ spend:{rows:[['事務用品費',438200,400000],['消耗品費',186500,250000],['会議費',64800,90000],['福利厚生費',92000,120000]],
+  html:'今月の本社は、<strong style="color:var(--red)">事務用品費が予算を10%超過</strong>しています。<br><span class="s">主因は、複合機トナーを保守契約外の単価でスポット購入したこと（3回・計 ¥55,500）です。契約単価にそろえると月に約 ¥10,000 下がります。</span>'},
+ expiry:async function(trigger){
+  await say({trigger:trigger,steps:[['防災備蓄の期限を確認','expiry'],['前回の入れ替え記録を参照','history']],
+   html:'防災備蓄の <strong>保存水 120ケース</strong> が、残り30日で賞味期限を迎えます。',
+   extra:'<table class="tbl"><thead><tr><th>品目</th><th>保管場所</th><th class="n">数量</th><th class="n">期限</th></tr></thead><tbody><tr><td>保存水 2L×6本</td><td>本社 B1 備蓄倉庫</td><td class="n">120ケース</td><td class="n"><span class="tag tg-amber">残り30日</span></td></tr><tr><td colspan="4" class="note">前回（2021年）は期限の1か月前に社員へ配布し、同数を買い替えています。今回も同じ運用を提案します。</td></tr></tbody></table>',
+   quick:[['社員に配布を案内して',function(){return act('社員に配布を案内して',async function(){
+      await say({steps:[['全社チャンネルを特定','directory'],['Teams に投稿','teams']],before:function(){S.flags.exp=1;doneAlert('expiry','保存水：<strong>配布を案内済み</strong>');},
+       html:'Teams の全社チャンネルに配布の案内を投稿しました。<br><span class="s">「防災備蓄の保存水を入れ替えます。'+day(7)+'〜'+day(11)+'、1F受付で1人2本までお持ち帰りください」</span>',quick:[['買い替えの下書きを作って']]});});}],
+    ['買い替えの下書きを作って']]});
+ },
+ intents:[
+  [/買い替え|入れ替え/,function(){return waterReplace();}],
+  [/定期(購入|便|化)|毎月/,function(){return say({steps:[['ルールを追加','rules']],html:'コピー用紙を <strong>毎月1日に20箱</strong> で下書きするルールを追加しました。承認依頼は毎回 '+SC.lo+' に送ります。<br><span class="s">在庫が多い月は、数量を自動で減らします。</span>'});}]
+ ]
+}};
+
+async function paperCycle(trigger){
+  await say({trigger:trigger,steps:[['同一品番の購買を集計','orders'],['在庫を確認','stock']],
+    html:'コピー用紙 A4 は、12か月連続で毎月 <strong>約20箱</strong> 購入しています。今月分はまだ申請がなく、在庫は8箱（発注点20）です。',
+    quick:[['今月分を下書きして',function(){return act('今月分を下書きして',async function(){
+      if(line('paper'))return say({html:'コピー用紙はすでに下書きに入っています。'});
+      await say({steps:[['購買履歴から数量を算出','orders'],['承認ルートを判定','approval']],before:function(){addLine('paper',20);},html:function(){return 'コピー用紙 A4 を <strong>20箱</strong> で下書きしました。総額 <strong>'+yen(totals().tot)+'</strong>（税込）、承認者は '+approver()+' です。';},quick:[['毎月の定期購入にして'],['この内容で申請して']]});});}],
+     ['毎月の定期購入にして']]});
+}
+async function waterReplace(){
+  if(line('water'))return say({html:'保存水の買い替えはすでに下書きに入っています。'});
+  await say({steps:[['入れ替え数量を算出','stock'],['単価を過去中央値と比較','price'],['承認ルートを判定','approval']],before:function(){addLine('water',120);},
+    html:function(){return '保存水 2L×6本を <strong>120ケース</strong>（期限切れ分と同数）で下書きしました。総額 <strong>'+yen(totals().tot)+'</strong>（税込）。<br>5万円以上のため、承認者は規程どおり <strong>'+approver()+'</strong> です。<br><span class="s">納品は配布期間の後、'+day(14)+' を指定しています。</span>';},
+    quick:[['この内容で申請して']]});
+}
+
+/* ========== draft panel ========== */
+var flash=null;
+function renderDraft(){
+  var box=$('lines');
+  if(!S.draft.length){
+    box.innerHTML='<div class="empty"><div class="ei"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg></div><b>まだ下書きはありません</b>Agentに頼むと、根拠つきの下書きがここにできます。</div>';
+  }else{
+    box.innerHTML=S.draft.map(function(l){
+      var it=item(l.id),over=l.price/it.median-1;
+      return '<div class="ln'+(flash===l.id?' new':'')+'" data-id="'+l.id+'"><div class="a"><div style="flex-grow:1;min-width:0"><div class="nm">'+esc(it.name)+'</div><div class="vd">'+it.vendor+' · '+it.code+'</div></div><button class="x" data-del="'+l.id+'" aria-label="削除" title="削除">×</button></div>'+
+       '<div class="why"><span class="r">'+esc(l.reason)+'</span><span style="color:var(--mute)">'+esc(l.sub)+'</span>'+(over>.2?'<span class="tag tg-amber">単価が中央値+'+Math.round(over*100)+'%</span>':'')+'</div>'+
+       '<div class="b"><span class="qty"><button data-q="-1" data-id="'+l.id+'" aria-label="減らす">−</button><span>'+l.qty+'</span><button data-q="1" data-id="'+l.id+'" aria-label="増やす">+</button></span><span class="up">'+it.unit+' × '+yen(l.price)+'</span><span class="st">'+yen(l.price*l.qty)+'</span></div></div>';
+    }).join('');
+    if(flash){var r=box.querySelector('.ln.new');if(r)r.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  }
+  flash=null;
+  var t=totals(),n=S.draft.length;
+  $('sSub').textContent=yen(t.sub);$('sTax').textContent=yen(t.tax);$('sTot').textContent=yen(t.tot);
+  $('dst').textContent=n?n+'品目 · 未申請':'空';
+  $('did').textContent=n?'DRAFT-'+(reqNo+1):'';
+  $('bSubmit').disabled=!n;
+  var b=$('bAppr');b.disabled=!n;
+  b.innerHTML=n?esc(approver())+' <small>'+(S.appr?'手動で指定':(approver()===SC.hi?'5万円以上は部長':'規程どおり'))+'</small><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>':'—';
+  var f=$('fab');f.classList.toggle('hide',!n);f.innerHTML='下書き '+n+'品目 · <b>'+yen(t.tot)+'</b>';
+}
+function addLine(id,qty,reason,sub){
+  var it=item(id),l=line(id);
+  if(l){if(qty!=null)l.qty=qty;}
+  else{l={id:id,qty:qty!=null?qty:it.rec,price:it.price,reason:reason||it.reason,sub:sub||it.sub};S.draft.push(l);}
+  S.last=id;flash=id;renderDraft();return l;
+}
+
+/* ========== chat ========== */
+var stream=$('stream'),msgs=$('msgs');
+function scroll(){msgs.scrollTop=msgs.scrollHeight;}
+function startConv(){if(S.started)return;S.started=true;var h=stream.querySelector('.hello-wrap');if(h)h.remove();renderChips();}
+function userMsg(t){startConv();var d=document.createElement('div');d.className='mu';var b=document.createElement('div');b.textContent=t;d.appendChild(b);stream.appendChild(d);scroll();}
+function shell(trigger){startConv();var d=document.createElement('div');d.className='ma';d.innerHTML='<span class="av">'+ICON_AG+'</span><div class="bd">'+(trigger?'<span class="trig">自動起動 · '+esc(trigger)+'</span>':'')+'</div>';stream.appendChild(d);scroll();return d.querySelector('.bd');}
+async function runSteps(body,list){
+  if(!list||!list.length)return;
+  var w=document.createElement('div');w.className='steps running';
+  w.innerHTML='<div class="ls"></div>';body.appendChild(w);var ls=w.firstChild;
+  for(var i=0;i<list.length;i++){
+    var s=document.createElement('div');s.className='step';s.innerHTML='<span class="spin"></span><span>'+list[i][0]+'</span>';
+    ls.appendChild(s);scroll();await wait(360+Math.random()*300);
+    s.firstChild.outerHTML='<span class="ok">✓</span>';
+  }
+  await wait(150);
+  w.className='steps closed';
+  var b=document.createElement('button');b.type='button';b.className='sum';
+  b.innerHTML='<span class="ok">✓</span>'+list.length+'件のデータを確認しました<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>';
+  b.onclick=function(){w.classList.toggle('closed');w.classList.toggle('open');};
+  w.insertBefore(b,ls);
+}
+async function typeOut(body,html){
+  var b=document.createElement('div');b.className='txt';b.innerHTML='<span class="typing"><i></i><i></i><i></i></span>';body.appendChild(b);scroll();
+  await wait(380);
+  var i=0,out='';
+  while(i<html.length){
+    var c=html[i];
+    if(c==='<'){var j=html.indexOf('>',i);out+=html.slice(i,j+1);i=j+1;continue;}
+    if(c==='&'){var k=html.indexOf(';',i);out+=html.slice(i,k+1);i=k+1;continue;}
+    out+=c;i++;
+    if(i%3===0||i>=html.length){b.innerHTML=out;scroll();await wait(13);}
+  }
+  b.innerHTML=html;scroll();return b;
+}
+function quick(body,list){
+  var q=document.createElement('div');q.className='qa';
+  list.forEach(function(x){var b=document.createElement('button');b.type='button';b.textContent=x[0];
+    b.onclick=function(){if(S.busy)return;q.querySelectorAll('button').forEach(function(z){z.disabled=true;});if(x[1])x[1]();else ask(x[0]);};q.appendChild(b);});
+  body.appendChild(q);scroll();
+}
+async function say(o){
+  var body=shell(o.trigger);
+  await runSteps(body,o.steps);
+  if(o.before)o.before();
+  await typeOut(body,typeof o.html==='function'?o.html():o.html);
+  if(o.extra){var x=document.createElement('div');x.innerHTML=o.extra;var el=x.firstChild;body.appendChild(el);scroll();if(o.wire)o.wire(el);}
+  var qk=typeof o.quick==='function'?o.quick():o.quick;if(qk&&qk.length)quick(body,qk);
+}
+async function run(fn){if(S.busy)return;S.busy=true;$('send').disabled=true;try{await fn();}finally{S.busy=false;$('send').disabled=false;}}
+function ask(t){run(async function(){userMsg(t);await handle(norm(t));});}
+function act(label,fn){run(async function(){userMsg(label);await fn();});}
+
+/* ========== intents ========== */
+function matchItems(t){var r=[];Object.keys(SC.items).forEach(function(k){if(SC.items[k].kw.test(t))r.push(k);});return r;}
+function num(t){var m=t.match(/(?<![第\d])(\d+)\s*(袋|本|箱|個|つ|ケース|セット|冊|双)/)||t.match(/(?<![第\d])(\d+)\s*(に|で)/);if(m)return +m[1];m=t.match(/([一二三四五六七八九十])\s*(袋|本|箱|個|つ|ケース)/);return m?JPN[m[1]]:null;}
+async function handle(t){
+  var items=matchItems(t),n=num(t);
+  if(/リセット|最初から|やり直/.test(t))return resetAll(true);
+  if(/契約(単価|価格)/.test(t))return toContract();
+  if(/まとめて|全部(入れ|追加|下書き)/.test(t))return bulkAdd();
+  if(/(申請|出して|進めて|承認(を)?依頼)/.test(t)&&!/承認者|教えて|期限|在庫/.test(t)&&!(items.length&&!line(items[0])))return submitFlow();
+  if(/承認者|部長|課長|主任/.test(t)){
+    var who=null;SC.approvers.forEach(function(a){if(t.indexOf(a[0].split(' ')[0])>=0)who=a[0];});
+    if(!who&&/部長/.test(t))who=SC.hi;if(!who&&/主任/.test(t))who=SC.approvers[2][0];if(!who&&/課長/.test(t))who=SC.lo;
+    if(who)return setApprover(who,true);
+  }
+  if(items.length&&/(いらない|不要|削除|外して|消して|やめ|キャンセル|取り消)/.test(t))return removeItems(items);
+  var tgt=items.length&&line(items[0])?items[0]:(!items.length&&S.last&&line(S.last)?S.last:null);
+  if(n!=null&&tgt&&/(に(して|変更|増|減)|変えて|へ|でいい|にする|増やして|減らして|で(お願い)?$)/.test(t))return setQty(tgt,n);
+  for(var i=0;i<SC.intents.length;i++)if(SC.intents[i][0].test(t))return SC.intents[i][1]();
+  if(/在庫.*(少|足り|切れ|ない)|少ない|発注点/.test(t)&&!items.length)return lowStock();
+  if(/前回|この前|先月と同じ|いつもと同じ/.test(t)&&!items.length)return previous();
+  if(/使いすぎ|使い過ぎ|予算|支出|コスト|いくら使/.test(t))return spend();
+  if(/期限|使い切|試薬|備蓄|防災/.test(t))return SC.expiry();
+  if(/カラー/.test(t)&&SC.items.tonerc)return addItems(['tonerc'],n);
+  if(items.length)return addItems(items,n);
+  if(/いつもの/.test(t))return lowStock();
+  if(/このまま|今回はいい|大丈夫|結構です/.test(t))return say({html:'承知しました。内容はこのままにしておきます。'});
+  if(/ありがと|助か|thanks/i.test(t))return say({html:'どういたしまして。発注点割れや期限接近を検知したら、またこちらからお知らせします。'});
+  if(/^(こんにちは|はじめまして|hi|hello)|何ができ|できること|使い方|ヘルプ|help/i.test(t))return help();
+  return unknown(t);
+}
+async function help(){
+  await say({html:'購買担当の Agent です。<strong>在庫・購買履歴・期限・予算</strong>を見て、申請の下書きと承認者の指定までを代わりに行います。発注は承認されたときだけです。<br><span class="s">「〇〇が切れそう」「前回と同じもの」「今月の使いすぎは？」のように話しかけてください。</span>',quick:[['在庫が少ないものを教えて'],['今月の使いすぎを教えて']]});
+}
+var STD=[['在庫を確認','stock'],['購買履歴12か月を照合','orders'],['単価を過去中央値と比較','price'],['承認ルートを判定','approval']];
+async function addItems(ids,n){
+  var first=ids[0];
+  if(SC.hero&&first===SC.hero.id&&!line(first))return SC.hero.run(n);
+  if(line(first)&&n!=null)return setQty(first,n);
+  ids=ids.filter(function(id){return !line(id);});
+  if(!ids.length)return say({html:'その品目はすでに下書きに入っています。数量を変えるときは「〇〇を3箱にして」のように伝えてください。'});
+  first=ids[0];var it=item(first);
+  if(it.contract){
+    return say({steps:STD,before:function(){addLine(first,n);},
+      html:function(){var l=line(first);return '<strong>'+it.name+'</strong> を '+l.qty+it.unit+' 追加しました（残り'+it.stock+sunit(it)+'・発注点'+it.rop+sunit(it)+'）。<br><span class="w">⚠ 今回の単価 '+yen(it.price)+' は過去中央値 '+yen(it.median)+' より'+Math.round((it.price/it.median-1)*100)+'%高いため、警告を付けています。</span><br><span class="s">保守契約の単価 '+yen(it.contract)+' で手配すれば、'+yen((it.price-it.contract)*l.qty)+' 抑えられます。</span>';},
+      quick:[['契約単価に切り替えて'],['このままでいい']]});
+  }
+  await say({steps:STD,before:function(){ids.forEach(function(id,i){addLine(id,i===0?n:null);});},
+    html:function(){
+      var lead=it.stock<it.rop?'残り'+it.stock+sunit(it)+'で、発注点'+it.rop+sunit(it)+'を下回っています。':'在庫は'+it.stock+sunit(it)+'で発注点を上回っていますが、ご指示どおり追加しました。';
+      var names=ids.map(function(id){var x=item(id);return '<strong>'+x.name+'</strong>（'+line(id).qty+x.unit+'）';}).join('、');
+      return lead+(ids.length===1&&it.addText?it.addText:names+' を下書きに追加しました。')+'<br>承認者は <strong>'+approver()+'</strong>、総額 <strong>'+yen(totals().tot)+'</strong>（税込）です。';},
+    quick:[['この内容で申請して'],['ほかに在庫が少ないものは？']]});
+}
+async function setQty(id,n){
+  var l=line(id),it=item(id);
+  if(n<=0)return removeItems([id]);
+  var before=approver();l.qty=n;flash=id;S.last=id;renderDraft();var after=approver();
+  await say({steps:[['下書きを更新','draft'],['承認ルートを再判定','approval']],
+    html:'<strong>'+it.name+'</strong> を '+n+it.unit+'に変更しました。総額 <strong>'+yen(totals().tot)+'</strong>（税込）。'+(n>it.rec&&it.reason.indexOf('実績')>=0?'<br><span class="s">平均（'+it.rec+it.unit+'）より多めなので、次の購買周期は少し延びる見込みです。</span>':'')+(before!==after?'<br>総額が5万円'+(after===SC.hi?'以上':'未満')+'になったため、承認者を <strong>'+after+'</strong> に切り替えました。':'')});
+}
+async function removeItems(ids){
+  var names=[];ids.forEach(function(id){var l=line(id);if(l){S.draft.splice(S.draft.indexOf(l),1);names.push(item(id).name);}});
+  renderDraft();
+  if(!names.length)return say({html:'その品目は下書きに入っていません。'});
+  await say({steps:[['下書きを更新','draft']],html:names.join('、')+' を下書きから外しました。'+(S.draft.length?'総額 <strong>'+yen(totals().tot)+'</strong>（税込）です。':'下書きは空になりました。')});
+}
+async function setApprover(who,chat){
+  if(!S.draft.length){if(chat)return say({html:'まだ下書きがありません。承認者は下書きを作るときに指定します。'});return;}
+  S.appr=who;renderDraft();
+  if(chat)await say({steps:[['組織図を照会','directory']],html:'承認者を <strong>'+who+'</strong>（'+dept(who)+'）に変更しました。依頼すると Teams に承認カードが届きます。'});
+  else toast('承認者を '+who+' に変更しました');
+}
+async function toContract(){
+  var ls=S.draft.filter(function(l){var it=item(l.id);return it.contract&&l.price>it.contract;});
+  if(!ls.length)return say({html:'契約単価に切り替えられる品目は、下書きにありません。'});
+  ls.forEach(function(l){var it=item(l.id);l.price=it.contract;l.reason='保守契約の単価';l.sub='年間契約 '+yen(it.contract)+'/'+it.unit;flash=l.id;});
+  renderDraft();
+  await say({steps:[['保守契約を照会（リコー）','contract']],html:'<strong>'+ls.map(function(l){return item(l.id).name;}).join('、')+'</strong> を保守契約の単価 '+yen(item(ls[0].id).contract)+' に切り替えました。警告は外れています。<br>総額 <strong>'+yen(totals().tot)+'</strong>（税込）、承認者は '+approver()+' です。',quick:[['この内容で申請して']]});
+}
+async function lowStock(trigger){
+  var rows=SC.low.map(function(id){var x=item(id),inD=!!line(id);
+    return '<tr><td>'+x.name+'<div style="color:var(--mute);font-size:11px">'+x.vendor+'</div></td><td class="n" style="color:var(--red);font-weight:600">'+x.stock+' / '+x.rop+'</td><td class="n">'+(inD?'<span class="tag tg-green">下書き済</span>':'<button class="mini-btn" data-add="'+id+'">追加</button>')+'</td></tr>';}).join('');
+  await say({trigger:trigger,steps:[['全拠点の在庫を集計','stock'],['発注点と照合','rules']],
+    html:'発注点を下回っている品目が <strong>'+SC.low.length+'件</strong> あります。数量は過去の実績から出しています。',
+    extra:'<table class="tbl"><thead><tr><th>品目</th><th class="n">在庫 / 発注点</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>',
+    wire:function(el){el.querySelectorAll('[data-add]').forEach(function(b){b.onclick=function(){if(S.busy)return;var id=b.dataset.add;b.outerHTML='<span class="tag tg-green">下書き済</span>';act(item(id).name+'を追加して',function(){return addItems([id],null);});};});},
+    quick:[['まとめて下書きに入れて']]});
+}
+async function bulkAdd(){
+  var add=SC.low.filter(function(id){return !line(id);});
+  if(!add.length)return say({html:'発注点を下回っている品目は、すべて下書きに入っています。'});
+  var before=S.draft.length?approver():SC.lo;
+  await say({steps:[['購買履歴から数量を算出','orders'],['単価を過去中央値と比較','price'],['承認ルートを判定','approval']],before:function(){add.forEach(function(id){addLine(id);});},
+    html:function(){var warn=S.draft.filter(function(l){var it=item(l.id);return it.contract&&l.price>it.contract;});
+      return add.length+'品目を下書きに追加しました。総額 <strong>'+yen(totals().tot)+'</strong>（税込）。'+(approver()!==before||approver()===SC.hi?'<br>5万円以上になったため、承認者は規程どおり <strong>'+approver()+'</strong> です。':'')+(warn.length?'<br><span class="w">⚠ '+item(warn[0].id).name+' の単価が過去中央値より23%高くなっています。</span>':'');},
+    quick:function(){var warn=S.draft.some(function(l){var it=item(l.id);return it.contract&&l.price>it.contract;});return warn?[['契約単価に切り替えて'],['この内容で申請して']]:[['この内容で申請して']];}});
+}
+async function previous(){
+  var p=SC.prev;
+  await say({steps:[['前回の申請を検索','requests'],['現在の在庫を確認','stock'],['最新の単価を取得','catalog']],
+    before:function(){p.lines.forEach(function(x){addLine(x[0],x[1],x[2],x[3]);});},html:p.html,quick:p.quick});
+}
+async function spend(){
+  var h=SC.spend.rows.map(function(r){var p=r[1]/r[2];return '<tr><td>'+r[0]+'</td><td class="n">'+yen(r[1])+'</td><td class="n" style="color:var(--mute)">'+yen(r[2])+'</td><td><span class="bar"><b class="'+(p>1?'over':'')+'" style="width:'+Math.min(100,p*100)+'%"></b></span> <span style="font-size:11.5px;'+(p>1?'color:var(--red);font-weight:600':'color:var(--sub)')+'">'+Math.round(p*100)+'%</span></td></tr>';}).join('');
+  await say({steps:[['今月の購買明細を集計','ledger'],['部門予算と照合（勘定奉行）','budget']],html:SC.spend.html,
+    extra:'<table class="tbl"><thead><tr><th>勘定科目</th><th class="n">実績</th><th class="n">予算</th><th>予算比</th></tr></thead><tbody>'+h+'</tbody></table>',
+    quick:[['予算を超える申請には注記を付けて',function(){return act('予算を超える申請には注記を付けて',function(){return say({steps:[['ルールを追加','rules']],html:'設定しました。今月の予算残を超える下書きには、承認者向けに「予算超過」の注記を付けます。'});});}]]});
+}
+async function unknown(t){
+  await say({steps:[['購買履歴を検索','orders'],['カタログを検索','catalog']],
+    html:'「'+esc(t.slice(0,30))+'」に当てはまる購買履歴が見つかりませんでした。<br>履歴のない品目は推測で下書きしない決まりなので、カタログから選んでください。<span class="s">選んだ品目は、次回から提案の根拠に使います。</span>',
+    quick:[['実績のある品目から選ぶ',function(){openCat();}]]});
+}
+
+/* ========== submit ========== */
+async function submitFlow(){
+  if(!S.draft.length)return say({html:'下書きがまだ空です。「在庫が少ないものを教えて」と話しかけると、必要なものから下書きを作ります。'});
+  var warn=S.draft.filter(function(l){return l.price/item(l.id).median-1>.2;});
+  await say({steps:[['購買規程と照合','policy'],['予算残を確認','budget'],['申請を作成','request']],
+    html:warn.length?'申請を作成します。<span class="w">単価警告が'+warn.length+'件あるため、承認者向けに注記を付けました。</span>':'規程・予算とも問題ありません。申請を作成して、<strong>'+approver()+'</strong> に承認を依頼します。'});
+  await openDone();
+}
+var VC={'モノタロウ':'MO','アスクル':'AS','リコー':'RC'};
+async function openDone(){
+  reqNo++;var no='PR-2611-0'+reqNo,t=totals(),ap=approver(),vendors=[],names=[];
+  S.draft.forEach(function(l){var v=item(l.id).vendor;if(vendors.indexOf(v)<0)vendors.push(v);names.push(item(l.id).name.split(' ')[0]);});
+  var heroIn=SC.hero&&!!line(SC.hero.id);
+  $('doneT').textContent='承認を依頼しました';
+  $('doneL').innerHTML='<span style="font-family:var(--mono)">'+no+'</span> · '+S.draft.length+'品目 · 総額 <strong>'+yen(t.tot)+'</strong>（税込）';
+  var st=[
+    ['申請を作成しました','申請者：'+SC.user+' · kintone の購買申請アプリにも同期'],
+    [ap+' に承認を依頼しました','<div class="teams"><b>1Approval</b> · 承認依頼<br>'+no+'　'+names.join('、')+'　<b>'+yen(t.tot)+'</b><div class="tbs"><span>承認</span><span class="g">差し戻し</span><span class="g">詳細</span></div></div>'],
+    [ap+' が承認しました','Teams から承認 · '+hhmm()],
+    [vendors.join('・')+' へ発注しました','注文番号 '+vendors.map(function(v,i){return (VC[v]||'OD')+'-'+(83021+i*17);}).join(' / ')],
+    ['納品予定 '+day(3),SC.site+' · 入荷したら検収のやることに出します']
+  ];
+  $('tl').innerHTML=st.map(function(s){return '<div class="it"><div class="dt"><b>✓</b><s></s></div><div class="c">'+s[0]+'<small>'+s[1]+'</small></div></div>';}).join('');
+  $('mDone').classList.add('on');
+  openDone.pending={no:no,ap:ap,tot:t.tot};
+  S.draft=[];S.appr=null;renderDraft();
+  var its=$('tl').querySelectorAll('.it');
+  for(var i=0;i<its.length;i++){
+    if(i===2){its[i].classList.add('wait');its[i].querySelector('b').textContent='';$('doneT').textContent='承認を待っています…';await wait(2600);its[i].classList.remove('wait');its[i].querySelector('b').textContent='✓';}
+    its[i].classList.add('on');await wait(i===2?500:650);
+  }
+  $('doneT').textContent='承認され、発注しました';
+  if(heroIn)doneAlert('stock',item(SC.hero.id).name.split(' ')[0]+'：<strong>発注済み</strong> · 納品 '+day(3));
+}
+$('doneClose').onclick=function(){$('mDone').classList.remove('on');var p=openDone.pending;if(!p)return;openDone.pending=null;
+  (function go(){if(S.busy)return setTimeout(go,300);run(function(){return say({html:'<span style="font-family:var(--mono);font-size:12.5px">'+p.no+'</span> は '+p.ap+' に承認され、発注まで完了しました（'+yen(p.tot)+'）。<br><span class="s">入荷したら検収の「やること」に出します。発注点も入荷に合わせて更新します。</span>',quick:[['在庫が少ないものを教えて'],['今月の使いすぎを教えて']]});});})();};
+
+/* ========== alerts / chips / welcome ========== */
+function renderAlerts(){
+  $('alerts').innerHTML=SC.alerts.map(function(a){return '<button class="al" data-k="'+a.k+'"><span class="dot" style="background:'+a.c+'"></span><span><div class="k">'+a.t+'</div><div class="v" data-v>'+a.v+'</div></span></button>';}).join('');
+}
+function doneAlert(k,html){var b=$('alerts').querySelector('[data-k="'+k+'"]');if(!b)return;b.classList.add('done');b.querySelector('[data-v]').innerHTML=html;}
+$('alerts').addEventListener('click',function(e){var b=e.target.closest('.al');if(!b||S.busy||b.classList.contains('done'))return;var f=SC.onAlert[b.dataset.k];run(function(){return f();});});
+function renderChips(){$('chips').innerHTML=S.started?SC.chips.map(function(c){return '<button type="button">'+c+'</button>';}).join(''):'';}
+$('chips').addEventListener('click',function(e){var b=e.target.closest('button');if(b&&!S.busy)ask(b.textContent);});
+var SG_IC='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+function welcome(){
+  stream.innerHTML='<div class="hello-wrap"><div class="hello"><div class="orb">'+ICON_AG.replace('14','20').replace('14','20')+'</div><h1>'+hello()+'、'+SC.user.split(' ')[0]+'さん</h1><p>'+SC.sub+'<br>何を用意しましょうか。下書きと承認者の指定まで済ませます。</p></div>'+
+   '<div class="sg">'+SC.sugs.map(function(s){return '<button type="button">'+SG_IC+'<span>'+s+'</span></button>';}).join('')+'</div></div>';
+  stream.querySelectorAll('.sg button').forEach(function(b){b.onclick=function(){if(!S.busy)ask(b.textContent);};});
+}
+
+/* ========== header / menu / modals ========== */
+var RULES=[['発注点割れ','在庫が発注点を下回ったら、下書きを作って担当者に知らせる',true],['期限接近','使用期限まで30日を切ったら、先に使う指示や入れ替えを提案する',true],['購買周期','いつもの周期が来たら、前回と同じ内容を提案する',false],['単価の上昇','中央値+20%を超える見積が来たら知らせる',false]];
+var SCOPE=[['購買履歴（12か月）','モノタロウ・アスクル・リコー・楽楽精算の明細',true],['在庫（リアルタイム）','全拠点の在庫と発注点、複合機の消耗品残量',true],['使用期限','期限管理の対象品目と防災備蓄',true],['予算','勘定科目 × 部門の月次予算（勘定奉行）',true],['kintone 申請アプリ','購買目的・納入先の過去の入力',true],['他部署の購買履歴','同じ品目の他部署での単価・頻度',false]];
+function toggles(list){return list.map(function(r){return '<div class="trow"><div class="x2">'+r[0]+'<small>'+r[1]+'</small></div><label class="sw"><input type="checkbox"'+(r[2]?' checked':'')+'><i></i></label></div>';}).join('');}
+$('tRules').innerHTML=toggles(RULES);$('tScope').innerHTML=toggles(SCOPE);
+document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){document.querySelectorAll('.tabs button').forEach(function(x){x.classList.toggle('on',x===b);});$('tRules').style.display=b.dataset.tab==='rules'?'':'none';$('tScope').style.display=b.dataset.tab==='scope'?'':'none';};});
+$('bSet').onclick=function(){$('mSet').classList.add('on');};
+document.querySelectorAll('.ov').forEach(function(o){o.addEventListener('click',function(e){
+  if(o.id==='mDone')return;
+  var c=e.target.closest('[data-close]');
+  if(e.target===o||c){if(c&&c.hasAttribute('data-save'))toast('設定を保存しました');o.classList.remove('on');}
+});});
+function openCat(){
+  $('catList').innerHTML=Object.keys(SC.items).map(function(id){var x=SC.items[id],inD=!!line(id);return '<div class="cat"><div class="x2">'+x.name+'<small>'+x.vendor+' · '+yen(x.price)+'/'+x.unit+' · 在庫 '+x.stock+'</small></div>'+(inD?'<span class="tag tg-green">下書き済</span>':'<button class="mini-btn" data-cadd="'+id+'">追加</button>')+'</div>';}).join('');
+  $('mCat').classList.add('on');
+}
+$('catList').addEventListener('click',function(e){var b=e.target.closest('[data-cadd]');if(!b)return;var id=b.dataset.cadd;addLine(id,null,'手動で追加','カタログから選択');b.outerHTML='<span class="tag tg-green">下書き済</span>';toast(item(id).name+' を追加しました');});
+$('bAdd').onclick=openCat;
+function renderMenu(){
+  $('menu').innerHTML='<div class="who"><b>'+SC.user+'</b><span>'+SC.company+' · '+SC.role+'</span></div><hr><div class="hd">デモシナリオ</div>'+
+   Object.keys(SCN).map(function(k){return '<button data-s="'+k+'"><span class="ck">'+(SC.key===k?'✓':'')+'</span>'+SCN[k].label+'</button>';}).join('')+
+   '<hr><button data-reset><span class="ck"></span>会話をリセット<small>Esc ×2</small></button>';
+}
+$('ava').onclick=function(e){e.stopPropagation();$('menu').classList.toggle('on');};
+$('menu').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;$('menu').classList.remove('on');
+  if(b.dataset.s){setScenario(b.dataset.s);toast(SCN[b.dataset.s].label+' に切り替えました');}
+  else if(b.hasAttribute('data-reset'))resetAll(true);});
+$('bAppr').onclick=function(e){e.stopPropagation();
+  $('pop').innerHTML='<div class="hd">承認者を選ぶ</div><button data-ap="auto">規程に従う<small>5万円以上は部長</small></button>'+SC.approvers.map(function(a){return '<button data-ap="'+a[0]+'">'+a[0]+'<small>'+a[1]+'</small></button>';}).join('');
+  $('pop').classList.toggle('on');};
+$('pop').addEventListener('click',function(e){var b=e.target.closest('[data-ap]');if(!b)return;$('pop').classList.remove('on');
+  if(b.dataset.ap==='auto'){S.appr=null;renderDraft();toast('規程どおり '+approver()+' を指定しました');}else setApprover(b.dataset.ap,false);});
+document.addEventListener('click',function(e){if(!e.target.closest('#pop'))$('pop').classList.remove('on');if(!e.target.closest('#menu'))$('menu').classList.remove('on');});
+$('lines').addEventListener('click',function(e){var q=e.target.closest('[data-q]'),d=e.target.closest('[data-del]');
+  if(q){var l=line(q.dataset.id);l.qty=Math.max(1,l.qty+(+q.dataset.q));renderDraft();}
+  if(d){S.draft.splice(S.draft.indexOf(line(d.dataset.del)),1);renderDraft();}});
+$('bSubmit').onclick=function(){if(S.draft.length)run(submitFlow);};
+$('fab').onclick=function(){$('panel').scrollIntoView({behavior:'smooth'});};
+
+/* ========== input ========== */
+$('form').addEventListener('submit',function(e){e.preventDefault();var v=$('q').value.trim();if(!v||S.busy)return;$('q').value='';ask(v);});
+$('q').addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.isComposing||e.keyCode===229))e.preventDefault();});
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+$('mic').onclick=function(){
+  if(!SR){toast('このブラウザは音声入力に対応していません（Chrome / Edge 推奨）');return;}
+  var r=new SR(),m=$('mic');r.lang='ja-JP';r.interimResults=true;m.classList.add('rec');
+  r.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;$('q').value=t;
+    if(e.results[e.results.length-1].isFinal){m.classList.remove('rec');var v=$('q').value.trim();$('q').value='';if(v)ask(v);}};
+  r.onerror=r.onend=function(){m.classList.remove('rec');};r.start();
+};
+var lastEsc=0;
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  var open=document.querySelector('.ov.on:not(#mDone)');if(open){open.classList.remove('on');return;}
+  var now=Date.now();if(now-lastEsc<500)resetAll(true);lastEsc=now;
+});
+
+/* ========== boot ========== */
+function resetAll(notify){
+  S=fresh();document.querySelectorAll('.ov').forEach(function(o){o.classList.remove('on');});openDone.pending=null;
+  $('ava').textContent=SC.ini;$('wsName').textContent=SC.company+' · '+SC.place;$('kvSite').textContent=SC.site;$('kvAcc').textContent=SC.account;
+  $('q').placeholder='Agentに頼む…　例：'+SC.sugs[0];
+  renderAlerts();renderMenu();renderDraft();welcome();renderChips();
+  if(notify)toast('最初の状態に戻しました');
+}
+function setScenario(k){SC=SCN[k]||SCN.factory;store.set('ap-scn',SC.key);resetAll(false);}
+var qs=new URLSearchParams(location.search).get('s');
+setScenario(qs==='b'||qs==='office'?'office':qs==='a'||qs==='factory'?'factory':(store.get('ap-scn')||'factory'));
+})();
+</script>
+</body>
+</html>
