@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>デモシナリオシート | Agent Purchase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#12141C;--sub:#5F6578;--line:#E3E6EE;--soft:#F5F6FA;--accent:#3552D8;--amber:#9A6700;--green:#1D7D4F;--bg:#F6F7FB}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;font-size:13.5px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.page{max-width:900px;margin:0 auto;padding:40px 16px 80px}
+.sheet{background:#fff;border:1px solid var(--line);border-radius:14px;padding:36px 40px;margin-bottom:20px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.top img{height:20px}
+.top .t{font-size:12px;color:var(--sub);border-left:1px solid var(--line);padding-left:12px}
+.top button{margin-left:auto;font:inherit;font-size:12.5px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer}
+h1{font-size:26px;letter-spacing:-.02em;margin:18px 0 4px}
+h2{font-size:18px;margin:0 0 4px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+h3{font-size:14px;margin:22px 0 8px}
+.lead{color:var(--sub);margin:0}
+.badge{font-size:11.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,#3552D8,#7048E8);border-radius:6px;padding:2px 8px}
+.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+.meta div{background:var(--soft);border-radius:10px;padding:10px 14px}
+.meta b{display:block;font-size:11px;color:var(--sub);font-weight:600}
+.meta span{font-size:13px}
+.msg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.msg div{border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.msg b{display:block;font-size:13.5px;margin-bottom:2px}
+.msg span{font-size:12.5px;color:var(--sub)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;font-size:11px;color:var(--sub);font-weight:600;background:var(--soft);padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
+td:first-child{width:28px;font-weight:700;color:var(--accent)}
+td.op{width:30%}
+td.re{width:28%;color:var(--sub)}
+.say{display:inline-block;background:#EEF1FD;color:#1E2B66;border-radius:6px;padding:1px 7px;margin:1px 0;font-weight:500}
+.click{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:0 7px;background:#fff;font-weight:500}
+.talk{color:var(--ink)}
+.talk:before{content:"🗣 ";}
+.pt{display:block;margin-top:4px;font-size:11.5px;color:var(--amber);font-weight:600}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.box{border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.box b{font-size:12.5px}
+.box ul{margin:6px 0 0;padding-left:18px}
+.box li{margin:2px 0}
+.qa dt{font-weight:600;margin-top:10px}
+.qa dd{margin:2px 0 0;color:var(--sub)}
+.note{font-size:12px;color:var(--sub);background:var(--soft);border-radius:8px;padding:10px 12px;margin-top:14px}
+a{color:var(--accent)}
+code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--soft);padding:1px 5px;border-radius:4px}
+@media (max-width:700px){.sheet{padding:24px 18px}.meta,.msg,.cols{grid-template-columns:1fr}td.op,td.re{width:auto}table,tbody,tr,td{display:block}thead{display:none}tr{border-bottom:1px solid var(--line);padding:8px 0}td{border:0;padding:4px 0}}
+@media print{
+ @page{size:A4;margin:12mm}
+ body{background:#fff;font-size:11.5px}
+ .page{padding:0;max-width:none}
+ .sheet{border:0;padding:0;margin:0;break-after:page}
+ .sheet:last-child{break-after:auto}
+ .top button{display:none}
+ tr{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="sheet">
+ <div class="top"><img src="../assets/1approval_logo.webp" alt="1Approval"><span class="t">展示会デモ用 · 社内資料</span><button onclick="print()">印刷 / PDF保存</button></div>
+ <h1>Agent Purchase デモシナリオシート</h1>
+ <p class="lead">購買担当の代わりに「何を・いくつ・誰の承認で」買うかを先回りして用意する Agent のデモ手順です。シナリオは2本、それぞれ約3〜4分です。</p>
+ <div class="meta">
+  <div><b>デモURL</b><span><a href="./?s=a">シナリオA</a> ／ <a href="./?s=b">シナリオB</a></span></div>
+  <div><b>所要時間</b><span>A・B 各3〜4分（ショート版は1分半）</span></div>
+  <div><b>推奨環境</b><span>Chrome / Edge · 全画面（F11）</span></div>
+ </div>
+
+ <h3>伝えたいこと（3つ）</h3>
+ <div class="msg">
+  <div><b>① 頼まれる前に気づく</b><span>在庫・購買周期・期限・複合機の残量を見て、Agent が先に声をかける</span></div>
+  <div><b>② 根拠つきの下書き</b><span>数量は過去の実績から。単価の異常、予算、承認ルートまで判定済み</span></div>
+  <div><b>③ 発注は人が決める</b><span>Agent が作るのは下書きと承認者の指定まで。承認されて初めて発注</span></div>
+ </div>
+
+ <h3>事前準備・操作のコツ</h3>
+ <div class="cols">
+  <div class="box"><b>開始前</b><ul>
+   <li>URL末尾 <code>?s=a</code>（工場）／<code>?s=b</code>（本社オフィス）で開くとシナリオを選べます</li>
+   <li>画面右上のアバター → 「デモシナリオ」からも切り替え可能</li>
+   <li>音声入力を使うときは、マイクの許可を事前に済ませる</li>
+  </ul></div>
+  <div class="box"><b>来場者が替わるたび</b><ul>
+   <li><b>Esc を2回</b>で最初の状態に戻ります（アバター →「会話をリセット」でも可）</li>
+   <li>入力は自由文でOK。画面下の候補ボタンを押すだけでも進みます</li>
+   <li>返答中は次の入力を受け付けません。返答が終わってから操作</li>
+  </ul></div>
+ </div>
+</section>
+
+<section class="sheet">
+ <h2><span class="badge">A</span>工場（製造業）— 消耗品の補充を任せる</h2>
+ <p class="lead">登場人物：田中 恵（製造管理課・購買担当）／ 承認者：山口 課長（5万円未満）・佐藤 部長（5万円以上）</p>
+ <h3>本編（約4分）</h3>
+ <table>
+  <thead><tr><th>#</th><th>操作</th><th>画面の反応</th><th>トーク例</th></tr></thead>
+  <tbody>
+   <tr><td>1</td><td class="op">開いた状態で上部の「Agentが検知しています」を指す</td><td class="re">在庫・購買周期・期限の3件が出ている</td><td class="talk">「担当者が画面を開いた時点で、Agent がもう“困りごと”を見つけています。」</td></tr>
+   <tr><td>2</td><td class="op">入力：<span class="say">第3工場の手袋が切れそう。いつものを頼んでおいて。</span></td><td class="re">在庫・履歴・単価・承認ルートを確認 → 右に下書き（5袋）</td><td class="talk">「“いつもの”で通じます。過去8回の平均と今の在庫から5袋。他拠点の在庫まで見て、融通できないことも確認しています。」<span class="pt">▶ ポイント②：数量に根拠がある</span></td></tr>
+   <tr><td>3</td><td class="op">候補ボタン <span class="click">潤滑スプレーも切れそうだった気がする</span></td><td class="re">スプレー1箱が追加、総額 ¥24,376</td><td class="talk">「うろ覚えでも大丈夫。実際の在庫で発注点割れを確認してから足しています。」</td></tr>
+   <tr><td>4</td><td class="op">入力：<span class="say">在庫が少ないものを教えて</span> → <span class="click">まとめて下書きに入れて</span></td><td class="re">4品目に。総額5万円超で承認者が<b>佐藤 部長</b>に自動で切替。トナーに<b>単価警告</b></td><td class="talk">「金額が5万円を超えたので、規程どおり部長承認に切り替わりました。それと、トナーの単価がいつもより23%高いと警告しています。」</td></tr>
+   <tr><td>5</td><td class="op"><span class="click">契約単価に切り替えて</span></td><td class="re">リコーの保守契約単価 ¥15,040 に変更、警告が消える</td><td class="talk">「保守契約の単価があるのに、スポットで高く買ってしまう——よくあるムダを止めます。」</td></tr>
+   <tr><td>6</td><td class="op">右下 <span class="click">承認を依頼する</span></td><td class="re">申請作成 → Teams に承認カード → 承認 → 各社へ発注 → 納品予定</td><td class="talk">「承認者には Teams でカードが届き、承認された瞬間に発注されます。Agent が勝手に発注することはありません。」<span class="pt">▶ ポイント③：発注は人の承認後</span></td></tr>
+   <tr><td>7</td><td class="op">上部の「期限 · 研究棟」カードを押す → <span class="click">古いロットから使うよう指示して</span></td><td class="re">古いロットの先行使用を Teams で3名に通知</td><td class="talk">「買うだけでなく、“買わずに済ませる”提案もします。期限切れの廃棄を減らせます。」<span class="pt">▶ ポイント①：先回り</span></td></tr>
+  </tbody>
+ </table>
+ <h3>ショート版（1分半）</h3>
+ <p style="margin:0">#2 → #4 → #6 だけで「頼む → 規程どおりの承認者 → 承認されて発注」まで見せられます。</p>
+</section>
+
+<section class="sheet">
+ <h2><span class="badge">B</span>本社オフィス（総務）— 複合機と備品をまとめて任せる</h2>
+ <p class="lead">登場人物：佐々木 彩（総務課・購買担当）／ 承認者：中村 課長（5万円未満）・木村 部長（5万円以上）<br>リコー様のブースでは、<b>複合機の残量通知から購買が始まる</b>流れを中心に見せます。</p>
+ <h3>本編（約4分）</h3>
+ <table>
+  <thead><tr><th>#</th><th>操作</th><th>画面の反応</th><th>トーク例</th></tr></thead>
+  <tbody>
+   <tr><td>1</td><td class="op">上部の「複合機 · 本社3F」カードを押す</td><td class="re">「自動起動」表示。複合機の残量を取得 → ブラックトナー2本の下書き＋<b>単価警告</b></td><td class="talk">「複合機自身が“残り1本”を知らせてきます。人が気づく前に、印刷量から5営業日で切れると読んで下書き済みです。」<span class="pt">▶ ポイント①：頼まれる前に気づく</span></td></tr>
+   <tr><td>2</td><td class="op">入力：<span class="say">契約単価に切り替えて</span></td><td class="re">保守契約単価に変更、警告が消える</td><td class="talk">「今回の見積は中央値より23%高い。保守契約の単価に寄せて、2本で約7,000円抑えます。」</td></tr>
+   <tr><td>3</td><td class="op">#1の候補ボタン <span class="click">カラーのトナーも見ておいて</span>（または同じ文を入力）</td><td class="re">シアン1本を追加。総額5万円超で<b>木村 部長</b>承認に自動切替</td><td class="talk">「ついでの一言も拾います。金額が変われば承認ルートも自動で変わります。」</td></tr>
+   <tr><td>4</td><td class="op">上部の「購買周期」カード → <span class="click">今月分を下書きして</span> → <span class="click">毎月の定期購入にして</span></td><td class="re">コピー用紙20箱を追加。毎月1日に下書きするルールを作成</td><td class="talk">「毎月同じものを買っているなら、それ自体を Agent に任せられます。」</td></tr>
+   <tr><td>5</td><td class="op">上部の「期限 · 防災備蓄」カード → <span class="click">社員に配布を案内して</span> → <span class="click">買い替えの下書きを作って</span></td><td class="re">全社チャンネルへ配布案内 → 保存水120ケースの買い替え下書き</td><td class="talk">「防災備蓄の入れ替えのような“年に一度で誰も覚えていない仕事”も、前回の記録から段取りします。」</td></tr>
+   <tr><td>6</td><td class="op">右下 <span class="click">承認を依頼する</span></td><td class="re">Teams 承認 → リコー・アスクルへ発注 → 納品予定</td><td class="talk">「複数の購買先にまたがっても、承認は1回。承認後はそれぞれに自動で発注されます。」<span class="pt">▶ ポイント③</span></td></tr>
+  </tbody>
+ </table>
+ <h3>ショート版（1分半）</h3>
+ <p style="margin:0">#1 → #2 → #6 で「複合機が知らせる → 単価のムダを止める → 承認されて発注」。</p>
+</section>
+
+<section class="sheet">
+ <h2>アドリブ対応・Q&amp;A</h2>
+ <h3>来場者に触ってもらうときの入力例</h3>
+ <div class="cols">
+  <div class="box"><b>数量・承認者を直す</b><ul>
+   <li><span class="say">手袋は8袋にして</span>（A）／<span class="say">緑茶は3ケースにして</span>（B）</li>
+   <li><span class="say">承認者を鈴木主任に</span>（A）／<span class="say">承認者を小林主任に</span>（B）</li>
+   <li><span class="say">ウエスはいらない</span> などで品目を外す</li>
+   <li>右の下書きの ＋ / − / × でも直せます</li>
+  </ul></div>
+  <div class="box"><b>Agent に聞く</b><ul>
+   <li><span class="say">前回と同じものを頼む</span></li>
+   <li><span class="say">今月の使いすぎを教えて</span>（予算比のグラフ）</li>
+   <li><span class="say">期限が近いものを使い切りたい</span>（A）／<span class="say">防災備蓄の期限を確認して</span>（B）</li>
+   <li>履歴のない品目（例：<span class="say">椅子が欲しい</span>）は、推測せずカタログへ案内 ＝ 安全設計の説明に使えます</li>
+  </ul></div>
+ </div>
+ <h3>よくある質問</h3>
+ <dl class="qa">
+  <dt>Q. 勝手に発注されませんか？</dt><dd>されません。Agent が作るのは申請の下書きと承認者の指定までで、発注は承認者が承認したときだけ行われます（画面下部にも常に表示）。</dd>
+  <dt>Q. 何を根拠に提案しているの？</dt><dd>右上の歯車「Agentの設定」→「参照データ」で、購買履歴・在庫・期限・予算・kintone 申請など、参照する範囲を見せられます。オフにした範囲は参照しません。</dd>
+  <dt>Q. いつ Agent から話しかけてくるの？</dt><dd>同じ設定画面の「自動起動」タブ。発注点割れ・期限接近などの条件を選べます。</dd>
+  <dt>Q. 普段使っているツールから使える？</dt><dd>承認依頼は Teams のカードで届く流れをデモで見せています。対応ツールや連携範囲の詳細は、営業担当から説明します。</dd>
+  <dt>Q. 本物のデータで動いているの？</dt><dd>展示用のサンプルデータで動作を再現したデモです。社名・人物・数値はすべて架空です。</dd>
+ </dl>
+ <h3>困ったとき</h3>
+ <div class="cols">
+  <div class="box"><b>画面がおかしい・途中で止まった</b><ul><li>Esc を2回でリセット。だめならページを再読み込み</li></ul></div>
+  <div class="box"><b>音声入力が反応しない</b><ul><li>Chrome / Edge 以外は非対応。キーボード入力か候補ボタンで進める</li></ul></div>
+ </div>
+ <div class="note">本デモの会話はすべてブラウザ内で動き、外部のAIサービスには接続していません。想定外の入力には「履歴が見つからないのでカタログから選んでください」と返します。ページを一度開けば、その後は会場の回線が不安定でも動作します。</div>
+</section>
+
+</div>
+</body>
+</html>
