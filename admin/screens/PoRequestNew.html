@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>施設予約の申請｜Agent Purchase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,"Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;background:#F4F6FB;color:#151823}
+a{color:#2F55D4}
+.shell{width:1440px;height:900px;display:flex;flex-direction:column;background:#F4F6FB;position:relative;overflow:hidden}
+header.app{color:#EEF1F8;flex-shrink:0;height:68px;padding:0 26px;background:#0D1018;border-bottom:1px solid #1E2433;display:flex;align-items:center;gap:16px}
+header.app .logo{background:#fff;border-radius:6px;padding:5px 8px;display:inline-flex}
+header.app .logo img{height:17px;display:block}
+header.app .sep{width:1px;height:20px;background:#343B4E}
+header.app .pn{font-size:14px;font-weight:700}
+header.app .beta{font-size:10px;font-weight:700;color:#fff;background:linear-gradient(135deg,#4F7BFF,#9B6BFF);border-radius:999px;padding:3px 8px;letter-spacing:.04em}
+header.app nav{display:flex;gap:2px;margin-left:18px}
+header.app nav a{padding:8px 15px;color:#9AA3B8;text-decoration:none;font-size:13px;border-radius:8px;border:1px solid transparent}
+header.app nav a.on{background:#1B2030;color:#fff;border-color:#3E465C;font-weight:600}
+header.app .r{margin-left:auto;display:flex;align-items:center;gap:16px}
+header.app .url{font-size:11px;color:#7D8699;font-family:ui-monospace,Menlo,monospace}
+header.app .url b{color:#9AA3B8;font-weight:400}
+header.app .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#4F7BFF,#9B6BFF);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+main{flex-grow:1;padding:22px 26px;overflow:hidden;position:relative}
+.ttl{display:flex;align-items:baseline;gap:13px}
+.ttl h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.02em}
+.ttl .sub{font-size:12px;color:#59617A}
+.ttl .acts{margin-left:auto;display:flex;gap:8px;align-items:center}
+.cols{display:flex;gap:16px;margin-top:14px;align-items:flex-start}
+.colm{flex-grow:1;min-width:0;display:flex;flex-direction:column;gap:12px}
+.cols aside{width:372px;flex-shrink:0;display:flex;flex-direction:column;gap:12px}
+.card{background:#fff;border:1px solid #E2E6F0;border-radius:12px;box-shadow:0 1px 2px rgba(19,24,45,.05),0 1px 3px rgba(19,24,45,.05);padding:18px}
+.card h2{margin:0;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.card h2 .x{margin-left:auto;font-weight:400;font-size:11px;color:#59617A}
+.btn{font-family:inherit;font-size:13px;font-weight:500;color:#151823;background:#F2F4FA;border:1px solid #C6CCDC;border-radius:9px;padding:9px 15px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}
+.btn.p{font-weight:600;color:#fff;background:linear-gradient(135deg,#2F55D4,#6E43D6);border:none;box-shadow:0 6px 18px rgba(47,85,212,.22)}
+.btn.d{color:#B42318;background:#fff;border-color:#F1C4BF}
+.btn.off{opacity:.42;pointer-events:none;box-shadow:none}
+.btn.s{font-size:12px;padding:6px 11px}
+.kv{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #EDF0F6;font-size:13px;line-height:1.6}
+.kv:last-child{border-bottom:none}
+.kv>span:first-child{width:104px;flex-shrink:0;font-size:11px;color:#59617A;padding-top:2px}
+.mut{color:#59617A;font-size:11px}
+.chip{font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.c-gray{color:#59617A;background:#EEF1F7}
+.c-blue{color:#2F55D4;background:rgba(47,85,212,.10)}
+.c-green{color:#067A57;background:rgba(6,122,87,.10)}
+.c-amber{color:#9A5B00;background:rgba(217,119,6,.13)}
+.c-red{color:#B42318;background:rgba(180,35,24,.09)}
+.c-violet{color:#6E43D6;background:rgba(110,67,214,.10)}
+.note{padding:11px 13px;border-radius:9px;font-size:12px;line-height:1.75}
+.n-blue{background:rgba(47,85,212,.07);border:1px solid rgba(47,85,212,.20);color:#23409E}
+.n-amber{background:rgba(217,119,6,.08);border:1px solid rgba(217,119,6,.28);color:#8A4B00}
+.n-red{background:rgba(180,35,24,.06);border:1px solid rgba(180,35,24,.22);color:#9A1D13}
+.n-green{background:rgba(6,122,87,.07);border:1px solid rgba(6,122,87,.22);color:#065F46}
+.n-gray{background:#F6F7FB;border:1px solid #E2E6F0;color:#3B4257}
+.new{outline:2px dashed #E8A400;outline-offset:3px;border-radius:10px;position:relative}
+.new::after{content:"PunchOut で追加";position:absolute;top:-11px;right:10px;font-size:10px;font-weight:700;color:#7A5300;background:#FFE7A3;border-radius:999px;padding:2px 8px}
+.new.nb::after{display:none}
+/* facility booking card (shaped like the trip booking card) */
+.fac{border:1px solid #E2E6F0;border-radius:12px;padding:15px 16px;display:flex;gap:14px;align-items:flex-start;background:#fff}
+.fac .ic{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#E9EEFF,#F1EAFF);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fac .bd{flex-grow:1;min-width:0}
+.fac .nm{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fac .src{font-size:10px;font-weight:700;color:#6E43D6;border:1px solid rgba(110,67,214,.35);border-radius:4px;padding:1px 6px}
+.fac .ln{font-size:12px;color:#3B4257;margin-top:5px;line-height:1.7}
+.fac .l2{font-size:12px;color:#59617A;margin-top:3px;font-family:ui-monospace,Menlo,monospace}
+.fac .am{text-align:right;flex-shrink:0}
+.fac .am b{font-size:20px;letter-spacing:-.02em;display:block}
+.fac .am span{font-size:11px;color:#59617A}
+.fac .ft{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;align-items:center}
+.zero b{color:#9AA3B8}
+.tl .st{display:flex;gap:11px;align-items:flex-start;padding-bottom:13px;border-left:1px solid #E2E6F0;margin-left:11px;padding-left:16px;position:relative}
+.tl .st:last-child{border-left-color:transparent}
+.tl .dot{position:absolute;left:-11px;top:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #C6CCDC}
+.tl .dot.ok{background:linear-gradient(135deg,#4F7BFF,#9B6BFF);border:none}
+.tl .dot.wait{border:2px solid #D97706}
+.tl .dot.ng{background:#B42318;border:none}
+.tl .t{font-size:13px;font-weight:500}
+.tl .d{display:block;font-size:11px;color:#59617A;margin-top:3px;line-height:1.7}
+.tl .cx{font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#6E43D6;background:rgba(110,67,214,.08);border-radius:4px;padding:1px 5px;margin-left:6px}
+.field{font-size:13px;background:#fff;border:1px solid #8793AF;border-radius:9px;padding:9px 12px;color:#151823}
+.lbl{font-size:11px;color:#59617A;margin-bottom:5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.arr{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.arr .o{border:1px solid #D7DCE8;border-radius:10px;padding:11px 12px;font-size:12px;color:#3B4257;background:#fff;display:flex;flex-direction:column;gap:4px}
+.arr .o b{font-size:13px;color:#151823}
+.arr .o.hot{border:1.5px solid #6E43D6;background:linear-gradient(180deg,#FBF9FF,#fff)}
+table.t{width:100%;border-collapse:collapse;font-size:12.5px}
+table.t th{background:#F6F7FB;text-align:left;font-size:11px;color:#59617A;font-weight:600;padding:8px 10px;border-bottom:1px solid #E2E6F0}
+table.t td{padding:9px 10px;border-bottom:1px solid #EDF0F6;vertical-align:top}
+.tot{display:flex;justify-content:space-between;align-items:baseline}
+.tot b{font-size:24px;font-weight:700}
+.scrim{position:absolute;inset:0;background:rgba(13,16,24,.42);display:flex;align-items:center;justify-content:center;z-index:5}
+.modal{width:620px;background:#fff;border-radius:14px;box-shadow:0 30px 80px rgba(13,16,24,.35);padding:24px}
+.modal h3{margin:0;font-size:17px}
+.ext{position:absolute;right:40px;top:110px;width:600px;background:#fff;border-radius:10px;box-shadow:0 26px 70px rgba(13,16,24,.35);border:1px solid #C6CCDC;overflow:hidden;z-index:4;display:flex;flex-direction:column}
+.ext .bar{height:34px;background:#EEF1F7;border-bottom:1px solid #D7DCE8;display:flex;align-items:center;gap:7px;padding:0 12px;font-size:11px;color:#59617A;font-family:ui-monospace,Menlo,monospace}
+.ext .bar i{width:10px;height:10px;border-radius:50%;background:#D7DCE8;display:inline-block}
+.ext .po{background:#1A3366;color:#fff;font-size:12px;padding:8px 14px;display:flex;gap:12px;align-items:center}
+.ext .po .b{margin-left:auto;background:rgba(255,255,255,.14);border-radius:6px;padding:3px 9px}
+
+.sw{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:20;display:flex;gap:5px;align-items:center;
+ background:rgba(255,255,255,.96);border:1.5px dashed #E8A400;border-radius:999px;padding:6px 8px 6px 14px;box-shadow:0 10px 30px rgba(13,16,24,.18);font-family:inherit}
+.sw .h{font-size:10px;font-weight:700;color:#7A5300;letter-spacing:.04em;margin-right:4px;white-space:nowrap}
+.sw button{font-family:inherit;font-size:11.5px;border:1px solid #E2E6F0;background:#fff;color:#3B4257;border-radius:999px;padding:5px 11px;cursor:pointer;white-space:nowrap}
+.sw button.on{background:#151823;color:#fff;border-color:#151823;font-weight:600}
+[data-s]:not(.show){display:none !important}
+</style>
+</head>
+<body style="margin:0;display:flex;justify-content:center;align-items:flex-start;">
+<div class="shell"><header class="app"><span class="logo"><img src="../assets/1approval_logo.webp" alt="1Approval"></span><span class="sep"></span><span class="pn">Agent Purchase</span><span class="beta">BETA</span><nav aria-label="メインメニュー"><a href="AgentPurchase.html">AIレコメンド</a><a href="AgentTrip.html">出張手配</a><a href="RequestCatalog.html">カタログ</a><a href="Rfq.html">見積依頼</a><a href="MyRequests.html" class=on>申請</a><a href="Approve.html">承認</a></nav><div class="r"><span class="url">app.1approval.com<b>/requests/new</b></span><a href="Home.html" style="font-size:12px;color:#9AA3B8;text-decoration:none;">管理画面</a><span class="av">山</span></div></header><main><div class="ttl"><h1>新しい申請</h1><span class="sub">下書き ／ 11/02 10:00 作成</span><div class="acts"><a class="btn" href="MyRequests.html">下書きを保存</a></div></div>
+<div class="cols"><div class="colm"><div class="card"><h2>申請の内容</h2><div style="margin-top:12px" class="grid3">
+<div><div class="lbl">件名</div><div class="field">11/5 顧客向け提案会の会議室</div></div>
+<div><div class="lbl">申請者</div><div class="field">山田 太郎（営業部）</div></div>
+<div><div class="lbl">部門負担</div><div class="field">営業部</div></div></div>
+<div style="margin-top:11px" class="grid2"><div><div class="lbl">目的</div><div class="field">顧客（○○商事）への提案・デモ</div></div>
+<div><div class="lbl">勘定科目</div><div class="field">会議費（自動）</div></div></div></div>
+<div data-s="before"><div class="card"><h2>手配<span class="x">申請に載せるものを選ぶ</span></h2>
+<div class="arr" style="margin-top:12px">
+<a class="o" href="RequestCatalog.html" style="text-decoration:none"><b>物品を購入</b>モノタロウ・トラスコ</a>
+<a class="o" href="AgentTrip.html" style="text-decoration:none"><b>出張を手配</b>新幹線・宿泊</a>
+<div class="o hot new"><b>施設予約を手配</b>space-hub の会議室・ホール<span style="margin-top:4px"><span class="btn p s">カタログを開く <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7M10 14 21 3M21 14v7H3V3h7"/></svg></span></span></div>
+<div class="o"><b>見積依頼</b>カタログに無いもの</div></div>
+<div class="note n-gray" style="margin-top:12px">施設予約は <b>1回の申請につき1件</b> です。押すと space-hub のカタログが別の窓で開き、カートに入れて「申請に戻す」とここに入ります。</div></div></div><div data-s="catalog"><div class="card"><h2>手配</h2>
+<div class="note n-blue" style="margin-top:12px;display:flex;gap:12px;align-items:center"><span style="flex-grow:1"><b>space-hub のカタログを別の窓で開いています。</b><br>カートに入れて「申請に戻す」を押すと、この申請に施設予約が入ります。セッションは開いてから60分で切れます。</span><span class="btn s">窓を前に出す</span></div></div></div><div data-s="cart"><div class="card new nb" style="outline:none"><h2>手配<span class="x">施設予約 1件（1回の申請につき1件まで）</span></h2><div style="margin-top:12px" class="new"><div class="fac "><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E43D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v6M16 4v6M7 15h4"/></svg></div><div class="bd"><div class="nm">新宿ワークラウンジ 会議室3<span class="src">space-hub</span><span class="chip c-gray">未着手</span></div><div class="ln">2026-11-05（木）13:00〜15:30 ／ 6名 ／ 東京都新宿区西新宿 1-2-3</div><div class="l2">見積もり番号 SHQ-20261102-0042 ／ 見積もりの期限 11/04 18:00</div><div class="ft"><span class="btn s">内容を直す（space-hub）<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7M10 14 21 3M21 14v7H3V3h7"/></svg></span><span class="btn s">申請から外す</span><span class="mut" style="margin-left:4px">空きも料金もまだ押さえていません。承認の後、発注のときに確かめ直します。</span></div></div><div class="am"><b>¥8,772</b><span>税抜 ¥7,975 ／ 税 ¥797（見込み）</span></div></div></div></div></div><div data-s="expired"><div class="card"><h2>手配</h2><div style="margin-top:12px"><div class="fac "><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E43D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v6M16 4v6M7 15h4"/></svg></div><div class="bd"><div class="nm">新宿ワークラウンジ 会議室3<span class="src">space-hub</span><span class="chip c-red">見積もりの期限切れ</span></div><div class="ln">2026-11-05（木）13:00〜15:30 ／ 6名 ／ 東京都新宿区西新宿 1-2-3</div><div class="l2">見積もり番号 SHQ-20261102-0042 ／ <span style="color:#B42318;font-weight:700">見積もりの期限 11/04 18:00 を過ぎました</span></div><div class="ft"><span class="btn p s">space-hub で選び直す<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7M10 14 21 3M21 14v7H3V3h7"/></svg></span><span class="btn s">申請から外す</span></div></div><div class="am"><b>¥8,772</b><span>税抜 ¥7,975 ／ 税 ¥797（見込み）</span></div></div></div>
+<div class="note n-red" style="margin-top:10px">見積もりの期限を過ぎた申請は、承認を依頼できません（承認者の画面でも承認できません）。space-hub で選び直すと、新しい見積もりに置き換わります。</div></div></div>
+</div><aside>
+<div data-s="before catalog"><div class="card"><div style="font-size:13px;font-weight:700">総額</div><div class="tot" style="margin-top:10px"><span class="mut" style="font-size:12px">申請する金額</span><b>¥0</b></div><div class="mut" style="margin-top:2px">手配を選ぶと金額が入ります</div><div style="margin-top:14px;display:flex;flex-direction:column;gap:8px"><span class="btn p off">承認を依頼する</span></div></div></div>
+<div data-s="cart"><div class="card"><div style="font-size:13px;font-weight:700">総額</div><div class="tot" style="margin-top:10px"><span class="mut" style="font-size:12px">申請する金額</span><b>¥8,772</b></div><div class="mut" style="margin-top:2px">税抜 ¥7,975 ／ 消費税 ¥797（見込み）</div><div style="margin-top:14px;display:flex;flex-direction:column;gap:8px"><a class="btn p" href="PoApprove.html">承認を依頼する</a><span class="mut">承認者は space-hub に登録しなくても、予約の内容を閲覧で確かめられます。</span></div></div></div>
+<div data-s="expired"><div class="card"><div style="font-size:13px;font-weight:700">総額</div><div class="tot" style="margin-top:10px"><span class="mut" style="font-size:12px">申請する金額</span><b>¥8,772</b></div><div class="mut" style="margin-top:2px">見積もりの期限切れ</div><div style="margin-top:14px;display:flex;flex-direction:column;gap:8px"><span class="btn p off">承認を依頼する</span></div></div></div>
+<div class="card"><h2>承認の経路</h2><div style="margin-top:8px"><div class="kv"><span>1段目</span><span>佐藤 花子（営業部 部長）</span></div><div class="kv"><span>経路</span><span>Teams の承認カード ／ 1Approval</span></div></div></div><div class="card"><h2>施設予約の決まり（初回リリース）</h2><div style="margin-top:8px;font-size:12px;line-height:1.85;color:#3B4257">
+・承認されると、1Approval が space-hub に発注します（OrderRequest）。<br>・発注の後に変えられるのは <b>時間だけ</b>（即時予約の施設）。変更も承認を通します。<br>・取り消しは <b>承認を通さず</b>、申請の画面からすぐ行えます。<br>・確定額が承認額を超えたときは、承認者に知らせます（許容 0円）。</div></div></aside></div><div class="ext" data-s="catalog"><div class="bar"><i></i><i></i><i></i><span style="margin-left:8px">space-hub.jp/search?punchout=1</span></div>
+<div class="po"><b>1Approval から予約しています</b><span>残り 52分</span><span>カート 1/1</span><span class="b">買わずに戻る</span></div>
+<div style="padding:16px;display:flex;flex-direction:column;gap:12px;font-size:12px;color:#3B4257">
+<div style="display:flex;gap:10px"><span class="field" style="flex-grow:1">新宿駅 ／ 11/5（木）13:00〜15:30 ／ 6名</span><span class="btn s">検索</span></div>
+<div style="border:1px solid #E2E6F0;border-radius:10px;padding:12px;display:flex;gap:12px"><div style="width:120px;height:78px;border-radius:8px;background:linear-gradient(135deg,#DCE3F5,#EDE6FA)"></div><div style="flex-grow:1"><b style="font-size:14px;color:#151823">新宿ワークラウンジ 会議室3</b><div style="margin-top:4px">最大8名 ／ モニター・ホワイトボード ／ 即時予約</div><div style="margin-top:8px;display:flex;gap:8px;align-items:center"><b style="font-size:15px;color:#151823">¥8,772</b><span class="mut">（税抜 ¥7,975）</span><span class="btn p s" style="margin-left:auto">カートに入れる</span></div></div></div>
+<div style="border:1px solid #E2E6F0;border-radius:10px;padding:12px;display:flex;gap:12px;opacity:.75"><div style="width:120px;height:78px;border-radius:8px;background:linear-gradient(135deg,#E6EAF2,#F1F2F6)"></div><div style="flex-grow:1"><b style="font-size:14px;color:#151823">新宿ビジネスセンター 会議室B</b><div style="margin-top:4px">最大10名 ／ 手配依頼（コンシェルジュ）</div><div style="margin-top:8px;display:flex;gap:8px;align-items:center"><span class="mut">料金は施設と調整して決まります</span><span class="btn s" style="margin-left:auto">空き確認を依頼する</span></div></div></div>
+<div class="mut">space-hub の画面（参考）。「予約する」が「カートに入れる」に変わり、ここではまだ予約しません。</div></div></div></main><div class="sw"><span class="h">モックの状態</span><button type="button" data-k="before">手配の前</button><button type="button" data-k="catalog">カタログを開いている</button><button type="button" data-k="cart">申請に戻った後</button><button type="button" data-k="expired">見積もりの期限切れ</button></div></div>
+
+<script>
+(function(){
+  var btns=[].slice.call(document.querySelectorAll('.sw button'));
+  function set(s){
+    [].forEach.call(document.querySelectorAll('[data-s]'),function(el){
+      el.classList.toggle('show',(' '+el.getAttribute('data-s')+' ').indexOf(' '+s+' ')>=0);});
+    btns.forEach(function(b){b.classList.toggle('on',b.dataset.k===s);});
+    try{history.replaceState(null,'','?s='+s+location.hash);}catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){set(b.dataset.k);});});
+  var q=(location.search.match(/[?&]s=([^&]+)/)||[])[1];
+  set(q&&btns.some(function(b){return b.dataset.k===q;})?q:btns[0].dataset.k);
+})();
+</script>
+
+</body>
+</html>

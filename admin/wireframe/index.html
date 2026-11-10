@@ -38,7 +38,7 @@ a.card:hover{border-color:#2826FF;box-shadow:0 8px 24px rgba(40,38,255,.12)}
 </head>
 <body>
 <header>
-  <img src="../assets/1approval_logo.webp" alt="1Approval"><b>画面モックアップ</b><span class="c">73画面</span>
+  <img src="../assets/1approval_logo.webp" alt="1Approval"><b>画面モックアップ</b><span class="c">82画面</span>
   <nav>
     <a href="../index.html">モックアップを動かす</a>
     <a href="../spec/">仕様レビュー</a>
@@ -47,7 +47,7 @@ a.card:hover{border-color:#2826FF;box-shadow:0 8px 24px rgba(40,38,255,.12)}
   </nav>
 </header>
 <main>
-<p class="lead">1Approval 管理機能のワイヤーフレーム 73 画面です。カードを押すとモックアップが開き、画面の中のリンクをたどって実際に遷移できます。<br>
+<p class="lead">1Approval 管理機能のワイヤーフレーム 82 画面です。カードを押すとモックアップが開き、画面の中のリンクをたどって実際に遷移できます。<br>
 Phase-1〜2 は管理画面（1approval.app）、Phase-3 は Agent Purchase（app.1approval.com）、Phase-6 の広告主コンソールは ads.1approval.com。それぞれ別システムとしてデザインを分けています。</p>
 <h2 id="p0">Phase-0 購買データ基盤 <span>23画面</span></h2><p class="gd">買った明細を集めて、会計と経費精算に出せる状態まで。発注も検収もしない</p><div class="grid">
 <a class="card" href="../index.html#Login"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/Login.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>ログイン</b><span>/login</span></div></a>
@@ -135,6 +135,17 @@ Phase-1〜2 は管理画面（1approval.app）、Phase-3 は Agent Purchase（ap
 <a class="card" href="../index.html#AdsConquest"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/AdsConquest.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>Phase-6 コンバージョン課金</b><span>ads/campaigns/conquest</span></div></a>
 <a class="card" href="../index.html#AdsPlacement"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/AdsPlacement.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>Phase-6 掲載イメージ</b><span>app/agent</span></div></a>
 <a class="card" href="../index.html#AdsSettings"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/AdsSettings.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>Phase-6 広告の受け入れ</b><span>/settings/ads</span></div></a>
+</div>
+<h2 id="p7">PunchOut 施設予約（space-hub） <span>9画面</span></h2><p class="gd">エイチの会議室 EC「space-hub」を cXML PunchOut で接続。申請・承認・変更・取り消し・手配依頼と、運用の画面。画面下の「モックの状態」で状態を切り替えられる</p><div class="grid">
+<a class="card" href="../index.html#PoRequestNew"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/PoRequestNew.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>施設予約 ｜ 申請（手配）</b><span>app/requests/new</span></div></a>
+<a class="card" href="../index.html#PoSetupError"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/PoSetupError.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>施設予約 ｜ カタログを開けない</b><span>app/requests/new</span></div></a>
+<a class="card" href="../index.html#PoRequestDetail"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/PoRequestDetail.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>施設予約 ｜ 申請の詳細（発注後）</b><span>app/requests/:id</span></div></a>
+<a class="card" href="../index.html#PoChange"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/PoChange.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>施設予約 ｜ 時間の変更</b><span>app/requests/:id/change</span></div></a>
+<a class="card" href="../index.html#PoCancel"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/PoCancel.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>施設予約 ｜ 取り消し</b><span>app/requests/:id</span></div></a>
+<a class="card" href="../index.html#PoConcierge"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/PoConcierge.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>施設予約 ｜ 手配依頼（コンシェルジュ）</b><span>app/requests/:id</span></div></a>
+<a class="card" href="../index.html#PoApprove"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/PoApprove.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>施設予約 ｜ 承認</b><span>app/approvals/:id</span></div></a>
+<a class="card" href="../index.html#SettingsSpaceHub"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/SettingsSpaceHub.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>space-hub 接続の設定</b><span>/settings/systems/space-hub</span></div></a>
+<a class="card" href="../index.html#PoOps"><div class="thumb"><div class="in" style="width:1440px;height:900px;transform:scale(0.2083)"><iframe src="../screens/PoOps.html" width="1440" height="900" loading="lazy" scrolling="no"></iframe></div></div><div class="meta"><b>施設予約の要対応</b><span>/ops/punchout</span></div></a>
 </div>
 </main>
 </body>
