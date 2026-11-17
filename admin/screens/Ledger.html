@@ -12,7 +12,7 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
 </style>
 </head>
 <body style="margin:0;display:flex;justify-content:center;align-items:flex-start;">
-<div style="width: 1440px; height: 900px; box-sizing: border-box; display: flex; background: #F6F7FB;">
+<div id="app" style="position: relative; width: 1440px; height: 900px; box-sizing: border-box; display: flex; background: #F6F7FB;">
 
   <nav style="width: 224px; flex-shrink: 0; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E7EE; padding: 18px 0; display: flex; flex-direction: column; gap: 2px;" aria-label="メインメニュー"><div style="padding: 0 18px 18px; display: flex; align-items: center; gap: 8px;"><img src="../assets/1approval_logo.webp" alt="1Approval" style="height: 22px; width: auto;"><span style="font-size: 11px; color: #5F6169; border: 1px solid #E6E7EE; border-radius: 4px; padding: 1px 6px;">管理</span></div><a href="Home.html" style="display: flex; align-items: center; gap: 10px; margin: 0 10px; padding: 10px 12px; text-decoration: none; font-size: 14px; border-radius: 8px; color: #33343B;">やること<span style="margin-left: auto; background: #2826FF; color: #FFFFFF; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 9px;">27</span></a><div style="padding: 16px 18px 6px; font-size: 11px; color: #8A8D98; letter-spacing: 0.08em;">購買</div><a href="Ledger.html" style="margin: 0 10px; padding: 9px 12px; background: #EEF0FE; color: #2826FF; text-decoration: none; font-size: 14px; font-weight: 700; border-radius: 8px;">購買明細台帳</a><a href="Spend.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">支出分析</a><div style="padding: 16px 18px 6px; font-size: 11px; color: #8A8D98; letter-spacing: 0.08em;">モノ</div><a href="Receiving.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">検収</a><a href="Assets.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">備品・資産</a><a href="Stock.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">在庫</a><a href="Expiry.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">期限</a><a href="Loan.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">貸出</a><a href="Stocktake.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">棚卸</a><a href="Leases.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">リース契約</a><div style="padding: 16px 18px 6px; font-size: 11px; color: #8A8D98; letter-spacing: 0.08em;">IT・SaaS</div><a href="SaaSLicenses.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">SaaSライセンス</a><a href="MdmGap.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">MDM連携</a><div style="padding: 16px 18px 6px; font-size: 11px; color: #8A8D98; letter-spacing: 0.08em;">人</div><a href="Members.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">メンバー</a><a href="Onboarding.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">入退社</a><div style="margin: 14px 18px 8px; height: 1px; background: #EDEEF4;"></div><a href="Notifications.html" style="margin: 0 10px; padding: 9px 12px; color: #33343B; text-decoration: none; font-size: 14px; border-radius: 8px;">通知</a><a href="Settings.html" style="margin: auto 10px 0; padding: 9px 12px; text-decoration: none; font-size: 14px; border-radius: 8px; color: #5F6169;">設定</a></nav>
 
@@ -21,8 +21,8 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
       <h1 style="margin: 0; font-size: 22px; font-weight: 700;">購買明細台帳</h1>
       <span style="font-size: 13px; color: #5F6169;">1,284件</span>
       <div style="margin-left: auto; display: flex; gap: 8px;">
-        <a href="SettingsAccounting.html" style="font-family: inherit; font-size: 13px; font-weight: 500; color: #17171A; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 7px; padding: 9px 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">会計ソフト向けCSV</a>
-        <a href="SettingsExpense.html" style="font-family: inherit; font-size: 13px; font-weight: 500; color: #17171A; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 7px; padding: 9px 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">経費精算向けCSV</a>
+        <button type="button" data-csv="acct" style="font-family: inherit; font-size: 13px; font-weight: 500; color: #17171A; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 7px; padding: 9px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>会計ソフト向けCSV</button>
+        <button type="button" data-csv="exp" style="font-family: inherit; font-size: 13px; font-weight: 500; color: #17171A; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 7px; padding: 9px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>経費精算向けCSV</button>
         <a href="Classify.html" style="font-family: inherit; font-size: 13px; font-weight: 700; color: #FFFFFF; background: #2826FF; border: none; border-radius: 7px; padding: 9px 16px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">分類を確定（12件）</a>
       </div>
     </div>
@@ -165,6 +165,201 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
       <span style="margin-left: auto;">在庫のある品目を発注しようとした申請は、申請画面で他拠点の在庫と最短期限を表示して抑止します。</span>
     </div>
   <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid #E6E7EE; margin-top: 18px; padding-top: 14px; padding: 12px 0 0;"><span style="font-size: 11px; color: #5F6169; font-weight: 700; margin-right: 2px;">つながる画面</span><a href="AdsSettings.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">広告の受け入れ</a><a href="Rules.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">ルール設定</a><a href="Home.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 14px; font-size: 12px; color: #17171A; text-decoration: none; font-weight: 700;">← ホーム</a><a href="Receiving.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #EEF0FE; border: 1px solid #DDE1FD; border-radius: 14px; font-size: 12px; color: #2826FF; text-decoration: none; font-weight: 700;">検収 →</a><a href="Spend.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #EEF0FE; border: 1px solid #DDE1FD; border-radius: 14px; font-size: 12px; color: #2826FF; text-decoration: none; font-weight: 700;">支出分析 →</a><a href="Assets.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">備品・資産</a><a href="Stock.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">在庫</a><a href="SettingsAccounting.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">勘定奉行</a><a href="AuditLog.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">監査ログ</a><a href="AgentPurchase.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">AIエージェント購買（Phase-3）</a></div></main>
+  <!-- CSV出力モーダル：連携先の仕様を選んでダウンロード -->
+  <style>
+    #csvModal{position:absolute;inset:0;background:rgba(23,23,26,.42);display:none;align-items:center;justify-content:center;z-index:20}
+    #csvModal.open{display:flex}
+    .cm-box{width:960px;max-height:780px;background:#fff;border-radius:14px;box-shadow:0 24px 60px rgba(23,23,26,.25);display:flex;flex-direction:column;overflow:hidden}
+    .cm-head{display:flex;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid #E6E7EE}
+    .cm-head h2{margin:0;font-size:17px}
+    .cm-x{margin-left:auto;background:none;border:0;font-size:22px;line-height:1;color:#5F6169;cursor:pointer;padding:4px 8px;border-radius:6px}
+    .cm-x:hover{background:#F6F7FB}
+    .cm-tabs{display:flex;gap:4px;padding:0 22px;border-bottom:1px solid #E6E7EE}
+    .cm-tab{font-family:inherit;font-size:13px;background:none;border:0;border-bottom:2px solid transparent;padding:11px 12px;color:#5F6169;cursor:pointer}
+    .cm-tab.on{color:#2826FF;border-bottom-color:#2826FF;font-weight:700}
+    .cm-body{display:flex;min-height:0;flex:1}
+    .cm-list{width:280px;flex-shrink:0;border-right:1px solid #E6E7EE;padding:14px;display:flex;flex-direction:column;gap:8px;overflow:auto;background:#FAFAFD}
+    .cm-sys{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid #E6E7EE;border-radius:10px;background:#fff;cursor:pointer;text-align:left;font-family:inherit;width:100%}
+    .cm-sys:hover{border-color:#B9BCF9}
+    .cm-sys.on{border-color:#2826FF;box-shadow:0 0 0 3px #EEF0FE}
+    .cm-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;flex-shrink:0}
+    .cm-sys b{display:block;font-size:13px;color:#17171A}
+    .cm-sys small{display:block;font-size:11px;color:#5F6169;margin-top:2px}
+    .cm-tag{margin-left:auto;font-size:10px;font-weight:700;color:#0E8A4F;background:#E4F6EC;padding:2px 6px;border-radius:4px;white-space:nowrap}
+    .cm-main{flex:1;min-width:0;padding:18px 22px;overflow:auto}
+    .cm-spec{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+    .cm-spec div{background:#F6F7FB;border-radius:8px;padding:9px 11px}
+    .cm-spec span{display:block;font-size:11px;color:#5F6169}
+    .cm-spec strong{display:block;font-size:13px;margin-top:3px}
+    .cm-sec{font-size:12px;font-weight:700;color:#33343B;margin:14px 0 8px}
+    .cm-opts{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+    .cm-opts label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+    .cm-prev{border:1px solid #E6E7EE;border-radius:8px;overflow:auto;max-height:230px}
+    .cm-prev table{border-collapse:collapse;font-size:12px;white-space:nowrap}
+    .cm-prev th{background:#F6F7FB;text-align:left;padding:7px 10px;border-bottom:1px solid #E6E7EE;font-weight:700;position:sticky;top:0}
+    .cm-prev td{padding:7px 10px;border-bottom:1px solid #EDEEF4;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    .cm-foot{display:flex;align-items:center;gap:10px;padding:14px 22px;border-top:1px solid #E6E7EE;background:#fff}
+    .cm-foot .note{font-size:12px;color:#5F6169}
+    .cm-btn{font-family:inherit;font-size:13px;border-radius:7px;padding:9px 16px;cursor:pointer}
+    .cm-btn.sub{background:#fff;border:1px solid #D6D8E3;color:#17171A}
+    .cm-btn.pri{background:#2826FF;border:0;color:#fff;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+    .cm-btn.pri:hover{background:#1F1DD1}
+    #csvToast{position:absolute;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#17171A;color:#fff;font-size:13px;padding:11px 18px;border-radius:9px;opacity:0;transition:.25s;pointer-events:none;z-index:30}
+    #csvToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  </style>
+
+  <div id="csvModal" role="dialog" aria-modal="true" aria-labelledby="cmTitle">
+    <div class="cm-box">
+      <div class="cm-head">
+        <h2 id="cmTitle">CSVダウンロード</h2>
+        <span style="font-size:12px;color:#5F6169;">連携先の取込仕様に合わせて出力します</span>
+        <button class="cm-x" type="button" data-close aria-label="閉じる">×</button>
+      </div>
+      <div class="cm-tabs">
+        <button class="cm-tab" type="button" data-tab="acct">会計ソフト向け</button>
+        <button class="cm-tab" type="button" data-tab="exp">経費精算向け</button>
+      </div>
+      <div class="cm-body">
+        <div class="cm-list" id="cmList"></div>
+        <div class="cm-main">
+          <div class="cm-spec" id="cmSpec"></div>
+          <div class="cm-sec">出力対象</div>
+          <div class="cm-opts">
+            <label><input type="radio" name="cmScope" value="all" checked> すべて（<span id="cmAll"></span>件）</label>
+            <label><input type="radio" name="cmScope" value="trip"> 出張のみ（ピカパカ）</label>
+            <label><input type="radio" name="cmScope" value="goods"> 物品のみ</label>
+            <label style="margin-left:auto;"><input type="checkbox" id="cmHeader" checked> 1行目に項目名を出力</label>
+          </div>
+          <div class="cm-sec">プレビュー <span id="cmCount" style="font-weight:400;color:#5F6169;"></span></div>
+          <div class="cm-prev"><table id="cmPrev"></table></div>
+        </div>
+      </div>
+      <div class="cm-foot">
+        <span class="note" id="cmNote"></span>
+        <a id="cmSettings" href="SettingsAccounting.html" style="font-size:12px;margin-left:8px;">連携設定を編集 →</a>
+        <button class="cm-btn sub" type="button" data-close style="margin-left:auto;">キャンセル</button>
+        <button class="cm-btn pri" type="button" id="cmDl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span id="cmDlLabel">ダウンロード</span></button>
+      </div>
+    </div>
+  </div>
+  <div id="csvToast" role="status"></div>
+
+  <script>
+  (function(){
+    // ---- 台帳の表から明細を読み取る ----
+    function rows(){
+      return [...document.querySelectorAll('main table tbody tr')].map(function(tr,i){
+        var td=tr.querySelectorAll('td');
+        var main=function(c){return (c.childNodes[0]&&c.childNodes[0].textContent||c.textContent).trim();};
+        var sub=function(c){var d=c.querySelector('div');return d?d.textContent.trim():'';};
+        var m=main(td[4]).match(/(\d{1,2})\/(\d{1,2})/);
+        var date=m?'2026/'+('0'+m[1]).slice(-2)+'/'+('0'+m[2]).slice(-2):'';
+        var amount=parseInt(td[3].textContent.replace(/[^\d]/g,''),10)||0;
+        var vendor=main(td[5]);
+        return {
+          no:'PO-2026-'+String(918+i).padStart(5,'0'),
+          date:date, name:main(td[1]), dept:sub(td[1]),
+          item:main(td[2]), detail:sub(td[2]), amount:amount, tax:Math.floor(amount*10/110),
+          vendor:vendor, site:sub(td[5]), account:main(td[6]), purpose:sub(td[6]),
+          kind:td[7].textContent.trim(), diag:td[0].textContent.trim(),
+          trip:vendor.indexOf('ピカパカ')===0
+        };
+      });
+    }
+    var dash=function(d){return d.replace(/\//g,'-');};
+    var md=function(d){var p=d.split('/');return p[1]+'/'+p[2]+'/'+p[0];};
+
+    // ---- 連携先ごとの取込仕様 ----
+    var SYS={
+      acct:[
+        {id:'bugyo',name:'勘定奉行クラウド',sub:'仕訳伝票（受入形式）',ico:'奉',col:'#C8102E',enc:'Shift_JIS',delim:'カンマ',datef:'YYYY/MM/DD',unit:'1明細＝1仕訳',linked:true,
+          cols:['伝票日付','伝票番号','借方部門','借方勘定科目','借方税区分','借方金額','貸方勘定科目','貸方金額','摘要'],
+          map:function(r){return [r.date,r.no,r.dept,r.account,'課税仕入10%',r.amount,'未払金',r.amount,r.vendor+' '+r.item+'（'+r.name+'）'];}},
+        {id:'freee',name:'freee会計',sub:'取引インポート',ico:'f',col:'#2864F0',enc:'UTF-8',delim:'カンマ',datef:'YYYY-MM-DD',unit:'1明細＝1取引',
+          cols:['収支区分','管理番号','発生日','決済期日','取引先','勘定科目','税区分','金額','品目','部門','メモタグ','備考'],
+          map:function(r){return ['支出',r.no,dash(r.date),'',r.vendor,r.account,'課対仕入10%',r.amount,r.item,r.dept,r.trip?'出張':'購買',r.purpose+' / '+r.name];}},
+        {id:'mf',name:'マネーフォワード クラウド会計',sub:'仕訳帳インポート',ico:'MF',col:'#F25A1D',enc:'Shift_JIS',delim:'カンマ',datef:'YYYY/MM/DD',unit:'1明細＝1仕訳',
+          cols:['取引No','取引日','借方勘定科目','借方部門','借方税区分','借方金額(円)','貸方勘定科目','貸方金額(円)','摘要','仕訳メモ'],
+          map:function(r){return [r.no,r.date,r.account,r.dept,'課税仕入 10%',r.amount,'未払金',r.amount,r.vendor+' '+r.item,r.purpose];}},
+        {id:'yayoi',name:'弥生会計',sub:'弥生インポート形式',ico:'弥',col:'#0A6E3C',enc:'Shift_JIS',delim:'カンマ',datef:'YYYY/MM/DD',unit:'1明細＝1仕訳',
+          cols:['識別フラグ','伝票No','決算','取引日付','借方勘定科目','借方補助科目','借方部門','借方税区分','借方金額','借方税金額','貸方勘定科目','貸方金額','摘要'],
+          map:function(r){return ['2000',r.no,'',r.date,r.account,'',r.dept,'課対仕入内10%',r.amount,r.tax,'未払金',r.amount,r.vendor+' '+r.item];}}
+      ],
+      exp:[
+        {id:'raku',name:'楽楽精算',sub:'経費明細インポート',ico:'楽',col:'#E8380D',enc:'Shift_JIS',delim:'カンマ',datef:'YYYY/MM/DD',unit:'1明細＝1経費',linked:true,
+          cols:['申請者','所属','利用日','内容','支払先','金額','勘定科目','目的','外部連携ID'],
+          map:function(r){return [r.name,r.dept,r.date,r.item,r.vendor,r.amount,r.account,r.purpose,r.no];}},
+        {id:'jobcan',name:'ジョブカン経費精算',sub:'経費データ取込',ico:'J',col:'#1E9BD7',enc:'UTF-8',delim:'カンマ',datef:'YYYY/MM/DD',unit:'1明細＝1経費',
+          cols:['従業員名','グループ','日付','経費科目','支払先','金額','税区分','備考'],
+          map:function(r){return [r.name,r.dept,r.date,r.account,r.vendor,r.amount,'課税10%',r.item+' / '+r.purpose];}},
+        {id:'tokium',name:'TOKIUM経費精算',sub:'経費一括登録',ico:'T',col:'#111111',enc:'UTF-8',delim:'カンマ',datef:'YYYY-MM-DD',unit:'1明細＝1経費',
+          cols:['利用日','支払先','金額','経費科目','申請者','部署','内容','プロジェクト'],
+          map:function(r){return [dash(r.date),r.vendor,r.amount,r.account,r.name,r.dept,r.item,r.purpose];}},
+        {id:'concur',name:'SAP Concur Expense',sub:'Expense Entry Import',ico:'C',col:'#0070D2',enc:'UTF-8',delim:'カンマ',datef:'MM/DD/YYYY',unit:'1明細＝1エントリ',
+          cols:['Transaction Date','Expense Type','Vendor','Amount','Currency','Employee','Department','Business Purpose','External ID'],
+          map:function(r){return [md(r.date),r.account,r.vendor,r.amount,'JPY',r.name,r.dept,r.purpose,r.no];}}
+      ]
+    };
+    var SETTINGS={acct:'SettingsAccounting.html',exp:'SettingsExpense.html'};
+
+    var $=function(id){return document.getElementById(id);};
+    var modal=$('csvModal'),tab='acct',sel={acct:'bugyo',exp:'raku'};
+    var esc=function(v){v=String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+    var html=function(v){return String(v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+    var cur=function(){return SYS[tab].filter(function(x){return x.id===sel[tab];})[0];};
+    var target=function(){
+      var sc=document.querySelector('input[name=cmScope]:checked').value;
+      return rows().filter(function(r){return sc==='all'||(sc==='trip'?r.trip:!r.trip);});
+    };
+
+    function render(){
+      document.querySelectorAll('.cm-tab').forEach(function(b){b.classList.toggle('on',b.dataset.tab===tab);});
+      $('cmList').innerHTML=SYS[tab].map(function(x){
+        return '<button type="button" class="cm-sys'+(x.id===sel[tab]?' on':'')+'" data-sys="'+x.id+'"><span class="cm-ico" style="background:'+x.col+'">'+x.ico+'</span><span><b>'+x.name+'</b><small>'+x.sub+'</small></span>'+(x.linked?'<span class="cm-tag">連携中</span>':'')+'</button>';
+      }).join('');
+      var s=cur(),data=target();
+      $('cmSpec').innerHTML=[['文字コード',s.enc],['区切り',s.delim],['日付形式',s.datef],['出力単位',s.unit]]
+        .map(function(a){return '<div><span>'+a[0]+'</span><strong>'+a[1]+'</strong></div>';}).join('');
+      $('cmAll').textContent=rows().length;
+      $('cmCount').textContent='（'+data.length+'件 × '+s.cols.length+'項目）';
+      $('cmPrev').innerHTML='<thead><tr>'+s.cols.map(function(c){return '<th>'+html(c)+'</th>';}).join('')+'</tr></thead><tbody>'+
+        data.slice(0,5).map(function(r){return '<tr>'+s.map(r).map(function(v){return '<td>'+html(v)+'</td>';}).join('')+'</tr>';}).join('')+
+        (data.length>5?'<tr><td colspan="'+s.cols.length+'" style="color:#5F6169;font-family:inherit;">ほか '+(data.length-5)+' 件</td></tr>':'')+
+        (data.length===0?'<tr><td colspan="'+s.cols.length+'" style="color:#5F6169;font-family:inherit;">対象の明細がありません</td></tr>':'')+'</tbody>';
+      $('cmNote').textContent='ファイル名：'+fname(s);
+      $('cmDlLabel').textContent=s.name+' 形式でダウンロード';
+      $('cmDl').disabled=data.length===0;$('cmDl').style.opacity=data.length?1:.5;
+      $('cmSettings').href=SETTINGS[tab];
+    }
+    function fname(s){return '1approval_'+s.id+'_20260901-20260920.csv';}
+
+    function download(){
+      var s=cur(),data=target();
+      var lines=data.map(function(r){return s.map(r).map(esc).join(',');});
+      if($('cmHeader').checked) lines.unshift(s.cols.map(esc).join(','));
+      // ブラウザ上ではUTF-8（BOM付き）で出力。Shift_JIS指定の連携先は本番ではサーバ側で変換
+      var blob=new Blob(['﻿'+lines.join('\r\n')+'\r\n'],{type:'text/csv;charset=utf-8'});
+      var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname(s);
+      document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);
+      close();toast(s.name+' 形式で '+data.length+' 件をダウンロードしました');
+    }
+    function toast(t){var el=$('csvToast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show');},2800);}
+    function open(k){tab=k;modal.classList.add('open');render();}
+    function close(){modal.classList.remove('open');}
+
+    document.querySelectorAll('[data-csv]').forEach(function(b){b.addEventListener('click',function(){open(b.dataset.csv);});});
+    modal.addEventListener('click',function(e){
+      var t=e.target;
+      if(t===modal||t.closest('[data-close]')) return close();
+      var tb=t.closest('[data-tab]'); if(tb){tab=tb.dataset.tab;return render();}
+      var sy=t.closest('[data-sys]'); if(sy){sel[tab]=sy.dataset.sys;return render();}
+    });
+    modal.addEventListener('change',render);
+    $('cmDl').addEventListener('click',download);
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  })();
+  </script>
+
 </div>
 </body>
 </html>
