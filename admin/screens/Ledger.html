@@ -29,7 +29,7 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
 
     <div style="display: flex; align-items: center; gap: 8px; margin-top: 16px; background: #FFFFFF; border: 1px solid #E6E7EE; border-radius: 10px; padding: 12px 14px;">
       <label for="q" style="font-size: 12px; color: #5F6169;">検索</label>
-      <input id="q" type="search" value="手袋" style="font-family: inherit; font-size: 13px; width: 150px; padding: 7px 10px; border: 1px solid #D6D8E3; border-radius: 6px; background: #FFFFFF;">
+      <input id="q" type="search" value="" placeholder="品名・申請者・取引先" style="font-family: inherit; font-size: 13px; width: 150px; padding: 7px 10px; border: 1px solid #D6D8E3; border-radius: 6px; background: #FFFFFF;">
       <label for="d1" style="font-size: 12px; color: #5F6169; margin-left: 6px;">取引年月日</label>
       <input id="d1" type="date" value="2026-09-01" style="font-family: inherit; font-size: 13px; padding: 7px 8px; border: 1px solid #D6D8E3; border-radius: 6px;">
       <span style="font-size: 12px; color: #5F6169;">〜</span>
@@ -38,7 +38,7 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
       <input id="amt" type="text" value="10,000 〜 500,000" style="font-family: inherit; font-size: 13px; width: 140px; padding: 7px 10px; border: 1px solid #D6D8E3; border-radius: 6px;">
       <label for="sup" style="font-size: 12px; color: #5F6169; margin-left: 6px;">取引先</label>
       <select id="sup" style="font-family: inherit; font-size: 13px; padding: 7px 8px; border: 1px solid #D6D8E3; border-radius: 6px; background: #FFFFFF;">
-        <option>すべて</option><option selected>モノタロウ</option><option>トラスコ中山</option>
+        <option selected>すべて</option><option>ピカパカ（出張）</option><option>モノタロウ</option><option>トラスコ中山</option>
       </select>
       <span style="margin-left: auto; font-size: 12px; color: #5F6169;">電帳法の検索要件（日付・金額・取引先）に対応</span>
     </div>
@@ -66,6 +66,36 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #0E8A4F; background: #E4F6EC; padding: 3px 8px; border-radius: 5px;">正常</span></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">鈴木 健太<div style="color: #5F6169; font-size: 12px;">本社 営業部</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">新幹線 東京⇄新大阪<div style="color: #5F6169; font-size: 12px;">のぞみ 指定席 往復</div></td>
+            <td style="padding: 12px; text-align: right; font-weight: 700; border-bottom: 1px solid #EDEEF4;">¥29,440</td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">9/22 出発<div style="color: #5F6169; font-size: 12px;">予約 9/18・発券済</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">ピカパカ<div style="color: #5F6169; font-size: 12px;">新幹線・本社</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">旅費交通費<div style="color: #5F6169; font-size: 12px;">顧客訪問（関西）</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="font-size: 11px; font-weight: 700; color: #7A3FD1; background: #F2ECFC; padding: 3px 8px; border-radius: 5px;">出張</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #0E8A4F; background: #E4F6EC; padding: 3px 8px; border-radius: 5px;">正常</span></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">高橋 美咲<div style="color: #5F6169; font-size: 12px;">本社 営業部</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">航空券 羽田⇄福岡<div style="color: #5F6169; font-size: 12px;">ANA エコノミー 往復</div></td>
+            <td style="padding: 12px; text-align: right; font-weight: 700; border-bottom: 1px solid #EDEEF4;">¥48,760</td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">9/25 出発<div style="color: #5F6169; font-size: 12px;">予約 9/17・発券済</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">ピカパカ<div style="color: #5F6169; font-size: 12px;">航空・本社</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">旅費交通費<div style="color: #5F6169; font-size: 12px;">展示会出展（九州）</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="font-size: 11px; font-weight: 700; color: #7A3FD1; background: #F2ECFC; padding: 3px 8px; border-radius: 5px;">出張</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #B26B00; background: #FFF3E3; padding: 3px 8px; border-radius: 5px;">宿泊上限超過</span></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">鈴木 健太<div style="color: #5F6169; font-size: 12px;">本社 営業部</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">ホテル 梅田 2泊<div style="color: #5F6169; font-size: 12px;">¥13,800/泊（上限¥12,000）</div></td>
+            <td style="padding: 12px; text-align: right; font-weight: 700; border-bottom: 1px solid #EDEEF4;">¥27,600</td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">9/22〜9/24 宿泊<div style="color: #5F6169; font-size: 12px;">予約 9/18</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">ピカパカ<div style="color: #5F6169; font-size: 12px;">ホテル・大阪</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">旅費交通費<div style="color: #5F6169; font-size: 12px;">顧客訪問（関西）</div></td>
+            <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="font-size: 11px; font-weight: 700; color: #7A3FD1; background: #F2ECFC; padding: 3px 8px; border-radius: 5px;">出張</span></td>
+          </tr>
           <tr style="background: #FFF7F7;">
             <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #E02424; background: #FDECEC; padding: 3px 8px; border-radius: 5px;">相場超過 ×7</span></td>
             <td style="padding: 12px; border-bottom: 1px solid #EDEEF4;">佐々木 誠<div style="color: #5F6169; font-size: 12px;">第3工場 保全課</div></td>
@@ -131,7 +161,7 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
     </div>
 
     <div style="display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 12px; color: #5F6169;">
-      <span>1〜6件（全1,284件）</span>
+      <span>1〜9件（全1,284件）</span>
       <span style="margin-left: auto;">在庫のある品目を発注しようとした申請は、申請画面で他拠点の在庫と最短期限を表示して抑止します。</span>
     </div>
   <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid #E6E7EE; margin-top: 18px; padding-top: 14px; padding: 12px 0 0;"><span style="font-size: 11px; color: #5F6169; font-weight: 700; margin-right: 2px;">つながる画面</span><a href="AdsSettings.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">広告の受け入れ</a><a href="Rules.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">ルール設定</a><a href="Home.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 14px; font-size: 12px; color: #17171A; text-decoration: none; font-weight: 700;">← ホーム</a><a href="Receiving.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #EEF0FE; border: 1px solid #DDE1FD; border-radius: 14px; font-size: 12px; color: #2826FF; text-decoration: none; font-weight: 700;">検収 →</a><a href="Spend.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #EEF0FE; border: 1px solid #DDE1FD; border-radius: 14px; font-size: 12px; color: #2826FF; text-decoration: none; font-weight: 700;">支出分析 →</a><a href="Assets.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">備品・資産</a><a href="Stock.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">在庫</a><a href="SettingsAccounting.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">勘定奉行</a><a href="AuditLog.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">監査ログ</a><a href="AgentPurchase.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">AIエージェント購買（Phase-3）</a></div></main>
