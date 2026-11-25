@@ -37,7 +37,7 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
       <input id="amt" type="text" value="10,000 〜 500,000" style="font-family: inherit; font-size: 13px; width: 140px; padding: 7px 10px; border: 1px solid #D6D8E3; border-radius: 6px;">
       <label for="sup" style="font-size: 12px; color: #5F6169; margin-left: 6px;">取引先</label>
       <select id="sup" style="font-family: inherit; font-size: 13px; padding: 7px 8px; border: 1px solid #D6D8E3; border-radius: 6px; background: #FFFFFF;">
-        <option selected>すべて</option><option>ピカパカ（出張）</option><option>モノタロウ</option><option>トラスコ中山</option>
+        <option value="" selected>すべて</option><option value="ピカパカ">ピカパカ（出張）</option><option value="モノタロウ">モノタロウ</option><option value="トラスコ中山">トラスコ中山</option>
       </select>
       <span style="margin-left: auto; font-size: 12px; color: #5F6169;">電帳法の検索要件（日付・金額・取引先）に対応</span>
     </div>
@@ -160,7 +160,7 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
     </div>
 
     <div style="display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 12px; color: #5F6169;">
-      <span>1〜9件（全1,284件）</span>
+      <span id="ledgerCount">1〜9件（全1,284件）</span>
       <span style="margin-left: auto;">在庫のある品目を発注しようとした申請は、申請画面で他拠点の在庫と最短期限を表示して抑止します。</span>
     </div>
   <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid #E6E7EE; margin-top: 18px; padding-top: 14px; padding: 12px 0 0;"><span style="font-size: 11px; color: #5F6169; font-weight: 700; margin-right: 2px;">つながる画面</span><a href="AdsSettings.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">広告の受け入れ</a><a href="Rules.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">ルール設定</a><a href="Home.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #FFFFFF; border: 1px solid #D6D8E3; border-radius: 14px; font-size: 12px; color: #17171A; text-decoration: none; font-weight: 700;">← ホーム</a><a href="Receiving.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #EEF0FE; border: 1px solid #DDE1FD; border-radius: 14px; font-size: 12px; color: #2826FF; text-decoration: none; font-weight: 700;">検収 →</a><a href="Spend.html" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; background: #EEF0FE; border: 1px solid #DDE1FD; border-radius: 14px; font-size: 12px; color: #2826FF; text-decoration: none; font-weight: 700;">支出分析 →</a><a href="Assets.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">備品・資産</a><a href="Stock.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">在庫</a><a href="SettingsAccounting.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">勘定奉行</a><a href="AuditLog.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">監査ログ</a><a href="AgentPurchase.html" style="display: inline-flex; align-items: center; padding: 6px 11px; background: #F6F7FB; border: 1px solid #E6E7EE; border-radius: 14px; font-size: 12px; color: #5F6169; text-decoration: none;">AIエージェント購買（Phase-3）</a></div></main>
@@ -247,7 +247,7 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
   (function(){
     // ---- 台帳の表から明細を読み取る ----
     function rows(){
-      return [...document.querySelectorAll('main table tbody tr')].map(function(tr,i){
+      return [...document.querySelectorAll('main table tbody tr')].filter(function(tr){return !tr.classList.contains('ledger-empty');}).map(function(tr,i){
         var td=tr.querySelectorAll('td');
         var main=function(c){return (c.childNodes[0]&&c.childNodes[0].textContent||c.textContent).trim();};
         var sub=function(c){var d=c.querySelector('div');return d?d.textContent.trim():'';};
@@ -261,9 +261,9 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
           item:main(td[2]), detail:sub(td[2]), amount:amount, tax:Math.floor(amount*10/110),
           vendor:vendor, site:sub(td[5]), account:main(td[6]), purpose:sub(td[6]),
           kind:td[7].textContent.trim(), diag:td[0].textContent.trim(),
-          trip:vendor.indexOf('ピカパカ')===0
+          trip:vendor.indexOf('ピカパカ')===0, shown:!tr.hidden
         };
-      });
+      }).filter(function(r){return r.shown;});
     }
     var dash=function(d){return d.replace(/\//g,'-');};
     var md=function(d){var p=d.split('/');return p[1]+'/'+p[2]+'/'+p[0];};
@@ -355,6 +355,44 @@ a{color:#2826FF}a:hover{color:#1F1DD1}
     });
     modal.addEventListener('change',render);
     $('cmDl').addEventListener('click',download);
+
+    // ---- 絞り込み（検索・取引年月日・金額・取引先）----
+    function filterLedger(){
+      var tbody=document.querySelector('main table tbody');
+      var trs=[...tbody.querySelectorAll('tr')].filter(function(tr){return !tr.classList.contains('ledger-empty');});
+      var q=$('q').value.trim().toLowerCase();
+      var d1=$('d1').value, d2=$('d2').value;
+      var nums=($('amt').value.match(/[\d,]+/g)||[]).map(function(x){return parseInt(x.replace(/,/g,''),10);}).filter(function(x){return !isNaN(x);});
+      var lo=nums.length?nums[0]:null, hi=nums.length>1?nums[1]:null;
+      var sup=$('sup').value;
+      var shown=0;
+      trs.forEach(function(tr){
+        var td=tr.querySelectorAll('td');
+        var vendor=(td[5].childNodes[0]&&td[5].childNodes[0].textContent||'').trim();
+        var amount=parseInt(td[3].textContent.replace(/[^\d]/g,''),10)||0;
+        // 取引年月日：出張は予約日、物品は発注日
+        var whenTxt=td[4].textContent;
+        var m=whenTxt.match(/予約\s*(\d{1,2})\/(\d{1,2})/)||whenTxt.match(/(\d{1,2})\/(\d{1,2})/);
+        var date=m?'2026-'+('0'+m[1]).slice(-2)+'-'+('0'+m[2]).slice(-2):'';
+        var ok=(!sup||vendor.indexOf(sup)===0)
+          &&(!q||tr.textContent.toLowerCase().indexOf(q)>=0)
+          &&(!date||((!d1||date>=d1)&&(!d2||date<=d2)))
+          &&(lo===null||amount>=lo)&&(hi===null||amount<=hi);
+        tr.hidden=!ok; if(ok) shown++;
+      });
+      var empty=tbody.querySelector('.ledger-empty');
+      if(!shown&&!empty){
+        empty=document.createElement('tr');empty.className='ledger-empty';
+        empty.innerHTML='<td colspan="8" style="padding:24px 12px;text-align:center;color:#5F6169;">条件に合う明細がありません</td>';
+        tbody.appendChild(empty);
+      }
+      if(empty) empty.hidden=shown>0;
+      var filtered=sup||q||shown!==trs.length;
+      $('ledgerCount').textContent=filtered?shown+'件を表示（絞り込み中・全1,284件）':'1〜'+shown+'件（全1,284件）';
+    }
+    ['q','d1','d2','amt'].forEach(function(id){$(id).addEventListener('input',filterLedger);});
+    ['sup','d1','d2'].forEach(function(id){$(id).addEventListener('change',filterLedger);});
+    filterLedger();
     document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
   })();
   </script>
